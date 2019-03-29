@@ -1,0 +1,43 @@
+package:
+  name: fluomodlib
+  #version: {{ environ.get('GIT_DESCRIBE_NUMBER', 'default')}}
+  version: 0.0.1
+
+source:
+  #git_url: ..
+  path: ..
+
+requirements:
+  build:
+    - python {{ python }}
+    - setuptools
+    - numpy
+    - swig
+    - cmake
+    - sphinx
+    - labellib
+  host:
+    - python {{ python }}
+    - numpy
+    - sphinx
+    - tttrlib
+    - labellib
+  run:
+    - numpy
+    - python {{ python }}
+
+#outputs:
+#    - type: wheel
+#    - name: tttrlib
+
+test:
+  imports:
+    - fluomodlib
+
+about:
+  home: https://github.com/tpeulen/tttrlib
+  license: Mozilla Public License 2.0 (MPL 2.0)
+  summary: Python bindings for fluomodlib
+  description: |
+    fluomodlib is a C++ library including Python wrapper for fluorescence models
+    time resolved data files.
