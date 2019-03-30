@@ -1,19 +1,19 @@
 //
-// Created by thomas on 3/28/19.
+// Created by thomas on 3/29/19.
 //
 
-#ifndef FLUOMODLIB_FLUORESCENCEDECAY_H
-#define FLUOMODLIB_FLUORESCENCEDECAY_H
+#ifndef FLUOMODLIB_DECAY_H
+#define FLUOMODLIB_DECAY_H
 
-#include <std>
+
 #include <vector>
 
 
-
-class FluorescenceDecay {
+class Decay {
 
 private:
-    std::vector<double <std::vector<double>> fluorescence_lifetimes;
+    std::vector<double> amplitudes;
+    std::vector<double> lifetimes;
     std::vector<double> irf;
 
 
@@ -24,12 +24,6 @@ public:
      * @param fluorescence_lifetime the fluorescence lifetime
      */
     void append(double amplitude, double fluorescence_lifetime);
-
-    /*!
-     * Removes the fluorescence lifetime from the specified position
-     * @param position the position of the fluorescence lifetime that is removed.
-     */
-    void pop(size position);
 
     /*!
      * Removes the fluorescence lifetime from the end of the fluorescence lifetime list.
@@ -52,4 +46,4 @@ public:
 };
 
 
-#endif //FLUOMODLIB_FLUORESCENCEDECAY_H
+#endif //FLUOMODLIB_DECAY_H

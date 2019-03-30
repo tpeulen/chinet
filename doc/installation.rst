@@ -33,7 +33,7 @@ Compliation
 To compile ``fluomodlib`` a set of prerequisites need to be fulfilled:
 
     1. An installed compiler.
-    2. LabelLib
+    2. The `HDF5 <https://www.hdfgroup.org/>`_ library with C/C++ include files.
     3. A recent 64bit `Python <https://www.python.org/>`_ installation with include files.
     4. `cmake <https://cmake.org/>`_
     5. `SWIG <http://www.swig.org/>`_
@@ -42,7 +42,7 @@ To compile ``fluomodlib`` a set of prerequisites need to be fulfilled:
 Windows
 ^^^^^^^
 On windows ``fluomodlib`` is best compiled with the `Visual Studio 2017 <https://visualstudio.microsoft.com/>`_. For
-compilation the Visual Studio Community edition is sufficient. In addition to Visual Studio the libraries and the
+compilation the Visual Studion Community edition is sufficient. In addition to Visual Studio the libraries and the
 include files as listed above need to be installed. The prebuilt binaries are compiled on Windows 10 with using
 64bit anaconda Python environments `miniconda <https://docs.conda.io/en/latest/miniconda.html>`_ using the conda
 build recipe that is provided with the source code in the ``conda-recipe`` folder.
@@ -60,7 +60,7 @@ The Linux prebuilt binaries are compiled on Ubuntu 18.04 in an anaconda distribu
 Conda
 ^^^^^
 
-A conda recipe is provided in the folder 'conda-recipe' to build the ``fluomodlib`` library with the
+A conda recipe is provided in the folder 'conda-recipe' to build the fluomodlib library with the
 `conda build <https://docs.conda.io/projects/conda-build/en/latest/>`_ environment.
 
 To build the library download the recipe, install the conda build package and use the provided

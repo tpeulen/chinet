@@ -1,4 +1,5 @@
 cmake_policy(SET CMP0078 NEW)
+cmake_policy(SET CMP0086 NEW)
 
 FIND_PACKAGE(SWIG REQUIRED)
 INCLUDE(${SWIG_USE_FILE})
@@ -27,24 +28,20 @@ INCLUDE_DIRECTORIES(${Python_NumPy_PATH})
 #INCLUDE_DIRECTORIES(${Python_INCLUDE_DIRS})
 
 
-SET(MODULE_NAME tttrlib)
+SET(MODULE_NAME fluomodlib)
 SET(CMAKE_SWIG_FLAGS "")
-SET(SWIG_SRC tttrlib.i)
+SET(SWIG_SRC fluomodlib.i)
 # The output path is controlled by the setup.py
 #SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/pyext)
 
-SET_PROPERTY(SOURCE tttrlib.i PROPERTY CPLUSPLUS ON)
+SET_PROPERTY(SOURCE fluomodlib.i PROPERTY CPLUSPLUS ON)
 SWIG_ADD_LIBRARY(
         ${MODULE_NAME}
         LANGUAGE python
         SOURCES
-        tttrlib.i
-        ../src/TTTR.cpp
-        ../src/RecordReader.cpp
-        ../src/Header.cpp
-        ../src/Histogram.cpp
-        ../src/Correlate.cpp
-        ../src/Image.cpp
+        fluomodlib.i
+        ../src/Curve.cpp
+        ../src/Functions.cpp
 )
 
 INCLUDE_DIRECTORIES(

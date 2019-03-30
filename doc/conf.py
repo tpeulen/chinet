@@ -19,7 +19,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = u'tttrlib'
+project = u'fluomodlib'
 copyright = u'2019, Thomas-Otavio Peulen'
 author = u'Thomas-Otavio Peulen'
 
@@ -110,7 +110,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'tttrlibdoc'
+htmlhelp_basename = 'fluomodlibdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -137,7 +137,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'tttrlib.tex', u'tttrlib Documentation',
+    (master_doc, 'fluomodlib.tex', u'fluomodlib Documentation',
      u'Thomas-Otavio Peulen', 'manual'),
 ]
 
@@ -147,7 +147,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'tttrlib', u'tttrlib Documentation',
+    (master_doc, 'fluomodlib', u'fluomodlib Documentation',
      [author], 1)
 ]
 
@@ -158,8 +158,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'tttrlib', u'tttrlib Documentation',
-     author, 'tttrlib', 'One line description of project.',
+    (master_doc, 'fluomodlib', u'fluomodlib Documentation',
+     author, 'fluomodlib', 'One line description of project.',
      'Miscellaneous'),
 ]
 

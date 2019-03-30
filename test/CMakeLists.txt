@@ -1,6 +1,6 @@
 
 ADD_EXECUTABLE(
-        test_tttrlib
+        test_fluomodlib
         tttr_test.cpp tttr_test.h
         ../src/TTTR.cpp ../include/TTTR.h
         ../include/RecordReader.h ../src/RecordReader.cpp

@@ -1,18 +1,21 @@
 fluomodlib
 ==========
 
-Process time-tagged time resolved (TTTR) data with a unified application programming interface (API) that entitles you
-to process data of TTTR experiments without the need of data conversion with your preferred scripting language.
+``fluomodlib`` is a library for fluorescence models, i.e., forward models. A forward model is a model that calculates
+experimental observables based on a set of parameters. ``fluomodlib`` can be used to calculate:
 
-tttrlib is a low level, high performance API to read and process time-tagged-time resolved (TTTR) data acquired by
-PicoQuant (PQ), Becker&Hickl measurement devices/cards, and TTTR files of the open Photon-HDF format. Feature include:
+   * Fluorescence decays
+   * Single-molecule FRET efficiency histograms
+   * Single-molecule anisotropy histograms
 
-   - Multi-dimensional histograms
-   - Correlation analysis
-   - Time-window analysis
-   - Photon distribution anaylsis
-   - FLIM image generation and analysis
+Currently supported forward models:
 
+   * Photon distribution analysis
+
+In addition to the calculation of models, ``fluomodlib`` can be used to optimize model parameters against experimental
+observables.
+
+   * Maximum likelihood estimator (fluorescence decays)
 
 
 Contents
@@ -22,6 +25,7 @@ Contents
    :maxdepth: 1
 
    installation
+   curves
    glossary
    references
 

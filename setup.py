@@ -12,7 +12,7 @@ from distutils.command.build_ext import build_ext
 from distutils.version import LooseVersion
 
 
-name = "tttrlib"  # name of the module
+name = "fluomodlib"  # name of the module
 
 
 class CMakeExtension(Extension):
@@ -87,8 +87,8 @@ setup(
     license='MPL v2.0',
     author='Thomas-Otavio Peulen',
     author_email='thomas.otavio.peulen@gmail.com',
-    version='0.0.6',
-    ext_modules=[CMakeExtension('tttrlib')],
+    version='0.0.1',
+    ext_modules=[CMakeExtension('fluomodlib')],
     cmdclass={
         'build_ext': CMakeBuild
     },
