@@ -9,16 +9,22 @@
 #include <vector>
 #include <Curve.h>
 #include <Functions.h>
+#include <iostream>
 
 
 class Decay : public Curve{
 
 private:
     std::vector<double> lifetime_spectrum;
-    Curve irf;
     unsigned int convolution_stop;
+    bool valid_irf;
 
 public:
+    Curve* irf;
+
+    // Constructor
+    Decay();
+    Decay(double dt, unsigned int nx);
 
     // Methods
 
@@ -32,7 +38,7 @@ public:
     /*!
      * Removes the fluorescence lifetime from the end of the fluorescence lifetime list.
      */
-    void pop();
+    void remove_last();
 
 
     void update();
@@ -42,6 +48,8 @@ public:
 
     std::vector<double> get_amplitudes();
     std::vector<double> get_lifetimes();
+    Curve* get_irf();
+    unsigned int get_convolution_stop();
 
     // Setter
 
@@ -53,7 +61,7 @@ public:
      * @param irf An array containing the amplitudes of the IRF
      * @param n_irf The length of the IRF
      */
-    void set_instrument_response_function(Curve &irf);
+    void set_instrument_response_function(Curve *irf);
 
     /*!
      * Sets the values of the fluorescence lifetimes. The fluorescence lifetime array

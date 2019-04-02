@@ -10,15 +10,19 @@
 #include <string>
 #include <Functions.h>
 #include <fstream>
-
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
 
 
 class Curve {
+
+    friend class Decay;
 
 protected:
     std::string name_x;
     std::string name_y;
     std::vector<double> x;
+    std::vector<double> ex;
     std::vector<double> y;
     std::vector<double> ey;
 
@@ -28,14 +32,15 @@ public:
     // Setter
     void set_x(double *in, int n_in);
     void set_x(std::vector<double> x_);
+
+    void set_ex(double *in, int n_in);
     void set_x_name(std::string v);
 
     void set_y(double *in, int n_in);
     void set_y(std::vector<double> y_);
-    void set_y_name(std::string v);
 
     void set_ey(double *in, int n_in);
-
+    void set_y_name(std::string v);
 
     // Getter
     void get_x(double **out, int *n_out);
@@ -118,6 +123,7 @@ public:
     void resize(size_t v);
 
     void save(std::string filename);
+    void load(std::string filename);
 
 
 };

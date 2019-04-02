@@ -41,15 +41,14 @@ SWIG_ADD_LIBRARY(
         SOURCES
         fluomodlib.i
         ../src/Curve.cpp
+        ../src/Decay.cpp
         ../src/Functions.cpp
 )
 
-add_dependencies(${MODULE_NAME} yaml)
 
 
 TARGET_LINK_LIBRARIES(
         ${MODULE_NAME}
         ${HDF5_LIBRARIES}
         ${PYTHON_LIBRARY}
-        yaml
 )

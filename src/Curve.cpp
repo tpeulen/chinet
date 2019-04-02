@@ -47,14 +47,14 @@ Curve::Curve(double dt, unsigned int nx) {
     std::vector<double> x_;
     x_.resize(nx);
     for(int i = 0; i < nx; i++){
-        x_.push_back( i * dt);
+        x_[i] = i * dt;
     }
     set_x(x_);
 
     std::vector<double> y_;
     y_.resize(nx);
     for(int i = 0; i < nx; i++){
-        x_.push_back(0.0);
+        x_[i] = 0.0;
     }
     set_y(y_);
 
@@ -139,18 +139,48 @@ void Curve::resize(size_t v) {
     x.resize(v);
 }
 
-using jsonf = nlohmann::json;
 
-void Curve::save(std::string filename) {
-    jsonf jsonfile;
+void Curve::save(const std::string filename) {
+    json jsonfile;
 
-    const unsigned char a[] = "testing";
-    jsonfile["foo"] = a;
+    jsonfile["type"] = "Curve";
+
+    jsonfile["x"]["values"] = x;
+    jsonfile["x"]["name"] = name_x;
+
+    jsonfile["y"]["values"] = y;
+    jsonfile["y"]["errors"] = ey;
+    jsonfile["y"]["name"] = name_y;
 
     std::ofstream file(filename);
     file << jsonfile;
 }
 
+
+void Curve::load(const std::string filename) {
+
+    x.resize(0);
+    y.resize(0);
+    ey.resize(0);
+
+    std::ifstream ifs(filename);
+    json j = json::parse(ifs);
+
+    for(const auto &xi : j["x"]["values"]){
+        x.push_back(xi);
+    }
+
+    for(const auto &yi : j["y"]["values"]){
+        y.push_back(yi);
+    }
+
+    for(const auto &yi : j["y"]["errors"]){
+        ey.push_back(yi);
+    }
+
+    name_x = j["x"]["name"];
+    name_y = j["y"]["name"];
+}
 
 
 
@@ -177,7 +207,15 @@ void Curve::set_x(double *in, int n_in) {
 void Curve::set_ey(double *in, int n_in) {
     Curve::ey.resize(n_in);
     for(int i=0; i<n_in; i++){
-        Curve::ey[i] = x[i];
+        Curve::ey[i] = in[i];
+    }
+}
+
+
+void Curve::set_ex(double *in, int n_in) {
+    Curve::ex.resize(n_in);
+    for(int i=0; i<n_in; i++){
+        Curve::ex[i] = in[i];
     }
 }
 
@@ -240,7 +278,7 @@ std::vector<double> Curve::get_dx() {
     std::vector<double> dx;
     dx.resize(size() - 1);
     for(int i = 0; i < size() - 1; i++){
-        dx.push_back(x[i + 1] -  x[i]);
+        dx[i] = (x[i + 1] -  x[i]);
     }
     return dx;
 }

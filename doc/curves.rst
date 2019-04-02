@@ -2,7 +2,8 @@ Curves
 ======
 
 The library ``fluomodlib`` uses the class ``Curve`` to save and operate on the data of a model. One dimensional
-models derive from the ``Curve`` class.
+models derive from the ``Curve`` class. A ``Curve`` object has properties for the x-values, the y-values, and
+the errors of the x- and y-values.
 
 .. code-block:: python
 
@@ -29,3 +30,23 @@ By default, if no error is provided for the y-values the error is initialized wi
 Above, shifting, addition, and multiplication are illustrated for a curve. Note, the multiplication operation can
 also be used with two curves.
 
+
+``Curve`` objects can be saved and loaded using the methods ``save`` and ``load``
+
+
+.. code-block:: python
+
+    import fluomodlib as flm
+    import numpy as np
+
+    curve = flm.Curve()
+    x = np.linspace(0, 6, 100)
+    y = np.sin(x)
+    curve.set_x(x)
+    curve.set_y(y)
+
+    curve.save("test.json")
+    c = flm.Curve()
+    c.load("test.json")
+
+A

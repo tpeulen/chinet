@@ -10,6 +10,7 @@
 #include <vector>
 #include <algorithm>
 #include <math.h>
+#include <iostream>
 
 
 namespace Functions {
