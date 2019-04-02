@@ -1,8 +1,5 @@
-//
-// Created by thomas on 3/28/19.
-//
-
 #include "../include/Curve.h"
+
 
 // Constructor
 
@@ -34,6 +31,7 @@ Curve::Curve(double *x, unsigned int nx, double *y, unsigned int ny) :
 Curve(x, nx, y, ny, nullptr, 0, std::string(""), std::string(""))
 {}
 
+
 Curve::Curve(double *x, unsigned int nx, double *y, unsigned int ny, double *ey, unsigned int ney) :
 Curve(x, nx, y, ny, ey, ney, std::string(""), std::string(""))
 {}
@@ -44,11 +42,34 @@ Curve(x, nx, y, ny, nullptr, 0, name_x, name_y)
 {}
 
 
+Curve::Curve(double dt, unsigned int nx) {
+
+    std::vector<double> x_;
+    x_.resize(nx);
+    for(int i = 0; i < nx; i++){
+        x_.push_back( i * dt);
+    }
+    set_x(x_);
+
+    std::vector<double> y_;
+    y_.resize(nx);
+    for(int i = 0; i < nx; i++){
+        x_.push_back(0.0);
+    }
+    set_y(y_);
+
+}
+
+
 // Methods
 
-void Curve::add(Curve v) {
-    for(unsigned int i=0; i < y.size(); i++){http://www.cplusplus.com/reference/vector/vector/vector/
-        y[i] += v.y[i];
+void Curve::add(Curve v, bool valid) {
+    if(!valid){
+        for(unsigned int i=0; i < y.size(); i++){
+            y[i] += v.y[i];
+        }
+    } else{
+        // TODO only add the region where the x-values overlap
     }
 }
 
@@ -60,9 +81,13 @@ void Curve::add(double v) {
 }
 
 
-void Curve::sub(Curve v) {
-    for(unsigned int i=0; i < y.size(); i++){
-        y[i] += v.y[i];
+void Curve::sub(Curve v, bool valid) {
+    if(!valid){
+        for(unsigned int i=0; i < y.size(); i++){
+            y[i] += v.y[i];
+        }
+    } else{
+        // TODO (only overlapping region)
     }
 }
 
@@ -74,9 +99,15 @@ void Curve::sub(double v) {
 }
 
 
-void Curve::mul(Curve v) {
-    for(unsigned int i=0; i < y.size(); i++){
-        y[i] *= v.y[i];
+void Curve::mul(Curve v, bool valid) {
+    if(!valid){
+        // simply multiply the y-values
+        for(unsigned int i=0; i < y.size(); i++){
+            y[i] *= v.y[i];
+        }
+    } else{
+        // only multiply the y-values
+        // the the same x-values (TODO)
     }
 }
 
@@ -92,6 +123,35 @@ void Curve::shift(double value) {
     Functions::shift(value, y);
     Functions::shift(value, ey);
 }
+
+
+double Curve::sum() {
+    double r = 0;
+    for(auto vi : y){
+        r += vi;
+    }
+    return r;
+}
+
+
+void Curve::resize(size_t v) {
+    y.resize(v);
+    x.resize(v);
+}
+
+using jsonf = nlohmann::json;
+
+void Curve::save(std::string filename) {
+    jsonf jsonfile;
+
+    const unsigned char a[] = "testing";
+    jsonfile["foo"] = a;
+
+    std::ofstream file(filename);
+    file << jsonfile;
+}
+
+
 
 
 // Setter
@@ -139,6 +199,16 @@ void Curve::set_y(double *in, int n_in) {
 }
 
 
+void Curve::set_x(std::vector<double> x_) {
+    x = x_;
+}
+
+
+void Curve::set_y(std::vector<double> y_) {
+    y = y_;
+}
+
+
 // Getter
 
 void Curve::get_x(double **out, int *n_out) {
@@ -160,4 +230,18 @@ std::vector<double> Curve::get_y() {
     return y;
 }
 
+
+size_t Curve::size() {
+    return x.size();
+}
+
+
+std::vector<double> Curve::get_dx() {
+    std::vector<double> dx;
+    dx.resize(size() - 1);
+    for(int i = 0; i < size() - 1; i++){
+        dx.push_back(x[i + 1] -  x[i]);
+    }
+    return dx;
+}
 

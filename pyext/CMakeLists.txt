@@ -44,12 +44,12 @@ SWIG_ADD_LIBRARY(
         ../src/Functions.cpp
 )
 
-INCLUDE_DIRECTORIES(
-        ${CMAKE_CURRENT_SOURCE_DIR}
-)
+add_dependencies(${MODULE_NAME} yaml)
+
 
 TARGET_LINK_LIBRARIES(
         ${MODULE_NAME}
         ${HDF5_LIBRARIES}
         ${PYTHON_LIBRARY}
+        yaml
 )

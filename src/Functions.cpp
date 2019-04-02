@@ -35,6 +35,7 @@ void Functions::roll(int value, std::vector<double> &y){
     }
 }
 
+
 void Functions::copy_vector_to_array(std::vector<double> &v, double **out, int *nout){
     auto r = (double*) malloc(v.size() * sizeof(double));
     for(unsigned int i = 0; i < v.size(); i++){
@@ -42,4 +43,95 @@ void Functions::copy_vector_to_array(std::vector<double> &v, double **out, int *
     }
     *out = r;
     *nout = v.size();
+}
+
+
+void Functions::copy_two_vectors_to_interleaved_array(
+        std::vector<double> &v1,
+        std::vector<double> &v2,
+        double**out, int *nout
+){
+    if(v1.size() == v2.size()){
+        int n = v1.size() + v2.size();
+        auto r = (double*) malloc(n * sizeof(double));
+        for(unsigned int i = 0; i < v1.size(); i++){
+            r[2 * i + 0] = v1[i];
+            r[2 * i + 1] = v2[i];
+        }
+        *out = r;
+        *nout = n;
+    }
+}
+
+
+void Functions::convolve_exponentials(
+        double* out, int n_out,
+        const double* lifetime_spectrum, int n_lifetime_spectrum,
+        const double* irf, int n_irf,
+        int convolution_stop,
+        double dt){
+
+    double dt_half = dt / 2.0;
+    double exp_curr;
+    double fit_curr;
+
+    int n_points = MIN(n_out, n_irf);
+    int stop = MIN(n_points, convolution_stop);
+
+    for(int i = 0; i < stop; i++){
+        out[i] = 0;
+    }
+
+    for(int ne = 0; ne < n_lifetime_spectrum; ne++){
+        exp_curr = exp(-dt / (lifetime_spectrum[2 * ne + 1] + 1e-12));
+        fit_curr = 0.0;
+        for(int i=0; i < stop; i++){
+            fit_curr = (fit_curr + dt_half * irf[i-1])*exp_curr + dt_half*irf[i];
+            out[i] += fit_curr * lifetime_spectrum[2 * ne];
+        }
+    }
+}
+
+
+void Functions::convolve_exponentials_periodic(
+        double* out, int n_out,
+        const double* lifetime, int n_lifetimes,
+        const double* irf, int n_irf,
+        int start,
+        int stop,
+        double dt,
+        double period
+){
+
+    double dt_half = dt*0.5;
+    int period_n = (int) (period / dt - 0.5);
+
+    int irfStart = 0;
+    while(irf[irfStart] == 0){
+        irfStart++;
+    }
+
+    int n_points = MIN(n_out, n_irf);
+    stop = MIN(n_points, stop);
+
+    for(int i = 0; i < stop; i++){
+        out[i] = 0;
+    }
+
+    int stop1 = (period_n+irfStart > n_points-1) ? n_points-1 : period_n+irfStart;
+    double fit_curr, exp_curr, tail_a;
+    for(int ne = 0; ne < n_lifetimes; ne++){
+        exp_curr = exp(-dt / (lifetime[2 * ne + 1] + 1e-12));
+        tail_a = 1./(1.-exp(-period/lifetime[2*ne+1]));
+        fit_curr = 0.0;
+        for(int i = 0; i < stop1; i++){
+            fit_curr = (fit_curr + dt_half*irf[i-1])*exp_curr + dt_half*irf[i];
+            out[i] += fit_curr * lifetime[2*ne];
+        }
+        fit_curr *= exp(-(period_n - stop + start)*dt/lifetime[2*ne+1]);
+        for(int i = start; i < stop; i++){
+            fit_curr *= exp_curr;
+            out[i] += fit_curr * lifetime[2 * ne] * tail_a;
+        }
+    }
 }
