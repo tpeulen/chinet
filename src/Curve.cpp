@@ -44,15 +44,13 @@ Curve(x, nx, y, ny, nullptr, 0, name_x, name_y)
 
 Curve::Curve(double dt, unsigned int nx) {
 
-    std::vector<double> x_;
-    x_.resize(nx);
+    std::vector<double> x_(nx);
     for(int i = 0; i < nx; i++){
         x_[i] = i * dt;
     }
     set_x(x_);
 
-    std::vector<double> y_;
-    y_.resize(nx);
+    std::vector<double> y_(nx);
     for(int i = 0; i < nx; i++){
         x_[i] = 0.0;
     }
@@ -257,7 +255,6 @@ void Curve::get_x(double **out, int *n_out) {
 void Curve::get_y(double **out, int *n_out) {
     Functions::copy_vector_to_array(y, out, n_out);
 }
-
 
 std::vector<double> Curve::get_x() {
     return x;

@@ -55,6 +55,28 @@ namespace Functions {
             std::vector<double> &v,
             double **out, int *nout);
 
+    /*!
+     * Copy an array and copies the content
+     * of a vector to already allocated memory.
+     *
+     * This function is mainly used for numpy array SWIGs
+     *
+     * @param v
+     * @param out
+     * @param nout
+     */
+    void copy_vector_to_array(
+            std::vector<double> &v,
+            double *out, int nout);
+
+    /*!
+     *
+     * @param in
+     * @param nin
+     * @param v
+     */
+    void copy_array_to_vector(double *in, int nin, std::vector<double> &v);
+
 
     /*!
      * This function copies two vectors of equal size to an interleaved array

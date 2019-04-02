@@ -11,11 +11,13 @@ Decay::Decay() :
 valid_irf(false),
 irf(nullptr),
 convolution_stop(0),
-lifetime_spectrum(0)
+lifetime_spectrum(0),
+polarization("vm")
 {
 }
 
-Decay::Decay(double dt, unsigned int nx) :
+
+Decay::Decay(double dt, unsigned int nx, std::string polarization) :
 Curve(dt, nx),
 valid_irf(false),
 irf(nullptr),
@@ -25,6 +27,13 @@ lifetime_spectrum(0)
     irf = new Curve(dt, nx);
     irf->y[0] = 1;
     convolution_stop = irf->size();
+    Decay::dt = get_dx()[0];
+    Decay::polarization = polarization;
+}
+
+Decay::Decay(double dt, unsigned int nx) :
+        Decay(dt, nx, "vm")
+{
 }
 
 
@@ -44,45 +53,18 @@ void Decay::remove_last() {
 
 void Decay::update() {
 
-    if(irf != nullptr){
+    Functions::convolve_exponentials(
+            y.data(), y.size(),
+            lifetime_spectrum.data(), lifetime_spectrum.size(),
+            irf->y.data(), irf->y.size(),
+            convolution_stop,
+            dt
+    );
 
-        // the convolution routine wants an array of the lifetime
-        // spectrum
-        int n_ls = lifetime_spectrum.size();
-        auto *ls = (double*) malloc(n_ls * sizeof(double));
-        for(int i = 0; i < n_ls; i++){
-            ls[i] = lifetime_spectrum[i];
-        }
-
-        int n_decay_out = size();
-        auto *decay_out = (double*) malloc(n_decay_out * sizeof(double));
-        for(int i = 0; i < n_decay_out; i++) decay_out[i] = 0.0;
-
-        int n_array_irf = size();
-        auto *array_irf = (double*) malloc(irf->size() * sizeof(double));
-        auto irf_y = irf->get_y();
-        for(int i = 0; i < n_array_irf; i++) array_irf[i] = irf_y[i];
-
-        auto dx = get_dx();
-        double dt = dx[0];
-
-        Functions::convolve_exponentials(
-                decay_out, n_decay_out,
-                ls, n_ls,
-                array_irf, n_array_irf,
-                convolution_stop,
-                dt
-        );
-
-        for(int i=0; i < n_decay_out; i++){
-            y[i] = decay_out[i];
-        }
-    }
 }
 
 
 // Getter
-
 Curve* Decay::get_irf() {
     return irf;
 }
@@ -130,9 +112,7 @@ void Decay::set_fluorescence_lifetimes(double *lifetime_spectrum, int n_lifetime
 
 
 void Decay::set_instrument_response_function(Curve *v) {
-    irf = new Curve();
-    irf->set_y(v->get_y());
-    irf->set_x(v->get_x());
+    irf = v;
 }
 
 

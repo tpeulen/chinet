@@ -36,13 +36,23 @@ void Functions::roll(int value, std::vector<double> &y){
 }
 
 
-void Functions::copy_vector_to_array(std::vector<double> &v, double **out, int *nout){
-    auto r = (double*) malloc(v.size() * sizeof(double));
-    for(unsigned int i = 0; i < v.size(); i++){
-        r[i] = v[i];
+void Functions::copy_vector_to_array(std::vector<double> &v, double *out, int nout){
+    for(unsigned int i = 0; i < nout; i++){
+        out[i] = v[i];
     }
-    *out = r;
+}
+
+
+void Functions::copy_array_to_vector(double *in, int nin, std::vector<double> &v){
+    for(unsigned int i = 0; i < nin; i++){
+        v[i] = in[i];
+    }
+}
+
+void Functions::copy_vector_to_array(std::vector<double> &v, double **out, int *nout){
+    *out = (double*) malloc(v.size() * sizeof(double));
     *nout = v.size();
+    copy_vector_to_array(v, *out, *nout);
 }
 
 
@@ -72,8 +82,6 @@ void Functions::convolve_exponentials(
         double dt){
 
     double dt_half = dt / 2.0;
-    double exp_curr;
-    double fit_curr;
 
     int n_points = MIN(n_out, n_irf);
     int stop = MIN(n_points, convolution_stop);
@@ -83,8 +91,8 @@ void Functions::convolve_exponentials(
     }
 
     for(int ne = 0; ne < n_lifetime_spectrum; ne++){
-        exp_curr = exp(-dt / (lifetime_spectrum[2 * ne + 1] + 1e-12));
-        fit_curr = 0.0;
+        double exp_curr = exp(-dt / (lifetime_spectrum[2 * ne + 1] + 1e-12));
+        double fit_curr = 0.0;
         for(int i=0; i < stop; i++){
             fit_curr = (fit_curr + dt_half * irf[i-1])*exp_curr + dt_half*irf[i];
             out[i] += fit_curr * lifetime_spectrum[2 * ne];

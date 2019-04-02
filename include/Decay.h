@@ -18,13 +18,21 @@ private:
     std::vector<double> lifetime_spectrum;
     unsigned int convolution_stop;
     bool valid_irf;
+    double dt;
+    std::string polarization;
+    Curve* irf;
 
 public:
-    Curve* irf;
 
     // Constructor
     Decay();
+
     Decay(double dt, unsigned int nx);
+    Decay(double dt, unsigned int nx, std::string polarization);
+
+    ~Decay(){
+        free(irf);
+    }
 
     // Methods
 
