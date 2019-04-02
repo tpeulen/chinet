@@ -195,34 +195,23 @@ void Curve::set_y_name(std::string v) {
 
 
 void Curve::set_x(double *in, int n_in) {
-    Curve::x.resize(n_in);
-    for(int i=0; i<n_in; i++){
-        Curve::x[i] = in[i];
-    }
+    Functions::copy_array_to_vector(in, n_in, x);
 }
 
 
 void Curve::set_ey(double *in, int n_in) {
-    Curve::ey.resize(n_in);
-    for(int i=0; i<n_in; i++){
-        Curve::ey[i] = in[i];
-    }
+    Functions::copy_array_to_vector(in, n_in, ey);
 }
 
 
 void Curve::set_ex(double *in, int n_in) {
-    Curve::ex.resize(n_in);
-    for(int i=0; i<n_in; i++){
-        Curve::ex[i] = in[i];
-    }
+    Functions::copy_array_to_vector(in, n_in, ex);
 }
 
 
 void Curve::set_y(double *in, int n_in) {
-    y.resize(n_in);
-    for(int i=0; i<n_in; i++){
-        y[i] = in[i];
-    }
+    Functions::copy_array_to_vector(in, n_in, y);
+
     // if the error vector is smaller than the data vector.
     // resize the error vector and fill it with ones.
     if(ey.size() < y.size()){
@@ -272,11 +261,11 @@ size_t Curve::size() {
 
 
 std::vector<double> Curve::get_dx() {
-    std::vector<double> dx;
-    dx.resize(size() - 1);
-    for(int i = 0; i < size() - 1; i++){
-        dx[i] = (x[i + 1] -  x[i]);
-    }
-    return dx;
+    return Functions::diff(x);
+}
+
+
+std::vector<double> Curve::get_dy() {
+    return Functions::diff(y);
 }
 

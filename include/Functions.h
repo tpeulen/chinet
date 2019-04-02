@@ -150,6 +150,14 @@ namespace Functions {
         double period
         );
 
+    /*!
+     * Calculates the discrete difference for an vector
+     *
+     * @param v
+     * @return
+     */
+    std::vector<double> diff(std::vector<double> v);
+
 }
 
 

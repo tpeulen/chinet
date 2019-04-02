@@ -44,10 +44,12 @@ void Functions::copy_vector_to_array(std::vector<double> &v, double *out, int no
 
 
 void Functions::copy_array_to_vector(double *in, int nin, std::vector<double> &v){
+    v.resize(nin);
     for(unsigned int i = 0; i < nin; i++){
         v[i] = in[i];
     }
 }
+
 
 void Functions::copy_vector_to_array(std::vector<double> &v, double **out, int *nout){
     *out = (double*) malloc(v.size() * sizeof(double));
@@ -143,3 +145,13 @@ void Functions::convolve_exponentials_periodic(
         }
     }
 }
+
+
+std::vector<double> Functions::diff(std::vector<double> v) {
+    std::vector<double> dx(v.size() - 1);
+    for(int i = 0; i < dx.size(); i++){
+        dx[i] = (v[i + 1] -  v[i]);
+    }
+    return dx;
+}
+

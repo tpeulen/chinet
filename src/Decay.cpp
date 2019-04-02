@@ -11,13 +11,12 @@ Decay::Decay() :
 valid_irf(false),
 irf(nullptr),
 convolution_stop(0),
-lifetime_spectrum(0),
-polarization("vm")
+lifetime_spectrum(0)
 {
 }
 
 
-Decay::Decay(double dt, unsigned int nx, std::string polarization) :
+Decay::Decay(double dt, unsigned int nx) :
 Curve(dt, nx),
 valid_irf(false),
 irf(nullptr),
@@ -28,12 +27,6 @@ lifetime_spectrum(0)
     irf->y[0] = 1;
     convolution_stop = irf->size();
     Decay::dt = get_dx()[0];
-    Decay::polarization = polarization;
-}
-
-Decay::Decay(double dt, unsigned int nx) :
-        Decay(dt, nx, "vm")
-{
 }
 
 

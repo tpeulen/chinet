@@ -56,6 +56,12 @@ public:
      */
     std::vector<double> get_dx();
 
+    /*!
+     * Calculates the difference between the y-Axis values
+     * @return
+     */
+    std::vector<double> get_dy();
+
 
     // Constructor, Destructor
 

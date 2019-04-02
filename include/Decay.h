@@ -19,7 +19,6 @@ private:
     unsigned int convolution_stop;
     bool valid_irf;
     double dt;
-    std::string polarization;
     Curve* irf;
 
 public:
@@ -28,14 +27,12 @@ public:
     Decay();
 
     Decay(double dt, unsigned int nx);
-    Decay(double dt, unsigned int nx, std::string polarization);
 
     ~Decay(){
         free(irf);
     }
 
     // Methods
-
     /*!
      * Adds a fluorescence lifetime to the list of lifetimes
      * @param amplitude the amplitude of the added fluorescence lifetime
@@ -53,15 +50,12 @@ public:
 
 
     // Getter
-
     std::vector<double> get_amplitudes();
     std::vector<double> get_lifetimes();
     Curve* get_irf();
     unsigned int get_convolution_stop();
 
     // Setter
-
-
     void set_convolution_stop(unsigned int);
 
     /*!
