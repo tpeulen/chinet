@@ -77,7 +77,6 @@ void Decay::update() {
         for(int i=0; i < n_decay_out; i++){
             y[i] = decay_out[i];
         }
-
     }
 }
 
