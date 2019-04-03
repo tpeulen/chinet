@@ -3,6 +3,8 @@ Roadmap
 =======
 
 ## v0.0.1
+https://thispointer.com/learning-shared_ptr-part-1-usage-details/
+use std shared_ptr with swig
 
 
 Documentation & Test cases

@@ -35,14 +35,13 @@ SET(SWIG_SRC fluomodlib.i)
 #SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/pyext)
 
 SET_PROPERTY(SOURCE fluomodlib.i PROPERTY CPLUSPLUS ON)
+file(GLOB SRC_files "../src/*.cpp")
 SWIG_ADD_LIBRARY(
         ${MODULE_NAME}
         LANGUAGE python
         SOURCES
         fluomodlib.i
-        ../src/Curve.cpp
-        ../src/Decay.cpp
-        ../src/Functions.cpp
+        ${SRC_files}
 )
 
 

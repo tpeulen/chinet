@@ -49,9 +49,9 @@ void Pda::conv_pF(double *SgSr, double *FgFr, unsigned int Nmax, double Bg, doub
 
 /***** modification for P(N) *****/
 void Pda::conv_pN(double *SgSr, double *FgFr,
-                    unsigned int Nmax,
-                    double Bg, double Br,
-                    double *pN) {
+                  unsigned int Nmax,
+                  double Bg, double Br,
+                  double *pN) {
 
 
     double s;
@@ -68,19 +68,16 @@ void Pda::conv_pN(double *SgSr, double *FgFr,
 }
 
 
-/////////////////////////// calculating p(G,R) according to Matthew ///////////////////////////////
-
 void Pda::sgsr_pN(double *SgSr,        // return: SgSr(i,j) = p(Sg=i, Sr=j)
-             double *pN,        // p(N)
-             unsigned int Nmax,    // max number of photons (max N)
-             double Bg,        // <background green>, per time window (!)
-             double Br,        // <background red>, -"-
-             double pg_theor)        // p(green|F=1), incl. crosstalk
+                  double *pN,        // p(N)
+                  unsigned int Nmax,    // max number of photons (max N)
+                  double Bg,        // <background green>, per time window (!)
+                  double Br,        // <background red>, -"-
+                  double pg_theor)        // p(green|F=1), incl. crosstalk
 {
 
     /*** FgFr: matrix, FgFr(i,j) = p(Fg=i, Fr=j | F=i+j) ***/
-
-    double *FgFr = new double[(Nmax + 1) * (Nmax + 1)];
+    auto *FgFr = new double[(Nmax + 1) * (Nmax + 1)];
     FgFr[0] = 1.;
     unsigned int i, red;
 
@@ -101,17 +98,11 @@ void Pda::sgsr_pN(double *SgSr,        // return: SgSr(i,j) = p(Sg=i, Sr=j)
 }
 
 
-///////////////////////// calculating p(G,R), one ratio, one P(F) ///////////////////////////////
-void Pda::sgsr_pF(double *SgSr,        // see sgsr_pN
-             double *pF,        // input: p(F)
-             unsigned int Nmax,
-             double Bg,
-             double Br,
-             double pg_theor) {
+void Pda::sgsr_pF(double *SgSr, double *pF, unsigned int Nmax, double Bg, double Br, double pg_theor) {
 
     /*** FgFr: matrix, FgFr(i,j) = p(Fg = i, Fr = j) ***/
 
-    double *FgFr = new double[(Nmax + 1) * (Nmax + 1)];
+    auto *FgFr = new double[(Nmax + 1) * (Nmax + 1)];
     FgFr[0] = 1.;
     unsigned int i, red;
 
@@ -132,22 +123,22 @@ void Pda::sgsr_pF(double *SgSr,        // see sgsr_pN
 }
 
 
-///////////////////////// calculating p(G,R), several ratios, same P(N) ///////////////////////////
-void Pda::sgsr_pN_manypg(double *SgSr,        // see sgsr_pN
-                    double *pN,        // input: p(N)
-                    unsigned int Nmax,
-                    double Bg,
-                    double Br,
-                    unsigned int N_pg,        // size of pg_theor
-                    double *pg_theor,
-                    double *a)            // corresponding amplitudes
+void Pda::sgsr_pN_manypg(
+        double *SgSr,
+        double *pN,
+        unsigned int Nmax,
+        double Bg,
+        double Br,
+        unsigned int N_pg,
+        double *pg_theor,
+        double *a)
 {
 
 
     /*** FgFr: matrix, FgFr(i,j) = p(Fg = i, Fr = j) ***/
 
-    double *FgFr = new double[(Nmax + 1) * (Nmax + 1)];
-    double *tmp = new double[(Nmax + 1) * (Nmax + 1)];
+    auto *FgFr = new double[(Nmax + 1) * (Nmax + 1)];
+    auto *tmp = new double[(Nmax + 1) * (Nmax + 1)];
     unsigned int j, i, red;
 
     for (j = 0; j < (Nmax + 1) * (Nmax + 1); j++) FgFr[j] = 0.;
@@ -173,23 +164,22 @@ void Pda::sgsr_pN_manypg(double *SgSr,        // see sgsr_pN
 
 }
 
-///////////////////////// calculating p(G,R), several ratios, same P(F) ///////////////////////////
 
 void Pda::sgsr_pF_manypg(double *SgSr,        // see sgsr_pN
-                    double *pF,        // input: p(F)
-                    unsigned int Nmax,
-                    double Bg,
-                    double Br,
-                    unsigned int N_pg,        // size of pg_theor
-                    double *pg_theor,
-                    double *a)            // corresponding amplitudes
+                         double *pF,        // input: p(F)
+                         unsigned int Nmax,
+                         double Bg,
+                         double Br,
+                         unsigned int N_pg,        // size of pg_theor
+                         double *pg_theor,
+                         double *a)            // corresponding amplitudes
 {
 
 
     /*** FgFr: matrix, FgFr(i,j) = p(Fg = i, Fr = j) ***/
 
-    double *FgFr = new double[(Nmax + 1) * (Nmax + 1)];
-    double *tmp = new double[(Nmax + 1) * (Nmax + 1)];
+    auto *FgFr = new double[(Nmax + 1) * (Nmax + 1)];
+    auto *tmp = new double[(Nmax + 1) * (Nmax + 1)];
     unsigned int j, i, red;
 
     for (j = 0; j < (Nmax + 1) * (Nmax + 1); j++) FgFr[j] = 0.;
@@ -218,20 +208,20 @@ void Pda::sgsr_pF_manypg(double *SgSr,        // see sgsr_pN
 ///////////////////////// calculating p(G,R), several ratios, many P(F)s //////////////////////////
 
 void Pda::sgsr_manypF(double *SgSr,        // see sgsr_pN
-                 double *pF,        // input: p(F); size = (Nmax+1)xN_pg
-                 unsigned int Nmax,
-                 double Bg,
-                 double Br,
-                 unsigned int N_pg,        // size of pg_theor
-                 double *pg_theor,
-                 double *a)            // corresponding amplitudes
+                      double *pF,        // input: p(F); size = (Nmax+1)xN_pg
+                      unsigned int Nmax,
+                      double Bg,
+                      double Br,
+                      unsigned int N_pg,        // size of pg_theor
+                      double *pg_theor,
+                      double *a)            // corresponding amplitudes
 {
 
 
     /*** FgFr: matrix, FgFr(i,j) = p(Fg = i, Fr = j) ***/
 
-    double *FgFr = new double[(Nmax + 1) * (Nmax + 1)];
-    double *tmp = new double[(Nmax + 1) * (Nmax + 1)];
+    auto *FgFr = new double[(Nmax + 1) * (Nmax + 1)];
+    auto *tmp = new double[(Nmax + 1) * (Nmax + 1)];
     unsigned int j, i, red;
 
     for (j = 0; j < (Nmax + 1) * (Nmax + 1); j++) FgFr[j] = 0.;
@@ -259,34 +249,30 @@ void Pda::sgsr_manypF(double *SgSr,        // see sgsr_pN
 }
 
 
-
-void Pda::poisson_0toN (double* return_p, double lambda, unsigned int return_dim)
-{
+void Pda::poisson_0toN(double *return_p, double lambda, unsigned int return_dim) {
     unsigned int i;
     return_p[0] = exp(-lambda);
-    for (i = 1; i<=return_dim; i++){
-        return_p[i] = return_p[i-1]*lambda/(double)i;
+    for (i = 1; i <= return_dim; i++) {
+        return_p[i] = return_p[i - 1] * lambda / (double) i;
     }
 }
 
 
-void Pda::poisson_0toN_multi(double* return_p, double* lambda, unsigned int M, unsigned int N)
-{
+void Pda::poisson_0toN_multi(double *return_p, double *lambda, unsigned int M, unsigned int N) {
     unsigned int i, j, ishift;
-    for (j = 0; j<M; j++) {
-        ishift = (N+1)*j;
+    for (j = 0; j < M; j++) {
+        ishift = (N + 1) * j;
         return_p[ishift] = exp(-lambda[j]);
-        for (i = 1; i<=N; i++){
-            return_p[ishift+i] = return_p[ishift+i-1]*lambda[j]/(double)i;
+        for (i = 1; i <= N; i++) {
+            return_p[ishift + i] = return_p[ishift + i - 1] * lambda[j] / (double) i;
         }
     }
 }
 
 
-void Pda::polynom2_conv (double* return_p, double* p, unsigned int n, double p2)
-{
+void Pda::polynom2_conv(double *return_p, double *p, unsigned int n, double p2) {
     unsigned int i;
-    return_p[0] = p[0]*p2;
-    for (i = 1; i<n; i++) return_p[i] = p[i-1]*(1.-p2) + p[i]*p2;
-    return_p[n] = p[n-1]*(1.-p2);
+    return_p[0] = p[0] * p2;
+    for (i = 1; i < n; i++) return_p[i] = p[i - 1] * (1. - p2) + p[i] * p2;
+    return_p[n] = p[n - 1] * (1. - p2);
 }
