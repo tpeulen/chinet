@@ -6,10 +6,6 @@
 #include "Node.h"
 
 // Constructor
-
-
-
-
 Node::Node()
 {}
 
@@ -49,39 +45,4 @@ std::string Node::make_name(const std::string function_name, std::vector<Node *>
     r.append(")");
     return r;
 }
-
-
-
-// Getter
-std::vector<Node*> Node::get_input_nodes(){
-    return input_ports;
-}
-
-
-double Node::get_value(){
-    if(auto_update){
-        update();
-    }
-    return value;
-}
-
-
-std::string Node::get_name(){
-        return name;
-}
-
-
-// Setter
-
-void Node::set_value(double v) {
-    value = v;
-
-    // for independent nodes set all the values of the linked Nodes to invalid
-    if(!is_linked()){
-        for(auto ni : ouput_ports){
-            ni->value_valid = false;
-        }
-    }
-}
-
 

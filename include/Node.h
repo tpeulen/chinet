@@ -54,7 +54,6 @@ public:
 
     // Operators
     Node operator*(Node &v);
-
     /*
     Node operator+(Node &v);
     Node operator-(Node &v);
@@ -83,9 +82,21 @@ public:
     }
 
     // Getter
-    double get_value();
-    std::string get_name();
-    std::vector<Node*> get_input_nodes();
+
+    double get_value(){
+        if(auto_update){
+            update();
+        }
+        return value;
+    }
+
+    std::string get_name(){
+        return name;
+    }
+
+    std::vector<Node*> get_input_nodes(){
+        return input_ports;
+    }
 
     // Setter
 
@@ -97,15 +108,21 @@ public:
      *
      * @param v the new value of the Node
      */
-    void set_value(double v);
+    void set_value(double v){
+        value = v;
+        // for independent nodes set all the values of the linked Nodes to invalid
+        if(!is_linked()){
+            for(auto ni : ouput_ports){
+                ni->value_valid = false;
+            }
+        }
+    };
 
 
     // Methods
-
     bool is_linked(){
         return (!input_ports.empty());
     }
-
 
     bool is_valid(){
         if(input_ports.empty()){
