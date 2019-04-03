@@ -8,9 +8,11 @@
 
 
 Decay::Decay() :
-valid_irf(false),
 irf(nullptr),
+convolution_start(0),
 convolution_stop(0),
+convolution_mode(0),
+period(0),
 lifetime_spectrum(0)
 {
 }
@@ -18,9 +20,11 @@ lifetime_spectrum(0)
 
 Decay::Decay(double dt, unsigned int nx) :
 Curve(dt, nx),
-valid_irf(false),
 irf(nullptr),
+convolution_start(0),
 convolution_stop(0),
+period(0),
+convolution_mode(0),
 lifetime_spectrum(0)
 {
     irf = new Curve(dt, nx);
@@ -46,14 +50,46 @@ void Decay::remove_last() {
 
 void Decay::update() {
 
-    Functions::convolve_exponentials(
-            y.data(), y.size(),
-            lifetime_spectrum.data(), lifetime_spectrum.size(),
-            irf->y.data(), irf->y.size(),
-            convolution_stop,
-            dt
-    );
+    switch (convolution_mode){
+        case 1:
+            Functions::convolve_sum_of_exponentials_periodic(
+                    y.data(), y.size(),
+                    lifetime_spectrum.data(), lifetime_spectrum.size(),
+                    irf->y.data(), irf->y.size(),
+                    convolution_start,
+                    convolution_stop,
+                    dt,
+                    period
+            );
+            break;
+        default:
+            Functions::convolve_sum_of_exponentials(
+                    y.data(), y.size(),
+                    lifetime_spectrum.data(), lifetime_spectrum.size(),
+                    irf->y.data(), irf->y.size(),
+                    convolution_stop,
+                    dt
+            );
+            break;
+    }
 
+}
+
+
+void Decay::save(const std::string filename) {
+    json jsonfile;
+
+    jsonfile["type"] = "Decay";
+
+    jsonfile["x"]["values"] = x;
+    jsonfile["x"]["name"] = name_x;
+
+    jsonfile["y"]["values"] = y;
+    jsonfile["y"]["errors"] = ey;
+    jsonfile["y"]["name"] = name_y;
+
+    std::ofstream file(filename);
+    file << jsonfile;
 }
 
 
@@ -93,23 +129,33 @@ unsigned int Decay::get_convolution_stop() {
 
 
 // Setter
-
 void Decay::set_fluorescence_lifetimes(double *lifetime_spectrum, int n_lifetime_spectrum) {
-    Decay::lifetime_spectrum.clear();
-    Decay::lifetime_spectrum.resize(n_lifetime_spectrum);
+    Functions::copy_array_to_vector(lifetime_spectrum, n_lifetime_spectrum, Decay::lifetime_spectrum);
+}
 
-    for(int i=0; i<n_lifetime_spectrum; i++){
-        Decay::lifetime_spectrum.push_back(lifetime_spectrum[i]);
-    }
+
+void Decay::set_instrument_response_function(Curve *v, unsigned int convolution_mode) {
+    irf = v;
+    Decay::convolution_mode = convolution_mode;
 }
 
 
 void Decay::set_instrument_response_function(Curve *v) {
-    irf = v;
+    set_instrument_response_function(v, convolution_mode);
+}
+
+
+void Decay::set_convolution_mode(unsigned int convolution_mode) {
+    Decay::convolution_mode = convolution_mode;
 }
 
 
 void Decay::set_convolution_stop(unsigned int v) {
     convolution_stop = v;
+}
+
+
+void Decay::set_convolution_start(unsigned int v) {
+    convolution_start = v;
 }
 

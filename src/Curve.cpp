@@ -60,49 +60,73 @@ Curve::Curve(double dt, unsigned int nx) {
 
 
 // Methods
-
-void Curve::add(Curve v, bool valid) {
-    if(!valid){
+Curve Curve::operator+(Curve &v) {
+    if(!valid_op){
         for(unsigned int i=0; i < y.size(); i++){
             y[i] += v.y[i];
         }
+        return *this;
     } else{
         // TODO only add the region where the x-values overlap
     }
 }
 
 
-void Curve::add(double v) {
+Curve Curve::operator+(double v) {
     for(auto &yi : y){
         yi += v;
     }
+    return *this;
 }
 
 
-void Curve::sub(Curve v, bool valid) {
-    if(!valid){
+Curve Curve::operator-(Curve &v) {
+    if(!valid_op){
         for(unsigned int i=0; i < y.size(); i++){
-            y[i] += v.y[i];
+            y[i] -= v.y[i];
         }
+        return *this;
     } else{
         // TODO (only overlapping region)
     }
 }
 
 
-void Curve::sub(double v) {
+Curve Curve::operator-(double v) {
     for(auto &yi : y){
-        yi += v;
+        yi -= v;
+    }
+    return *this;
+}
+
+
+Curve Curve::operator/(Curve &v) {
+    if(!valid_op){
+        for(unsigned int i=0; i < y.size(); i++){
+            y[i] /= v.y[i];
+        }
+        return *this;
+    } else{
+        // TODO (only overlapping region)
     }
 }
 
 
-void Curve::mul(Curve v, bool valid) {
-    if(!valid){
+Curve Curve::operator/(double v) {
+    for(auto &yi : y){
+        yi /= v;
+    }
+    return *this;
+}
+
+
+Curve Curve::operator*(Curve &v) {
+    if(!valid_op){
         // simply multiply the y-values
         for(unsigned int i=0; i < y.size(); i++){
             y[i] *= v.y[i];
         }
+        return *this;
     } else{
         // only multiply the y-values
         // the the same x-values (TODO)
@@ -110,10 +134,11 @@ void Curve::mul(Curve v, bool valid) {
 }
 
 
-void Curve::mul(double v) {
+Curve Curve::operator*(double v) {
     for(auto &yi : y){
         yi *= v;
     }
+    return *this;
 }
 
 

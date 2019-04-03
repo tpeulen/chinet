@@ -18,6 +18,15 @@ class Curve {
 
     friend class Decay;
 
+private:
+    // if this is true only overlapping regions of
+    // curves are operated on addition, etc.
+    bool valid_op = false;
+
+    // if this is true operations are executed in place, i.e., no new
+    // objects are created.
+    bool inplace_op = true;
+
 protected:
     std::string name_x;
     std::string name_y;
@@ -109,12 +118,6 @@ public:
      */
     void shift(double value);
 
-    void add(Curve v, bool valid=false);
-    void add(double v);
-
-    void sub(Curve v, bool valid=false);
-    void sub(double v);
-
     /*!
      * This method multiplies to the y-values of the current instance of a @class Curve
      * object the y-values of another @class Curve object.
@@ -124,12 +127,23 @@ public:
      * without check for overlap. If this parameter is true only the overlapping y-values are multiplied.
      * The overlap is judged by the values of the x-axis (TODO).
      */
-    void mul(Curve v, bool valid=false);
-    void mul(double v);
+
+    Curve operator+(Curve &v);
+    Curve operator+(double v);
+
+    Curve operator-(Curve &v);
+    Curve operator-(double v);
+
+    Curve operator*(Curve &v);
+    Curve operator*(double v);
+
+    Curve operator/(Curve &v);
+    Curve operator/(double v);
+
     void resize(size_t v);
 
-    void save(std::string filename);
-    void load(std::string filename);
+    virtual void save(std::string filename);
+    virtual void load(std::string filename);
 
 
 };

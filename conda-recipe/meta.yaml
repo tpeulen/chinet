@@ -16,19 +16,16 @@ requirements:
     - hdf5
     - cmake
     - sphinx
-    - yaml
   host:
     - python {{ python }}
     - numpy
     - sphinx
     - hdf5
-    - yaml
   run:
     - numpy
     - python {{ python }}
     - hdf5
-    - yaml
-    
+
 #outputs:
 #    - type: wheel
 #    - name: fluomodlib

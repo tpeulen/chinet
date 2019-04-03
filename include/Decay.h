@@ -16,10 +16,12 @@ class Decay : public Curve{
 
 private:
     std::vector<double> lifetime_spectrum;
+    unsigned int convolution_start;
     unsigned int convolution_stop;
-    bool valid_irf;
     double dt;
     Curve* irf;
+    int convolution_mode;
+    double period;
 
 public:
 
@@ -48,6 +50,8 @@ public:
 
     void update();
 
+    void save(std::string filename);
+
 
     // Getter
     std::vector<double> get_amplitudes();
@@ -57,6 +61,7 @@ public:
 
     // Setter
     void set_convolution_stop(unsigned int);
+    void set_convolution_start(unsigned int);
 
     /*!
      * Sets the instrument response function (IRF)
@@ -64,6 +69,9 @@ public:
      * @param n_irf The length of the IRF
      */
     void set_instrument_response_function(Curve *irf);
+    void set_instrument_response_function(Curve *irf, unsigned int convolution_mode);
+
+    void set_convolution_mode(unsigned int convolution_mode);
 
     /*!
      * Sets the values of the fluorescence lifetimes. The fluorescence lifetime array

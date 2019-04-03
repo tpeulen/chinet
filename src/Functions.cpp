@@ -76,10 +76,10 @@ void Functions::copy_two_vectors_to_interleaved_array(
 }
 
 
-void Functions::convolve_exponentials(
-        double* out, int n_out,
-        const double* lifetime_spectrum, int n_lifetime_spectrum,
-        const double* irf, int n_irf,
+void Functions::convolve_sum_of_exponentials(
+        double *out, int n_out,
+        const double *lifetime_spectrum, int n_lifetime_spectrum,
+        const double *irf, int n_irf,
         int convolution_stop,
         double dt){
 
@@ -103,10 +103,10 @@ void Functions::convolve_exponentials(
 }
 
 
-void Functions::convolve_exponentials_periodic(
-        double* out, int n_out,
-        const double* lifetime, int n_lifetimes,
-        const double* irf, int n_irf,
+void Functions::convolve_sum_of_exponentials_periodic(
+        double *out, int n_out,
+        const double *lifetime, int n_lifetimes,
+        const double *irf, int n_irf,
         int start,
         int stop,
         double dt,
@@ -154,4 +154,5 @@ std::vector<double> Functions::diff(std::vector<double> v) {
     }
     return dx;
 }
+
 

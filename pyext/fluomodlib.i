@@ -6,6 +6,7 @@
 #include "../include/Curve.h"
 #include "../include/Functions.h"
 #include "../include/Decay.h"
+#include "../include/Variable.h"
 %}
 
 %include <typemaps.i>
@@ -28,4 +29,5 @@ namespace std{
 
 %include "curve.i"
 %include "decay.i"
+%include "variable.i"
 
