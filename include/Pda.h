@@ -6,10 +6,48 @@
 #define FLUOMODLIB_PDA_H
 
 #include <math.h>
+#include <vector>
 
 
 class Pda {
 
+private:
+
+    double Bg;
+    double Br;
+    unsigned int Nmax;
+    double* SgSr;
+    std::vector<double> amplitudes;
+    std::vector<double> probability_green_theor;
+
+public:
+
+    // Constructor and Destructor
+    ~Pda(){
+        delete[] SgSr;
+    }
+
+    // Methods
+    void append(double amplitude, double probability_green);
+
+    // Getter and Setter
+
+    unsigned int getNmax() const;
+
+    void setNmax(unsigned int nmax);
+
+    double getBg() const;
+
+    void setBg(double bg);
+
+    double getBr() const;
+
+    void setBr(double br);
+
+};
+
+
+namespace PdaFunctions{
 
     /*!
      *
@@ -110,7 +148,7 @@ class Pda {
      * @param Bg
      * @param Br
      */
-    void conv_pF(double *SgSr, double *FgFr, unsigned int Nmax, double Bg, double Br);
+    inline void conv_pF(double *SgSr, double *FgFr, unsigned int Nmax, double Bg, double Br);
 
 
     /*!
@@ -122,7 +160,7 @@ class Pda {
      * @param Br
      * @param pN
      */
-    void conv_pN(double *SgSr, double *FgFr, unsigned int Nmax, double Bg, double Br, double *pN);
+    inline void conv_pN(double *SgSr, double *FgFr, unsigned int Nmax, double Bg, double Br, double *pN);
 
 
     /*!
@@ -132,22 +170,21 @@ class Pda {
     * @param lambda
     * @param return_dim
     */
-    void poisson_0toN(double *return_p, double lambda, unsigned int return_dim);
+    inline void poisson_0toN(double *return_p, double lambda, unsigned int return_dim);
 
 
     /*!
      * generates Poisson distribution for a set of lambdas
      */
-    void poisson_0toN_multi(double *, double *, unsigned int, unsigned int);
+    inline void poisson_0toN_multi(double *, double *, unsigned int, unsigned int);
 
 
     /*!
      * convolves vectors p and [p2 1-p2]
      */
-    void polynom2_conv(double *, double *, unsigned int, double);
+    inline void polynom2_conv(double *, double *, unsigned int, double);
 
-
-};
+}
 
 
 #endif //FLUOMODLIB_PDA_H

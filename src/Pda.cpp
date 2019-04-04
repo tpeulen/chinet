@@ -7,7 +7,7 @@
 
 ////////////////////////////////// convolution with background ////////////////////////////////////
 
-void Pda::conv_pF(double *SgSr, double *FgFr, unsigned int Nmax, double Bg, double Br) {
+void PdaFunctions::conv_pF(double *SgSr, double *FgFr, unsigned int Nmax, double Bg, double Br) {
 
     double *tmp = new double[(Nmax + 1) * (Nmax + 1)];
 
@@ -48,7 +48,7 @@ void Pda::conv_pF(double *SgSr, double *FgFr, unsigned int Nmax, double Bg, doub
 }
 
 /***** modification for P(N) *****/
-void Pda::conv_pN(double *SgSr, double *FgFr,
+void PdaFunctions::conv_pN(double *SgSr, double *FgFr,
                   unsigned int Nmax,
                   double Bg, double Br,
                   double *pN) {
@@ -68,7 +68,7 @@ void Pda::conv_pN(double *SgSr, double *FgFr,
 }
 
 
-void Pda::sgsr_pN(double *SgSr,        // return: SgSr(i,j) = p(Sg=i, Sr=j)
+void PdaFunctions::sgsr_pN(double *SgSr,        // return: SgSr(i,j) = p(Sg=i, Sr=j)
                   double *pN,        // p(N)
                   unsigned int Nmax,    // max number of photons (max N)
                   double Bg,        // <background green>, per time window (!)
@@ -98,7 +98,7 @@ void Pda::sgsr_pN(double *SgSr,        // return: SgSr(i,j) = p(Sg=i, Sr=j)
 }
 
 
-void Pda::sgsr_pF(double *SgSr, double *pF, unsigned int Nmax, double Bg, double Br, double pg_theor) {
+void PdaFunctions::sgsr_pF(double *SgSr, double *pF, unsigned int Nmax, double Bg, double Br, double pg_theor) {
 
     /*** FgFr: matrix, FgFr(i,j) = p(Fg = i, Fr = j) ***/
 
@@ -123,7 +123,7 @@ void Pda::sgsr_pF(double *SgSr, double *pF, unsigned int Nmax, double Bg, double
 }
 
 
-void Pda::sgsr_pN_manypg(
+void PdaFunctions::sgsr_pN_manypg(
         double *SgSr,
         double *pN,
         unsigned int Nmax,
@@ -131,7 +131,7 @@ void Pda::sgsr_pN_manypg(
         double Br,
         unsigned int N_pg,
         double *pg_theor,
-        double *a)
+        double *a) 
 {
 
 
@@ -165,7 +165,7 @@ void Pda::sgsr_pN_manypg(
 }
 
 
-void Pda::sgsr_pF_manypg(double *SgSr,        // see sgsr_pN
+void PdaFunctions::sgsr_pF_manypg(double *SgSr,        // see sgsr_pN
                          double *pF,        // input: p(F)
                          unsigned int Nmax,
                          double Bg,
@@ -207,7 +207,7 @@ void Pda::sgsr_pF_manypg(double *SgSr,        // see sgsr_pN
 
 ///////////////////////// calculating p(G,R), several ratios, many P(F)s //////////////////////////
 
-void Pda::sgsr_manypF(double *SgSr,        // see sgsr_pN
+void PdaFunctions::sgsr_manypF(double *SgSr,        // see sgsr_pN
                       double *pF,        // input: p(F); size = (Nmax+1)xN_pg
                       unsigned int Nmax,
                       double Bg,
@@ -249,7 +249,7 @@ void Pda::sgsr_manypF(double *SgSr,        // see sgsr_pN
 }
 
 
-void Pda::poisson_0toN(double *return_p, double lambda, unsigned int return_dim) {
+void PdaFunctions::poisson_0toN(double *return_p, double lambda, unsigned int return_dim) {
     unsigned int i;
     return_p[0] = exp(-lambda);
     for (i = 1; i <= return_dim; i++) {
@@ -258,7 +258,7 @@ void Pda::poisson_0toN(double *return_p, double lambda, unsigned int return_dim)
 }
 
 
-void Pda::poisson_0toN_multi(double *return_p, double *lambda, unsigned int M, unsigned int N) {
+void PdaFunctions::poisson_0toN_multi(double *return_p, double *lambda, unsigned int M, unsigned int N) {
     unsigned int i, j, ishift;
     for (j = 0; j < M; j++) {
         ishift = (N + 1) * j;
@@ -270,9 +270,42 @@ void Pda::poisson_0toN_multi(double *return_p, double *lambda, unsigned int M, u
 }
 
 
-void Pda::polynom2_conv(double *return_p, double *p, unsigned int n, double p2) {
+void PdaFunctions::polynom2_conv(double *return_p, double *p, unsigned int n, double p2) {
     unsigned int i;
     return_p[0] = p[0] * p2;
     for (i = 1; i < n; i++) return_p[i] = p[i - 1] * (1. - p2) + p[i] * p2;
     return_p[n] = p[n - 1] * (1. - p2);
 }
+
+
+unsigned int Pda::getNmax() const {
+    return Nmax;
+}
+
+
+void Pda::setNmax(unsigned int nmax) {
+    Nmax = nmax;
+    free(SgSr);
+    SgSr = new double[(Nmax + 1) * (Nmax + 1)];
+}
+
+
+double Pda::getBg() const {
+    return Bg;
+}
+
+
+void Pda::setBg(double bg) {
+    Bg = bg;
+}
+
+
+double Pda::getBr() const {
+    return Br;
+}
+
+
+void Pda::setBr(double br) {
+    Br = br;
+}
+

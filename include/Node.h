@@ -4,11 +4,15 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <Port.h>
+#include <map>
 #include <NodeOperations.h>
 
 class Node {
 
 private:
+
+    std::map<std::string, Port*> ports;
 
     /// the value of the Node
     double value;
