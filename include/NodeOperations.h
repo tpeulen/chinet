@@ -11,9 +11,9 @@ class Node;
 
 namespace NodeOperations {
 
-    typedef double (*eval_t)(std::vector<Node*> &v);
+    typedef void (*eval_t)(std::vector<Port *> &input, std::vector<Port *> &output);
 
-    double multiply(std::vector<Node *> &v);
+    void multiply(std::vector<Port *> &inputs, std::vector<Port *> &ouptputs);
 
     eval_t get_node_operation_multiply();
 

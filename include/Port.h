@@ -12,15 +12,35 @@ class Node;
 
 class Port {
 
-private:
+    friend Node;
 
+private:
+    static unsigned int sNextId;
+    size_t id;
     std::string name;
     double value;
     Node* node;
+    Port* input = nullptr;
+    std::vector<Port*> ouputs;
 
 public:
 
-    double get_value();
+    Port(){
+        id = sNextId++;
+    }
+
+    void link_to(Port* port){
+        input = port;
+        port->ouputs.push_back(port);
+    }
+
+    double get_value(){
+        if(input == nullptr){
+            return value;
+        } else{
+            return input->get_value();
+        }
+    }
 
     void set_value(double v){
         value = v;
@@ -35,9 +55,7 @@ public:
         name = v;
     }
 
-    bool is_valid(){
-        return node->is_linked();
-    }
+    bool is_valid();
 
 };
 

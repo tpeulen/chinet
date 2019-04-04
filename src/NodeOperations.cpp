@@ -7,18 +7,18 @@
 
 namespace NodeOperations {
 
-    double multiply(std::vector<Node *> &v) {
+    void multiply(std::vector<Port *> &inputs, std::vector<Port *> &outputs) {
         double r = 1.0;
-        for (auto vi : v) {
+        for (auto vi : inputs) {
             if (vi != nullptr) {
                 r *= vi->get_value();
             }
         }
-        return r;
+        outputs[0]->set_value(r);
     }
 
     eval_t get_node_operation_multiply(){
         return multiply;
     }
 
-};
+}

@@ -3,3 +3,8 @@
 //
 
 #include "Port.h"
+
+
+bool Port::is_valid() {
+    return node->is_valid();
+}
