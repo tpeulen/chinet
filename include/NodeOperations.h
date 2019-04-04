@@ -5,10 +5,11 @@
 #ifndef FLUOMODLIB_NODEOPERATIONS_H
 #define FLUOMODLIB_NODEOPERATIONS_H
 
-#include <include/Node.h>
+#include <include/Port.h>
 
 class Node;
 
+/*
 namespace NodeOperations {
 
     typedef void (*eval_t)(std::vector<Port *> &input, std::vector<Port *> &output);
@@ -18,6 +19,7 @@ namespace NodeOperations {
     eval_t get_node_operation_multiply();
 
 };
+ */
 
 
 #endif //FLUOMODLIB_NODEOPERATIONS_H

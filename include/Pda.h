@@ -28,7 +28,7 @@ public:
     }
 
     // Methods
-    void append(double amplitude, double probability_green);
+    //void append(double amplitude, double probability_green);
 
     // Getter and Setter
 
@@ -148,7 +148,7 @@ namespace PdaFunctions{
      * @param Bg
      * @param Br
      */
-    inline void conv_pF(double *SgSr, double *FgFr, unsigned int Nmax, double Bg, double Br);
+    void conv_pF(double *SgSr, double *FgFr, unsigned int Nmax, double Bg, double Br);
 
 
     /*!
@@ -160,7 +160,7 @@ namespace PdaFunctions{
      * @param Br
      * @param pN
      */
-    inline void conv_pN(double *SgSr, double *FgFr, unsigned int Nmax, double Bg, double Br, double *pN);
+    void conv_pN(double *SgSr, double *FgFr, unsigned int Nmax, double Bg, double Br, double *pN);
 
 
     /*!
@@ -170,19 +170,19 @@ namespace PdaFunctions{
     * @param lambda
     * @param return_dim
     */
-    inline void poisson_0toN(double *return_p, double lambda, unsigned int return_dim);
+    void poisson_0toN(double *return_p, double lambda, unsigned int return_dim);
 
 
     /*!
      * generates Poisson distribution for a set of lambdas
      */
-    inline void poisson_0toN_multi(double *, double *, unsigned int, unsigned int);
+    void poisson_0toN_multi(double *, double *, unsigned int, unsigned int);
 
 
     /*!
      * convolves vectors p and [p2 1-p2]
      */
-    inline void polynom2_conv(double *, double *, unsigned int, double);
+    void polynom2_conv(double *, double *, unsigned int, double);
 
 }
 

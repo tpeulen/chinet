@@ -9,9 +9,19 @@
 #include <NodeOperations.h>
 
 
+class Port;
+
 class Node {
 
+    static int sNextId;
+
 private:
+
+    /// An id unique to every Node instance
+    size_t id;
+
+    /// The name of the Node instance (only used of representation)
+    std::string name;
 
     /*!
      * Stores if an value is valid. The value of a Node that is not linked to other Nodes is valid by default. A
@@ -20,23 +30,18 @@ private:
      */
     bool node_valid = true;
 
-    /// a list of Nodes the are used to compute the value of the Node
-    std::vector<Port *> input_ports;
+    /// A pointer to a instance of a Port that serves as an input
+    std::shared_ptr<Port> input;
 
-    /// a list of pointers to Nodes that use this node to calculate their values
-    std::vector<Port *> output_ports;
+    /// A pointer to a instance of a Port that serves as an output
+    std::shared_ptr<Port> output;
 
-    /// the pointer to a function that evaluates an input vector and writes to the output vector
-    void (*eval)(std::vector<Port*> &inputs, std::vector<Port*> &outputs);
-
-    /// the name of the Node (only used of representation)
-    std::string name;
-
-
-protected:
+    /// A pointer to a function that operates on an input Port instance (first argument)
+    /// and writes to an output Port instance (second argument)
+    void (*eval)(Port &, Port &);
 
     /// creates a name for a function and a list of pointers to Nodes
-    std::string make_name(std::string function_name, std::vector<Port *> v);
+    std::string make_name(std::string function_name);
 
 public:
 
@@ -44,59 +49,30 @@ public:
     Node(std::string n);
     Node();
 
-    void update(){
-        if(!input_ports.empty()){
-            eval(input_ports, output_ports);
-        }
-    }
+    // Methods
+    void update();
 
     void set_operation(
-            std::string operation_name,
-            void(*pfn)(std::vector<Port *> &inputs, std::vector<Port *> &outputs)
-            ){
-        eval = pfn;
-        name = make_name(operation_name, input_ports);
-    }
+            std::string &operation_name,
+            void(*pfn)(Port &, Port &)
+            );
+
+    void link_input_to(std::shared_ptr<Port> &port);
+
+    bool is_valid();
 
     // Getter
-    std::string get_name(){
-        return name;
-    }
-
-    std::vector<Port *> get_input_ports(){
-        return input_ports;
-    }
-
-    std::vector<Port *> get_output_ports(){
-        return output_ports;
-    }
-
+    std::string get_name();
+    std::shared_ptr<Port> get_input_port();
+    std::shared_ptr<Port> get_output_port();
 
     // Setter
-    void set_input_ports(std::vector<Port *> &inputs){
-        input_ports = inputs;
-        name = make_name("", input_ports);
-    }
+    void set_input_port(std::shared_ptr<Port> input);
+    void set_input_port(Port* input);
 
-    void set_output_ports(std::vector<Port *> &outputs){
-        output_ports = outputs;
-    }
+    void set_output_port(std::shared_ptr<Port> output);
+    void set_output_port(Port* output);
 
-    // Methods
-
-    bool is_valid(){
-        if(input_ports.empty()){
-            return true;
-        } else{
-            for(auto v : input_ports){
-                if(!v->is_valid()){
-                    node_valid = false;
-                    break;
-                }
-            }
-            return node_valid;
-        }
-    }
 };
 
 

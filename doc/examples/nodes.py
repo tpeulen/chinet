@@ -1,10 +1,9 @@
 import fluomodlib as flm
-import numpy as np
-import pylab as p
 
 
-v1 = flm.Node(11, "a")
-v1.get_value()
+n1 = flm.Node("a")
+n1_pa = flm.Port("a1")
+n1_pa.get_value()
 
 v2 = flm.Node(2, "b")
 v2.get_value()

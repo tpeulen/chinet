@@ -18,6 +18,7 @@
 %include "std_map.i"
 %include "std_vector.i";
 %include "std_list.i";
+%include "std_shared_ptr.i"
 
 %include "numpy.i"
 %init %{

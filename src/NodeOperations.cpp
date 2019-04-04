@@ -6,7 +6,7 @@
 
 
 namespace NodeOperations {
-
+/*
     void multiply(std::vector<Port *> &inputs, std::vector<Port *> &outputs) {
         double r = 1.0;
         for (auto vi : inputs) {
@@ -20,5 +20,5 @@ namespace NodeOperations {
     eval_t get_node_operation_multiply(){
         return multiply;
     }
-
+*/
 }
