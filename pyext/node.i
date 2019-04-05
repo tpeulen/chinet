@@ -5,7 +5,6 @@
 
 namespace std{
         %template(VectorNode) vector<Node*>;
-        %template(VectorUint8) std::vector<std::uint8_t>;
 }
 
 %{

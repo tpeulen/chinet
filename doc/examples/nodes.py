@@ -1,9 +1,14 @@
 import fluomodlib as flm
 
-
 n1 = flm.Node("a")
 n1_pa = flm.Port("a1")
 n1_pa.get_value()
+
+json_string = open('curve.json').read()
+
+n1_pa.read_json(json_string)
+n1_pa.get_json()
+
 
 v2 = flm.Node(2, "b")
 v2.get_value()

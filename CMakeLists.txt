@@ -11,6 +11,7 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest")
 endif(MSVC)
 
+
 OPTION (USE_OpenMP "Use OpenMP" ON)
 IF(USE_OpenMP)
     FIND_PACKAGE(OpenMP)
@@ -20,10 +21,17 @@ IF(USE_OpenMP)
     ENDIF()
 ENDIF()
 
+# Specify the minimum version you require.
+FIND_PACKAGE (libbson-1.0 1.7 REQUIRED)
+message ("--   libbson found version \"${BSON_VERSION}\"")
+message ("--   libbson include path \"${BSON_INCLUDE_DIRS}\"")
+message ("--   libbson libraries \"${BSON_LIBRARIES}\"")
+INCLUDE_DIRECTORIES(${BSON_INCLUDE_DIRS})
 
 # JSON
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/json/single_include/)
 
+# Project
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)

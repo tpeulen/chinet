@@ -4,7 +4,6 @@ int Port::sNextId = 0;
 
 
 // Constructor
-
 Port::Port(
         std::shared_ptr<Node> &node,
         std::vector<std::uint8_t> &v_bson_value
@@ -36,7 +35,6 @@ Port::Port(std::string name) : Port(){
 
 
 // Getter
-
 int Port::get_id() {
     return id;
 }
@@ -46,8 +44,13 @@ std::string Port::get_name(){
 }
 
 std::string Port::get_json(){
-    json j = json::from_bson(v_bson_value);
-    return j;
+    if(!v_bson_value.empty()){
+        size_t size;
+        char* data = bson_as_json(b, &size);
+        std::string json_string(data, size);
+        return json_string;
+        //return json::from_bson(v_bson_value).dump();
+    } else return "";
 }
 
 std::shared_ptr<Port> Port::shared_ptr() {
@@ -55,7 +58,6 @@ std::shared_ptr<Port> Port::shared_ptr() {
 }
 
 // Setter
-
 void Port::set_name(std::string &v){
     name = v;
 }
@@ -66,7 +68,6 @@ void Port::set_value(std::vector <std::uint8_t> &v){
 
 
 // Methods
-
 std::vector<std::uint8_t> Port::get_value(){
     if(input == nullptr){
         return v_bson_value;
@@ -76,6 +77,7 @@ std::vector<std::uint8_t> Port::get_value(){
 }
 
 void Port::read_json(std::string json_string){
+    bson_json_reader;
     json j = json::parse(json_string);
     v_bson_value = json::to_bson(j);
 }

@@ -7,6 +7,7 @@
 #include <Node.h>
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
+#include <bson.h>
 
 
 class Node;
@@ -30,12 +31,10 @@ private:
 
     /// stores the data of the Port
     std::vector<std::uint8_t> v_bson_value;
+    bson_t *b;
 
 public:
 
-    /*!
-     * Creates the id of the port. An Port.id is an incrementing number.
-     */
     Port();
     Port(std::string name);
     Port(std::shared_ptr<Node> &node, std::vector<std::uint8_t> &v_bson_value);
