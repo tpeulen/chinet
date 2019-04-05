@@ -27,29 +27,28 @@ private:
 
     std::shared_ptr<Node> node;
     std::shared_ptr<Port> input;
-    std::vector<std::shared_ptr<Port>> outputs;
+    std::vector<std::shared_ptr<Port>> targets;
 
     /// stores the data of the Port
-    std::vector<std::uint8_t> v_bson_value;
-    bson_t *b;
+    bson_t b;
 
 public:
 
     Port();
     Port(std::string name);
-    Port(std::shared_ptr<Node> &node, std::vector<std::uint8_t> &v_bson_value);
-    Port(std::string name, std::shared_ptr<Node> &node, std::vector<std::uint8_t> &v_bson_value);
+    Port(std::shared_ptr<Node> &node);
+    Port(std::string name, std::shared_ptr<Node> &node);
 
     // Getter
     std::string get_json();
     std::string get_name();
     int get_id();
-    std::vector<std::uint8_t> get_value();
+    bson_t* get_value();
     std::shared_ptr<Port> shared_ptr();
 
     // Setter
     void set_name(std::string &v);
-    void set_value(std::vector<std::uint8_t> &v);
+    void set_value(bson_t v);
 
     // Methods
     void read_json(std::string json_string);

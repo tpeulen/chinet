@@ -57,7 +57,7 @@ bool Node::is_valid(){
 
 void Node::link_input_to(std::shared_ptr<Port> &port){
     this->input = port;
-    port->outputs.push_back(input);
+    port->targets.push_back(input);
 }
 
 // Getter
@@ -78,6 +78,7 @@ std::shared_ptr<Port> Node::get_output_port(){
 void Node::set_input_port(std::shared_ptr<Port> input) {
     this->input = input;
     this->name = make_name("");
+    this->output = input;
 }
 
 void Node::set_input_port(Port* input) {

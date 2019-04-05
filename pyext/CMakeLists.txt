@@ -47,8 +47,18 @@ SWIG_ADD_LIBRARY(
 
 
 TARGET_LINK_LIBRARIES(
-        ${MODULE_NAME}
+        ${MODULE_NAME} PRIVATE
         ${HDF5_LIBRARIES}
         ${PYTHON_LIBRARY}
+        ${BSON_LIBRARIES}
 )
 
+TARGET_COMPILE_DEFINITIONS(
+        ${MODULE_NAME} PRIVATE
+        ${BSON_DEFINITIONS}
+)
+
+add_dependencies(
+        ${MODULE_NAME}
+        libmongoc
+)

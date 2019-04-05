@@ -5,27 +5,25 @@ int Port::sNextId = 0;
 
 // Constructor
 Port::Port(
-        std::shared_ptr<Node> &node,
-        std::vector<std::uint8_t> &v_bson_value
+        std::shared_ptr<Node> &node
         ) :
-        Port("", node, v_bson_value)
+        Port("", node)
 {}
 
 
 Port::Port(
         std::string name,
-        std::shared_ptr<Node> &node,
-        std::vector<std::uint8_t> &v_bson_value
+        std::shared_ptr<Node> &node
         ) :
         Port(name)
 {
     this->node = node;
-    Port::v_bson_value = v_bson_value;
 }
 
 
 Port::Port(){
     id = sNextId++;
+    bson_init(&b);
 }
 
 
@@ -44,13 +42,9 @@ std::string Port::get_name(){
 }
 
 std::string Port::get_json(){
-    if(!v_bson_value.empty()){
-        size_t size;
-        char* data = bson_as_json(b, &size);
-        std::string json_string(data, size);
-        return json_string;
-        //return json::from_bson(v_bson_value).dump();
-    } else return "";
+    char* data = bson_as_json(&b, NULL);
+    std::string json_string(data);
+    return json_string;
 }
 
 std::shared_ptr<Port> Port::shared_ptr() {
@@ -62,23 +56,25 @@ void Port::set_name(std::string &v){
     name = v;
 }
 
-void Port::set_value(std::vector <std::uint8_t> &v){
-    v_bson_value = v;
+void Port::set_value(bson_t v){
+    bson_destroy(&b);
+    b = *bson_copy(&v);
 }
 
 
 // Methods
-std::vector<std::uint8_t> Port::get_value(){
+bson_t* Port::get_value(){
     if(input == nullptr){
-        return v_bson_value;
+        return bson_copy(&b);
     } else{
-        return input->v_bson_value;
+        return bson_copy(&(input->b));
     }
 }
 
 void Port::read_json(std::string json_string){
-    bson_json_reader;
-    json j = json::parse(json_string);
-    v_bson_value = json::to_bson(j);
+    bson_error_t error;
+    bson_t *temp = bson_new_from_json((uint8_t*) json_string.c_str(), -1, &error);
+    bson_destroy(&b);
+    b = *bson_copy(temp);
 }
 
