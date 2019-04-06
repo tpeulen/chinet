@@ -67,7 +67,7 @@ class CMakeBuild(build_ext):
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
 
 
-if 'doc2' in sys.argv:
+if 'doc' in sys.argv:
     cwd = os.getcwd()
     os.chdir('./include/')
     subprocess.call(

@@ -10,8 +10,13 @@ n1_pi.read_json(json_string)
 n1_pi.get_json() == n1.get_output_port().get_json()
 
 
-n1_po = flm.Port("outA1")
+#################################
+
+n1_po = flm.Port("outA1", "port.json")
 n1.set_output_port(n1_po)
+
+
+
 
 
 v2 = flm.Node(2, "b")

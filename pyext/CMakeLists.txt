@@ -58,7 +58,3 @@ TARGET_COMPILE_DEFINITIONS(
         ${BSON_DEFINITIONS}
 )
 
-add_dependencies(
-        ${MODULE_NAME}
-        libmongoc
-)
