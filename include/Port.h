@@ -7,7 +7,8 @@
 #include <Node.h>
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
-#include <bson.h>
+#include <mongoc/mongoc.h>
+#include <bsoncxx/json.hpp>
 
 
 class Node;
@@ -29,11 +30,14 @@ private:
     std::shared_ptr<Port> input;
     std::vector<std::shared_ptr<Port>> targets;
 
-    /// stores the data of the Port
-    bson_t b;
+    /// stores the data of the Port in a BSON document
+    bson_t* bson_doc;
+    bson_iter_t bson_iter;
 
 public:
 
+    // Constructor
+    //--------------------------------------------------------------------
     Port();
     Port(std::string name);
     Port(std::shared_ptr<Node> &node);
@@ -41,7 +45,13 @@ public:
     //Port(std::string name, std::string filename, std::shared_ptr<Node> &node);
     Port(std::string name, std::shared_ptr<Node> &node);
 
+    // Destructor
+    //--------------------------------------------------------------------
+    //~Port();
+
+
     // Getter
+    //--------------------------------------------------------------------
     std::string get_json();
     std::string get_name();
     int get_id();
@@ -49,10 +59,16 @@ public:
     std::shared_ptr<Port> shared_ptr();
 
     // Setter
+    //--------------------------------------------------------------------
     void set_name(std::string &v);
-    void set_value(bson_t v);
+    void set_value(bson_t *v);
+
+    // Operator
+    //--------------------------------------------------------------------
+    void operator[](std::string key);
 
     // Methods
+    //--------------------------------------------------------------------
     void read_json(std::string json_string);
 
 };

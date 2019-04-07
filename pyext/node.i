@@ -11,6 +11,7 @@ namespace std{
 #include "../include/Node.h"
 #include "../include/Port.h"
 #include "../include/NodeOperations.h"
+#include <mongoc/mongoc.h>
 
 %}
 
@@ -20,5 +21,5 @@ namespace std{
 %include "../include/Node.h"
 %include "../include/Port.h"
 %include "../include/NodeOperations.h"
-
+%include <mongoc/mongoc.h>
 

@@ -7,6 +7,7 @@
 #include <Port.h>
 #include <map>
 #include <NodeOperations.h>
+#include <mongoc/mongoc.h>
 
 
 class Port;
@@ -31,10 +32,10 @@ private:
     bool node_valid = true;
 
     /// A pointer to a instance of a Port that serves as an input
-    std::shared_ptr<Port> input;
+    std::shared_ptr<Port> input_port;
 
     /// A pointer to a instance of a Port that serves as an output
-    std::shared_ptr<Port> output;
+    std::shared_ptr<Port> output_port;
 
     /// A pointer to a function that operates on an input Port instance (first argument)
     /// and writes to an output Port instance (second argument)
@@ -46,27 +47,31 @@ private:
 public:
 
     // Constructor
+    //--------------------------------------------------------------------
     Node(std::string n);
     Node();
 
     // Methods
+    //--------------------------------------------------------------------
     void update();
-
     void set_operation(
             std::string &operation_name,
             void(*pfn)(Port &, Port &)
             );
 
     void link_input_to(std::shared_ptr<Port> &port);
-
     bool is_valid();
 
     // Getter
+    //--------------------------------------------------------------------
     std::string get_name();
+    bson_t* get_input_data();
+    bson_t* get_output_data();
     std::shared_ptr<Port> get_input_port();
     std::shared_ptr<Port> get_output_port();
 
     // Setter
+    //--------------------------------------------------------------------
     void set_input_port(std::shared_ptr<Port> input);
     void set_input_port(Port* input);
 

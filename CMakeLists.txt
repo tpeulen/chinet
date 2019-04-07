@@ -22,15 +22,21 @@ IF(USE_OpenMP)
     ENDIF()
 ENDIF()
 
+# Mongo-CXX-driver
+find_package(libmongocxx REQUIRED)
+find_package(libbsoncxx REQUIRED)
+include_directories(${LIBMONGOCXX_INCLUDE_DIR})
+include_directories(${LIBBSONCXX_INCLUDE_DIR})
 
-# libbson for BSON and JSON files
-FIND_PACKAGE (libbson-1.0 REQUIRED)
-message ("--   libbson found version \"${BSON_VERSION}\"")
-message ("--   libbson include path \"${BSON_INCLUDE_DIRS}\"")
-message ("--   libbson libraries \"${BSON_LIBRARIES}\"")
-INCLUDE_DIRECTORIES(${BSON_INCLUDE_DIRS})
-LINK_LIBRARIES(${BSON_LIBRARIES})
-ADD_COMPILE_DEFINITIONS(${BSON_DEFINITIONS})
+# Mongo-C-driver
+find_package (libmongoc-1.0 REQUIRED)
+message ("--   mongoc found version \"${MONGOC_VERSION}\"")
+message ("--   mongoc include path \"${MONGOC_INCLUDE_DIRS}\"")
+message ("--   mongoc libraries \"${MONGOC_LIBRARIES}\"")
+INCLUDE_DIRECTORIES ("${MONGOC_INCLUDE_DIRS}")
+LINK_LIBRARIES("${MONGOC_LIBRARIES}")
+ADD_COMPILE_DEFINITIONS("${MONGOC_DEFINITIONS}")
+
 
 # JSON
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/json/single_include/)
