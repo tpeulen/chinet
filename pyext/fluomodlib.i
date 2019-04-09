@@ -8,7 +8,6 @@
 #include "../include/Decay.h"
 #include "../include/Node.h"
 #include "../include/Pda.h"
-
 %}
 
 %include <typemaps.i>
@@ -28,6 +27,7 @@ import_array();
 namespace std{
         %template(map_string_string) map<string, string>;
         %template(vector_double) vector<double>;
+        %template(vector_string) vector<string>;
 }
 
 %include "curve.i"

@@ -4,15 +4,30 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <Port.h>
 #include <map>
-#include <NodeOperations.h>
-#include <mongoc/mongoc.h>
 
+#include <mongocxx/instance.hpp>
+#include <mongocxx/uri.hpp>
+#include <mongocxx/client.hpp>
+#include <mongocxx/database.hpp>
+
+#include <Port.h>
+#include <NodeOperations.h>
+
+
+// Database
+//--------------------------------------------------------------------
+/*
+mongocxx::instance instance{}; // This should be done only once.
+mongocxx::client client{mongocxx::uri{}};
+mongocxx::database db = client["mydb"];
+mongocxx::collection coll = db["nodes"];
+*/
 
 class Port;
 
 class Node {
+    friend Port;
 
     static int sNextId;
 
@@ -65,8 +80,8 @@ public:
     // Getter
     //--------------------------------------------------------------------
     std::string get_name();
-    bson_t* get_input_data();
-    bson_t* get_output_data();
+    //void* get_input_data();
+    //void* get_output_data();
     std::shared_ptr<Port> get_input_port();
     std::shared_ptr<Port> get_output_port();
 

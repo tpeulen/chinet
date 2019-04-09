@@ -1,17 +1,10 @@
-[
-  {
-    "name" : "NameA",
+{
+  "NameA": {
     "value": 1.0,
     "fixed": false
   },
-  {
-    "name" : "NameB",
+  "NameB": {
     "value": 2.0,
     "fixed": true
-  },
-  {
-    "name" : "Filename",
-    "value": "path to file",
-    "fixed": true
   }
-]
+}

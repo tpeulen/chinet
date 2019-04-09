@@ -182,9 +182,9 @@ void Curve::save(const std::string filename) {
 
 void Curve::load(const std::string filename) {
 
-    x.resize(0);
-    y.resize(0);
-    ey.resize(0);
+    x.clear();
+    y.clear();
+    ey.clear();
 
     std::ifstream ifs(filename);
     json j = json::parse(ifs);

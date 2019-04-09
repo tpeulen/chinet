@@ -1,15 +1,12 @@
-//
-// Created by thomas on 4/2/19.
-//
-
 #include <include/Port.h>
 #include "Node.h"
 
 int Node::sNextId = 0;
 
+
+
 // Constructor
-
-
+//--------------------------------------------------------------------
 Node::Node(std::string n) :
 name(n)
 {
@@ -75,13 +72,15 @@ std::shared_ptr<Port> Node::get_output_port(){
     return this->output_port;
 }
 
-bson_t* Node::get_input_data() {
+/*
+void* Node::get_input_data() {
     return input_port->get_value();
 }
 
-bson_t* Node::get_output_data() {
+void* Node::get_output_data() {
     return output_port->get_value();
 }
+ */
 
 // Setter
 //--------------------------------------------------------------------

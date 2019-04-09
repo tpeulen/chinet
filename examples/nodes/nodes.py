@@ -1,13 +1,20 @@
 import fluomodlib as flm
 
 node_1 = flm.Node("A")
-n1_pi = flm.Port("inA1")
-node_1.set_input_port(n1_pi)
+input = flm.Port("inA1")
+node_1.set_input_port(input)
 
-json_string = open('./examples/nodes/curve.json').read()
-n1_pi.read_json(json_string)
+json_string = open('./examples/nodes/port.json').read()
+print json_string
+input.from_json(json_string)
+print input.to_json()
+
+input.set_slot_value("aa", 22)
+print input.to_json()
+
+
 # By default a Node is a pass through (output = input)
-n1_pi.get_json() == node_1.get_output_port().get_json()
+input.to_json() == node_1.get_output_port().to_json()
 
 
 #################################

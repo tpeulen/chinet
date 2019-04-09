@@ -10,13 +10,12 @@ Port::Port(
         ) :
         Port("", node)
 {
-    bson_iter_init(&bson_iter, bson_doc);
+    bson_init(b);
 }
 
 
 Port::Port(
         std::string name,
-        //std::string filename,
         std::shared_ptr<Node> &node
         ) :
         Port(name)
@@ -25,9 +24,9 @@ Port::Port(
 }
 
 
-Port::Port() {
+Port::Port()
+{
     id = sNextId++;
-    bson_init(bson_doc);
 }
 
 
@@ -37,30 +36,10 @@ Port::Port(std::string name) : Port(){
 
 // Destructor
 //--------------------------------------------------------------------
-/*
-Port::~Port() :
-std::enable_shared_from_this<Port>::~Port()
-{
-    bson_destroy(bson_doc);
-}
- */
 
 
 // Operator
 //--------------------------------------------------------------------
-void Port::operator[](std::string key){
-    // find key in bson_doc
-    bson_iter_find(&bson_iter, key.c_str());
-
-    const uint8_t *data = NULL;
-    uint32_t len = 0;
-    bson_iter_array(&bson_iter, &len, &data);
-
-    bson_t * fSubArray = bson_new_from_data(data, len);
-    bson_iter_t fIter;
-    bson_iter_init(&fIter, fSubArray);
-
-}
 
 
 // Getter
@@ -73,10 +52,14 @@ std::string Port::get_name(){
     return name;
 }
 
-std::string Port::get_json(){
-    char* data = bson_as_json(bson_doc, NULL);
-    std::string json_string(data);
-    return json_string;
+std::string Port::to_json(){
+    if(b == nullptr){
+        return "";
+    } else{
+        size_t len;
+        char* str = bson_as_json (b, &len);
+        return std::string(str, len);
+    }
 }
 
 std::shared_ptr<Port> Port::shared_ptr() {
@@ -89,26 +72,86 @@ void Port::set_name(std::string &v){
     name = v;
 }
 
-void Port::set_value(bson_t *v){
-    bson_destroy(bson_doc);
-    bson_doc = bson_copy(v);
+void Port::set_slot_value(std::string slot_key, double value){
+    /*
+    // Todo: this is very inefficient
+    auto doc = bsoncxx::builder::stream::document{};
+    auto v = bsoncxx::document::view(data.data(), data.size());
+    for(auto i : v){
+        if(i.key() != slot_key){
+            doc << i.key() << i.get_value();
+        } else{
+            for(){
+
+            }
+            doc << i.key() << value;
+        }
+    }
+
+    size_t n = doc.view().length();
+    data.clear(); data.resize(n);
+    for(int i=0; i < n; i++){
+        data[i] = doc.view().data()[i];
+    }
+     */
+
 }
 
 
 // Methods
 // --------------------------------------------------------------------
-bson_t* Port::get_value(){
-    if(input == nullptr){
-        return bson_copy(bson_doc);
-    } else{
-        return bson_copy((input->bson_doc));
+double Port::get_value(const std::string &slot_key){
+    bson_iter_t iter;
+    bson_iter_t baz;
+
+    if (bson_iter_init (&iter, b) &&
+        bson_iter_find_descendant (&iter, "foo.bar.0.baz", &baz) &&
+            BSON_ITER_HOLDS_DOUBLE (&baz)) {
+        printf ("baz = %d\n", bson_iter_int32 (&baz));
     }
+    return 0;
+
+    /*
+    auto view = bsoncxx::document::view(data.data(), data.size());
+    auto sv = bsoncxx::stdx::string_view(slot_key.c_str());
+    //auto sv = std::string_view(slot_key);
+    try{
+        auto element = view[sv]["value"];
+        if(element.type() != bsoncxx::type::k_double) {
+            throw bsoncxx::exception();
+        }
+        return element.get_double();
+    }
+    catch(bsoncxx::exception &e){
+        std::cerr <<
+        "An exception occurred: They value of Port " <<
+        get_name() << "." << slot_key <<
+        " is not valid.\n";
+        return NAN;
+    }
+     */
 }
 
-void Port::read_json(std::string json_string){
+std::vector<std::string> Port::get_slot_names(){
+    /*
+    std::vector<std::string> names;
+    auto view = bsoncxx::document::view(data.data(), data.size());
+    for(bsoncxx::document::element ele : view){
+        names.push_back(ele.key().to_string());
+    }
+    return names;
+     */
+}
+
+void Port::from_json(const std::string &json_string){
     bson_error_t error;
-    bson_t *temp = bson_new_from_json((uint8_t*) json_string.c_str(), -1, &error);
-    bson_destroy(bson_doc);
-    bson_doc = bson_copy(temp);
+    b = bson_new_from_json(
+            (uint8_t*)json_string.c_str(),
+            json_string.size(),
+            &error
+            );
+    if (!b) {
+        printf ("Error: %s\n", error.message);
+    }
 }
 

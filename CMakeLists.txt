@@ -4,6 +4,7 @@ SET(PROJECT_NAME fluomodlib)
 PROJECT(${PROJECT_NAME})
 
 # Set minimum C++ to 2011 standards
+###############################
 ENABLE_LANGUAGE(CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -12,7 +13,8 @@ if(MSVC)
 endif(MSVC)
 
 
-# Use OpenMP
+# OpenMP
+###############################
 OPTION (USE_OpenMP "Use OpenMP" ON)
 IF(USE_OpenMP)
     FIND_PACKAGE(OpenMP)
@@ -22,26 +24,45 @@ IF(USE_OpenMP)
     ENDIF()
 ENDIF()
 
-# Mongo-CXX-driver
-find_package(libmongocxx REQUIRED)
+
+# Boost
+###############################
+FIND_PACKAGE(Boost 1.40 COMPONENTS system filesystem REQUIRED )
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR} )
+LINK_LIBRARIES(${Boost_LIBRARIES})
+
+
+# libBson
+###############################
+find_package (libbson-1.0 1.7 REQUIRED)
+message ("libbson version \"${BSON_VERSION}\"")
+message ("libbson include path \"${BSON_INCLUDE_DIRS}\"")
+message ("libbson libraries \"${BSON_LIBRARIES}\"")
+link_libraries(${BSON_LIBRARIES})
+include_directories(${BSON_INCLUDE_DIRS})
+
+# libBsonCxx
+###############################
 find_package(libbsoncxx REQUIRED)
-include_directories(${LIBMONGOCXX_INCLUDE_DIR})
-include_directories(${LIBBSONCXX_INCLUDE_DIR})
+link_libraries(${LIBBSONCXX_LIBRARIES})
+include_directories(${LIBBSONCXX_INCLUDE_DIRS})
+message(STATUS "${LIBBSONCXX_LIBRARIES}")
+message(STATUS "${LIBBSONCXX_INCLUDE_DIRS}")
 
-# Mongo-C-driver
-find_package (libmongoc-1.0 REQUIRED)
-message ("--   mongoc found version \"${MONGOC_VERSION}\"")
-message ("--   mongoc include path \"${MONGOC_INCLUDE_DIRS}\"")
-message ("--   mongoc libraries \"${MONGOC_LIBRARIES}\"")
-INCLUDE_DIRECTORIES ("${MONGOC_INCLUDE_DIRS}")
-LINK_LIBRARIES("${MONGOC_LIBRARIES}")
-ADD_COMPILE_DEFINITIONS("${MONGOC_DEFINITIONS}")
-
+# libMongoCxx
+###############################
+find_package(libmongocxx REQUIRED)
+link_libraries(${LIBMONGOCXX_LIBRARIES})
+include_directories(${LIBMONGOCXX_INCLUDE_DIRS})
+message(STATUS "${LIBMONGOCXX_LIBRARIES}")
+message(STATUS "${LIBMONGOCXX_INCLUDE_DIRS}")
 
 # JSON
+###############################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/json/single_include/)
 
 # Project
+###############################
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
