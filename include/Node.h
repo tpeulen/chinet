@@ -6,23 +6,11 @@
 #include <memory>
 #include <map>
 
-#include <mongocxx/instance.hpp>
-#include <mongocxx/uri.hpp>
-#include <mongocxx/client.hpp>
-#include <mongocxx/database.hpp>
+#include <mongoc.h>
 
 #include <Port.h>
 #include <NodeOperations.h>
 
-
-// Database
-//--------------------------------------------------------------------
-/*
-mongocxx::instance instance{}; // This should be done only once.
-mongocxx::client client{mongocxx::uri{}};
-mongocxx::database db = client["mydb"];
-mongocxx::collection coll = db["nodes"];
-*/
 
 class Port;
 

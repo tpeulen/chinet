@@ -17,6 +17,22 @@ name(n)
 Node::Node() :
 Node("")
 {
+    // Database
+    //--------------------------------------------------------------------
+    const char *uri_string = "mongodb://localhost:27017";
+    mongoc_uri_t *uri;
+    mongoc_client_t *client;
+    mongoc_database_t *database;
+    mongoc_collection_t *collection;
+    bson_t *command, reply, *insert;
+    bson_error_t error;
+    char *str;
+    bool retval;
+
+    /*
+     * Required to initialize libmongoc's internals
+     */
+    mongoc_init ();
 }
 
 // Methods

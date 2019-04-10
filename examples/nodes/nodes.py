@@ -10,7 +10,6 @@ input.from_json(json_string)
 print input.to_json()
 
 input.set_slot_value("aa", 22)
-print input.to_json()
 
 
 # By default a Node is a pass through (output = input)

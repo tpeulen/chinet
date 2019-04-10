@@ -32,30 +32,35 @@ INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR} )
 LINK_LIBRARIES(${Boost_LIBRARIES})
 
 
-# libBson
+# libbson
 ###############################
 find_package (libbson-1.0 1.7 REQUIRED)
-message ("libbson version \"${BSON_VERSION}\"")
-message ("libbson include path \"${BSON_INCLUDE_DIRS}\"")
-message ("libbson libraries \"${BSON_LIBRARIES}\"")
+message ("--   libbson version \"${BSON_VERSION}\"")
+message ("--   libbson include path \"${BSON_INCLUDE_DIRS}\"")
+message ("--   libbson libraries \"${BSON_LIBRARIES}\"")
 link_libraries(${BSON_LIBRARIES})
 include_directories(${BSON_INCLUDE_DIRS})
 
-# libBsonCxx
+# libmongocxx
 ###############################
-find_package(libbsoncxx REQUIRED)
-link_libraries(${LIBBSONCXX_LIBRARIES})
-include_directories(${LIBBSONCXX_INCLUDE_DIRS})
-message(STATUS "${LIBBSONCXX_LIBRARIES}")
-message(STATUS "${LIBBSONCXX_INCLUDE_DIRS}")
-
-# libMongoCxx
-###############################
+#[[
 find_package(libmongocxx REQUIRED)
 link_libraries(${LIBMONGOCXX_LIBRARIES})
 include_directories(${LIBMONGOCXX_INCLUDE_DIRS})
-message(STATUS "${LIBMONGOCXX_LIBRARIES}")
-message(STATUS "${LIBMONGOCXX_INCLUDE_DIRS}")
+message("-- libmongocxx libraries \"${LIBMONGOCXX_LIBRARIES}\"")
+message("-- libmongocxx include \"${LIBMONGOCXX_INCLUDE_DIRS}\"")
+]]
+
+# libmongoc
+###############################
+find_package (libmongoc-1.0 1.7 REQUIRED)
+message ("--   mongoc found version \"${MONGOC_VERSION}\"")
+message ("--   mongoc include path \"${MONGOC_INCLUDE_DIRS}\"")
+message ("--   mongoc libraries \"${MONGOC_LIBRARIES}\"")
+include_directories (${MONGOC_INCLUDE_DIRS})
+link_libraries (${MONGOC_LIBRARIES})
+add_compile_definitions(${MONGOC_DEFINITIONS})
+
 
 # JSON
 ###############################

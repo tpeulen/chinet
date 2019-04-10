@@ -9,22 +9,8 @@
 #include <string_view>
 #include <cmath>
 
-/*
-#include <cstdlib>
-#include <bsoncxx/json.hpp>
-#include <bsoncxx/types.hpp>
-#include <bsoncxx/stdx/string_view.hpp>
-#include <bsoncxx/document/view_or_value.hpp>
-#include <bsoncxx/document/value.hpp>
-#include <bsoncxx/builder/stream/document.hpp>
-#include <bsoncxx/exception/exception.hpp>
-#include <mongocxx/collection.hpp>
-#include <bsoncxx/builder/basic/kvp.hpp>
-*/
-
-#include "bson/bson.h"
+#include "bson.h"
 #include "bson/bson-error.h"
-
 
 #include <Node.h>
 
@@ -37,27 +23,25 @@ class Port
 
     friend Node;
 
-    static int sNextId;
-
 private:
 
-    size_t id;
     std::string name;
 
     std::shared_ptr<Node> node;
     std::shared_ptr<Port> input;
     std::vector<std::shared_ptr<Port>> targets;
 
+    /// stores the data of the Port in a BSON document
+    bson_t *b;
+
+    /// the object identifier (unique number)
+    bson_oid_t oid;
 
 public:
 
-    /// stores the data of the Port in a BSON document
-    //std::vector<uint8_t> data;
-    bson_t *b;
-
     // Constructor
     //--------------------------------------------------------------------
-    Port();
+    Port() = default;
     Port(std::string name);
     Port(std::shared_ptr<Node> &node);
     //Port(std::string name, std::string filename);
@@ -66,22 +50,23 @@ public:
 
     // Destructor
     //--------------------------------------------------------------------
-    //~Port();
+    ~Port();
 
 
     // Getter
     //--------------------------------------------------------------------
     std::string to_json();
     std::string get_name();
-    int get_id();
-    double get_value(const std::string &slot);
+    double get_slot_value(const std::string &slot_key);
     std::shared_ptr<Port> shared_ptr();
     std::vector<std::string> get_slot_names();
+    std::string get_oid();
 
     // Setter
     //--------------------------------------------------------------------
     void set_name(std::string &v);
-    void set_slot_value(std::string slot_key, double v);
+    void set_slot_value(std::string slot_key, double value);
+    void set_oid(std::string v);
 
     // Operator
     //--------------------------------------------------------------------
