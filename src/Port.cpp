@@ -5,21 +5,20 @@
 //--------------------------------------------------------------------
 
 Port::Port(){
+    bson_oid_init(&oid, NULL);
 }
 
 Port::Port(std::string json_string) :
-Port(json_string, nullptr)
-{
+Port(json_string, nullptr){
 }
 
 
 Port::Port(std::shared_ptr<Node> node) :
-Port("", node)
-{
+Port() {
+    this->node = node;
 }
 
 Port::Port(std::string json_string, std::shared_ptr<Node> node){
-    //bson_oid_init(&oid, NULL);
     this->node = node;
     from_json(json_string);
 }
@@ -38,13 +37,11 @@ Port::~Port() {
 // Getter
 //--------------------------------------------------------------------
 
-/*
 std::string Port::get_oid(){
     char * oid_s = new char[25];
     bson_oid_to_string(&oid, oid_s);
     return std::string(oid_s);
 }
- */
 
 /*
 std::string Port::get_name(){
@@ -115,16 +112,23 @@ std::vector<double> Port::get_slot_values(){
 
 std::vector<std::string> Port::get_slot_keys(){
     std::vector<std::string> names;
-    //bson_iter_t iter;
-    bson_iter_t iter_s;
+    bson_iter_t i0;
+    bson_iter_t i1;
+    bson_iter_t ik;
 
-    //bson_iter_init(&iter, get_value());
+    bson_iter_init(&i0, get_value());
     //bson_iter_find(&iter, "slots");
     //bson_iter_recurse (&iter, &iter_s);
-    bson_iter_init(&iter_s, get_value());
+    bson_iter_init(&ik, get_value());
 
-    while (bson_iter_next (&iter_s)) {
-        names.emplace_back(bson_iter_key (&iter_s));
+    while (bson_iter_next (&ik)) {
+        std::string search_values = std::string(bson_iter_key(&ik)) + ".value";
+        bson_iter_init(&i0, get_value());
+        if (bson_iter_init (&i0, get_value()) &&
+            bson_iter_find_descendant (&i0, search_values.c_str(), &i1) &&
+            BSON_ITER_HOLDS_DOUBLE (&i1)){
+            names.emplace_back(bson_iter_key (&ik));
+        }
     }
     return names;
 }
@@ -136,18 +140,16 @@ std::shared_ptr<Port> Port::get_input(){
 // Setter
 //--------------------------------------------------------------------
 
-/*
 void Port::set_oid(std::string v){
     bson_oid_init_from_string (&oid, v.c_str());
 }
- */
 
 void Port::set_slot_value(std::string slot_key, double value){
     bson_iter_t iter;
     bson_iter_t baz;
 
     std::string search_values = slot_key + ".value";
-    if (bson_iter_init (&iter, b) &&
+    if (bson_iter_init (&iter, get_value()) &&
         bson_iter_find_descendant (&iter, search_values.c_str(), &baz) &&
         BSON_ITER_HOLDS_DOUBLE (&baz)) {
         bson_iter_overwrite_double(&baz, value);
@@ -186,4 +188,9 @@ std::string Port::to_json(){
         char* str = bson_as_json (b, &len);
         return std::string(str, len);
     }
+}
+
+
+void Port::link_slot(std::string slot_name, bson_oid_t target_port_oid, std::string target_slot_name){
+    // TODO
 }

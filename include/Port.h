@@ -33,7 +33,7 @@ private:
     bson_t *b;
 
     /// the object identifier (unique number)
-    //bson_oid_t oid;
+    bson_oid_t oid;
 
 public:
 
@@ -66,13 +66,13 @@ public:
     std::vector<std::string> get_slot_keys();
 
     std::shared_ptr<Port> shared_ptr();
-    //std::string get_oid();
+    std::string get_oid();
 
     // Setter
     //--------------------------------------------------------------------
     void set_input(std::shared_ptr<Port> v);
     void set_slot_value(std::string slot_key, double value);
-    //void set_oid(std::string v);
+    void set_oid(std::string v);
 
     // Operator
     //--------------------------------------------------------------------
@@ -80,6 +80,7 @@ public:
     // Methods
     //--------------------------------------------------------------------
     void from_json(const std::string &json_string);
+    void link_slot(std::string slot_name, bson_oid_t target_port_oid, std::string target_slot_name);
 
 };
 

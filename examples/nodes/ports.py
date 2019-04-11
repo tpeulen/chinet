@@ -17,8 +17,8 @@ print(portA.get_slot_values())
 print(portA.get_slot_keys())
 
 
-node_1 = flm.Node()
-node_1.set_input_port(portA)
+node = flm.Node()
+node.set_input_port(portA)
 
 
 
