@@ -2,7 +2,18 @@
 // Created by thomas on 4/3/19.
 //
 
-#include <include/NodeOperations.h>
+#include <NodeCallback.h>
+
+
+void NodeCallback::run(std::shared_ptr<Port> input, std::shared_ptr<Port> output){
+    std::cout << "This print from C++" << std::endl;
+}
+
+
+NodeCallback::NodeCallback(std::string name){
+    this->name = name;
+};
+
 
 
 namespace NodeOperations {

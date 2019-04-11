@@ -1,0 +1,18 @@
+{
+  "slotA1": {
+    "value": 1.0,
+    "fixed": false,
+    "link": {
+      "node_oid": null,
+      "slot": null
+    }
+  },
+  "slotA1": {
+    "value": 2.0,
+    "fixed": true,
+    "link": {
+      "node_oid": null,
+      "slot": null
+    }
+  }
+}

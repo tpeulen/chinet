@@ -9,23 +9,23 @@
 #include <mongoc.h>
 
 #include <Port.h>
-#include <NodeOperations.h>
+#include <NodeCallback.h>
 
 
 class Port;
+class NodeCallback;
+
+
+// Node
+//====================================================================
 
 class Node {
     friend Port;
 
-    static int sNextId;
-
 private:
 
     /// An id unique to every Node instance
-    size_t id;
-
-    /// The name of the Node instance (only used of representation)
-    std::string name;
+    bson_oid_t oid;
 
     /*!
      * Stores if an value is valid. The value of a Node that is not linked to other Nodes is valid by default. A
@@ -42,27 +42,22 @@ private:
 
     /// A pointer to a function that operates on an input Port instance (first argument)
     /// and writes to an output Port instance (second argument)
-    void (*eval)(Port &, Port &);
+    std::shared_ptr<NodeCallback> callback;
+    //void (*callback)(Port &, Port &);
 
     /// creates a name for a function and a list of pointers to Nodes
-    std::string make_name(std::string function_name);
+    std::string make_name();
 
 public:
 
     // Constructor
     //--------------------------------------------------------------------
-    Node(std::string n);
     Node();
+    Node(std::shared_ptr<Port> input, std::shared_ptr<Port> output, std::shared_ptr<NodeCallback> callback);
 
     // Methods
     //--------------------------------------------------------------------
     void update();
-    void set_operation(
-            std::string &operation_name,
-            void(*pfn)(Port &, Port &)
-            );
-
-    void link_input_to(std::shared_ptr<Port> &port);
     bool is_valid();
 
     // Getter
@@ -80,6 +75,8 @@ public:
 
     void set_output_port(std::shared_ptr<Port> output);
     void set_output_port(Port* output);
+
+    void set_callback(std::shared_ptr<NodeCallback> cb);
 
 };
 

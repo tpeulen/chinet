@@ -35,9 +35,9 @@ LINK_LIBRARIES(${Boost_LIBRARIES})
 # libbson
 ###############################
 find_package (libbson-1.0 1.7 REQUIRED)
-message ("--   libbson version \"${BSON_VERSION}\"")
-message ("--   libbson include path \"${BSON_INCLUDE_DIRS}\"")
-message ("--   libbson libraries \"${BSON_LIBRARIES}\"")
+message ("-- Found libbson version \"${BSON_VERSION}\"")
+message ("--   include path \"${BSON_INCLUDE_DIRS}\"")
+message ("--   libraries \"${BSON_LIBRARIES}\"")
 link_libraries(${BSON_LIBRARIES})
 include_directories(${BSON_INCLUDE_DIRS})
 
@@ -54,9 +54,9 @@ message("-- libmongocxx include \"${LIBMONGOCXX_INCLUDE_DIRS}\"")
 # libmongoc
 ###############################
 find_package (libmongoc-1.0 1.7 REQUIRED)
-message ("--   mongoc found version \"${MONGOC_VERSION}\"")
-message ("--   mongoc include path \"${MONGOC_INCLUDE_DIRS}\"")
-message ("--   mongoc libraries \"${MONGOC_LIBRARIES}\"")
+message ("-- Found mongoc version \"${MONGOC_VERSION}\"")
+message ("--   include path \"${MONGOC_INCLUDE_DIRS}\"")
+message ("--   libraries \"${MONGOC_LIBRARIES}\"")
 include_directories (${MONGOC_INCLUDE_DIRS})
 link_libraries (${MONGOC_LIBRARIES})
 add_compile_definitions(${MONGOC_DEFINITIONS})

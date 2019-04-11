@@ -5,9 +5,25 @@
 #ifndef FLUOMODLIB_NODEOPERATIONS_H
 #define FLUOMODLIB_NODEOPERATIONS_H
 
-#include <include/Port.h>
+#include <Port.h>
 
 class Node;
+class Port;
+
+
+// NodeCallback
+//====================================================================
+
+class NodeCallback{
+public:
+    std::string name;
+    virtual void run(std::shared_ptr<Port>, std::shared_ptr<Port>);
+    NodeCallback() {};
+    NodeCallback(std::string name);
+    virtual ~NodeCallback() {};
+};
+
+
 
 /*
 namespace NodeOperations {
