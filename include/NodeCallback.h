@@ -5,11 +5,12 @@
 #ifndef FLUOMODLIB_NODEOPERATIONS_H
 #define FLUOMODLIB_NODEOPERATIONS_H
 
+#include <rttr/registration>
 #include <Port.h>
+#include <Node.h>
 
 class Node;
 class Port;
-
 
 // NodeCallback
 //====================================================================

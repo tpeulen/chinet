@@ -8,20 +8,23 @@ Port::Port(){
     bson_oid_init(&oid, NULL);
 }
 
+
 Port::Port(std::string json_string) :
-Port(json_string, nullptr){
+Port(){
+    from_json(json_string);
 }
 
-
+/*
 Port::Port(std::shared_ptr<Node> node) :
 Port() {
     this->node = node;
 }
 
 Port::Port(std::string json_string, std::shared_ptr<Node> node){
-    this->node = node;
+    set_node(node);
     from_json(json_string);
 }
+*/
 
 
 // Destructor
@@ -159,6 +162,12 @@ void Port::set_slot_value(std::string slot_key, double value){
 void Port::set_input(std::shared_ptr<Port> v){
     this->input = v;
 }
+
+/*
+void Port::set_node(std::shared_ptr<Node> node){
+    this->node = node;
+}
+ */
 
 
 // Methods

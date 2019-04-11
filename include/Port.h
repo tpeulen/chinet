@@ -8,9 +8,7 @@
 #include <string>
 #include <string_view>
 #include <cmath>
-
 #include "bson.h"
-#include "bson/bson-error.h"
 
 #include <Node.h>
 
@@ -25,7 +23,7 @@ class Port
 
 private:
 
-    std::shared_ptr<Node> node;
+    //std::shared_ptr<Node> node;
     std::shared_ptr<Port> input;
     std::vector<std::shared_ptr<Port>> targets;
 
@@ -41,8 +39,8 @@ public:
     //--------------------------------------------------------------------
     Port();
     Port(std::string json_string);
-    Port(std::shared_ptr<Node> node);
-    Port(std::string json_string, std::shared_ptr<Node> node);
+    //Port(std::shared_ptr<Node> node);
+    //Port(std::string json_string, std::shared_ptr<Node> node);
 
     // Destructor
     //--------------------------------------------------------------------
@@ -55,16 +53,12 @@ public:
     std::string to_json();
     //std::string get_name();
     std::shared_ptr<Port> get_input();
-
     /// returns the value of a slot for a given key (slot name)
     double get_slot_value(const std::string &slot_key);
-
     /// returns the values of all the slots as an vector
     std::vector<double> get_slot_values();
-
     /// returns the keys of all the slots as an vector
     std::vector<std::string> get_slot_keys();
-
     std::shared_ptr<Port> shared_ptr();
     std::string get_oid();
 
@@ -73,6 +67,7 @@ public:
     void set_input(std::shared_ptr<Port> v);
     void set_slot_value(std::string slot_key, double value);
     void set_oid(std::string v);
+    //void set_node(std::shared_ptr<Node> node);
 
     // Operator
     //--------------------------------------------------------------------

@@ -2,6 +2,7 @@ from __future__ import print_function
 import fluomodlib as flm
 
 
+# Creating a port and reading content from JSON string
 portA = flm.Port()
 json_string = open('./examples/nodes/portA.json').read()
 portA.from_json(json_string)
@@ -9,16 +10,13 @@ print(portA.get_slot_value("NameA1"))
 print(portA.get_slot_keys())
 print(portA.get_slot_values())
 
+# Creating a port from JSON string
 portB = flm.Port(open('./examples/nodes/portB.json').read())
 
-# Assigning an input redirects the keys and values
+# Assigning an input redirects the content
 portA.set_input(portB)
 print(portA.get_slot_values())
 print(portA.get_slot_keys())
-
-
-node = flm.Node()
-node.set_input_port(portA)
 
 
 

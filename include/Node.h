@@ -57,17 +57,28 @@ private:
 
 public:
 
-    // Constructor
+    // Constructor & Destructor
     //--------------------------------------------------------------------
     Node();
-    Node(std::shared_ptr<Port> input, std::shared_ptr<Port> output, std::shared_ptr<NodeCallback> callback);
-
+    Node(const char *uri_string);
+    Node(std::shared_ptr<Port> input,
+            std::shared_ptr<Port> output,
+            std::shared_ptr<NodeCallback> callback
+            );
+    Node(const char *uri_string,
+            std::shared_ptr<Port> input,
+            std::shared_ptr<Port> output,
+            std::shared_ptr<NodeCallback> callback
+            );
     ~Node();
 
     // Methods
     //--------------------------------------------------------------------
     void update();
     bool is_valid();
+    bool write_to_db();
+    bool connect_to_uri(const char* uri_string);
+
 
     // Getter
     //--------------------------------------------------------------------
@@ -76,6 +87,7 @@ public:
     //void* get_output_data();
     std::shared_ptr<Port> get_input_port();
     std::shared_ptr<Port> get_output_port();
+    std::string get_oid();
 
     // Setter
     //--------------------------------------------------------------------
