@@ -31,25 +31,11 @@ FIND_PACKAGE(Boost 1.40 COMPONENTS system filesystem REQUIRED )
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR} )
 LINK_LIBRARIES(${Boost_LIBRARIES})
 
-
-# libbson
+# RTTR
 ###############################
-find_package (libbson-1.0 1.7 REQUIRED)
-message ("-- Found libbson version \"${BSON_VERSION}\"")
-message ("--   include path \"${BSON_INCLUDE_DIRS}\"")
-message ("--   libraries \"${BSON_LIBRARIES}\"")
-link_libraries(${BSON_LIBRARIES})
-include_directories(${BSON_INCLUDE_DIRS})
-
-# libmongocxx
-###############################
-#[[
-find_package(libmongocxx REQUIRED)
-link_libraries(${LIBMONGOCXX_LIBRARIES})
-include_directories(${LIBMONGOCXX_INCLUDE_DIRS})
-message("-- libmongocxx libraries \"${LIBMONGOCXX_LIBRARIES}\"")
-message("-- libmongocxx include \"${LIBMONGOCXX_INCLUDE_DIRS}\"")
-]]
+find_package(RTTR CONFIG REQUIRED Core)
+link_libraries(RTTR::Core)
+message ("-- Found librttr version \"${PACKAGE_VERSION}\"")
 
 # libmongoc
 ###############################
@@ -61,6 +47,25 @@ include_directories (${MONGOC_INCLUDE_DIRS})
 link_libraries (${MONGOC_LIBRARIES})
 add_compile_definitions(${MONGOC_DEFINITIONS})
 
+
+#[[
+# libbson
+###############################
+find_package (libbson-1.0 1.7 REQUIRED)
+message ("-- Found libbson version \"${BSON_VERSION}\"")
+message ("--   include path \"${BSON_INCLUDE_DIRS}\"")
+message ("--   libraries \"${BSON_LIBRARIES}\"")
+link_libraries(${BSON_LIBRARIES})
+include_directories(${BSON_INCLUDE_DIRS})
+
+# libmongocxx
+###############################
+find_package(libmongocxx REQUIRED)
+link_libraries(${LIBMONGOCXX_LIBRARIES})
+include_directories(${LIBMONGOCXX_INCLUDE_DIRS})
+message("-- libmongocxx libraries \"${LIBMONGOCXX_LIBRARIES}\"")
+message("-- libmongocxx include \"${LIBMONGOCXX_INCLUDE_DIRS}\"")
+]]
 
 # JSON
 ###############################

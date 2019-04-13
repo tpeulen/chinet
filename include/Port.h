@@ -16,8 +16,7 @@
 class Node;
 
 
-class Port
-        : public std::enable_shared_from_this<Port>{
+class Port : public std::enable_shared_from_this<Port>{
 
     friend Node;
 
@@ -39,6 +38,7 @@ public:
     //--------------------------------------------------------------------
     Port();
     Port(std::string json_string);
+    Port(bson_oid_t oid);
     //Port(std::shared_ptr<Node> node);
     //Port(std::string json_string, std::shared_ptr<Node> node);
 
@@ -75,6 +75,7 @@ public:
     // Methods
     //--------------------------------------------------------------------
     void from_json(const std::string &json_string);
+    bool add_port_to_collection(mongoc_collection_t * port_collection);
     void link_slot(std::string slot_name, bson_oid_t target_port_oid, std::string target_slot_name);
 
 };

@@ -1,19 +1,18 @@
 {
-  "_id" : { "$oid" : "5caea5d371323f06b6473214" },
-  "slotB1": {
-    "value": 888.0,
+  "slotC1": {
+    "value": 111.0,
     "fixed": false,
     "link": {
       "oid": "5caea5d371323f06b6473261",
-      "slot": "slotA1"
+      "slot": "slotC1"
     }
   },
-  "slotB2": {
-    "value": 888.0,
+  "slotC2": {
+    "value": 222.0,
     "fixed": true,
     "link": {
       "oid": "5caea5d371323f06b6473261",
-      "slot": "slotA2"
+      "slot": "slotC2"
     }
   }
 }

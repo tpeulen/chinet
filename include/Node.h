@@ -30,7 +30,8 @@ private:
     mongoc_uri_t *uri;
     mongoc_client_t *client;
     mongoc_database_t *database;
-    mongoc_collection_t *collection;
+    mongoc_collection_t *node_collection;
+    mongoc_collection_t * port_collection;
     bson_t *command, reply;
     bson_error_t error;
 
@@ -70,6 +71,10 @@ public:
             std::shared_ptr<Port> output,
             std::shared_ptr<NodeCallback> callback
             );
+    Node(const char *uri_string,
+         std::string input_port_oid,
+         std::string output_port_oid
+    );
     ~Node();
 
     // Methods
@@ -78,16 +83,18 @@ public:
     bool is_valid();
     bool write_to_db();
     bool connect_to_uri(const char* uri_string);
-
+    bool append_port_to_collection(std::shared_ptr<Port> port);
 
     // Getter
     //--------------------------------------------------------------------
     std::string get_name();
     //void* get_input_data();
     //void* get_output_data();
+    std::shared_ptr<Port> get_port(const std::string oid);
     std::shared_ptr<Port> get_input_port();
     std::shared_ptr<Port> get_output_port();
     std::string get_oid();
+
 
     // Setter
     //--------------------------------------------------------------------
@@ -98,6 +105,7 @@ public:
     void set_output_port(Port* output);
 
     void set_callback(std::shared_ptr<NodeCallback> cb);
+    void set_callback(std::string &callback, std::string &callback_type);
 
 };
 

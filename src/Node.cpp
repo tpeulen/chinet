@@ -43,6 +43,16 @@ Node::Node(
     set_callback(callback);
 }
 
+Node::Node(
+        const char *uri_string,
+        std::string input_port_oid,
+        std::string output_port_oid
+) : Node(uri_string)
+{
+    set_input_port(get_port(input_port_oid));
+    set_output_port(get_port(output_port_oid));
+}
+
 // Destructor
 //--------------------------------------------------------------------
 Node::~Node() {
@@ -52,7 +62,7 @@ Node::~Node() {
     /*
      * Release our handles and clean up mongoc
      */
-    mongoc_collection_destroy (collection);
+    mongoc_collection_destroy (node_collection);
     mongoc_database_destroy (database);
     mongoc_uri_destroy (uri);
     mongoc_client_destroy (client);
@@ -89,7 +99,8 @@ bool Node::connect_to_uri(const char* uri_string){
          * Get a handle on the database "db_name" and collection "coll_name"
          */
         database = mongoc_client_get_database (client, "db_mofa");
-        collection = mongoc_client_get_collection (client, "db_mofa", "nodes");
+        node_collection = mongoc_client_get_collection (client, "db_mofa", "nodes");
+        port_collection = mongoc_client_get_collection (client, "db_mofa", "ports");
         return true;
     }
 }
@@ -115,14 +126,21 @@ bool Node::is_valid(){
 }
 
 bool Node::write_to_db(){
-    if (!mongoc_collection_insert_one (collection, input_port->b, NULL, NULL, &error)) {
+    if (!mongoc_collection_insert_one (node_collection, input_port->b, NULL, NULL, &error)) {
         fprintf (stderr, "%s\n", error.message);
     }
-    if (!mongoc_collection_insert_one (collection, output_port->b, NULL, NULL, &error)) {
+    if (!mongoc_collection_insert_one (node_collection, output_port->b, NULL, NULL, &error)) {
         fprintf (stderr, "%s\n", error.message);
     }
 }
 
+bool Node::append_port_to_collection(std::shared_ptr<Port> port) {
+    return mongoc_collection_insert_one(
+            port_collection,
+            port->b,
+            nullptr, nullptr, nullptr
+    );
+}
 
 // Getter
 //--------------------------------------------------------------------
@@ -143,12 +161,43 @@ std::string Node::get_name(){
     }
 }
 
-std::shared_ptr<Port> Node::get_input_port(){
-    return this->input_port;
+
+std::shared_ptr<Port> Node::get_port(const std::string oid_string){
+    // convert the string to an bson_oid_t
+    bson_oid_t oid_port;
+    bson_oid_init_from_string(&oid_port, oid_string.c_str());
+
+    // find the oid_pinter for the oid_string in the DB
+    bson_t *query =  BCON_NEW ("_id", BCON_OID(&oid_port));
+    mongoc_cursor_t *cursor =
+            mongoc_collection_find_with_opts(
+                    port_collection,
+                    query,
+                    nullptr, nullptr);
+
+    // read the data
+    const bson_t *doc;
+    char *str;
+    std::shared_ptr<Port> p(new Port);
+    while (mongoc_cursor_next (cursor, &doc)) {
+        /*
+        std::cout << ".";
+        str = bson_as_canonical_extended_json (doc, NULL);
+        fprintf (stdout, "%s\n", str);
+        bson_free (str);
+         */
+        p->b = bson_copy(doc);
+    }
+    mongoc_cursor_destroy(cursor);
+    return p;
 }
 
 std::shared_ptr<Port> Node::get_output_port(){
     return this->output_port;
+}
+
+std::shared_ptr<Port> Node::get_input_port(){
+    return this->input_port;
 }
 
 std::string Node::get_oid(){
@@ -160,18 +209,23 @@ std::string Node::get_oid(){
 // Setter
 //--------------------------------------------------------------------
 void Node::set_input_port(std::shared_ptr<Port> input) {
-    this->input_port = input;
-    this->output_port = input;
+    input_port = input;
+    append_port_to_collection(input);
 }
 
 void Node::set_input_port(Port* input) {
     set_input_port(input->shared_ptr());
 }
 
-void Node::set_output_port(std::shared_ptr<Port> output){
-    this->output_port = output;
-}
-
 void Node::set_output_port(Port* output) {
     set_output_port(output->shared_ptr());
+}
+
+void Node::set_output_port(std::shared_ptr<Port> output){
+    output_port = output;
+    append_port_to_collection(output);
+}
+
+void Node::set_callback(std::string &callback, std::string &callback_type){
+    // TODO
 }

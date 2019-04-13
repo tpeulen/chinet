@@ -2,8 +2,8 @@
 // Created by thomas on 4/3/19.
 //
 
-#ifndef FLUOMODLIB_NODEOPERATIONS_H
-#define FLUOMODLIB_NODEOPERATIONS_H
+#ifndef FLUOMODLIB_NODECALLBACK_H
+#define FLUOMODLIB_NODECALLBACK_H
 
 #include <rttr/registration>
 #include <Port.h>
@@ -16,6 +16,7 @@ class Port;
 //====================================================================
 
 class NodeCallback{
+
 public:
     std::string name;
     virtual void run(std::shared_ptr<Port>, std::shared_ptr<Port>);
@@ -25,18 +26,4 @@ public:
 };
 
 
-
-/*
-namespace NodeOperations {
-
-    typedef void (*eval_t)(std::vector<Port *> &input, std::vector<Port *> &output);
-
-    void multiply(std::vector<Port *> &inputs, std::vector<Port *> &ouptputs);
-
-    eval_t get_node_operation_multiply();
-
-};
- */
-
-
-#endif //FLUOMODLIB_NODEOPERATIONS_H
+#endif //FLUOMODLIB_NODECALLBACK_H

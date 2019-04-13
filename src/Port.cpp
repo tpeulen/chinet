@@ -9,6 +9,11 @@ Port::Port(){
 }
 
 
+Port::Port(bson_oid_t oid){
+    this->oid = oid;
+}
+
+
 Port::Port(std::string json_string) :
 Port(){
     from_json(json_string);
@@ -183,10 +188,25 @@ void Port::from_json(const std::string &json_string){
 
     if (!b) {
         printf ("Error: %s\n", error.message);
-    } /*else{
-        bson_oid_init (&oid, NULL);
-        BSON_APPEND_OID (b, "_id", &oid);
-    }*/
+    } else{
+        // find the oid
+        bson_iter_t iter;
+        char oidstr[25];
+        if (bson_iter_init (&iter, b) &&
+            bson_iter_find (&iter, "_id") &&
+            BSON_ITER_HOLDS_OID (&iter)) {
+            oid = *bson_iter_oid(&iter);
+            bson_oid_to_string (&oid, oidstr);
+            printf ("%s\n", oidstr);
+        } else {
+            std::cout << "Document is missing _id." << std::endl;
+            bson_oid_init (&oid, NULL);
+            BSON_APPEND_OID (b, "_id", &oid);
+            std::cout << "Generated id: " <<
+            get_oid() <<
+            std::endl;
+        }
+    }
 }
 
 std::string Port::to_json(){
@@ -200,6 +220,19 @@ std::string Port::to_json(){
 }
 
 
-void Port::link_slot(std::string slot_name, bson_oid_t target_port_oid, std::string target_slot_name){
+void Port::link_slot(
+        std::string slot_name,
+        bson_oid_t target_port_oid,
+        std::string target_slot_name
+        ){
     // TODO
 }
+
+
+bool Port::add_port_to_collection(mongoc_collection_t * port_collection){
+    return mongoc_collection_insert_one(port_collection,
+            b,
+            nullptr, nullptr, nullptr
+            );
+}
+

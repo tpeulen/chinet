@@ -1,7 +1,7 @@
 {
-  "_id" : { "$oid" : "5caea5d371323f06b6473261" },
+  "_id" : { "$oid" : "5caea5d371323f06b6473262" },
   "slotA1": {
-    "value": 1.0,
+    "value": 777.0,
     "fixed": false,
     "link": {
       "node_oid": null,
@@ -9,7 +9,7 @@
     }
   },
   "slotA2": {
-    "value": 2.0,
+    "value": 777.0,
     "fixed": true,
     "link": {
       "node_oid": null,

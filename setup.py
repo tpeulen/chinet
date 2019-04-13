@@ -5,7 +5,6 @@ import re
 import sys
 import platform
 import subprocess
-from sphinx.setup_command import BuildDoc
 
 from setuptools import setup, Extension
 from distutils.command.build_ext import build_ext
@@ -68,6 +67,8 @@ class CMakeBuild(build_ext):
 
 
 if 'doc' in sys.argv:
+    from sphinx.setup_command import BuildDoc
+
     cwd = os.getcwd()
     os.chdir('./include/')
     subprocess.call(

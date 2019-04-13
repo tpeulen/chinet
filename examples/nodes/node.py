@@ -13,11 +13,24 @@ uri_string = "mongodb://localhost:27017"
 node = flm.Node(uri_string)
 print(node.get_oid())
 
-# assignment of ports
+# assignment of ports - this adds the ports to the DB
 portA = flm.Port(open('./examples/nodes/portA.json').read())
 portB = flm.Port(open('./examples/nodes/portB.json').read())
 node.set_input_port(portA)
 node.set_output_port(portB)
+
+# From nodes and port in database
+node = flm.Node(
+    uri_string,
+    portA.get_oid(),
+    portB.get_oid()
+)
+print(node.get_input_port().get_slot_keys())
+print(node.get_output_port().get_slot_keys())
+
+
+# Callbacks
+#################
 
 # Nodes evaluate callbacks, i.e., functions with an input and an output
 # callbacks derive from the NodeCallback class.
@@ -48,6 +61,9 @@ print(node.get_oid())
 # Alternatively, the uri string is not provided -> local MongoDB server
 node = flm.Node(portA, portB, cb)
 print(node.get_oid())
+
+
+
 
 #node = flm.Node("A", input=portA, output=portB, callback=call)
 
