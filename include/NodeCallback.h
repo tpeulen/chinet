@@ -23,7 +23,10 @@ public:
     NodeCallback() {};
     NodeCallback(std::string name);
     virtual ~NodeCallback() {};
+    //RTTR_ENABLE();
 };
+
+
 
 
 #endif //FLUOMODLIB_NODECALLBACK_H

@@ -8,6 +8,7 @@
 
 #include <mongoc.h>
 #include <mongoc/mongoc.h>
+#include <rttr/registration>
 
 #include <Port.h>
 #include <NodeCallback.h>
@@ -54,7 +55,8 @@ private:
     /// A pointer to a function that operates on an input Port instance (first argument)
     /// and writes to an output Port instance (second argument)
     std::shared_ptr<NodeCallback> callback;
-
+    std::string callback_class_name;
+    std::string callback_type;
 
 public:
 
@@ -74,6 +76,13 @@ public:
     Node(const char *uri_string,
          std::string input_port_oid,
          std::string output_port_oid
+    );
+    Node(
+            const char *uri_string,
+            std::string input_port_oid,
+            std::string output_port_oid,
+            std::string callback_class_name,
+            std::string call_back_type
     );
     ~Node();
 

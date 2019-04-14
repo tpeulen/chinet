@@ -53,6 +53,27 @@ Node::Node(
     set_output_port(get_port(output_port_oid));
 }
 
+Node::Node(
+        const char *uri_string,
+        std::string input_port_oid,
+        std::string output_port_oid,
+        std::string callback_class_name,
+        std::string callback_type
+) : Node(uri_string)
+{
+    set_input_port(get_port(input_port_oid));
+    set_output_port(get_port(output_port_oid));
+    this->callback_class_name = callback_class_name;
+    this->callback_type = callback_type;
+    if(callback_type == "C"){
+        rttr::type class_type = rttr::type::get_by_name(callback_class_name);
+        if(!class_type){
+            std::cerr << "The class type " << callback_class_name << " does not exist." <<
+            "No callback class set. " << std::endl;
+        }
+    }
+}
+
 // Destructor
 //--------------------------------------------------------------------
 Node::~Node() {
@@ -111,9 +132,18 @@ void Node::set_callback(std::shared_ptr<NodeCallback> cb){
 
 void Node::update(){
     if((input_port != nullptr) &&
-    (output_port != nullptr) &&
-    (callback != nullptr)) {
-        callback->run(input_port, output_port);
+    (output_port != nullptr)){
+        if(callback_type == "C"){
+            rttr::type::invoke("callback_class_name", {input_port, output_port});
+            std::cerr << "Callback type/name: C/" << callback_class_name << std::endl;
+            rttr::type class_type = rttr::type::get_by_name(callback_class_name);
+            rttr::method run_meth = class_type.get_method("run");
+            run_meth.invoke(input_port, output_port);
+        } else{
+            if (callback != nullptr) {
+                callback->run(input_port, output_port);
+            }
+        }
     }
 }
 

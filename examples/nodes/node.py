@@ -29,6 +29,18 @@ print(node.get_input_port().get_slot_keys())
 print(node.get_output_port().get_slot_keys())
 
 
+# From nodes and port in database
+node = flm.Node(
+    uri_string,
+    portA.get_oid(),
+    portB.get_oid(),
+    "flm.",
+    "C"
+)
+print(node.get_input_port().get_slot_keys())
+print(node.get_output_port().get_slot_keys())
+
+
 # Callbacks
 #################
 
