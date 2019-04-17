@@ -23,13 +23,6 @@ namespace std{
 %shared_ptr(NodeCallback)
 %shared_ptr(Port)
 
-
-%feature("pythonprepend") Node::set_callback(std::shared_ptr<NodeCallback>) %{
-    # adding the callback to Node object: ensure that the PyObject is correctly deleted
-    self.call = cb
-%}
-
-
 %include "../include/Node.h"
 %include "../include/Port.h"
 %include "../include/NodeCallback.h"

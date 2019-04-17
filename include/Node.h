@@ -6,6 +6,7 @@
 #include <memory>
 #include <map>
 
+#include "bson.h"
 #include <mongoc.h>
 #include <mongoc/mongoc.h>
 #include <rttr/registration>
@@ -16,8 +17,6 @@
 
 class Port;
 class NodeCallback;
-
-
 
 // Node
 //====================================================================
@@ -30,14 +29,15 @@ private:
     //------------------
     mongoc_uri_t *uri;
     mongoc_client_t *client;
-    mongoc_database_t *database;
+    mongoc_client_session_t *client_session;
     mongoc_collection_t *node_collection;
     mongoc_collection_t * port_collection;
-    bson_t *command, reply;
+    bson_t *command, reply, *query;
     bson_error_t error;
 
     /// An id unique to every Node instance
     bson_oid_t oid;
+    bson_t *document;
 
     /*!
      * Stores if an value is valid. The value of a Node that is not linked to other Nodes is valid by default. A
@@ -54,11 +54,11 @@ private:
 
     /// A pointer to a function that operates on an input Port instance (first argument)
     /// and writes to an output Port instance (second argument)
-    std::shared_ptr<NodeCallback> callback;
-    std::string callback_class_name;
-    std::string callback_type;
+    std::shared_ptr<NodeCallback> callback_class;
 
 public:
+    std::string callback;
+    int callback_type;
 
     // Constructor & Destructor
     //--------------------------------------------------------------------
@@ -74,6 +74,9 @@ public:
             std::shared_ptr<NodeCallback> callback
             );
     Node(const char *uri_string,
+         std::string json_string_node
+    );
+    Node(const char *uri_string,
          std::string input_port_oid,
          std::string output_port_oid
     );
@@ -81,7 +84,7 @@ public:
             const char *uri_string,
             std::string input_port_oid,
             std::string output_port_oid,
-            std::string callback_class_name,
+            std::string callback,
             std::string call_back_type
     );
     ~Node();
@@ -91,8 +94,12 @@ public:
     void update();
     bool is_valid();
     bool write_to_db();
+    bool update_db();
     bool connect_to_uri(const char* uri_string);
     bool append_port_to_collection(std::shared_ptr<Port> port);
+    bool add_node_to_collection();
+    std::string get_input_oid();
+    std::string get_output_oid();
 
     // Getter
     //--------------------------------------------------------------------
@@ -103,7 +110,8 @@ public:
     std::shared_ptr<Port> get_input_port();
     std::shared_ptr<Port> get_output_port();
     std::string get_oid();
-
+    void from_json(const std::string &json_string);
+    std::string to_json();
 
     // Setter
     //--------------------------------------------------------------------

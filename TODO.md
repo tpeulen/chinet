@@ -6,6 +6,8 @@ Roadmap
 https://thispointer.com/learning-shared_ptr-part-1-usage-details/
 use std shared_ptr with swig
 
+https://github.com/swig/swig/tree/master/Examples/python/callback
+
 
 Documentation & Test cases
 ==========================

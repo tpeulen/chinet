@@ -1,4 +1,6 @@
 {
+  "birth": 1,
+  "death": null,
   "slotC1": {
     "value": 111.0,
     "fixed": false,

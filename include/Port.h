@@ -65,7 +65,7 @@ public:
     // Setter
     //--------------------------------------------------------------------
     void set_input(std::shared_ptr<Port> v);
-    void set_slot_value(std::string slot_key, double value);
+    bool set_slot_value(std::string slot_key, double value);
     void set_oid(std::string v);
     //void set_node(std::shared_ptr<Node> node);
 

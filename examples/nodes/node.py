@@ -34,8 +34,6 @@ node = flm.Node(
     uri_string,
     portA.get_oid(),
     portB.get_oid(),
-    "flm.",
-    "C"
 )
 print(node.get_input_port().get_slot_keys())
 print(node.get_output_port().get_slot_keys())
@@ -49,6 +47,9 @@ print(node.get_output_port().get_slot_keys())
 
 class NodeCallback(flm.NodeCallback):
 
+    def __init__(self, *args, **kwargs):
+        flm.NodeCallback.__init__(self, *args, **kwargs)
+
     def run(self, input, output):
         print("This print from Python")
 
@@ -61,13 +62,13 @@ print(node.get_name())
 node.update()
 
 # monkey patching callbacks
-cb.run = lambda self, input, output: print("alternative")
+cb.run = lambda input, output: print("alternative")
 cb.name = "op2"
 print(node.get_name())
 node.update()
 
 # upon creation the uri, the input and output port and the call back can be specified
-node = flm.Node(uri_string, portA, portB, cb)
+node = flm.Node(uri_string, portA, portB, NodeCallback('operation'))
 print(node.get_oid())
 
 # Alternatively, the uri string is not provided -> local MongoDB server
@@ -75,7 +76,29 @@ node = flm.Node(portA, portB, cb)
 print(node.get_oid())
 
 
+# registered methods
+node = flm.Node(
+    uri_string,
+    portA.get_oid(),
+    portB.get_oid(),
+    "NodeCallback2",
+    "C"
+)
+node.update()
 
 
-#node = flm.Node("A", input=portA, output=portB, callback=call)
+# registered methods
+import fluomodlib as flm
+uri_string = "mongodb://localhost:27017"
 
+node = flm.Node(
+    uri_string,
+    open('./examples/nodes/node.json').read()
+)
+port_input = node.get_input_port()
+port_ouput = node.get_output_port()
+print(port_input.get_slot_value("slotA1"))
+port_input.set_slot_value("slotA1", 666)
+node.update_db()
+
+print(port_input.get_slot_value("slotA1"))

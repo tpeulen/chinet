@@ -1,5 +1,7 @@
 {
   "_id" : { "$oid" : "5caea5d371323f06b6473262" },
+  "birth": 1,
+  "death": null,
   "slotA1": {
     "value": 777.0,
     "fixed": false,
@@ -15,5 +17,5 @@
       "node_oid": null,
       "slot": null
     }
-  }
+  },
 }

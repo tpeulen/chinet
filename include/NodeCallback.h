@@ -23,7 +23,6 @@ public:
     NodeCallback() {};
     NodeCallback(std::string name);
     virtual ~NodeCallback() {};
-    //RTTR_ENABLE();
 };
 
 

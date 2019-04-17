@@ -14,6 +14,13 @@ NodeCallback::NodeCallback(std::string name){
 
 void run2(std::shared_ptr<Port> input, std::shared_ptr<Port> output){
     std::cout << "This p22222rint from C++" << std::endl;
+    for(auto key : input->get_slot_keys()){
+        std::cout << key;
+    }
+    std::cout << std::endl;
+    double test;
+    test = input->get_slot_value("slotA1") * input->get_slot_value("slotA2");
+    std::cout << test << std::endl;
 }
 
 RTTR_REGISTRATION {

@@ -152,7 +152,7 @@ void Port::set_oid(std::string v){
     bson_oid_init_from_string (&oid, v.c_str());
 }
 
-void Port::set_slot_value(std::string slot_key, double value){
+bool Port::set_slot_value(std::string slot_key, double value){
     bson_iter_t iter;
     bson_iter_t baz;
 
@@ -161,7 +161,9 @@ void Port::set_slot_value(std::string slot_key, double value){
         bson_iter_find_descendant (&iter, search_values.c_str(), &baz) &&
         BSON_ITER_HOLDS_DOUBLE (&baz)) {
         bson_iter_overwrite_double(&baz, value);
+        return true;
     }
+    return false;
 }
 
 void Port::set_input(std::shared_ptr<Port> v){

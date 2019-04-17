@@ -1,7 +1,9 @@
 {
   "_id" : { "$oid" : "5caea5d371323f06b6473243" },
-  "input_port_oid": "5caea5d371323f06b6473261",
-  "output_port_oid": "5caea5d371323f06b6473263",
+  "input_port_oid": "5caea5d371323f06b6473262",
+  "output_port_oid": "5caea5d371323f06b6473214",
+  "callback": "NodeCallback2",
   "callback_type": "C",
-  "callback": "NodeCallback"
+  "birth": 1,
+  "death": null
 }
