@@ -1,5 +1,6 @@
 {
   "_id" : { "$oid" : "5caea5d371323f06b6473262" },
+  "predecessor" : null,
   "birth": 1,
   "death": null,
   "slotA1": {
@@ -17,5 +18,5 @@
       "node_oid": null,
       "slot": null
     }
-  },
+  }
 }

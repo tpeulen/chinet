@@ -68,6 +68,7 @@ public:
     bool set_slot_value(std::string slot_key, double value);
     void set_oid(std::string v);
     //void set_node(std::shared_ptr<Node> node);
+    void set_predecessor(bson_oid_t v);
 
     // Operator
     //--------------------------------------------------------------------
@@ -77,6 +78,7 @@ public:
     void from_json(const std::string &json_string);
     bool add_port_to_collection(mongoc_collection_t * port_collection);
     void link_slot(std::string slot_name, bson_oid_t target_port_oid, std::string target_slot_name);
+    void new_oid();
 
 };
 

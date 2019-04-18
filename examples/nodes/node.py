@@ -99,6 +99,14 @@ port_input = node.get_input_port()
 port_ouput = node.get_output_port()
 print(port_input.get_slot_value("slotA1"))
 port_input.set_slot_value("slotA1", 666)
-node.update_db()
+
+
+# registered methods
+node2 = flm.Node(
+    uri_string,
+    open('./examples/nodes/node.json').read()
+)
+port_ouput = node2.get_output_port()
+print(node2.get_input_port().get_slot_value("slotA1"))
 
 print(port_input.get_slot_value("slotA1"))

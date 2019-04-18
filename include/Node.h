@@ -30,9 +30,10 @@ private:
     mongoc_uri_t *uri;
     mongoc_client_t *client;
     mongoc_client_session_t *client_session;
+    mongoc_database_t *database;
     mongoc_collection_t *node_collection;
     mongoc_collection_t * port_collection;
-    bson_t *command, reply, *query;
+    bson_t *query;
     bson_error_t error;
 
     /// An id unique to every Node instance
@@ -94,7 +95,7 @@ public:
     void update();
     bool is_valid();
     bool write_to_db();
-    bool update_db();
+    //bool update_db();
     bool connect_to_uri(const char* uri_string);
     bool append_port_to_collection(std::shared_ptr<Port> port);
     bool add_node_to_collection();
@@ -106,6 +107,7 @@ public:
     std::string get_name();
     //void* get_input_data();
     //void* get_output_data();
+    std::shared_ptr<Port> get_port(bson_oid_t *oid_port);
     std::shared_ptr<Port> get_port(const std::string oid);
     std::shared_ptr<Port> get_input_port();
     std::shared_ptr<Port> get_output_port();
