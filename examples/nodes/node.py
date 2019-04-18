@@ -4,36 +4,26 @@ import fluomodlib as flm
 # creating a Node object
 ########################
 
-# without arguments the Node object connects to the local MongoDB server
+# without arguments the Node object connects to "mongodb://localhost:27017", the local MongoDB server,
+# and creates of new Node entry in the "db_mofa.nodes" collection
 node = flm.Node()
 print(node.get_oid())
 
-# passing a uri string upon creation the MongoDB server can be specified
 uri_string = "mongodb://localhost:27017"
+# passing a uri string upon creation the MongoDB server can be specified
 node = flm.Node(uri_string)
-print(node.get_oid())
-
-# assignment of ports - this adds the ports to the DB
 portA = flm.Port(open('./examples/nodes/portA.json').read())
 portB = flm.Port(open('./examples/nodes/portB.json').read())
 node.set_input_port(portA)
 node.set_output_port(portB)
+node.write_to_db()
+
 
 # From nodes and port in database
 node = flm.Node(
     uri_string,
     portA.get_oid(),
     portB.get_oid()
-)
-print(node.get_input_port().get_slot_keys())
-print(node.get_output_port().get_slot_keys())
-
-
-# From nodes and port in database
-node = flm.Node(
-    uri_string,
-    portA.get_oid(),
-    portB.get_oid(),
 )
 print(node.get_input_port().get_slot_keys())
 print(node.get_output_port().get_slot_keys())
@@ -90,23 +80,20 @@ node.update()
 # registered methods
 import fluomodlib as flm
 uri_string = "mongodb://localhost:27017"
-
 node = flm.Node(
     uri_string,
     open('./examples/nodes/node.json').read()
 )
 port_input = node.get_input_port()
-port_ouput = node.get_output_port()
+port_output = node.get_output_port()
 print(port_input.get_slot_value("slotA1"))
-port_input.set_slot_value("slotA1", 666)
+port_input.set_slot_value("slotA1", 888)
 
-
-# registered methods
 node2 = flm.Node(
     uri_string,
     open('./examples/nodes/node.json').read()
 )
-port_ouput = node2.get_output_port()
+port_input = node2.get_input_port()
 print(node2.get_input_port().get_slot_value("slotA1"))
 
 print(port_input.get_slot_value("slotA1"))

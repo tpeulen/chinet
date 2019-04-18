@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <map>
+#include <chrono>
 
 #include "bson.h"
 #include <mongoc.h>
@@ -29,10 +30,8 @@ private:
     //------------------
     mongoc_uri_t *uri;
     mongoc_client_t *client;
-    mongoc_client_session_t *client_session;
     mongoc_database_t *database;
-    mongoc_collection_t *node_collection;
-    mongoc_collection_t * port_collection;
+    mongoc_collection_t *node_collection, *port_collection;
     bson_t *query;
     bson_error_t error;
 
@@ -78,13 +77,13 @@ public:
          std::string json_string_node
     );
     Node(const char *uri_string,
-         std::string input_port_oid,
-         std::string output_port_oid
+         const char *input_port_oid,
+         const char *output_port_oid
     );
     Node(
             const char *uri_string,
-            std::string input_port_oid,
-            std::string output_port_oid,
+            const char *input_port_oid,
+            const char *output_port_oid,
             std::string callback,
             std::string call_back_type
     );
@@ -108,7 +107,7 @@ public:
     //void* get_input_data();
     //void* get_output_data();
     std::shared_ptr<Port> get_port(bson_oid_t *oid_port);
-    std::shared_ptr<Port> get_port(const std::string oid);
+    std::shared_ptr<Port> get_port(const char* oid);
     std::shared_ptr<Port> get_input_port();
     std::shared_ptr<Port> get_output_port();
     std::string get_oid();
