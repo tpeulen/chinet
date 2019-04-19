@@ -7,15 +7,18 @@ import fluomodlib as flm
 # without arguments the Node object connects to "mongodb://localhost:27017", the local MongoDB server,
 # and creates of new Node entry in the "db_mofa.nodes" collection
 node = flm.Node()
-print(node.get_oid())
 
-uri_string = "mongodb://localhost:27017"
 # passing a uri string upon creation the MongoDB server can be specified
+uri_string = "mongodb://localhost:27017"
 node = flm.Node(uri_string)
+
+# ports
 portA = flm.Port(open('./examples/nodes/portA.json').read())
 portB = flm.Port(open('./examples/nodes/portB.json').read())
+portC = flm.Port()
 node.set_input_port(portA)
 node.set_output_port(portB)
+node.to_json()
 node.write_to_db()
 
 

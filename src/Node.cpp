@@ -45,8 +45,10 @@ Node::Node(const char *uri_string){
             );
 
     connect_to_uri(uri_string);
-
     std::cout << "adding node to collection" << std::endl;
+    if (!mongoc_collection_insert_one (node_collection, document, nullptr, nullptr, &error)) {
+        fprintf(stderr, "Node already exists. Error: %s\n", error.message);
+    }
 }
 
 Node::Node() :
@@ -94,11 +96,6 @@ Node::~Node() {
     /*
      * Release our handles and clean up mongoc
      */
-    /*
-    if (query) {
-        bson_destroy (query);
-    }
-     */
 
     // destroy cursor, collection, session before the client they came from
     if (node_collection) {
@@ -142,7 +139,6 @@ bool Node::connect_to_uri(const char* uri_string){
         * on the server. This can also be done from the URI (see other examples).
         */
         mongoc_client_set_appname (client, "mofa-node");
-        database = mongoc_client_get_database (client, "db_mofa");
         /*
          * Get a handle on the collections
          */
@@ -168,10 +164,6 @@ void Node::update(){
             rttr::method meth = rttr::type::get_global_method(callback);
             if (meth) {
                 rttr::variant return_value = meth.invoke({}, input_port, output_port);
-                /*
-                if (return_value.is_valid() && return_value.is_type<double>())
-                    std::cout << return_value.get_value<double>() << std::endl; // 729
-                */
             }
             break;
         }
@@ -192,115 +184,89 @@ bool Node::is_valid(){
 }
 
 bool Node::write_to_db(){
-    mongoc_collection_insert_one(
-            node_collection,
-            document,
-            nullptr, nullptr, nullptr
-    );
-
-    //append_port_to_collection(input);
-    //append_port_to_collection(output);
-
-    // input node
-    // set the predecessor and update the oid
-    input_port->set_predecessor(input_port->oid);
-    input_port->new_oid();
-
-    // write to the db
-    if (!mongoc_collection_insert_one (port_collection, input_port->b, nullptr, nullptr, &error)) {
+    if (!mongoc_collection_insert_one (node_collection, document, nullptr, nullptr, &error)) {
         fprintf (stderr, "%s\n", error.message);
     }
 
-    // output node
-    // set the predecessor and update the oid
-    output_port->set_predecessor(output_port->oid);
-    output_port->new_oid();
+    /*
+    // write updated ports to db
+    {
+        // input node
+        // set the predecessor and update the oid
+        input_port->set_predecessor(input_port->oid);
+        std::cout << "input_port ";
+        input_port->new_oid();
 
-    // write to the db
-    if (!mongoc_collection_insert_one (port_collection, output_port->b, nullptr, nullptr, &error)) {
-        fprintf (stderr, "%s\n", error.message);
+        // output node
+        // set the predecessor and update the oid
+        output_port->set_predecessor(output_port->oid);
+        std::cout << "output_port ";
+        output_port->new_oid();
     }
+     */
 
-    // update the references to the input and output ports
-    bson_t *update = NULL;
-    query = BCON_NEW ("_id", BCON_OID (&oid));
-    update = BCON_NEW ("$set",
-                       "{",
-                       "input_port_oid",
-                       BCON_OID (&(input_port->oid)),
-                       "output_port_oid",
-                       BCON_OID (&(output_port->oid)),
-                       "}");
-    if (!mongoc_collection_update_one (
-            node_collection, query, update, NULL, NULL, &error)) {
-        fprintf (stderr, "%s\n", error.message);
+    // write node to the db
+    {
+
+        // update the references to the input and output ports
+        bson_t *update = NULL;
+        bson_t *query;
+        bson_t reply;
+        query = BCON_NEW ("_id", BCON_OID(&oid));
+        update = BCON_NEW ("$set",
+                           "{",
+                           "input_port_oid", BCON_OID(&(input_port->oid)),
+                           "output_port_oid", BCON_OID(&(output_port->oid)),
+                           "callback", BCON_UTF8(callback.c_str()),
+                           "callback_type", BCON_UTF8("C"),
+                           "}");
+        if (!mongoc_collection_find_and_modify(
+                node_collection, query, NULL, update, NULL, false, false, true, &reply, &error)) {
+            fprintf(stderr, "%s\n", error.message);
+        }
+        fprintf(stderr, "update reply: %s\n", bson_as_json(&reply, NULL));
+
+        bson_destroy(&reply);
+        bson_destroy(query);
     }
 }
 
-/*
-bool Node::update_db(){
-
-
-    // copy node
-
-    bson_t *update = NULL;
-    query = BCON_NEW ("_id", BCON_OID (&oid));
-    update = BCON_NEW ("$set",
-                       "{",
-                       "key",
-                       BCON_UTF8 ("new_value"),
-                       "updated",
-                       BCON_BOOL (true),
-                       "}");
-}
-*/
-
-bool Node::append_port_to_collection(std::shared_ptr<Port> port) {
-    return mongoc_collection_insert_one(
-            port_collection,
-            port->b,
-            nullptr, nullptr, nullptr
-    );
-}
-
-bool Node::add_node_to_collection() {
-}
-
-void Node::from_json(const std::string &json_string){
-    std::cout << "from_json" << std::endl;
-
-    document = bson_new_from_json(
-            (uint8_t*)json_string.c_str(),
-            json_string.size(),
-            &error
-    );
+void Node::from_bson(const bson_t *doc){
+    std::cout << "bson:" << std::endl;
+    document = bson_copy(doc);
 
     bson_iter_t iter;
     bson_oid_t port_oid;
     char *oid_s = new char[25];
 
+    // set oid
+    if (bson_iter_init(&iter, document) &&
+        bson_iter_find(&iter, "_id") &&
+        BSON_ITER_HOLDS_OID(&iter)) {
+        oid = *bson_iter_oid(&iter);
+        bson_oid_to_string(&oid, oid_s);
+        std::cout << "    node_oid: " << oid_s << std::endl;
+    }
+
     // set input
     if (bson_iter_init(&iter, document) &&
         bson_iter_find(&iter, "input_port_oid") &&
-        BSON_ITER_HOLDS_OID(&iter)
-            ) {
+        BSON_ITER_HOLDS_OID(&iter)) {
         port_oid = *bson_iter_oid(&iter);
         bson_oid_to_string(&port_oid, oid_s);
-        std::cout << "found input_port_oid: " << oid_s << std::endl;
+        std::cout << "    input_port_oid: " << oid_s << std::endl;
         input_port = get_port(&port_oid);
     }
-    std::cout << "1";
 
     // set output
     if (bson_iter_init(&iter, document) &&
         bson_iter_find(&iter, "output_port_oid") &&
-        BSON_ITER_HOLDS_UTF8(&iter)) {
+        BSON_ITER_HOLDS_OID(&iter)) {
         port_oid = *bson_iter_oid(&iter);
         bson_oid_to_string(&port_oid, oid_s);
-        std::cout << "found output_port_oid: " << oid_s << std::endl;
+        std::cout << "    output_port_oid: " << oid_s << std::endl;
         output_port = get_port(&port_oid);
     }
-    std::cout << "2";
 
     // set callback
     std::string s_callback;
@@ -308,27 +274,53 @@ void Node::from_json(const std::string &json_string){
     if (bson_iter_init(&iter, document) &&
         bson_iter_find(&iter, "callback") &&
         BSON_ITER_HOLDS_UTF8(&iter)) {
-        std::cout << "found callback" << std::endl;
         uint32_t l;
         const char *s = bson_iter_utf8(&iter, &l);
         s_callback = std::string(s, l);
+        std::cout << "    callback: " << s_callback << std::endl;
     }
     if (bson_iter_init(&iter, document) &&
         bson_iter_find(&iter, "callback_type") &&
         BSON_ITER_HOLDS_UTF8(&iter)) {
-        std::cout << "found callback_type" << std::endl;
         uint32_t l;
         const char *s = bson_iter_utf8(&iter, &l);
         s_callback_type = std::string(s, l);
+        std::cout << "    callback_type: " << s_callback_type << std::endl;
     }
-    std::cout << "3";
     set_callback(s_callback, s_callback_type);
-
-    if (!mongoc_collection_insert_one (node_collection, document, nullptr, nullptr, &error)) {
-        fprintf (stderr, "%s\n", error.message);
-    }
 }
 
+void Node::from_json(const std::string &json_string){
+    std::cout << "json:";
+    const bson_t *doc = bson_new_from_json(
+            (uint8_t*)json_string.c_str(),
+            json_string.size(),
+            &error
+    );
+    from_bson(doc);
+}
+
+void Node::from_oid(bson_oid_t *oid_doc){
+    std::cout << "oid_t:";
+    const bson_t *doc;
+    mongoc_cursor_t *cursor;
+    bson_t *query;
+
+    query = BCON_NEW ("_id", BCON_OID(oid_doc));
+    cursor = mongoc_collection_find_with_opts(node_collection, query, NULL, NULL);
+    while (mongoc_cursor_next (cursor, &doc)) {
+        from_bson(doc);
+    }
+    mongoc_cursor_destroy(cursor);
+    bson_destroy(query);
+}
+
+void Node::from_oid(const std::string oid_doc){
+    std::cout << "oid_s:";
+    bson_oid_t oid_d;
+    bson_oid_init_from_string(&oid_d, oid_doc.c_str());
+    from_oid(&oid_d);
+}
 
 std::string Node::to_json(){
     if(document == nullptr){
@@ -340,14 +332,12 @@ std::string Node::to_json(){
     }
 }
 
-
 // Getter
 //--------------------------------------------------------------------
 std::string Node::get_name(){
-    if((input_port != nullptr) &&
-       (callback_class != nullptr)){
+    if(input_port != nullptr){
         std::string r;
-        r.append(callback_class->name);
+        r.append(callback);
         r.append("(");
         for(auto n : input_port->get_slot_keys()){
             r.append(n);
@@ -360,39 +350,6 @@ std::string Node::get_name(){
     }
 }
 
-std::shared_ptr<Port> Node::get_port(bson_oid_t *oid_port){
-    query =  BCON_NEW ("_id", BCON_OID(oid_port));
-    mongoc_cursor_t *cursor = mongoc_collection_find_with_opts( port_collection, query, nullptr, nullptr);
-    // read the data
-    const bson_t *doc;
-    auto p = std::make_shared<Port>(*oid_port);
-    while (mongoc_cursor_next (cursor, &doc)) {
-        p->b = bson_copy(doc);
-    }
-    mongoc_cursor_destroy(cursor);
-    return p;
-}
-
-
-std::shared_ptr<Port> Node::get_port(const char* oid_string){
-    // convert the string to an bson_oid_t
-    bson_oid_t oid_port;
-    bson_oid_init_from_string(&oid_port, oid_string);
-    query =  BCON_NEW ("_id", BCON_OID(&oid_port));
-    mongoc_cursor_t *cursor =
-            mongoc_collection_find_with_opts(
-                    port_collection,
-                    query,
-                    nullptr, nullptr);
-    // read the data
-    const bson_t *doc;
-    std::shared_ptr<Port> p(new Port);
-    while (mongoc_cursor_next (cursor, &doc)) {
-        p->b = bson_copy(doc);
-    }
-    mongoc_cursor_destroy(cursor);
-    return p;
-}
 
 std::shared_ptr<Port> Node::get_output_port(){
     return this->output_port;
@@ -485,4 +442,51 @@ void Node::set_callback(std::string &s_callback, std::string &s_callback_type){
     } else{
         this->callback_type = 0;
     }
+}
+
+
+// Private
+//--------------------------------------------------------------------
+
+// Methods
+//--------------------------------------------------------------------
+
+std::shared_ptr<Port> Node::get_port(bson_oid_t *oid_port){
+    bson_t *query;
+    query =  BCON_NEW ("_id", BCON_OID(oid_port));
+    mongoc_cursor_t *cursor = mongoc_collection_find_with_opts( port_collection, query, nullptr, nullptr);
+    // read the data
+    const bson_t *doc;
+    auto p = std::make_shared<Port>(*oid_port);
+    while (mongoc_cursor_next (cursor, &doc)) {
+        p->b = bson_copy(doc);
+    }
+    mongoc_cursor_destroy(cursor);
+    bson_destroy(query);
+    return p;
+}
+
+
+std::shared_ptr<Port> Node::get_port(const char* oid_string){
+    // convert the string to an bson_oid_t
+    bson_oid_t oid_port;
+    bson_t *query;
+
+    bson_oid_init_from_string(&oid_port, oid_string);
+    query =  BCON_NEW ("_id", BCON_OID(&oid_port));
+    mongoc_cursor_t *cursor =
+            mongoc_collection_find_with_opts(
+                    port_collection,
+                    query,
+                    nullptr, nullptr);
+    // read the data
+    const bson_t *doc;
+    std::shared_ptr<Port> p(new Port);
+    while (mongoc_cursor_next (cursor, &doc)) {
+        p->b = bson_copy(doc);
+    }
+
+    mongoc_cursor_destroy(cursor);
+    bson_destroy(query);
+    return p;
 }

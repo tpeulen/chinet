@@ -13,7 +13,12 @@ NodeCallback::NodeCallback(std::string name){
 }
 
 void run2(std::shared_ptr<Port> input, std::shared_ptr<Port> output){
-    std::cout << "This p22222rint from C++" << std::endl;
+    /*
+    if (return_value.is_valid() && return_value.is_type<double>())
+        std::cout << return_value.get_value<double>() << std::endl; // 729
+    */
+
+    std::cout << "This is run2 from C++" << std::endl;
     for(auto key : input->get_slot_keys()){
         std::cout << key;
     }

@@ -30,9 +30,7 @@ private:
     //------------------
     mongoc_uri_t *uri;
     mongoc_client_t *client;
-    mongoc_database_t *database;
     mongoc_collection_t *node_collection, *port_collection;
-    bson_t *query;
     bson_error_t error;
 
     /// An id unique to every Node instance
@@ -55,6 +53,11 @@ private:
     /// A pointer to a function that operates on an input Port instance (first argument)
     /// and writes to an output Port instance (second argument)
     std::shared_ptr<NodeCallback> callback_class;
+
+    // Methods
+    //--------------------------------------------------------------------
+    std::shared_ptr<Port> get_port(bson_oid_t *oid_port);
+    std::shared_ptr<Port> get_port(const char* oid);
 
 public:
     std::string callback;
@@ -93,26 +96,24 @@ public:
     //--------------------------------------------------------------------
     void update();
     bool is_valid();
-    bool write_to_db();
-    //bool update_db();
-    bool connect_to_uri(const char* uri_string);
-    bool append_port_to_collection(std::shared_ptr<Port> port);
-    bool add_node_to_collection();
     std::string get_input_oid();
     std::string get_output_oid();
+
+    void from_json(const std::string &json_string);
+    void from_bson(const bson_t *document);
+    void from_oid(bson_oid_t *oid_doc);
+    void from_oid(const std::string oid_doc);
+    std::string to_json();
+
+    bool connect_to_uri(const char* uri_string);
+    bool write_to_db();
 
     // Getter
     //--------------------------------------------------------------------
     std::string get_name();
-    //void* get_input_data();
-    //void* get_output_data();
-    std::shared_ptr<Port> get_port(bson_oid_t *oid_port);
-    std::shared_ptr<Port> get_port(const char* oid);
     std::shared_ptr<Port> get_input_port();
     std::shared_ptr<Port> get_output_port();
     std::string get_oid();
-    void from_json(const std::string &json_string);
-    std::string to_json();
 
     // Setter
     //--------------------------------------------------------------------

@@ -178,8 +178,10 @@ void Port::set_input(std::shared_ptr<Port> v){
 
 void Port::set_predecessor(bson_oid_t v){
     bson_iter_t iter;
+    char oidstr[25];
     if (bson_iter_init (&iter, b) && bson_iter_find (&iter, "predecessor") && BSON_ITER_HOLDS_OID (&iter)){
-        printf ("Found the field named: %s\n", bson_iter_key (&iter));
+        bson_oid_to_string (bson_iter_oid(&iter), oidstr);
+        printf ("predecessor: %s\n", oidstr);
         bson_iter_overwrite_oid(&iter, &v);
     }
 }

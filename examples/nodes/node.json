@@ -1,9 +1,15 @@
 {
-  "_id" : { "$oid" : "5caea5d371323f06b6473243" },
-  "input_port_oid": { "$oid" : "5caea5d371323f06b6473262" },
-  "output_port_oid": { "$oid" : "5caea5d371323f06b6473214" },
+  "_id": {
+    "$oid": "5cb8e8f871323f01785ca886"
+  },
+  "input_port_oid": {
+    "$oid": "5cb8e90071323f01785ca88a"
+  },
+  "output_port_oid": {
+    "$oid": "5cb8e90071323f01785ca88b"
+  },
   "callback": "NodeCallback2",
   "callback_type": "C",
-  "birth": 1,
-  "death": null
+  "birth": 1555622136794,
+  "death": 0
 }
