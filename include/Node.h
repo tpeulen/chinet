@@ -1,5 +1,5 @@
-#ifndef FLUOMODLIB_Node_H
-#define FLUOMODLIB_Node_H
+#ifndef chinet_Node_H
+#define chinet_Node_H
 
 #include <string>
 #include <vector>
@@ -106,8 +106,14 @@ public:
     void from_oid(const std::string oid_doc);
     std::string to_json();
 
+    // DB methods
     bool connect_to_uri(const char* uri_string);
+    bool write_input_port_to_db();
+    bool write_output_port_to_db();
+    bool write_ports_to_db();
+    bool write_node_to_db();
     bool write_to_db();
+    bool append_ports_in_db();
 
     // Getter
     //--------------------------------------------------------------------
@@ -130,4 +136,4 @@ public:
 };
 
 
-#endif //FLUOMODLIB_Node_H
+#endif //chinet_Node_H

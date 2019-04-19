@@ -3,34 +3,34 @@
 Installation
 ============
 
-``fluomodlib`` can either be installed from prebuilt binaries or from the source code. For most users it is recommended
-to install ``fluomodlib`` using the prebuilt binaries. Below the installation using prebuilt binaries and the
-prerequisites to compile ``fluomodlib`` are briefly outlined.
+``chinet`` can either be installed from prebuilt binaries or from the source code. For most users it is recommended
+to install ``chinet`` using the prebuilt binaries. Below the installation using prebuilt binaries and the
+prerequisites to compile ``chinet`` are briefly outlined.
 
 
 Prebuilt binaries
 -----------------
-It is recommended to install ``fluomodlib`` for Python environments via ``conda`` by. ::
+It is recommended to install ``chinet`` for Python environments via ``conda`` by. ::
 
-    conda install -c tpeulen fluomodlib
-
-
-Alternatively, ``fluomodlib`` can be installed via ``pip``.::
+    conda install -c tpeulen chinet
 
 
-    pip install fluomodlib
+Alternatively, ``chinet`` can be installed via ``pip``.::
+
+
+    pip install chinet
 
 
 Compliation
 -----------
 
-``fluomodlib`` can be compiled and installed using the source code provided in the git repository. ::
+``chinet`` can be compiled and installed using the source code provided in the git repository. ::
 
-    git clone --recursive https://github.com/tpeulen/fluomodlib.git
-    cd fluomodlib
+    git clone --recursive https://github.com/tpeulen/chinet.git
+    cd chinet
     sudo python setup.py install
 
-To compile ``fluomodlib`` a set of prerequisites need to be fulfilled:
+To compile ``chinet`` a set of prerequisites need to be fulfilled:
 
     1. An installed compiler.
     2. The `HDF5 <https://www.hdfgroup.org/>`_ library with C/C++ include files.
@@ -41,7 +41,7 @@ To compile ``fluomodlib`` a set of prerequisites need to be fulfilled:
 
 Windows
 ^^^^^^^
-On windows ``fluomodlib`` is best compiled with the `Visual Studio 2017 <https://visualstudio.microsoft.com/>`_. For
+On windows ``chinet`` is best compiled with the `Visual Studio 2017 <https://visualstudio.microsoft.com/>`_. For
 compilation the Visual Studion Community edition is sufficient. In addition to Visual Studio the libraries and the
 include files as listed above need to be installed. The prebuilt binaries are compiled on Windows 10 with using
 64bit anaconda Python environments `miniconda <https://docs.conda.io/en/latest/miniconda.html>`_ using the conda
@@ -60,7 +60,7 @@ The Linux prebuilt binaries are compiled on Ubuntu 18.04 in an anaconda distribu
 Conda
 ^^^^^
 
-A conda recipe is provided in the folder 'conda-recipe' to build the fluomodlib library with the
+A conda recipe is provided in the folder 'conda-recipe' to build the chinet library with the
 `conda build <https://docs.conda.io/projects/conda-build/en/latest/>`_ environment.
 
 To build the library download the recipe, install the conda build package and use the provided

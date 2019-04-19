@@ -1,21 +1,21 @@
 from __future__ import print_function
-import fluomodlib as flm
+import chinet as cn
 
 # creating a Node object
 ########################
 
 # without arguments the Node object connects to "mongodb://localhost:27017", the local MongoDB server,
-# and creates of new Node entry in the "db_mofa.nodes" collection
-node = flm.Node()
+# and creates of new Node entry in the "db_chinet.nodes" collection
+node = cn.Node()
 
 # passing a uri string upon creation the MongoDB server can be specified
 uri_string = "mongodb://localhost:27017"
-node = flm.Node(uri_string)
+node = cn.Node(uri_string)
 
 # ports
-portA = flm.Port(open('./examples/nodes/portA.json').read())
-portB = flm.Port(open('./examples/nodes/portB.json').read())
-portC = flm.Port()
+portA = cn.Port(open('./examples/nodes/portA.json').read())
+portB = cn.Port(open('./examples/nodes/portB.json').read())
+portC = cn.Port()
 node.set_input_port(portA)
 node.set_output_port(portB)
 node.to_json()
@@ -23,7 +23,7 @@ node.write_to_db()
 
 
 # From nodes and port in database
-node = flm.Node(
+node = cn.Node(
     uri_string,
     portA.get_oid(),
     portB.get_oid()
@@ -38,10 +38,10 @@ print(node.get_output_port().get_slot_keys())
 # Nodes evaluate callbacks, i.e., functions with an input and an output
 # callbacks derive from the NodeCallback class.
 
-class NodeCallback(flm.NodeCallback):
+class NodeCallback(cn.NodeCallback):
 
     def __init__(self, *args, **kwargs):
-        flm.NodeCallback.__init__(self, *args, **kwargs)
+        cn.NodeCallback.__init__(self, *args, **kwargs)
 
     def run(self, input, output):
         print("This print from Python")
@@ -61,16 +61,16 @@ print(node.get_name())
 node.update()
 
 # upon creation the uri, the input and output port and the call back can be specified
-node = flm.Node(uri_string, portA, portB, NodeCallback('operation'))
+node = cn.Node(uri_string, portA, portB, NodeCallback('operation'))
 print(node.get_oid())
 
 # Alternatively, the uri string is not provided -> local MongoDB server
-node = flm.Node(portA, portB, cb)
+node = cn.Node(portA, portB, cb)
 print(node.get_oid())
 
 
 # registered methods
-node = flm.Node(
+node = cn.Node(
     uri_string,
     portA.get_oid(),
     portB.get_oid(),
@@ -79,11 +79,10 @@ node = flm.Node(
 )
 node.update()
 
-
 # registered methods
-import fluomodlib as flm
+import chinet as cn
 uri_string = "mongodb://localhost:27017"
-node = flm.Node(
+node = cn.Node(
     uri_string,
     open('./examples/nodes/node.json').read()
 )
@@ -92,7 +91,7 @@ port_output = node.get_output_port()
 print(port_input.get_slot_value("slotA1"))
 port_input.set_slot_value("slotA1", 888)
 
-node2 = flm.Node(
+node2 = cn.Node(
     uri_string,
     open('./examples/nodes/node.json').read()
 )

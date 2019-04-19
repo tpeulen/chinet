@@ -1,4 +1,4 @@
-%module(directors="1") fluomodlib
+%module(directors="1") chinet
 
 %include "std_vector.i";
 %include "std_list.i";

@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.13)
 
-SET(PROJECT_NAME fluomodlib)
+SET(PROJECT_NAME chinet)
 PROJECT(${PROJECT_NAME})
 
 # Set minimum C++ to 2011 standards

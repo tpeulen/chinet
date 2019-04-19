@@ -1,8 +1,8 @@
-fluomodlib
+chinet
 ==========
 
-``fluomodlib`` is a library for fluorescence models, i.e., forward models. A forward model is a model that calculates
-experimental observables based on a set of parameters. ``fluomodlib`` can be used to calculate:
+``chinet`` is a library for fluorescence models, i.e., forward models. A forward model is a model that calculates
+experimental observables based on a set of parameters. ``chinet`` can be used to calculate:
 
    * Fluorescence decays
    * Single-molecule FRET efficiency histograms
@@ -12,7 +12,7 @@ Currently supported forward models:
 
    * Photon distribution analysis
 
-In addition to the calculation of models, ``fluomodlib`` can be used to optimize model parameters against experimental
+In addition to the calculation of models, ``chinet`` can be used to optimize model parameters against experimental
 observables.
 
    * Maximum likelihood estimator (fluorescence decays)
@@ -42,4 +42,4 @@ Indices and tables
 License
 -------
 
-fluomodlib is released under the open source `MIT license <https://opensource.org/licenses/MIT>`_.
+chinet is released under the open source `MIT license <https://opensource.org/licenses/MIT>`_.

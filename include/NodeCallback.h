@@ -2,12 +2,13 @@
 // Created by thomas on 4/3/19.
 //
 
-#ifndef FLUOMODLIB_NODECALLBACK_H
-#define FLUOMODLIB_NODECALLBACK_H
+#ifndef chinet_NODECALLBACK_H
+#define chinet_NODECALLBACK_H
 
 #include <rttr/registration>
 #include <Port.h>
 #include <Node.h>
+#include <Functions.h>
 
 class Node;
 class Port;
@@ -28,4 +29,4 @@ public:
 
 
 
-#endif //FLUOMODLIB_NODECALLBACK_H
+#endif //chinet_NODECALLBACK_H

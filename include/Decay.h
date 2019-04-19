@@ -2,8 +2,8 @@
 // Created by thomas on 3/29/19.
 //
 
-#ifndef FLUOMODLIB_DECAY_H
-#define FLUOMODLIB_DECAY_H
+#ifndef chinet_DECAY_H
+#define chinet_DECAY_H
 
 
 #include <vector>
@@ -87,4 +87,4 @@ public:
 };
 
 
-#endif //FLUOMODLIB_DECAY_H
+#endif //chinet_DECAY_H

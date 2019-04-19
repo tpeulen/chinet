@@ -1,14 +1,14 @@
- # fluomodlib
+ # chinet
 [![Linux Build Status](https://travis-ci.org/Fluorescence-Tools/LabelLib.svg?branch=master)](https://travis-ci.org/Fluorescence-Tools/LabelLib)
-[![Anaconda-Server Version](https://anaconda.org/tpeulen/fluomodlib/badges/version.svg)](https://anaconda.org/tpeulen/fluomodlib)
-[![Anaconda-Server Downloads](https://anaconda.org/tpeulen/fluomodlib/badges/downloads.svg)](https://anaconda.org/tpeulen/fluomodlib)
+[![Anaconda-Server Version](https://anaconda.org/tpeulen/chinet/badges/version.svg)](https://anaconda.org/tpeulen/chinet)
+[![Anaconda-Server Downloads](https://anaconda.org/tpeulen/chinet/badges/downloads.svg)](https://anaconda.org/tpeulen/chinet)
 
 ## General description
 
-fluomodlib is a file format agnostic low level, high performance API to read and process time-tagged-time resolved (TTTR) 
+chinet is a file format agnostic low level, high performance API to read and process time-tagged-time resolved (TTTR) 
 data acquired by  PicoQuant (PQ) and Becker&Hickl measurement devices/cards or TTTR files in the open Photon-HDF format.
 
-The library fluomodlib facilitates the work with files containing time-tagged time resolved photon streams by providing 
+The library chinet facilitates the work with files containing time-tagged time resolved photon streams by providing 
 a vendor independent C++ application programming interface (API) for TTTR files that is wrapped by SWIG (Simplified 
 Wrapper and Interface Generator) for common scripting languages as Python as target languages and non-scripting 
 languages such as C# and Java including Octave, Scilab and R.
@@ -20,7 +20,7 @@ languages such as C# and Java including Octave, Scilab and R.
 * Photon distribution anaylsis
 * FLIM image generation and analysis
 
-fluomodlib is NOT intended as ready-to-use software for specific application purposes.
+chinet is NOT intended as ready-to-use software for specific application purposes.
 
 
 ## Supported file formats
@@ -54,7 +54,7 @@ analysis without the need of independent measurements..
 * Fast photon distribution analysis
 * Fast selection of photons from a photon stream
 
-Generation of fluorescence decay histograms fluomodlib outperforms pure numpy and Python based
+Generation of fluorescence decay histograms chinet outperforms pure numpy and Python based
 libraries by a factor of ~40  
 
 
@@ -70,8 +70,8 @@ analysis of TTTR data.
 The C++ shared library can be installed from source with [cmake](https://cmake.org/):
 
 ```console
-git clone --recursive https://github.com/tpeulen/fluomodlib.git
-mkdir fluomodlib/build; cd fluomodlib/build
+git clone --recursive https://github.com/tpeulen/chinet.git
+mkdir chinet/build; cd chinet/build
 cmake ..
 sudo make install
 ```
@@ -86,14 +86,14 @@ precompiled distribution for Python anaconda environment.
 The following commands can be used to download and compile the source code:
 
 ```console
-git clone --recursive https://github.com/tpeulen/fluomodlib.git
-cd fluomodlib
+git clone --recursive https://github.com/tpeulen/chinet.git
+cd chinet
 sudo python setup.py install
 ```
 
 In an [anaconda](https://www.anaconda.com/) environment the library can be installed by the following command: 
 ```console
-conda install -c tpeulen fluomodlib
+conda install -c tpeulen chinet
 ```
 
 For most users the later approach is recommended. Currently, pre-compiled packages for the anaconda distribution
@@ -117,5 +117,5 @@ Legacy 32-bit platforms are currently not supported.
 
 # License
 
-fluomodlib is released under the open source MIT license.
+chinet is released under the open source MIT license.
 

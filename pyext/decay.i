@@ -1,4 +1,4 @@
-%module fluomodlib
+%module chinet
 %{
 #include "../include/Curve.h"
 #include "../include/Decay.h"

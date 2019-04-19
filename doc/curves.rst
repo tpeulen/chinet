@@ -1,13 +1,13 @@
 Curves
 ======
 
-The library ``fluomodlib`` uses the class ``Curve`` to save and operate on the data of a model. One dimensional
+The library ``chinet`` uses the class ``Curve`` to save and operate on the data of a model. One dimensional
 models derive from the ``Curve`` class. A ``Curve`` object has properties for the x-values, the y-values, and
 the errors of the x- and y-values.
 
 .. code-block:: python
 
-    import fluomodlib as flm
+    import chinet as flm
     import numpy as np
 
     curve = flm.Curve()
@@ -36,7 +36,7 @@ also be used with two curves.
 
 .. code-block:: python
 
-    import fluomodlib as flm
+    import chinet as flm
     import numpy as np
 
     curve = flm.Curve()

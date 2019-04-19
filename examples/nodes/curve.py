@@ -1,4 +1,4 @@
-import fluomodlib as flm
+import chinet as flm
 import numpy as np
 
 curve = flm.Curve()

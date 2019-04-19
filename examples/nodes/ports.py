@@ -1,5 +1,5 @@
 from __future__ import print_function
-import fluomodlib as flm
+import chinet as flm
 
 
 # Creating a port and reading content from JSON string

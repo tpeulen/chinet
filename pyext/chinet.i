@@ -1,4 +1,4 @@
-%module fluomodlib
+%module chinet
 %include "documentation.i"
 
 %{

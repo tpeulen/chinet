@@ -22,18 +22,17 @@ void run2(std::shared_ptr<Port> input, std::shared_ptr<Port> output){
     for(auto key : input->get_slot_keys()){
         std::cout << key;
     }
-    std::cout << std::endl;
-    double test;
-    test = input->get_slot_value("slotA1") * input->get_slot_value("slotA2");
+    double test = input->get_slot_value("slotA1")[0] * input->get_slot_value("slotA2")[0];
     std::cout << test << std::endl;
+}
+
+void convolve_sum_of_exponentials_periodic(std::shared_ptr<Port> input, std::shared_ptr<Port> output){
+    //Functions::convolve_sum_of_exponentials_periodic();
 }
 
 RTTR_REGISTRATION {
     using namespace rttr;
-    registration::class_<NodeCallback>("NodeCallback")
-            .constructor<>()
-            .method("run", &NodeCallback::run);
-
+    registration::class_<NodeCallback>("NodeCallback").constructor<>().method("run", &NodeCallback::run);
     registration::method("NodeCallback2", &run2);
-
+    registration::method("NodeCallback2", &convolve_sum_of_exponentials_periodic);
 }

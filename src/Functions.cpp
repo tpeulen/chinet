@@ -154,7 +154,7 @@ std::vector<double> Functions::diff(std::vector<double> v) {
     return dx;
 }
 
-uint64_t get_time(){
+uint64_t Functions::get_time(){
     // the birth is the current time stored as a long
     auto now = std::chrono::system_clock::now();
     auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);

@@ -1,5 +1,5 @@
-#ifndef FLUOMODLIB_PORT_H
-#define FLUOMODLIB_PORT_H
+#ifndef chinet_PORT_H
+#define chinet_PORT_H
 
 #include <cstdint>
 #include <iostream>
@@ -29,7 +29,7 @@ private:
     std::vector<std::shared_ptr<Port>> targets;
 
     /// stores the data of the Port in a BSON document
-    bson_t *b;
+    bson_t *document;
 
     /// the object identifier (unique number)
     bson_oid_t oid;
@@ -56,7 +56,7 @@ public:
     //std::string get_name();
     std::shared_ptr<Port> get_input();
     /// returns the value of a slot for a given key (slot name)
-    double get_slot_value(const std::string &slot_key);
+    std::vector<double> get_slot_value(const std::string &slot_key);
     /// returns the values of all the slots as an vector
     std::vector<double> get_slot_values();
     /// returns the keys of all the slots as an vector
@@ -70,7 +70,9 @@ public:
     bool set_slot_value(std::string slot_key, double value);
     void set_oid(std::string v);
     //void set_node(std::shared_ptr<Node> node);
-    void set_predecessor(bson_oid_t v);
+    bool set_predecessor(bson_oid_t v);
+    bool set_death_time(uint64_t v);
+    bool set_birth_time(uint64_t v);
 
     // Operator
     //--------------------------------------------------------------------
@@ -78,10 +80,10 @@ public:
     // Methods
     //--------------------------------------------------------------------
     void from_json(const std::string &json_string);
-    bool add_port_to_collection(mongoc_collection_t * port_collection);
+    //bool add_port_to_collection(mongoc_collection_t * port_collection);
     void new_oid();
 
 };
 
 
-#endif //FLUOMODLIB_PORT_H
+#endif //chinet_PORT_H

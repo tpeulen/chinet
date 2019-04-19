@@ -28,19 +28,19 @@ INCLUDE_DIRECTORIES(${Python_NumPy_PATH})
 #INCLUDE_DIRECTORIES(${Python_INCLUDE_DIRS})
 
 
-SET(MODULE_NAME fluomodlib)
+SET(MODULE_NAME chinet)
 SET(CMAKE_SWIG_FLAGS "")
-SET(SWIG_SRC fluomodlib.i)
+SET(SWIG_SRC chinet.i)
 # The output path is controlled by the setup.py
 #SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/pyext)
 
-SET_PROPERTY(SOURCE fluomodlib.i PROPERTY CPLUSPLUS ON)
+SET_PROPERTY(SOURCE chinet.i PROPERTY CPLUSPLUS ON)
 file(GLOB SRC_files "../src/*.cpp")
 SWIG_ADD_LIBRARY(
         ${MODULE_NAME}
         LANGUAGE python
         SOURCES
-        fluomodlib.i
+        chinet.i
         ${SRC_files}
 )
 

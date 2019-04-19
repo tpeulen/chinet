@@ -2,8 +2,8 @@
 // Created by thomas on 3/29/19.
 //
 
-#ifndef FLUOMODLIB_FUNCTIONS_H
-#define FLUOMODLIB_FUNCTIONS_H
+#ifndef chinet_FUNCTIONS_H
+#define chinet_FUNCTIONS_H
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
@@ -159,10 +159,14 @@ namespace Functions {
      */
     std::vector<double> diff(std::vector<double> v);
 
+    /*!
+     * Returns the current time in milliseconds as a uint64
+     * @return
+     */
     uint64_t get_time();
 }
 
 
 
 
-#endif //FLUOMODLIB_FUNCTIONS_H
+#endif //chinet_FUNCTIONS_H

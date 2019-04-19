@@ -2,8 +2,8 @@
 // Created by thomas on 3/28/19.
 //
 
-#ifndef FLUOMODLIB_CURVE_H
-#define FLUOMODLIB_CURVE_H
+#ifndef chinet_CURVE_H
+#define chinet_CURVE_H
 
 #include <vector>
 #include <algorithm>
@@ -149,4 +149,4 @@ public:
 };
 
 
-#endif //FLUOMODLIB_CURVE_H
+#endif //chinet_CURVE_H

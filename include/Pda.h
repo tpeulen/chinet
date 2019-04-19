@@ -2,8 +2,8 @@
 // Created by thomas on 3/28/19.
 //
 
-#ifndef FLUOMODLIB_PDA_H
-#define FLUOMODLIB_PDA_H
+#ifndef chinet_PDA_H
+#define chinet_PDA_H
 
 #include <math.h>
 #include <vector>
@@ -187,4 +187,4 @@ namespace PdaFunctions{
 }
 
 
-#endif //FLUOMODLIB_PDA_H
+#endif //chinet_PDA_H

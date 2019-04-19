@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-
 import os
 import re
 import sys
@@ -11,7 +10,7 @@ from distutils.command.build_ext import build_ext
 from distutils.version import LooseVersion
 
 
-name = "fluomodlib"  # name of the module
+name = "chinet"  # name of the module
 
 
 class CMakeExtension(Extension):
@@ -89,7 +88,7 @@ setup(
     author='Thomas-Otavio Peulen',
     author_email='thomas.otavio.peulen@gmail.com',
     version='0.0.1',
-    ext_modules=[CMakeExtension('fluomodlib')],
+    ext_modules=[CMakeExtension('chinet')],
     cmdclass={
         'build_ext': CMakeBuild
     },
