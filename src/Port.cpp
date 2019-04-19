@@ -6,30 +6,31 @@
 
 Port::Port(){
     bson_oid_init(&oid, NULL);
-}
 
+    b = BCON_NEW(
+            "_id", BCON_OID(&oid),
+            "predecessor", BCON_OID(&oid),
+            "birth", BCON_INT64(Functions::get_time()),
+            "death", BCON_INT64(0)
+    );
+}
 
 Port::Port(bson_oid_t oid){
     this->oid = oid;
-}
 
+    b = BCON_NEW(
+            "_id", BCON_OID(&oid),
+            "predecessor", BCON_OID(&oid),
+            "birth", BCON_INT64(Functions::get_time()),
+            "death", BCON_INT64(0)
+    );
+
+}
 
 Port::Port(std::string json_string) :
 Port(){
     from_json(json_string);
 }
-
-/*
-Port::Port(std::shared_ptr<Node> node) :
-Port() {
-    this->node = node;
-}
-
-Port::Port(std::string json_string, std::shared_ptr<Node> node){
-    set_node(node);
-    from_json(json_string);
-}
-*/
 
 
 // Destructor
@@ -85,10 +86,15 @@ double Port::get_slot_value(const std::string &slot_key){
 
     //std::string search_values = "slots." + slot_key + ".value";
     std::string search_values = slot_key + ".value";
-    if (bson_iter_init (&iter, get_value()) &&
-        bson_iter_find_descendant (&iter, search_values.c_str(), &baz) &&
-        BSON_ITER_HOLDS_DOUBLE (&baz)) {
-        return bson_iter_double(&baz);
+    bson_t* doc = get_value();
+    if(doc != NULL){
+        if (bson_iter_init (&iter, doc) &&
+            bson_iter_find_descendant (&iter, search_values.c_str(), &baz) &&
+            BSON_ITER_HOLDS_DOUBLE (&baz)) {
+            return bson_iter_double(&baz);
+        }
+    } else{
+        std::cerr << "Port document not initialized.";
     }
     return NAN;
 }
@@ -101,14 +107,19 @@ std::vector<double> Port::get_slot_values(){
 
     bson_iter_init(&i2, get_value());
 
-    while (bson_iter_next (&i2)) {
-        std::string search_values = std::string(bson_iter_key(&i2)) + ".value";
-        bson_iter_init(&i0, get_value());
-        if (bson_iter_init (&i3, get_value()) &&
-            bson_iter_find_descendant (&i0, search_values.c_str(), &i3) &&
-            BSON_ITER_HOLDS_DOUBLE (&i3)) {
-            values.emplace_back(bson_iter_as_double (&i3));
+    bson_t* doc = get_value();
+    if(doc != NULL){
+        while (bson_iter_next (&i2)) {
+            std::string search_values = std::string(bson_iter_key(&i2)) + ".value";
+            bson_iter_init(&i0, doc);
+            if (bson_iter_init (&i3, doc) &&
+                bson_iter_find_descendant (&i0, search_values.c_str(), &i3) &&
+                BSON_ITER_HOLDS_DOUBLE (&i3)) {
+                values.emplace_back(bson_iter_as_double (&i3));
+            }
         }
+    } else{
+        std::cerr << "Port document not initialized.";
     }
     return values;
 }
@@ -119,17 +130,21 @@ std::vector<std::string> Port::get_slot_keys(){
     bson_iter_t i1;
     bson_iter_t ik;
 
-    bson_iter_init(&i0, get_value());
-    bson_iter_init(&ik, get_value());
-
-    while (bson_iter_next (&ik)) {
-        std::string search_values = std::string(bson_iter_key(&ik)) + ".value";
-        bson_iter_init(&i0, get_value());
-        if (bson_iter_init (&i0, get_value()) &&
-            bson_iter_find_descendant (&i0, search_values.c_str(), &i1) &&
-            BSON_ITER_HOLDS_DOUBLE (&i1)){
-            names.emplace_back(bson_iter_key (&ik));
+    bson_t* doc = get_value();
+    if(doc != NULL){
+        bson_iter_init(&i0, doc);
+        bson_iter_init(&ik, doc);
+        while (bson_iter_next (&ik)) {
+            std::string search_values = std::string(bson_iter_key(&ik)) + ".value";
+            bson_iter_init(&i0, doc);
+            if (bson_iter_init (&i0, doc) &&
+                bson_iter_find_descendant (&i0, search_values.c_str(), &i1) &&
+                BSON_ITER_HOLDS_DOUBLE (&i1)){
+                names.emplace_back(bson_iter_key (&ik));
+            }
         }
+    } else{
+        std::cerr << "Port document not initialized.";
     }
     return names;
 }
@@ -149,25 +164,34 @@ void Port::new_oid(){
     bson_oid_init(&oid, NULL);
     bson_iter_t iter;
 
-    if (bson_iter_init (&iter, b) &&
-        bson_iter_find (&iter, "_id") &&
-        BSON_ITER_HOLDS_OID (&iter)) {
-        bson_iter_overwrite_oid(&iter, &oid);
-        std::cout << "new oid: " << get_oid() << std::endl;
+    bson_t *doc = b;
+    if(doc != NULL) {
+        if (bson_iter_init(&iter, doc) &&
+            bson_iter_find(&iter, "_id") &&
+            BSON_ITER_HOLDS_OID (&iter)) {
+            bson_iter_overwrite_oid(&iter, &oid);
+            std::cout << "new oid: " << get_oid() << std::endl;
+        }
+    } else{
+        std::cerr << "Port document not initialized.";
     }
 }
-
 
 bool Port::set_slot_value(std::string slot_key, double value){
     bson_iter_t iter;
     bson_iter_t baz;
 
-    std::string search_values = slot_key + ".value";
-    if (bson_iter_init (&iter, get_value()) &&
-        bson_iter_find_descendant (&iter, search_values.c_str(), &baz) &&
-        BSON_ITER_HOLDS_DOUBLE (&baz)) {
-        bson_iter_overwrite_double(&baz, value);
-        return true;
+    bson_t *doc = b;
+    if(doc != NULL) {
+        std::string search_values = slot_key + ".value";
+        if (bson_iter_init(&iter, doc) &&
+            bson_iter_find_descendant(&iter, search_values.c_str(), &baz) &&
+            BSON_ITER_HOLDS_DOUBLE (&baz)) {
+            bson_iter_overwrite_double(&baz, value);
+            return true;
+        }
+    }else{
+        std::cerr << "Error: set_slot_value, port document not initialized.";
     }
     return false;
 }
@@ -178,17 +202,21 @@ void Port::set_input(std::shared_ptr<Port> v){
 
 void Port::set_predecessor(bson_oid_t v){
     bson_iter_t iter;
-    char oidstr[25];
-    if (bson_iter_init (&iter, b) && bson_iter_find (&iter, "predecessor") && BSON_ITER_HOLDS_OID (&iter)){
-        bson_oid_to_string (bson_iter_oid(&iter), oidstr);
-        printf ("predecessor: %s\n", oidstr);
-        bson_iter_overwrite_oid(&iter, &v);
+    bson_t *doc = b;
+    if(doc != NULL) {
+        char oidstr[25];
+        if (bson_iter_init(&iter, doc) && bson_iter_find(&iter, "predecessor") && BSON_ITER_HOLDS_OID (&iter)) {
+            bson_oid_to_string(bson_iter_oid(&iter), oidstr);
+            printf("predecessor: %s\n", oidstr);
+            bson_iter_overwrite_oid(&iter, &v);
+        }
+    } else{
+        std::cerr << "Error: set_predecessor, port document not initialized.";
     }
 }
 
 // Methods
 // --------------------------------------------------------------------
-
 void Port::from_json(const std::string &json_string){
     bson_error_t error;
     b = bson_new_from_json(
@@ -229,16 +257,6 @@ std::string Port::to_json(){
         return std::string(str, len);
     }
 }
-
-
-void Port::link_slot(
-        std::string slot_name,
-        bson_oid_t target_port_oid,
-        std::string target_slot_name
-        ){
-    // TODO
-}
-
 
 bool Port::add_port_to_collection(mongoc_collection_t * port_collection){
     return mongoc_collection_insert_one(port_collection,

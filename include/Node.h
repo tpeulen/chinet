@@ -12,6 +12,7 @@
 #include <mongoc/mongoc.h>
 #include <rttr/registration>
 
+#include <Functions.h>
 #include <Port.h>
 #include <NodeCallback.h>
 

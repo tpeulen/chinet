@@ -27,28 +27,6 @@ Node::Node(const char *uri_string){
     mongoc_init();
     bson_oid_init (&oid, nullptr);
 
-    // the birth is the current time stored as a long
-    auto now = std::chrono::system_clock::now();
-    auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
-    auto epoch = now_ms.time_since_epoch();
-    auto value = std::chrono::duration_cast<std::chrono::milliseconds>(epoch);
-    uint64_t duration = value.count();
-
-    document = BCON_NEW(
-            "_id", BCON_OID(&oid),
-            "input_port_oid", BCON_OID(&oid),
-            "output_port_oid", BCON_OID(&oid),
-            "callback", BCON_UTF8(""),
-            "callback_type", BCON_UTF8(""),
-            "birth", BCON_INT64(duration),
-            "death", BCON_INT64(0)
-            );
-
-    connect_to_uri(uri_string);
-    std::cout << "adding node to collection" << std::endl;
-    if (!mongoc_collection_insert_one (node_collection, document, nullptr, nullptr, &error)) {
-        fprintf(stderr, "Node already exists. Error: %s\n", error.message);
-    }
 }
 
 Node::Node() :
@@ -85,9 +63,33 @@ Node::Node(
         std::string callback_type
 ) : Node(uri_string)
 {
+
+    bson_oid_t input_oid, output_oid;
+    bson_oid_init_from_string (&input_oid, input_port_oid);
+    bson_oid_init_from_string (&output_oid, output_port_oid);
+
+
+    document = BCON_NEW(
+            "_id", BCON_OID(&oid),
+            "input_port_oid", BCON_OID(&input_oid),
+            "output_port_oid", BCON_OID(&output_oid),
+            "callback", BCON_UTF8(callback.c_str()),
+            "callback_type", BCON_UTF8(callback_type.c_str()),
+            "birth", BCON_INT64(Functions::get_time()),
+            "death", BCON_INT64(0)
+    );
+
+    connect_to_uri(uri_string);
+
+    std::cout << "adding node to collection" << std::endl;
+    if (!mongoc_collection_insert_one (node_collection, document, nullptr, nullptr, &error)) {
+        fprintf(stderr, "Node already exists. Error: %s\n", error.message);
+    }
+
+    set_callback(callback, callback_type);
     set_input_port(get_port(input_port_oid));
     set_output_port(get_port(output_port_oid));
-    set_callback(callback, callback_type);
+
 }
 
 // Destructor

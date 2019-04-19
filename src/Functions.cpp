@@ -25,7 +25,6 @@ void Functions::shift(double value, std::vector<double> &x) {
 
 }
 
-
 void Functions::roll(int value, std::vector<double> &y){
     if(value > 0){
         std::rotate(y.begin(), y.begin() + value, y.end());
@@ -155,4 +154,11 @@ std::vector<double> Functions::diff(std::vector<double> v) {
     return dx;
 }
 
-
+uint64_t get_time(){
+    // the birth is the current time stored as a long
+    auto now = std::chrono::system_clock::now();
+    auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
+    auto epoch = now_ms.time_since_epoch();
+    auto value = std::chrono::duration_cast<std::chrono::milliseconds>(epoch);
+    return value.count();
+}

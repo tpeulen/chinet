@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <math.h>
 #include <iostream>
+#include <chrono>
 
 
 namespace Functions {
@@ -158,6 +159,7 @@ namespace Functions {
      */
     std::vector<double> diff(std::vector<double> v);
 
+    uint64_t get_time();
 }
 
 

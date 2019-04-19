@@ -1,8 +1,8 @@
 {
   "_id" : { "$oid" : "5caea5d371323f06b6473262" },
-  "predecessor" : null,
+  "predecessor" : { "$oid" : "5caea5d371323f06b6473262" },
   "birth": 1,
-  "death": null,
+  "death": 0,
   "slotA1": {
     "value": 777.0,
     "fixed": false,
