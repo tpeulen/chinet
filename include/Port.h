@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <iostream>
 #include <vector>
+#include <map>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -58,7 +59,7 @@ public:
     /// returns the value of a slot for a given key (slot name)
     std::vector<double> get_slot_value(const std::string &slot_key);
     /// returns the values of all the slots as an vector
-    std::vector<double> get_slot_values();
+    std::map<std::string, std::vector<double>> get_slot_values();
     /// returns the keys of all the slots as an vector
     std::vector<std::string> get_slot_keys();
     std::shared_ptr<Port> shared_ptr();

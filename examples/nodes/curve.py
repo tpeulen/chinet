@@ -1,7 +1,7 @@
-import chinet as flm
+import chinet as cn
 import numpy as np
 
-curve = flm.Curve()
+curve = cn.Curve()
 x = np.linspace(0, 6, 100)
 y = np.sin(x)
 curve.set_x(x)

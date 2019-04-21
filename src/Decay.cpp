@@ -76,7 +76,8 @@ void Decay::update() {
 }
 
 
-void Decay::save(const std::string filename) {
+void Decay::to_json(std::string filename) {
+    /*
     json jsonfile;
 
     jsonfile["type"] = "Decay";
@@ -90,6 +91,7 @@ void Decay::save(const std::string filename) {
 
     std::ofstream file(filename);
     file << jsonfile;
+     */
 }
 
 

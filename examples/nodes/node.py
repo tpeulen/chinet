@@ -4,18 +4,57 @@ import chinet as cn
 # creating a Node object
 ########################
 
-# without arguments the Node object connects to "mongodb://localhost:27017", the local MongoDB server,
+################################################################################
+# without arguments the Node object connects to
+# "mongodb://localhost:27017", the local MongoDB server,
 # and creates of new Node entry in the "db_chinet.nodes" collection
-node = cn.Node()
+# the ports are added to the DB
+from __future__ import print_function
+import chinet as cn
+
+portA = cn.Port(open('./examples/nodes/portA.json').read())
+portB = cn.Port(open('./examples/nodes/portB.json').read())
+uri_string = "mongodb://localhost:27017"
+oid_string = "5caea5d371323f06b6473262"
+node = cn.Node(uri_string, oid_string, portA, portB, "NodeCallback2", "C")
+
+################################################################################
+# reading the ports from the DB
+from __future__ import print_function
+import chinet as cn
+
+uri_string = "mongodb://localhost:27017"
+oid_string = "5caea5d371323f06b6473262"
+portA_oid = "5caea5d371323f06b6473262"
+portB_oid = "5caea5d371323f06b6473214"
+node = cn.Node(uri_string, oid_string, portA_oid, portB_oid, "NodeCallback2", "C")
+
+################################################################################
+from __future__ import print_function
+import chinet as cn
+
+uri_string = "mongodb://localhost:27017"
+portA = cn.Port(open('./examples/nodes/portA.json').read())
+portB = cn.Port(open('./examples/nodes/portB.json').read())
+
+class NodeCallback(cn.NodeCallback):
+
+    def __init__(self, *args, **kwargs):
+        cn.NodeCallback.__init__(self, *args, **kwargs)
+
+    def run(self, input, output):
+        print("This print from Python")
+
+cb = NodeCallback('operation')
+node = cn.Node(uri_string, portA, portB, cb)
+
 
 # passing a uri string upon creation the MongoDB server can be specified
-uri_string = "mongodb://localhost:27017"
 node = cn.Node(uri_string)
 
 # ports
 portA = cn.Port(open('./examples/nodes/portA.json').read())
 portB = cn.Port(open('./examples/nodes/portB.json').read())
-portC = cn.Port()
 node.set_input_port(portA)
 node.set_output_port(portB)
 node.to_json()
@@ -45,7 +84,6 @@ class NodeCallback(cn.NodeCallback):
 
     def run(self, input, output):
         print("This print from Python")
-
 
 cb = NodeCallback('operation')
 
@@ -97,5 +135,4 @@ node2 = cn.Node(
 )
 port_input = node2.get_input_port()
 print(node2.get_input_port().get_slot_value("slotA1"))
-
 print(port_input.get_slot_value("slotA1"))

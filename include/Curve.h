@@ -10,8 +10,7 @@
 #include <string>
 #include <Functions.h>
 #include <fstream>
-#include <nlohmann/json.hpp>
-using json = nlohmann::json;
+#include <bson.h>
 
 
 class Curve {
@@ -26,6 +25,9 @@ private:
     // if this is true operations are executed in place, i.e., no new
     // objects are created.
     bool inplace_op = true;
+
+    // BSON
+    bson_t document;
 
 protected:
     std::string name_x;
@@ -142,8 +144,8 @@ public:
 
     void resize(size_t v);
 
-    virtual void save(std::string filename);
-    virtual void load(std::string filename);
+    virtual void to_json(std::string filename);
+    virtual void from_json(std::string filename);
 
 
 };

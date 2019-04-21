@@ -31,7 +31,7 @@ Above, shifting, addition, and multiplication are illustrated for a curve. Note,
 also be used with two curves.
 
 
-``Curve`` objects can be saved and loaded using the methods ``save`` and ``load``
+``Curve`` objects can be saved and loaded using the methods ``save`` and ``from_json``
 
 
 .. code-block:: python
@@ -47,6 +47,6 @@ also be used with two curves.
 
     curve.save("test.json")
     c = flm.Curve()
-    c.load("test.json")
+    c.from_json("test.json")
 
 A

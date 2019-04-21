@@ -27,7 +27,7 @@ ENDIF()
 
 # Boost
 ###############################
-FIND_PACKAGE(Boost 1.40 COMPONENTS system filesystem REQUIRED )
+FIND_PACKAGE(Boost 1.40 COMPONENTS system REQUIRED )
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR} )
 LINK_LIBRARIES(${Boost_LIBRARIES})
 
@@ -65,11 +65,12 @@ link_libraries(${LIBMONGOCXX_LIBRARIES})
 include_directories(${LIBMONGOCXX_INCLUDE_DIRS})
 message("-- libmongocxx libraries \"${LIBMONGOCXX_LIBRARIES}\"")
 message("-- libmongocxx include \"${LIBMONGOCXX_INCLUDE_DIRS}\"")
-]]
 
 # JSON
 ###############################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/json/single_include/)
+
+]]
 
 # Project
 ###############################

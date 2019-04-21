@@ -8,6 +8,7 @@ use std shared_ptr with swig
 
 https://github.com/swig/swig/tree/master/Examples/python/callback
 
+FIX: JSON dependency in Curve, and Decay class: JSON -> BSON
 
 Documentation & Test cases
 ==========================

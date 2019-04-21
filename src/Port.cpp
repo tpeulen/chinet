@@ -94,7 +94,11 @@ std::vector<double> Port::get_slot_value(const std::string &slot_key){
                 v.push_back(bson_iter_double(&baz));
             }
             if(BSON_ITER_HOLDS_ARRAY(&baz)){
-                // TODO
+                bson_iter_t iter_array;
+                bson_iter_recurse (&iter, &iter_array);
+                while (bson_iter_next (&iter_array)) {
+                    v.push_back(bson_iter_double(&iter_array));
+                }
             }
         }
     } else{
@@ -104,29 +108,45 @@ std::vector<double> Port::get_slot_value(const std::string &slot_key){
     return v;
 }
 
-std::vector<double> Port::get_slot_values(){
-    std::vector<double> values;
-    bson_iter_t i0;
-    bson_iter_t i2;
-    bson_iter_t i3;
+std::map<std::string, std::vector<double>> Port::get_slot_values(){
 
-    bson_iter_init(&i2, get_value());
+    std::map<std::string, std::vector<double>> r;
+    bson_iter_t i0;
+    bson_iter_t i1;
+    bson_iter_t ik;
 
     bson_t* doc = get_value();
     if(doc != nullptr){
-        while (bson_iter_next (&i2)) {
-            std::string search_values = std::string(bson_iter_key(&i2)) + ".value";
+        bson_iter_init(&i0, doc);
+        bson_iter_init(&ik, doc);
+        while (bson_iter_next (&ik)) {
+            std::string key = std::string(bson_iter_key(&ik));
+            std::string search_values = key + ".value";
+
             bson_iter_init(&i0, doc);
-            if (bson_iter_init (&i3, doc) &&
-                bson_iter_find_descendant (&i0, search_values.c_str(), &i3) &&
-                BSON_ITER_HOLDS_DOUBLE (&i3)) {
-                values.emplace_back(bson_iter_as_double (&i3));
+            if (bson_iter_init (&i0, doc) &&
+                bson_iter_find_descendant (&i0, search_values.c_str(), &i1) &&
+                (BSON_ITER_HOLDS_DOUBLE (&i1) || BSON_ITER_HOLDS_ARRAY(&i1))
+                ){
+
+                std::vector<double> slot_values;
+                if(BSON_ITER_HOLDS_ARRAY(&i1)){
+                    bson_iter_t iter_array;
+                    bson_iter_recurse (&i1, &iter_array);
+                    while (bson_iter_next (&iter_array)) {
+                        slot_values.push_back(bson_iter_double(&iter_array));
+                    }
+                }
+                if(BSON_ITER_HOLDS_DOUBLE (&i1)){
+                    slot_values.push_back(bson_iter_as_double (&i1));
+                }
+                r[key] = slot_values;
             }
         }
     } else{
         std::cerr << "Port document not initialized.";
     }
-    return values;
+    return r;
 }
 
 std::vector<std::string> Port::get_slot_keys(){
@@ -144,7 +164,8 @@ std::vector<std::string> Port::get_slot_keys(){
             bson_iter_init(&i0, doc);
             if (bson_iter_init (&i0, doc) &&
                 bson_iter_find_descendant (&i0, search_values.c_str(), &i1) &&
-                BSON_ITER_HOLDS_DOUBLE (&i1)){
+                    (BSON_ITER_HOLDS_DOUBLE (&i1) || BSON_ITER_HOLDS_ARRAY(&i1))
+                ){
                 names.emplace_back(bson_iter_key (&ik));
             }
         }
@@ -259,6 +280,7 @@ bool Port::set_birth_time(uint64_t v){
 // Methods
 // --------------------------------------------------------------------
 void Port::from_json(const std::string &json_string){
+    std::clog << "Port.from_json:";
     bson_error_t error;
     document = bson_new_from_json((uint8_t*)json_string.c_str(), json_string.size(), &error);
     if (!document) {
@@ -272,16 +294,15 @@ void Port::from_json(const std::string &json_string){
             BSON_ITER_HOLDS_OID (&iter)) {
             oid = *bson_iter_oid(&iter);
             bson_oid_to_string (&oid, oidstr);
-            printf ("%s\n", oidstr);
+            std::clog << "OID:" << oidstr;
         } else {
-            std::cout << "Document is missing _id." << std::endl;
+            std::clog << "no OID:";
             bson_oid_init (&oid, nullptr);
             BSON_APPEND_OID (document, "_id", &oid);
-            std::cout << "Generated id: " <<
-            get_oid() <<
-            std::endl;
+            std::clog << "Generated OID: " << get_oid();
         }
     }
+    std::clog << std::endl;
 }
 
 std::string Port::to_json(){

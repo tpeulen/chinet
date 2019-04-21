@@ -1,12 +1,10 @@
 %module(directors="1") chinet
 
 %include "std_vector.i";
+%include "std_map.i";
 %include "std_list.i";
 
 
-namespace std{
-%template(VectorNode) vector<Node*>;
-}
 
 
 %{
@@ -28,3 +26,7 @@ namespace std{
 %include "../include/NodeCallback.h"
 
 
+namespace std{
+        %template(VectorNode) vector<Node*>;
+        %template(map_string_vector) map<string, vector<double>>;
+}

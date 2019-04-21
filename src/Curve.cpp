@@ -163,7 +163,8 @@ void Curve::resize(size_t v) {
 }
 
 
-void Curve::save(const std::string filename) {
+void Curve::to_json(std::string filename) {
+    /*
     json jsonfile;
 
     jsonfile["type"] = "Curve";
@@ -177,10 +178,12 @@ void Curve::save(const std::string filename) {
 
     std::ofstream file(filename);
     file << jsonfile;
+     */
 }
 
 
-void Curve::load(const std::string filename) {
+void Curve::from_json(std::string filename) {
+    /*
 
     x.clear();
     y.clear();
@@ -203,6 +206,7 @@ void Curve::load(const std::string filename) {
 
     name_x = j["x"]["name"];
     name_y = j["y"]["name"];
+     */
 }
 
 

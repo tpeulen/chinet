@@ -50,7 +50,7 @@ public:
 
     void update();
 
-    void save(std::string filename);
+    void to_json(std::string filename);
 
 
     // Getter
