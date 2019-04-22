@@ -162,3 +162,22 @@ uint64_t Functions::get_time(){
     auto value = std::chrono::duration_cast<std::chrono::milliseconds>(epoch);
     return value.count();
 }
+
+
+void Functions::add_documents(bson_t *src, bson_t *dst, std::vector<std::string> skip){
+    bson_iter_t iter;
+    if (bson_iter_init (&iter, src)) {
+        while (bson_iter_next (&iter)) {
+            bool add = true;
+            for(auto &sk : skip){
+                if (strcmp(bson_iter_key(&iter), sk.c_str()) == 0){
+                    add = false;
+                    break;
+                }
+            }
+            if(add){
+                BSON_APPEND_VALUE(dst, bson_iter_key(&iter), bson_iter_value(&iter));
+            }
+        }
+    }
+}

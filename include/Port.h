@@ -35,6 +35,7 @@ private:
     /// the object identifier (unique number)
     bson_oid_t oid;
 
+
 public:
 
     // Constructor

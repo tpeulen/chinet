@@ -12,6 +12,7 @@
 #include <math.h>
 #include <iostream>
 #include <chrono>
+#include <bson.h>
 
 
 namespace Functions {
@@ -164,9 +165,12 @@ namespace Functions {
      * @return
      */
     uint64_t get_time();
+
+    /*!
+     * Adds the content in the bson_t document src to the document dst omitting the keys
+     * provided by the vector skip.
+     */
+    void add_documents(bson_t *src, bson_t *dst, std::vector<std::string> skip);
 }
-
-
-
 
 #endif //chinet_FUNCTIONS_H
