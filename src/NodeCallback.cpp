@@ -27,6 +27,7 @@ void run2(std::shared_ptr<Port> input, std::shared_ptr<Port> output){
 }
 
 void convolve_sum_of_exponentials_periodic(std::shared_ptr<Port> input, std::shared_ptr<Port> output){
+
     //Functions::convolve_sum_of_exponentials_periodic();
 }
 

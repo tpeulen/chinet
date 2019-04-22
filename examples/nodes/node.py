@@ -1,5 +1,3 @@
-from __future__ import print_function
-import chinet as cn
 
 # creating a Node object
 ########################
@@ -8,12 +6,13 @@ import chinet as cn
 # without arguments the Node object connects to
 # "mongodb://localhost:27017", the local MongoDB server,
 # and creates of new Node entry in the "db_chinet.nodes" collection
-# the ports are added to the DB
+# the ports are written/added to the DB
 from __future__ import print_function
 import chinet as cn
 
 portA = cn.Port(open('./examples/nodes/portA.json').read())
 portB = cn.Port(open('./examples/nodes/portB.json').read())
+
 uri_string = "mongodb://localhost:27017"
 oid_string = "5caea5d371323f06b6473262"
 node = cn.Node(uri_string, oid_string, portA, portB, "NodeCallback2", "C")
@@ -28,6 +27,7 @@ oid_string = "5caea5d371323f06b6473262"
 portA_oid = "5caea5d371323f06b6473262"
 portB_oid = "5caea5d371323f06b6473214"
 node = cn.Node(uri_string, oid_string, portA_oid, portB_oid, "NodeCallback2", "C")
+
 
 ################################################################################
 from __future__ import print_function

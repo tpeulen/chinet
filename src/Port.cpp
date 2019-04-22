@@ -41,7 +41,43 @@ Port::~Port() {
 
 // Operator
 //--------------------------------------------------------------------
+std::shared_ptr<Port> Port::operator+(std::shared_ptr<Port> v){
+    bson_oid_t new_port_oid;
+    bson_oid_init(&new_port_oid, nullptr);
+    auto r = std::make_shared<Port>(new_port_oid);
+    bson_init(r->document);
+    r->document = BCON_NEW(
+            "_id", BCON_OID(&new_port_oid),
+            "predecessor", BCON_OID(&new_port_oid),
+            "birth", BCON_INT64(Functions::get_time()),
+            "death", BCON_INT64(0)
+    );
 
+    bson_iter_t iter;
+    if (bson_iter_init (&iter, this->document)) {
+        while (bson_iter_next (&iter)) {
+            printf ("Found element key: \"%s\"\n", bson_iter_key (&iter));
+            // TODO, skip "_id" : { "$oid" : "5caea5d371323f06b6473262" },
+            //  "predecessor" : { "$oid" : "5caea5d371323f06b6473262" },
+            //  "birth": 1,
+            //  "death": 0,
+            if(BSON_ITER_HOLDS_ARRAY(&iter)){
+                // TODO
+                //bson_append_array(r->document, bson_iter_key(&iter), -1, bson_ar(&iter));
+            } else{
+                BSON_APPEND_VALUE(r->document, bson_iter_key(&iter), bson_iter_value(&iter));
+            }
+        }
+    }
+
+    if (bson_iter_init (&iter, v->document)) {
+        while (bson_iter_next (&iter)) {
+            printf ("Found element key: \"%s\"\n", bson_iter_key (&iter));
+            BSON_APPEND_VALUE(r->document, bson_iter_key(&iter), bson_iter_value(&iter));
+        }
+    }
+    return r;
+}
 
 // Getter
 //--------------------------------------------------------------------
