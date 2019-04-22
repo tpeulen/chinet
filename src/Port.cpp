@@ -53,12 +53,16 @@ std::shared_ptr<Port> Port::operator+(std::shared_ptr<Port> v){
             "death", BCON_INT64(0)
     );
 
-    std::vector<std::string> skip = {"_id", "predecessor", "birth", "death"};
     Functions::add_documents(this->document, r->document, skip);
     Functions::add_documents(v->document, r->document, skip);
 
     return r;
 }
+
+std::vector<double> Port::operator[](std::string key){
+    return value(key);
+}
+
 
 // Getter
 //--------------------------------------------------------------------
@@ -97,7 +101,7 @@ bson_t* Port::get_value(){
     }
 }
 
-std::vector<double> Port::get_slot_value(const std::string &slot_key){
+std::vector<double> Port::value(const std::string &slot_key){
     bson_iter_t iter;
     bson_iter_t baz;
     std::vector<double> v;
@@ -125,7 +129,7 @@ std::vector<double> Port::get_slot_value(const std::string &slot_key){
     return v;
 }
 
-std::map<std::string, std::vector<double>> Port::get_slot_values(){
+std::map<std::string, std::vector<double>> Port::values(){
 
     std::map<std::string, std::vector<double>> r;
     bson_iter_t i0;
@@ -166,7 +170,7 @@ std::map<std::string, std::vector<double>> Port::get_slot_values(){
     return r;
 }
 
-std::vector<std::string> Port::get_slot_keys(){
+std::vector<std::string> Port::keys(){
     std::vector<std::string> names;
     bson_iter_t i0;
     bson_iter_t i1;
@@ -330,6 +334,19 @@ std::string Port::to_json(){
         char* str = bson_as_json (document, &len);
         return std::string(str, len);
     }
+}
+
+size_t Port::size(){
+    bson_iter_t iter;
+    size_t s = 0;
+    if (bson_iter_init (&iter, document)) {
+        while (bson_iter_next (&iter)) {
+            if(!Functions::bson_iter_skip(&iter, &skip)){
+                s++;
+            }
+        }
+    }
+    return s;
 }
 
 /*

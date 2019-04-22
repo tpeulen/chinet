@@ -5,8 +5,6 @@
 %include "std_list.i";
 
 
-
-
 %{
 #include "../include/Node.h"
 #include "../include/Port.h"
@@ -24,7 +22,6 @@
 %include "../include/Node.h"
 %include "../include/Port.h"
 %include "../include/NodeCallback.h"
-
 
 namespace std{
         %template(VectorNode) vector<Node*>;

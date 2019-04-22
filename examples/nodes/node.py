@@ -12,6 +12,7 @@ import chinet as cn
 
 portA = cn.Port(open('./examples/nodes/portA.json').read())
 portB = cn.Port(open('./examples/nodes/portB.json').read())
+curve = cn.Port(open('./examples/nodes/curve.json').read())
 
 uri_string = "mongodb://localhost:27017"
 oid_string = "5caea5d371323f06b6473262"

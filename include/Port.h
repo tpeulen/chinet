@@ -29,12 +29,13 @@ private:
     std::shared_ptr<Port> input;
     std::vector<std::shared_ptr<Port>> targets;
 
+    std::vector<std::string> skip = {"_id", "predecessor", "birth", "death"};
+
     /// stores the data of the Port in a BSON document
     bson_t *document;
 
     /// the object identifier (unique number)
     bson_oid_t oid;
-
 
 public:
 
@@ -58,11 +59,11 @@ public:
     //std::string get_name();
     std::shared_ptr<Port> get_input();
     /// returns the value of a slot for a given key (slot name)
-    std::vector<double> get_slot_value(const std::string &slot_key);
+    std::vector<double> value(const std::string &slot_key);
     /// returns the values of all the slots as an vector
-    std::map<std::string, std::vector<double>> get_slot_values();
+    std::map<std::string, std::vector<double>> values();
     /// returns the keys of all the slots as an vector
-    std::vector<std::string> get_slot_keys();
+    std::vector<std::string> keys();
     std::shared_ptr<Port> shared_ptr();
     std::string get_oid();
 
@@ -79,12 +80,14 @@ public:
     // Operator
     //--------------------------------------------------------------------
     std::shared_ptr<Port> operator +(std::shared_ptr<Port> v);
+    std::vector<double> operator [](std::string key);
 
     // Methods
     //--------------------------------------------------------------------
     void from_json(const std::string &json_string);
     //bool add_port_to_collection(mongoc_collection_t * port_collection);
     void new_oid();
+    virtual size_t size();
 
 };
 

@@ -431,7 +431,7 @@ std::string Node::get_name(){
         std::string r;
         r.append(callback);
         r.append("(");
-        for(auto n : input_port->get_slot_keys()){
+        for(auto n : input_port->keys()){
             r.append(n);
             r.append(",");
         }

@@ -19,10 +19,10 @@ void run2(std::shared_ptr<Port> input, std::shared_ptr<Port> output){
     */
 
     std::cout << "This is run2 from C++" << std::endl;
-    for(auto key : input->get_slot_keys()){
+    for(auto key : input->keys()){
         std::cout << key;
     }
-    double test = input->get_slot_value("slotA1")[0] * input->get_slot_value("slotA2")[0];
+    double test = input->value("slotA1")[0] * input->value("slotA2")[0];
     std::cout << test << std::endl;
 }
 

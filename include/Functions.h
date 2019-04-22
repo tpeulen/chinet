@@ -91,7 +91,7 @@ namespace Functions {
     void copy_two_vectors_to_interleaved_array(
             std::vector<double> &v1,
             std::vector<double> &v2,
-            double**out, int *nout
+            double **out, int *nout
     );
 
 
@@ -171,6 +171,14 @@ namespace Functions {
      * provided by the vector skip.
      */
     void add_documents(bson_t *src, bson_t *dst, std::vector<std::string> skip);
+
+    /*!
+     * Returns true if the key associated to @param iter is in the list of vectors @param skip
+     *
+     * @param iter pointer to a bson_iter_t
+     * @param skip vector of strings containing keys that are skipped by iter
+     */
+    bool bson_iter_skip(bson_iter_t *iter, std::vector<std::string> *skip);
 }
 
 #endif //chinet_FUNCTIONS_H
