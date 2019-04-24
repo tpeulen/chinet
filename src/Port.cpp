@@ -407,17 +407,17 @@ bool Port::add_port_to_collection(mongoc_collection_t * port_collection){
 }
 */
 
-bool Port::set_v(std::string key, Value *v, Link *l){
+bool Port::set_v(std::string key, std::shared_ptr<Value> v, std::shared_ptr<Link> l){
     _values[key] = std::make_tuple(v, l);
     return true;
 }
 
 
-bool Port::set_v(std::string key, Value *v){
+bool Port::set_v(std::string key, std::shared_ptr<Value> v){
     return set_v(key, v, nullptr);
 }
 
-Value* Port::get_v(std::string key){
+std::shared_ptr<Value> Port::get_v(std::string key){
     if(std::get<1>(_values[key]) == nullptr){
         return std::get<0>(_values[key]);
     } else{

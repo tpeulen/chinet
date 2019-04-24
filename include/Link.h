@@ -9,6 +9,7 @@
 #include <vector>
 #include <bson.h>
 #include <Value.h>
+#include <memory>
 
 class Value;
 class Port;
@@ -19,17 +20,16 @@ class Link {
 
 private:
     bson_oid_t oid;
-
-    Port *target;
+    std::shared_ptr<Port> target;
     std::string key;
 
 public:
     Link();
-    Link(Port *target, std::string key);
-    Value* get_target_value();
+    Link(std::shared_ptr<Port> target, std::string key);
+    std::shared_ptr<Value> get_target_value();
     bson_t* to_bson();
     std::string to_json();
-    bool set_target(Port *target, std::string key);
+    bool set_target(std::shared_ptr<Port> target, std::string key);
 };
 
 

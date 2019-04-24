@@ -16,6 +16,8 @@
 /* turn on director wrapping Callback */
 %feature("director") NodeCallback;
 
+%shared_ptr(Value)
+%shared_ptr(Link)
 %shared_ptr(Node)
 %shared_ptr(NodeCallback)
 %shared_ptr(Port)

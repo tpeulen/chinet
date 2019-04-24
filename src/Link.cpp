@@ -9,18 +9,20 @@ Link::Link() {
     bson_oid_init(&oid, nullptr);
 }
 
-Link::Link(Port *target, std::string key){
+Link::Link(std::shared_ptr<Port> target, std::string key) :
+Link()
+{
     this->target = target;
     this->key = key;
 }
 
-Value* Link::get_target_value(){
+std::shared_ptr<Value> Link::get_target_value(){
     return target->get_v(key);
 }
 
 std::string Link::to_json() {
     size_t len;
-    char* str = bson_as_json (to_bson(), &len);
+    char* str = bson_as_json(to_bson(), &len);
     return std::string(str, len);
 }
 
@@ -44,7 +46,7 @@ bson_t* Link::to_bson() {
 }
 
 
-bool Link::set_target(Port *target, std::string key){
+bool Link::set_target(std::shared_ptr<Port> target, std::string key){
     this->target = target;
     this->key = key;
 }

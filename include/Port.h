@@ -31,7 +31,7 @@ class Port : public std::enable_shared_from_this<Port>{
 
 private:
 
-    std::map<std::string, std::tuple<Value*, Link*>> _values;
+    std::map<std::string, std::tuple<std::shared_ptr<Value>, std::shared_ptr<Link>>> _values;
     Node *node;
 
     //std::shared_ptr<Node> node;
@@ -50,9 +50,10 @@ private:
 
 public:
 
-    bool set_v(std::string key, Value *v);
-    bool set_v(std::string key, Value *v, Link *l);
-    Value* get_v(std::string key);
+    bool set_v(std::string key, std::shared_ptr<Value> v);
+    bool set_v(std::string key, std::shared_ptr<Value> v, std::shared_ptr<Link> l);
+    std::shared_ptr<Value> get_v(std::string key);
+    //std::shared_ptr<Link> link(std::string key, Port *target_port, std::string target_key);
 
     // Constructor
     //--------------------------------------------------------------------
