@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <tuple>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -14,30 +15,44 @@
 
 #include <Functions.h>
 #include <Node.h>
+#include <Value.h>
+#include <Link.h>
 
 
 class Node;
-
+class Value;
+class Link;
 
 class Port : public std::enable_shared_from_this<Port>{
 
     friend Node;
+    friend Value;
+    friend Link;
 
 private:
 
+    std::map<std::string, std::tuple<Value*, Link*>> _values;
+    Node *node;
+
     //std::shared_ptr<Node> node;
     std::shared_ptr<Port> input;
-    std::vector<std::shared_ptr<Port>> targets;
-
-    std::vector<std::string> skip = {"_id", "predecessor", "birth", "death"};
 
     /// stores the data of the Port in a BSON document
     bson_t *document;
 
     /// the object identifier (unique number)
+    std::vector<std::string> skip = {"_id", "predecessor", "birth", "death"};
     bson_oid_t oid;
 
+    bson_oid_t predecessor;
+    uint64_t birth;
+    uint64_t death;
+
 public:
+
+    bool set_v(std::string key, Value *v);
+    bool set_v(std::string key, Value *v, Link *l);
+    Value* get_v(std::string key);
 
     // Constructor
     //--------------------------------------------------------------------
@@ -70,7 +85,7 @@ public:
     // Setter
     //--------------------------------------------------------------------
     void set_input(std::shared_ptr<Port> v);
-    bool set_slot_value(std::string slot_key, double value);
+    bool set_slot_value(std::string slot_key, std::vector<double> values);
     void set_oid(std::string v);
     //void set_node(std::shared_ptr<Node> node);
     bool set_predecessor(bson_oid_t v);
@@ -88,6 +103,7 @@ public:
     //bool add_port_to_collection(mongoc_collection_t * port_collection);
     void new_oid();
     virtual size_t size();
+    bson_t *to_bson();
 
 };
 

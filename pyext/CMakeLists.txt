@@ -44,8 +44,6 @@ SWIG_ADD_LIBRARY(
         ${SRC_files}
 )
 
-
-
 TARGET_LINK_LIBRARIES(
         ${MODULE_NAME} PRIVATE
         ${HDF5_LIBRARIES}

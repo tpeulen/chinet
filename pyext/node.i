@@ -6,10 +6,11 @@
 
 
 %{
-#include "../include/Node.h"
+#include "../include/Value.h"
 #include "../include/Port.h"
+#include "../include/Link.h"
+#include "../include/Node.h"
 #include "../include/NodeCallback.h"
-
 %}
 
 /* turn on director wrapping Callback */
@@ -19,11 +20,14 @@
 %shared_ptr(NodeCallback)
 %shared_ptr(Port)
 
-%include "../include/Node.h"
+%include "../include/Value.h"
 %include "../include/Port.h"
+%include "../include/Link.h"
+%include "../include/Node.h"
 %include "../include/NodeCallback.h"
 
 namespace std{
         %template(VectorNode) vector<Node*>;
         %template(map_string_vector) map<string, vector<double>>;
+        %template(map_string_vector) map<string, vector<Value>>;
 }

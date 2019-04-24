@@ -10,8 +10,8 @@
 from __future__ import print_function
 import chinet as cn
 
-portA = cn.Port(open('./examples/nodes/portA.json').read())
-portB = cn.Port(open('./examples/nodes/portB.json').read())
+portA = cn.Port(open('./examples/nodes/input.json').read())
+portB = cn.Port(open('./examples/nodes/output.json').read())
 curve = cn.Port(open('./examples/nodes/curve.json').read())
 
 uri_string = "mongodb://localhost:27017"
@@ -35,8 +35,8 @@ from __future__ import print_function
 import chinet as cn
 
 uri_string = "mongodb://localhost:27017"
-portA = cn.Port(open('./examples/nodes/portA.json').read())
-portB = cn.Port(open('./examples/nodes/portB.json').read())
+portA = cn.Port(open('./examples/nodes/input.json').read())
+portB = cn.Port(open('./examples/nodes/output.json').read())
 
 class NodeCallback(cn.NodeCallback):
 
@@ -54,8 +54,8 @@ node = cn.Node(uri_string, portA, portB, cb)
 node = cn.Node(uri_string)
 
 # ports
-portA = cn.Port(open('./examples/nodes/portA.json').read())
-portB = cn.Port(open('./examples/nodes/portB.json').read())
+portA = cn.Port(open('./examples/nodes/input.json').read())
+portB = cn.Port(open('./examples/nodes/output.json').read())
 node.set_input_port(portA)
 node.set_output_port(portB)
 node.to_json()

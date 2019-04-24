@@ -4,14 +4,14 @@ import chinet as flm
 
 # Creating a port and reading content from JSON string
 portA = flm.Port()
-json_string = open('./examples/nodes/portA.json').read()
+json_string = open('./examples/nodes/input.json').read()
 portA.from_json(json_string)
 print(portA.get_slot_value("NameA1"))
 print(portA.get_slot_keys())
 print(portA.get_slot_values())
 
 # Creating a port from JSON string
-portB = flm.Port(open('./examples/nodes/portB.json').read())
+portB = flm.Port(open('./examples/nodes/output.json').read())
 
 # Assigning an input redirects the content
 portA.set_input(portB)
@@ -33,7 +33,7 @@ input.to_json() == node_1.get_output_port().to_json()
 
 #################################
 
-n1_po = flm.Port("outA1", "portA.json")
+n1_po = flm.Port("outA1", "input.json")
 node_1.set_output_port(n1_po)
 
 
