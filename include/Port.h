@@ -60,6 +60,7 @@ public:
     Port();
     Port(std::string json_string);
     Port(bson_oid_t oid);
+    Port(const char *uri, bson_oid_t oid);
     //Port(std::shared_ptr<Node> node);
     //Port(std::string json_string, std::shared_ptr<Node> node);
 

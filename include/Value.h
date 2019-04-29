@@ -20,6 +20,8 @@ class Value {
 
 private:
     bson_oid_t oid;
+    const char *uri;
+
     bool fixed;
     std::vector<double> content;
     Value *precursor;
@@ -28,7 +30,10 @@ private:
 public:
     bson_t* to_bson();
     std::string to_json();
+    bool from_bson(const bson_t *doc);
+    bool from_json(std::string json_string);
     Value();
+    Value(const char *uri, bson_oid_t oid);
     Value(std::vector<double> v, bool fixed);
     Value(std::vector<double> v, bool fixed, Value *precursor);
     ~Value();

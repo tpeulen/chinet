@@ -30,6 +30,10 @@ Port::Port(bson_oid_t oid){
 
 }
 
+Port::Port(const char *uri, bson_oid_t oid){
+    // TODO
+}
+
 Port::Port(std::string json_string) :
 Port(){
     from_json(json_string);
