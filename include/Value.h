@@ -7,40 +7,37 @@
 
 #include <string>
 #include <bson.h>
+
+#include <MongoObject.h>
 #include <Link.h>
-#include <Port.h>
-
-class Link;
-class Port;
+//#include <Port.h>
 
 
-class Value {
-    friend Link;
-    friend Port;
+class MongoObject;
+
+
+template<typename T>
+class Value{
 
 private:
-    bson_oid_t oid;
-    const char *uri;
-
     bool fixed;
-    std::vector<double> content;
-    Value *precursor;
-    Port *port;
+    std::vector<T> content;
 
 public:
+    /*
+    Port *port;
     bson_t* to_bson();
-    std::string to_json();
-    bool from_bson(const bson_t *doc);
-    bool from_json(std::string json_string);
+    //bool from_bson(const bson_t *doc);
+    //bool from_json(const std::string &json_string);
     Value();
-    Value(const char *uri, bson_oid_t oid);
-    Value(std::vector<double> v, bool fixed);
-    Value(std::vector<double> v, bool fixed, Value *precursor);
+    Value(std::vector<T> v, bool fixed);
+    Value(std::vector<T> v, bool fixed, Value *precursor);
     ~Value();
 
-    std::vector<double> get_value();
+    std::vector<T> get_value();
     uint64_t get_time();
-    bool push_back(double v);
+    void push_back(T v);
+     */
 };
 
 

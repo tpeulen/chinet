@@ -19,18 +19,25 @@ void run2(std::shared_ptr<Port> input, std::shared_ptr<Port> output){
     */
 
     std::cout << "This is run2 from C++" << std::endl;
+    /*
     for(auto key : input->keys()){
         std::cout << key;
     }
     double test = input->value("slotA1")[0] * input->value("slotA2")[0];
     std::cout << test << std::endl;
+     */
 }
 
-void convolve_sum_of_exponentials_periodic(std::shared_ptr<Port> input, std::shared_ptr<Port> output){
-    std::vector<double> irf = input->value("irf");
-    std::vector<double> decay = input->value("decay");
-    std::vector<double> lifetimes = input->value("lifetimes");
+void convolve_sum_of_exponentials_periodic(
+        std::map<std::string, std::shared_ptr<Port>> input_map,
+        std::map<std::string, std::shared_ptr<Port>> output_map){
+    /*
+    std::vector<double> irf = input_map["irf"]->value();
+    std::vector<double> decay = input_map["decay"]->value();
+    std::vector<double> lifetimes = input_map["lifetimes"]->value();
+    */
 
+    /*
     int start = input->value("start")[0];
     int stop = input->value("stop")[0];
     double dt = input->value("dt")[0];
@@ -44,6 +51,7 @@ void convolve_sum_of_exponentials_periodic(std::shared_ptr<Port> input, std::sha
             );
 
     output->set_slot_value("decay", decay);
+     */
 }
 
 RTTR_REGISTRATION {

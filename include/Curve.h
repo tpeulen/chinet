@@ -11,10 +11,10 @@
 #include <Functions.h>
 #include <fstream>
 #include <bson.h>
-#include <Port.h>
+//#include <Port.h>
 
 
-class Curve : Port{
+class Curve{
 
     friend class Decay;
 

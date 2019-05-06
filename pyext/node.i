@@ -6,9 +6,7 @@
 
 
 %{
-#include "../include/Value.h"
-#include "../include/Port.h"
-#include "../include/Link.h"
+#include "../include/MongoObject.h"
 #include "../include/Node.h"
 #include "../include/NodeCallback.h"
 %}
@@ -20,16 +18,13 @@
 %shared_ptr(Link)
 %shared_ptr(Node)
 %shared_ptr(NodeCallback)
-%shared_ptr(Port)
 
-%include "../include/Value.h"
-%include "../include/Port.h"
-%include "../include/Link.h"
 %include "../include/Node.h"
 %include "../include/NodeCallback.h"
+%include "../include/MongoObject.h"
 
 namespace std{
         %template(VectorNode) vector<Node*>;
-        %template(map_string_vector) map<string, vector<double>>;
-        %template(map_string_vector) map<string, vector<Value>>;
+        %template(map_string_vector_double) map<string, vector<double>>;
+        %template(map_string_port) map<string, shared_ptr<Port>>;
 }

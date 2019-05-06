@@ -11,25 +11,30 @@
 #include <Value.h>
 #include <memory>
 
-class Value;
+#include "Port.h"
+
 class Port;
 
-class Link {
-    friend Value;
-    friend Port;
+class Link : public MongoObject{
 
 private:
-    bson_oid_t oid;
     std::shared_ptr<Port> target;
-    std::string key;
 
 public:
+
     Link();
+    double get_target_value_double();
+    int get_target_value_int();
+    void set_target_value(double v);
+    void set_target(std::shared_ptr<Port> v);
+
+    /*
     Link(std::shared_ptr<Port> target, std::string key);
-    std::shared_ptr<Value> get_target_value();
+    std::shared_ptr<Value<T>> get_target_value();
     bson_t* to_bson();
     std::string to_json();
     bool set_target(std::shared_ptr<Port> target, std::string key);
+     */
 };
 
 

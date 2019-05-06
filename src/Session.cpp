@@ -3,41 +3,52 @@
 //
 
 #include "Session.h"
+#include "MongoObject.h"
 
-
-Session::Session(const char *uri_string) {
-    connect_to_uri(uri_string);
+bool Session::read_from_db(const std::string &oid_string){
+    bool return_value = true;
+    return_value &= MongoObject::read_from_db(oid_string);
+    return_value &= create_and_connect_objects_from_oids(&document, "nodes", &nodes);
+    return_value &= create_and_connect_objects_from_oids(&document, "ports", &ports);
+    return_value &= create_and_connect_objects_from_oids(&document, "links", &links);
+    return return_value;
 }
 
+bool Session::write_to_db(){
 
-bool Session::connect_to_uri(const char* uri_string){
-    mongoc_init();
+    bool re = MongoObject::write_to_db();
 
-    // Database
-    //----------------------------------------------------------------
-    std::clog << "connecting:" << uri_string << ":";
-    uri = mongoc_uri_new_with_error (uri_string, &error);
-    if (!uri) {
-        std::cerr << "failed to parse URI:" << uri_string << std::endl;
-        std::cerr << "error message:       " << error.message << std::endl;
-        return false;
-    } else{
-        /*
-        * Create a new client instance
-        */
-        client = mongoc_client_new_from_uri (uri);
-        /*
-        * Register the application name so we can track it in the profile logs
-        * on the server. This can also be done from the URI (see other examples).
-        */
-        mongoc_client_set_appname (client, "chinet-node");
-
-        /*
-         * Get a handle on the collections
-         */
-        nodes = mongoc_client_get_collection (client, "db_chinet", "nodes");
-        links = mongoc_client_get_collection (client, "db_chinet", "links");
-        return true;
+    for(auto &o : registered_objects){
+        if(!o->is_connected_to_db()){
+            re &= connect_object_to_db(o);
+        }
     }
+
+    for(auto &o : registered_objects){
+        re &= o->write_to_db();
+    }
+
+    return re;
 }
+
+bson_t Session::get_bson(){
+    bson_t doc2 = MongoObject::get_bson();
+
+    bson_t doc; bson_init (&doc);
+    bson_copy_to_excluding_noinit(
+            &doc2, &doc,
+            "ports",
+            "nodes",
+            "links",
+            NULL
+            );
+
+    create_oid_array_in_doc(&doc, "ports", ports);
+    create_oid_array_in_doc(&doc, "nodes", nodes);
+    create_oid_array_in_doc(&doc, "links", links);
+
+    return doc;
+}
+
+
 

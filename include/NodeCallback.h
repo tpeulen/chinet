@@ -10,7 +10,6 @@
 #include <Node.h>
 #include <Functions.h>
 
-class Node;
 class Port;
 
 // NodeCallback

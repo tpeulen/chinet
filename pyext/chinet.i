@@ -30,10 +30,13 @@ namespace std{
         %template(vector_string) vector<string>;
 }
 
-
+%include "mongo.i"
 %include "curve.i"
 %include "decay.i"
+%include "port.i"
+%include "link.i"
 %include "node.i"
+%include "session.i"
 %include "pda.i"
 
 

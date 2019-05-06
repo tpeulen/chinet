@@ -5,11 +5,29 @@ FIND_PACKAGE(SWIG REQUIRED)
 INCLUDE(${SWIG_USE_FILE})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
-FIND_PACKAGE(Python)
-#FIND_PACKAGE(PythonLibs)
-INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR})
-LINK_LIBRARIES(${PYTHON_LIBRARY})
 
+FIND_PACKAGE(Python COMPONENTS Interpreter Development)
+FIND_PACKAGE(PythonLibs)
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR})
+LINK_LIBRARIES(${Python_LIBRARIES})
+#[[
+if(NOT DEFINED PYTHON_INCLUDE_DIRS AND NOT IMP_STATIC)
+    execute_process(COMMAND ${IMP_PYTHON} -c "import sys; print(sys.executable)"
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+            OUTPUT_VARIABLE python_full_path
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
+    execute_process(COMMAND ${IMP_PYTHON} -c "import sys; print('%d.%d.%d' % sys.version_info[:3])"
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+            OUTPUT_VARIABLE python_full_version
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
+    string(REGEX REPLACE "^([0-9]+\\.[0-9]+).*" "\\1" python_version
+            ${python_full_version})
+    message(STATUS "Python binary is " ${python_full_path} " (version " ${python_full_version} ")")
+
+    FIND_PACKAGE(PythonInterp)
+    FIND_PACKAGE(PythonLibs ${python_full_version} EXACT REQUIRED)
+endif()
+]]#
 
 
 execute_process(
@@ -21,13 +39,6 @@ execute_process(
         OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 INCLUDE_DIRECTORIES(${Python_NumPy_PATH})
-
-# This is the "new" way but it does not work yet
-# There may be fixes
-#INCLUDE_DIRECTORIES(${Python_INCLUDE_DIRS} ${Python_NumPy_INCLUDE_DIRS})
-#FIND_PACKAGE(Python COMPONENTS Interpreter)
-#LINK_DIRECTORIES(${Python_LIBRARY_DIRS})
-#INCLUDE_DIRECTORIES(${Python_INCLUDE_DIRS})
 
 
 SET(MODULE_NAME chinet)

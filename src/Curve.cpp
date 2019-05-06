@@ -68,6 +68,7 @@ Curve Curve::operator+(Curve &v) {
         return *this;
     } else{
         // TODO only add the region where the x-values overlap
+        return *this;
     }
 }
 
@@ -87,6 +88,7 @@ Curve Curve::operator-(Curve &v) {
         }
         return *this;
     } else{
+        return *this;
         // TODO (only overlapping region)
     }
 }
@@ -107,6 +109,7 @@ Curve Curve::operator/(Curve &v) {
         }
         return *this;
     } else{
+        return *this;
         // TODO (only overlapping region)
     }
 }

@@ -1,9 +1,75 @@
 #include "Port.h"
 
 
+double Port::get_value_double(){
+    if(link == nullptr){
+        bson_iter_t iter;
+        if (bson_iter_init_find (&iter, get_document(), "value") &&
+            BSON_ITER_HOLDS_DOUBLE(&iter)) {
+            return bson_iter_double(&iter);
+        } else{
+            return NAN;
+        }
+    } else{
+        return link->get_target_value_double();
+    }
+}
+
+int Port::get_value_int(){
+    if(link == nullptr){
+        bson_iter_t iter;
+        if (bson_iter_init_find (&iter, get_document(), "value") &&
+            BSON_ITER_HOLDS_INT64(&iter)) {
+            return bson_iter_int64(&iter);
+        } else{
+            if(BSON_ITER_HOLDS_DOUBLE(&iter)){
+                return (int) bson_iter_double(&iter);
+            }
+            return 0;
+        }
+    } else{
+        return link->get_target_value_int();
+    }
+}
+
+bool Port::is_fixed(){
+    bson_iter_t iter;
+    if (bson_iter_init_find (&iter, get_document(), "fixed") &&
+        BSON_ITER_HOLDS_BOOL(&iter)) {
+        return bson_iter_bool(&iter);
+    } else{
+        return true;
+    }
+}
+
+void Port::set_value(double v) {
+
+    bson_iter_t iter;
+    if (bson_iter_init_find(&iter, get_document(), "value") &&
+        BSON_ITER_HOLDS_DOUBLE(&iter)) {
+        bson_iter_overwrite_double(&iter, v);
+    }
+
+    if (bson_iter_init_find(&iter, get_document(), "value") &&
+        BSON_ITER_HOLDS_INT64(&iter)) {
+        bson_iter_overwrite_int64(&iter, (uint64_t) v);
+    }
+
+    if(link != nullptr){
+        link->set_target_value(v);
+    }
+}
+
+void Port::set_link(std::shared_ptr<Link> v) {
+    overwrite_oid_in_field(v->get_oid(), "link");
+    link = v;
+}
+
+
 // Constructor
 //--------------------------------------------------------------------
 
+/*
 Port::Port() :
 death(0),
 birth(Functions::get_time())
@@ -17,68 +83,72 @@ birth(Functions::get_time())
             "death", BCON_INT64(0)
     );
 }
+ */
 
-Port::Port(bson_oid_t oid){
-    this->oid = oid;
+//Port::Port(bson_oid_t oid){
+//    this->oid = oid;
+//
+//    document = BCON_NEW(
+//            "_id", BCON_OID(&oid),
+//            "predecessor", BCON_OID(&oid),
+//            "birth", BCON_INT64(Functions::get_time()),
+//            "death", BCON_INT64(0)
+//    );
+//
+//}
+//
+//Port::Port(const char *uri, bson_oid_t oid){
+//    // TODO
+//}
+//
+//Port::Port(std::string json_string) :
+//Port(){
+//    from_json(json_string);
+//}
+//
+//
+//// Destructor
+////--------------------------------------------------------------------
+//Port::~Port() {
+//    bson_destroy(document);
+//}
+//
+//// Operator
+////--------------------------------------------------------------------
+//std::shared_ptr<Port> Port::operator+(std::shared_ptr<Port> v){
+//    bson_oid_t new_port_oid;
+//    bson_oid_init(&new_port_oid, nullptr);
+//    auto r = std::make_shared<Port>(new_port_oid);
+//    bson_init(r->document);
+//    r->document = BCON_NEW(
+//            "_id", BCON_OID(&new_port_oid),
+//            "predecessor", BCON_OID(&new_port_oid),
+//            "birth", BCON_INT64(Functions::get_time()),
+//            "death", BCON_INT64(0)
+//    );
+//
+//    Functions::add_documents(this->document, r->document, skip);
+//    Functions::add_documents(v->document, r->document, skip);
+//
+//    return r;
+//}
 
-    document = BCON_NEW(
-            "_id", BCON_OID(&oid),
-            "predecessor", BCON_OID(&oid),
-            "birth", BCON_INT64(Functions::get_time()),
-            "death", BCON_INT64(0)
-    );
-
-}
-
-Port::Port(const char *uri, bson_oid_t oid){
-    // TODO
-}
-
-Port::Port(std::string json_string) :
-Port(){
-    from_json(json_string);
-}
-
-
-// Destructor
-//--------------------------------------------------------------------
-Port::~Port() {
-    bson_destroy(document);
-}
-
-// Operator
-//--------------------------------------------------------------------
-std::shared_ptr<Port> Port::operator+(std::shared_ptr<Port> v){
-    bson_oid_t new_port_oid;
-    bson_oid_init(&new_port_oid, nullptr);
-    auto r = std::make_shared<Port>(new_port_oid);
-    bson_init(r->document);
-    r->document = BCON_NEW(
-            "_id", BCON_OID(&new_port_oid),
-            "predecessor", BCON_OID(&new_port_oid),
-            "birth", BCON_INT64(Functions::get_time()),
-            "death", BCON_INT64(0)
-    );
-
-    Functions::add_documents(this->document, r->document, skip);
-    Functions::add_documents(v->document, r->document, skip);
-
-    return r;
-}
-
+/*
 std::vector<double> Port::operator[](std::string key){
     return value(key);
 }
-
+ */
 
 // Getter
 //--------------------------------------------------------------------
 
+/*
 std::string Port::get_oid(){
     char * oid_s = new char[25];
     bson_oid_to_string(&oid, oid_s);
     return std::string(oid_s);
 }
+ */
 
 /*
 std::string Port::get_name(){
@@ -96,10 +166,11 @@ std::string Port::get_name(){
 }
  */
 
-std::shared_ptr<Port> Port::shared_ptr() {
-    return std::shared_ptr<Port>(this);
-}
+//std::shared_ptr<Port> Port::shared_ptr() {
+//    return std::shared_ptr<Port>(this);
+//}
 
+/*
 bson_t* Port::get_value(){
     if(input == nullptr){
         return document;
@@ -107,7 +178,9 @@ bson_t* Port::get_value(){
         return input->get_value();
     }
 }
+ */
 
+/*
 std::vector<double> Port::value(const std::string &slot_key){
     bson_iter_t iter;
     bson_iter_t baz;
@@ -135,7 +208,9 @@ std::vector<double> Port::value(const std::string &slot_key){
     }
     return v;
 }
+ */
 
+/*
 std::map<std::string, std::vector<double>> Port::values(){
 
     std::map<std::string, std::vector<double>> r;
@@ -176,7 +251,9 @@ std::map<std::string, std::vector<double>> Port::values(){
     }
     return r;
 }
+ */
 
+/*
 std::vector<std::string> Port::keys(){
     std::vector<std::string> names;
     bson_iter_t i0;
@@ -202,75 +279,82 @@ std::vector<std::string> Port::keys(){
     }
     return names;
 }
+ */
 
+/*
 std::shared_ptr<Port> Port::get_input(){
     return input;
 }
+ */
 
 // Setter
 //--------------------------------------------------------------------
 
-void Port::set_oid(std::string v){
-    bson_oid_init_from_string (&oid, v.c_str());
-}
+//void Port::set_oid(std::string v){
+//    bson_oid_init_from_string (&oid, v.c_str());
+//}
+//
+//void Port::new_oid(){
+//    bson_oid_init(&oid, nullptr);
+//    bson_iter_t iter;
+//
+//    bson_t *doc = document;
+//    if(doc != nullptr) {
+//        if (bson_iter_init(&iter, doc) &&
+//            bson_iter_find(&iter, "_id") &&
+//            BSON_ITER_HOLDS_OID (&iter)) {
+//            bson_iter_overwrite_oid(&iter, &oid);
+//            std::cout << "new oid: " << get_oid() << std::endl;
+//        }
+//    } else{
+//        std::cerr << "Port document not initialized.";
+//    }
+//}
 
-void Port::new_oid(){
-    bson_oid_init(&oid, nullptr);
-    bson_iter_t iter;
+//bool Port::set_slot_value(std::string slot_key, std::vector<double> values){
+//    bson_iter_t iter;
+//    bson_iter_t baz;
+//
+//    bson_t *doc = document;
+//    if(doc != nullptr) {
+//        std::string search_values = slot_key + ".value";
+//        if (bson_iter_init(&iter, doc) &&
+//            bson_iter_find_descendant(&iter, search_values.c_str(), &baz)
+//            ) {
+//            if(BSON_ITER_HOLDS_DOUBLE (&baz)){
+//
+//            } else{
+//                if(BSON_ITER_HOLDS_ARRAY(&baz)){
+//                    /*
+//                    bson_count_keys(bson_iter_);
+//                    int narray;
+//                    const uint8_t **array;
+//                    bson_iter_array(&baz, &narray, array);
+//                     */
+//                }
+//            }
+//            /*
+//            if(bson_count_keys(&baz))
+//            for(auto &v : values){
+//                bson_a
+//            }
+//            bson_iter_overwrite_double(&baz, value);
+//            return true;*/
+//        }
+//    }else{
+//        std::cerr << "Error: set_slot_value, port document not initialized.";
+//    }
+//    return false;
+//}
 
-    bson_t *doc = document;
-    if(doc != nullptr) {
-        if (bson_iter_init(&iter, doc) &&
-            bson_iter_find(&iter, "_id") &&
-            BSON_ITER_HOLDS_OID (&iter)) {
-            bson_iter_overwrite_oid(&iter, &oid);
-            std::cout << "new oid: " << get_oid() << std::endl;
-        }
-    } else{
-        std::cerr << "Port document not initialized.";
-    }
-}
 
-bool Port::set_slot_value(std::string slot_key, std::vector<double> values){
-    bson_iter_t iter;
-    bson_iter_t baz;
-
-    bson_t *doc = document;
-    if(doc != nullptr) {
-        std::string search_values = slot_key + ".value";
-        if (bson_iter_init(&iter, doc) &&
-            bson_iter_find_descendant(&iter, search_values.c_str(), &baz)
-            ) {
-            if(BSON_ITER_HOLDS_DOUBLE (&baz)){
-
-            } else{
-                if(BSON_ITER_HOLDS_ARRAY(&baz)){
-                    /*
-                    bson_count_keys(bson_iter_);
-                    int narray;
-                    const uint8_t **array;
-                    bson_iter_array(&baz, &narray, array);
-                     */
-                }
-            }
-            /*
-            if(bson_count_keys(&baz))
-            for(auto &v : values){
-                bson_a
-            }
-            bson_iter_overwrite_double(&baz, value);
-            return true;*/
-        }
-    }else{
-        std::cerr << "Error: set_slot_value, port document not initialized.";
-    }
-    return false;
-}
-
+/*
 void Port::set_input(std::shared_ptr<Port> v){
     this->input = v;
 }
+ */
 
+/*
 bool Port::set_predecessor(bson_oid_t v){
     bson_iter_t iter;
     bson_t *doc = document;
@@ -287,7 +371,9 @@ bool Port::set_predecessor(bson_oid_t v){
     }
     return false;
 }
+ */
 
+/*
 bool Port::set_death_time(uint64_t v){
     bson_iter_t iter;
     bson_t *doc = document;
@@ -304,7 +390,9 @@ bool Port::set_death_time(uint64_t v){
     }
     return false;
 }
+ */
 
+/*
 bool Port::set_birth_time(uint64_t v){
     bson_iter_t iter;
     bson_t *doc = document;
@@ -321,9 +409,11 @@ bool Port::set_birth_time(uint64_t v){
     }
     return false;
 }
+ */
 
 // Methods
 // --------------------------------------------------------------------
+/*
 void Port::from_json(const std::string &json_string){
     std::clog << "Port.from_json:";
     bson_error_t error;
@@ -349,22 +439,25 @@ void Port::from_json(const std::string &json_string){
     }
     std::clog << std::endl;
 }
+*/
 
-std::string Port::to_json(){
-    /*
-    if(document == nullptr){
-        return "";
-    } else{
-        size_t len;
-        char* str = bson_as_json (document, &len);
-        return std::string(str, len);
-    }
-     */
-    size_t len;
-    char* str = bson_as_json (to_bson(), &len);
-    return std::string(str, len);
-}
+//std::string Port::to_json(){
+//    /*
+//    if(document == nullptr){
+//        return "";
+//    } else{
+//        size_t len;
+//        char* str = bson_as_json (document, &len);
+//        return std::string(str, len);
+//    }
+//     */
+//    size_t len;
+//    char* str = bson_as_json (to_bson(), &len);
+//    return std::string(str, len);
+//}
 
+
+/*
 bson_t *Port::to_bson(){
     bson_t *doc;
     doc = BCON_NEW(
@@ -388,7 +481,9 @@ bson_t *Port::to_bson(){
     }
     return doc;
 }
+ */
 
+/*
 size_t Port::size(){
     bson_iter_t iter;
     size_t s = 0;
@@ -401,6 +496,7 @@ size_t Port::size(){
     }
     return s;
 }
+ */
 
 /*
 bool Port::add_port_to_collection(mongoc_collection_t * port_collection){
@@ -409,14 +505,11 @@ bool Port::add_port_to_collection(mongoc_collection_t * port_collection){
             nullptr, nullptr, nullptr
             );
 }
-*/
 
 bool Port::set_v(std::string key, std::shared_ptr<Value> v, std::shared_ptr<Link> l){
     _values[key] = std::make_tuple(v, l);
     return true;
 }
-
-
 bool Port::set_v(std::string key, std::shared_ptr<Value> v){
     return set_v(key, v, nullptr);
 }
@@ -428,3 +521,7 @@ std::shared_ptr<Value> Port::get_v(std::string key){
         return std::get<1>(_values[key])->get_target_value();
     }
 }
+
+ */
+
+

@@ -1,11 +1,11 @@
 #include "Value.h"
 
-
+/*
 Value::Value() :
-fixed(true),
-precursor(nullptr)
+fixed(true)
 {
     bson_oid_init(&oid, nullptr);
+    bson_oid_copy(&oid, &oid_precursor);
     port = nullptr;
 }
 
@@ -18,28 +18,22 @@ Value::Value(std::vector<double> v, bool fixed) : Value()
 Value::Value(std::vector<double> v, bool fixed, Value *precursor) :
 Value(v, fixed)
 {
-    this->precursor = precursor;
-}
-
-Value::Value(const char *uri, bson_oid_t oid) {
-    // TODO
+    oid_precursor = precursor->oid_precursor;
 }
 
 Value::~Value() {
 }
 
 bson_t* Value::to_bson() {
-    bson_t *doc;
+    bson_t *doc = MongoObject::to_bson();
 
     bson_oid_t oid_port = (port == nullptr) ? oid : port->oid;
-    bson_oid_t oid_precursor = (port == nullptr) ? oid : precursor->oid;
 
     // create a bson for the values
 
     doc = BCON_NEW(
             "_id", BCON_OID(&oid),
             "fixed", BCON_BOOL(fixed),
-            "precursor", BCON_OID(&oid_precursor),
             "port", BCON_OID(&oid_port)
             );
 
@@ -53,7 +47,9 @@ bson_t* Value::to_bson() {
 
     return doc;
 }
+ */
 
+/*
 bool Value::from_bson(const bson_t *doc){
     bson_iter_t iter;
     bson_iter_t child;
@@ -70,14 +66,12 @@ bool Value::from_bson(const bson_t *doc){
 
     if (bson_iter_init_find (&iter, doc, "precursor") &&
             BSON_ITER_HOLDS_OID (&iter)) {
-        bson_oid_t precursor_oid = *bson_iter_oid(&iter);
-        precursor = new Value(uri, precursor_oid);
+        oid_precursor = *bson_iter_oid(&iter);
     }
 
     if (bson_iter_init_find (&iter, doc, "port") &&
         BSON_ITER_HOLDS_OID (&iter)) {
-        bson_oid_t port_oid = *bson_iter_oid(&iter);
-        port = new Port(uri, port_oid);
+        oid_port = *bson_iter_oid(&iter);
     }
 
     content.resize(0);
@@ -92,7 +86,7 @@ bool Value::from_bson(const bson_t *doc){
     return true;
 }
 
-bool Value::from_json(std::string json_string){
+bool Value::from_json(const std::string &json_string){
     bson_error_t error;
     const bson_t *doc = bson_new_from_json(
             (uint8_t*)json_string.c_str(),
@@ -102,13 +96,9 @@ bool Value::from_json(std::string json_string){
     return from_bson(doc);
 
 }
+*/
 
-std::string Value::to_json() {
-    size_t len;
-    char* str = bson_as_json (to_bson(), &len);
-    return std::string(str, len);
-}
-
+/*
 std::vector<double> Value::get_value() {
     return content;
 }
@@ -117,6 +107,7 @@ uint64_t Value::get_time() {
     return bson_oid_get_time_t(&oid);
 }
 
-bool Value::push_back(double v) {
+void Value::push_back(double v) {
     content.push_back(v);
 }
+ */
