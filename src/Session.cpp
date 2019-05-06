@@ -8,9 +8,9 @@
 bool Session::read_from_db(const std::string &oid_string){
     bool return_value = true;
     return_value &= MongoObject::read_from_db(oid_string);
-    return_value &= create_and_connect_objects_from_oids(&document, "nodes", &nodes);
-    return_value &= create_and_connect_objects_from_oids(&document, "ports", &ports);
-    return_value &= create_and_connect_objects_from_oids(&document, "links", &links);
+    return_value &= create_and_connect_objects_from_oid_array(&document, "nodes", &nodes);
+    return_value &= create_and_connect_objects_from_oid_array(&document, "ports", &ports);
+    return_value &= create_and_connect_objects_from_oid_array(&document, "links", &links);
     return return_value;
 }
 

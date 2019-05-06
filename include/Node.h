@@ -29,20 +29,22 @@ class Node : public MongoObject{
 
 private:
 
-    /// A pointer to a function that operates on an input Port instance (first argument)
-    /// and writes to an output Port instance (second argument)
-    std::shared_ptr<NodeCallback> callback_class;
+
+    std::map<std::string, std::shared_ptr<Port>> input_ports;
+    std::map<std::string, std::shared_ptr<Port>> output_ports;
 
     // Methods
     //--------------------------------------------------------------------
 
+
 public:
-    std::map<std::string, std::shared_ptr<Port>> input_ports;
-    std::map<std::string, std::shared_ptr<Port>> output_ports;
+
+    /// A pointer to a function that operates on an input Port instance (first argument)
+    /// and writes to an output Port instance (second argument)
+    std::shared_ptr<NodeCallback> callback_class;
 
     std::string callback;
-    std::string callback_type_str;
-    int callback_type;
+    std::string callback_type;
 
     // Constructor & Destructor
     //--------------------------------------------------------------------
@@ -60,6 +62,8 @@ public:
     std::vector<std::string> get_port_oids();
     std::vector<std::string> get_input_port_oids();
     std::vector<std::string> get_output_port_oids();
+    std::shared_ptr<Port> get_input_port(const std::string &port_name);
+    std::shared_ptr<Port> get_output_port(const std::string &port_name);
 
     void add_input_port(std::string key, std::shared_ptr<Port>);
     void add_output_port(std::string key, std::shared_ptr<Port>);
@@ -69,46 +73,12 @@ public:
     void set_callback(std::shared_ptr<NodeCallback> cb);
     void set_callback(std::string &callback, std::string &callback_type);
 
-    // std::shared_ptr<Port> get_port(bson_oid_t *oid_port);
-    // std::shared_ptr<Port> get_port(const char* oid);
-
     /*
     void update();
     bool is_valid();
-
-    void from_json(const std::string &json_string);
-    void from_bson(const bson_t *document);
-    void from_oid(bson_oid_t *oid_doc);
     */
 
-
-    /*
-    void init_node(
-            const char *uri_string,
-            std::string oid_s,
-            std::shared_ptr<Port> input,
-            std::shared_ptr<Port> output,
-            std::string callback,
-            std::string call_back_type
-    );
-     */
-
     //bool node_valid = true;
-
-    /*
-    Node(const char *uri_string,
-            std::shared_ptr<Port> input,
-            std::shared_ptr<Port> output,
-            std::shared_ptr<NodeCallback> callback
-            );
-    Node(const char *uri_string,
-         std::string json_string_node
-    );
-    Node(const char *uri_string,
-         const char *input_port_oid,
-         const char *output_port_oid
-    );
-     */
 
 };
 

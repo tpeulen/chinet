@@ -6,7 +6,7 @@
 
 
 Node::Node(){
-    bson_append_utf8(&document, "type", 4, "node", 4);
+    append_string(&document, "type", "node");
 }
 
 
@@ -19,19 +19,20 @@ Node::~Node() {
 // Methods
 //--------------------------------------------------------------------
 
+
 void Node::set_callback(std::shared_ptr<NodeCallback> cb){
     callback_class = cb;
 }
 
 bool Node::read_from_db(const std::string &oid_string){
     bool return_value = MongoObject::read_from_db(oid_string);
-    create_and_connect_objects_from_oids(&document, "input_ports", &input_ports);
+    create_and_connect_objects_from_oid_doc(&document, "input_ports", &input_ports);
+    create_and_connect_objects_from_oid_doc(&document, "output_ports", &output_ports);
     return return_value;
 }
 
 // Getter
 //--------------------------------------------------------------------
-
 
 std::string Node::get_name(){
     std::string r;
@@ -54,6 +55,14 @@ std::string Node::get_name(){
     r.append(")");
 
     return r;
+}
+
+std::shared_ptr<Port> Node::get_input_port(const std::string &port_name){
+    return input_ports[port_name];
+}
+
+std::shared_ptr<Port> Node::get_output_port(const std::string &port_name){
+    return output_ports[port_name];
 }
 
 std::vector<std::string> Node::get_input_port_oids(){
@@ -87,19 +96,15 @@ std::vector<std::string> Node::get_port_oids(){
 // Setter
 //--------------------------------------------------------------------
 
-
 void Node::set_callback(std::string &s_callback, std::string &s_callback_type){
     this->callback = s_callback;
-    this->callback_type_str = s_callback_type;
+    this->callback_type = s_callback_type;
     if(s_callback_type == "C"){
         rttr::method meth = rttr::type::get_global_method(callback);
         if(!meth){
             std::cerr << "The class type " << callback << " does not exist." <<
                       " No callback set. " << std::endl;
         }
-        this->callback_type = 1;
-    } else{
-        this->callback_type = 0;
     }
 }
 
@@ -124,11 +129,15 @@ bson_t Node::get_bson(){
     bson_copy_to_excluding_noinit(&src, &dst,
             "input_ports",
             "output_ports",
+            "callback",
+            "callback_type",
             NULL
     );
 
     create_oid_dict_in_doc(&dst, "input_ports", input_ports);
     create_oid_dict_in_doc(&dst, "output_ports", output_ports);
+    append_string(&dst, "callback", callback);
+    append_string(&dst, "callback_type", callback_type);
 
     return dst;
 }
@@ -228,79 +237,8 @@ void Node::from_bson(const bson_t *doc){
     set_callback(s_callback, s_callback_type);
 }
 
-void Node::from_oid(bson_oid_t *oid_doc){
-    std::clog << "oid_t:";
-    const bson_t *doc;
-    mongoc_cursor_t *cursor;
-    bson_t *query;
-
-    query = BCON_NEW ("_id", BCON_OID(oid_doc));
-    cursor = mongoc_collection_find_with_opts(node_collection, query, nullptr, nullptr);
-    while (mongoc_cursor_next (cursor, &doc)) {
-        from_bson(doc);
-    }
-    mongoc_cursor_destroy(cursor);
-    bson_destroy(query);
-}
-
-void Node::from_oid(const std::string oid_doc){
-    std::clog << "oid_s:";
-    bson_oid_t oid_d;
-    bson_oid_init_from_string(&oid_d, oid_doc.c_str());
-    from_oid(&oid_d);
-}
-
  */
 
-/*
-std::shared_ptr<Port> Node::get_output_port(){
-    return this->output_port;
-}
-
-std::shared_ptr<Port> Node::get_input_port(){
-    return this->input_port;
-}
- */
-
-
-/*
-
-std::string Node::get_oid(){
-    char * oid_s = new char[25];
-    bson_oid_to_string(&oid, oid_s);
-    return std::string(oid_s);
-}
-
-
-std::string Node::get_output_oid(){
-    bson_iter_t iter;
-    if (bson_iter_init(&iter, document) &&
-        bson_iter_find(&iter, "output_port_oid")
-            ) {
-        if (bson_iter_init (&iter, document) &&
-            BSON_ITER_HOLDS_UTF8(&iter)) {
-            uint32_t l;
-            const char* s = bson_iter_utf8(&iter, &l);
-            return std::string(s, l);
-        }
-    }
-    return nullptr;
-}
-
-std::string Node::get_input_oid(){
-    bson_iter_t iter;
-    if (bson_iter_init(&iter, document) && bson_iter_find(&iter, "input_port_oid")) {
-        if (bson_iter_init (&iter, document) && BSON_ITER_HOLDS_OID(&iter)) {
-            uint32_t l = 25;
-            char *oid_s = new char[l];
-            bson_oid_t const *s  = bson_iter_oid(&iter);
-            bson_oid_to_string(s, oid_s);
-            return std::string(oid_s, l);
-        }
-    }
-    return "";
-}
- */
 
 /*
 void Node::set_input_port(std::shared_ptr<Port> input) {
