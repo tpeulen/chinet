@@ -19,9 +19,11 @@ class NodeCallback{
 
 public:
     std::string name;
-    virtual void run(std::shared_ptr<Port>, std::shared_ptr<Port>);
+    virtual void run(
+            std::map<std::string, std::shared_ptr<Port>>,
+            std::map<std::string, std::shared_ptr<Port>>
+            );
     NodeCallback() {};
-    NodeCallback(std::string name);
     virtual ~NodeCallback() {};
 };
 

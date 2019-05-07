@@ -5,15 +5,11 @@
 #include <vector>
 #include <memory>
 #include <map>
-#include <chrono>
 
 #include "bson.h"
-#include <mongoc.h>
-#include <mongoc/mongoc.h>
 #include <rttr/registration>
 
 #include "MongoObject.h"
-#include "Functions.h"
 #include "Port.h"
 #include "NodeCallback.h"
 
@@ -29,15 +25,16 @@ class Node : public MongoObject{
 
 private:
 
-
-    std::map<std::string, std::shared_ptr<Port>> input_ports;
-    std::map<std::string, std::shared_ptr<Port>> output_ports;
+    bool node_valid_ = true;
 
     // Methods
     //--------------------------------------------------------------------
 
 
 public:
+
+    std::map<std::string, std::shared_ptr<Port>> input_ports;
+    std::map<std::string, std::shared_ptr<Port>> output_ports;
 
     /// A pointer to a function that operates on an input Port instance (first argument)
     /// and writes to an output Port instance (second argument)
@@ -55,6 +52,8 @@ public:
     //--------------------------------------------------------------------
     bson_t get_bson();
     bool read_from_db(const std::string &oid_string) final;
+    void update();
+    bool is_valid();
 
     // Getter
     //--------------------------------------------------------------------
@@ -71,14 +70,7 @@ public:
     // Setter
     //--------------------------------------------------------------------
     void set_callback(std::shared_ptr<NodeCallback> cb);
-    void set_callback(std::string &callback, std::string &callback_type);
-
-    /*
-    void update();
-    bool is_valid();
-    */
-
-    //bool node_valid = true;
+    void set_callback(std::string callback, std::string callback_type);
 
 };
 

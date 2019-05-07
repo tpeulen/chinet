@@ -25,9 +25,20 @@ void Node::set_callback(std::shared_ptr<NodeCallback> cb){
 }
 
 bool Node::read_from_db(const std::string &oid_string){
-    bool return_value = MongoObject::read_from_db(oid_string);
-    create_and_connect_objects_from_oid_doc(&document, "input_ports", &input_ports);
-    create_and_connect_objects_from_oid_doc(&document, "output_ports", &output_ports);
+    bool return_value = true;
+
+    return_value &= MongoObject::read_from_db(oid_string);
+    return_value &= create_and_connect_objects_from_oid_doc(&document, "input_ports", &input_ports);
+    return_value &= create_and_connect_objects_from_oid_doc(&document, "output_ports", &output_ports);
+
+    std::cout << "callback-restore: " << get_string_by_key(&document, "callback") << std::endl;
+    std::cout << "callback_type-restore: " << get_string_by_key(&document, "callback_type") << std::endl;
+
+    set_callback(
+            get_string_by_key(&document, "callback"),
+            get_string_by_key(&document, "callback_type")
+            );
+
     return return_value;
 }
 
@@ -37,7 +48,7 @@ bool Node::read_from_db(const std::string &oid_string){
 std::string Node::get_name(){
     std::string r;
     r.append(callback);
-
+    r.append(": ");
     r.append("(");
     for(auto const &n : input_ports){
         r.append(n.first);
@@ -96,7 +107,7 @@ std::vector<std::string> Node::get_port_oids(){
 // Setter
 //--------------------------------------------------------------------
 
-void Node::set_callback(std::string &s_callback, std::string &s_callback_type){
+void Node::set_callback(const std::string s_callback, const std::string s_callback_type){
     this->callback = s_callback;
     this->callback_type = s_callback_type;
     if(s_callback_type == "C"){
@@ -143,38 +154,31 @@ bson_t Node::get_bson(){
 }
 
 
-/*
 void Node::update(){
-    if((input_port == nullptr) ||
-    (output_port == nullptr)) {
+    if(input_ports.empty() || output_ports.empty()) {
         return;
     }
     std::clog << "update:callback_type:" << callback_type;
-    switch(callback_type){
-        case 1: {             // C
-            std::clog << ":registered C function"  << std::endl;
-            rttr::method meth = rttr::type::get_global_method(callback);
-            if (meth) {
-                rttr::variant return_value = meth.invoke({}, input_port, output_port);
-            }
-            break;
+    if(callback_type == "C")
+    {
+        std::clog << ":registered C function"  << std::endl;
+        rttr::method meth = rttr::type::get_global_method(callback);
+        if (meth) {
+            rttr::variant return_value = meth.invoke({}, input_ports, output_ports);
         }
-        default :{
-            if (callback_class != nullptr) {
-                callback_class->run(input_port, output_port);
-            }
-        }
+    } else if (callback_class != nullptr) {
+            callback_class->run(input_ports, output_ports);
     }
 }
 
+
 bool Node::is_valid(){
-    if(input_port == nullptr){
+    if(input_ports.empty()){
         return true;
     } else{
-        return node_valid;
+        return node_valid_;
     }
 }
- */
 
 
 /*

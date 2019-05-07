@@ -300,12 +300,7 @@ bson_oid_t* MongoObject::get_oid() {
 }
 
 const bson_t* MongoObject::get_document(){
-
-    if(!read_from_db(oid_to_string(oid_document))){
-        return &document;
-    } else{
-        return nullptr;
-    }
+    return &document;
 }
 
 std::string MongoObject::create_copy() {

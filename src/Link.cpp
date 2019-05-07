@@ -12,7 +12,7 @@ Link::Link(){
 
 double Link::get_target_value_double(){
     if(target!= nullptr){
-        return target->get_value_double();
+        return target->get_double();
     } else{
         std::cerr << "Error - class Link get_value_double: target is nullptr" << std::endl;
         return NAN;
@@ -20,7 +20,7 @@ double Link::get_target_value_double(){
 }
 int Link::get_target_value_int(){
     if(target!= nullptr){
-        return target->get_value_int();
+        return target->get_int();
     } else{
         std::cerr << "Error - class Link get_value_int: target is nullptr" << std::endl;
         return 0;
@@ -39,15 +39,3 @@ void Link::set_target(std::shared_ptr<Port> v) {
     overwrite_oid_in_field(v->get_oid(), "target");
     target = v;
 }
-
-
-
-/*
-Link::Link(std::shared_ptr<Port> target, std::string key) :
-Link()
-{
-    this->target = target;
-    this->key = key;
-}
-
-*/

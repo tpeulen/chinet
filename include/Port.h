@@ -2,19 +2,8 @@
 #define chinet_PORT_H
 
 #include <cstdint>
-#include <iostream>
-#include <vector>
-#include <map>
-#include <tuple>
 #include <memory>
-#include <string>
-#include <string_view>
-#include <cmath>
-#include <chrono>
-#include "bson.h"
 
-#include <MongoObject.h>
-#include <Functions.h>
 #include <Node.h>
 #include <Link.h>
 
@@ -27,8 +16,8 @@ private:
 
 public:
 
-    double get_value_double();
-    int get_value_int();
+    double get_double();
+    int get_int();
     bool is_fixed();
     void set_value(double v);
     void set_link(std::shared_ptr<Link> v);

@@ -1,6 +1,5 @@
 %module(directors="1") chinet
 
-
 %{
 #include "../include/MongoObject.h"
 %}

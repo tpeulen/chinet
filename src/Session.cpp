@@ -3,7 +3,6 @@
 //
 
 #include "Session.h"
-#include "MongoObject.h"
 
 bool Session::read_from_db(const std::string &oid_string){
     bool return_value = true;

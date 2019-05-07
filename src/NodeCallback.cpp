@@ -3,34 +3,27 @@
 //using namespace rttr;
 
 
-void NodeCallback::run(std::shared_ptr<Port> input, std::shared_ptr<Port> output){
+void NodeCallback::run(
+        std::map<std::string, std::shared_ptr<Port>> inputs,
+        std::map<std::string, std::shared_ptr<Port>> outputs){
     std::cout << "This print from C++" << std::endl;
 }
 
+void node_callback_test(
+        std::map<std::string, std::shared_ptr<Port>> inputs,
+        std::map<std::string, std::shared_ptr<Port>> outputs){
 
-NodeCallback::NodeCallback(std::string name){
-    this->name = name;
-}
+    std::cout << "This is node_callback_test from C++:" << std::endl;
 
-void run2(std::shared_ptr<Port> input, std::shared_ptr<Port> output){
-    /*
-    if (return_value.is_valid() && return_value.is_type<double>())
-        std::cout << return_value.get_value<double>() << std::endl; // 729
-    */
-
-    std::cout << "This is run2 from C++" << std::endl;
-    /*
-    for(auto key : input->keys()){
-        std::cout << key;
+    std::cout << "Inputs:\n";
+    for(auto &o : inputs){
+        std::cout << o.first << ":" << o.second->get_double() << std::endl;
     }
-    double test = input->value("slotA1")[0] * input->value("slotA2")[0];
-    std::cout << test << std::endl;
-     */
 }
 
 void convolve_sum_of_exponentials_periodic(
-        std::map<std::string, std::shared_ptr<Port>> input_map,
-        std::map<std::string, std::shared_ptr<Port>> output_map){
+        std::map<std::string, std::shared_ptr<Port>> inputs,
+        std::map<std::string, std::shared_ptr<Port>> output){
     /*
     std::vector<double> irf = input_map["irf"]->value();
     std::vector<double> decay = input_map["decay"]->value();
@@ -57,6 +50,6 @@ void convolve_sum_of_exponentials_periodic(
 RTTR_REGISTRATION {
     using namespace rttr;
     registration::class_<NodeCallback>("NodeCallback").constructor<>().method("run", &NodeCallback::run);
-    registration::method("NodeCallback2", &run2);
+    registration::method("NodeCallbackTest", &node_callback_test);
     registration::method("convolve", &convolve_sum_of_exponentials_periodic);
 }

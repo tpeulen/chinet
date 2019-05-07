@@ -1,59 +1,30 @@
 #include "Port.h"
 
 
-double Port::get_value_double(){
+double Port::get_double(){
     if(link == nullptr){
-        bson_iter_t iter;
-        if (bson_iter_init_find (&iter, get_document(), "value") &&
-            BSON_ITER_HOLDS_DOUBLE(&iter)) {
-            return bson_iter_double(&iter);
-        } else{
-            return NAN;
-        }
+        return MongoObject::get_double("value");
     } else{
         return link->get_target_value_double();
     }
 }
 
-int Port::get_value_int(){
+int Port::get_int(){
     if(link == nullptr){
-        bson_iter_t iter;
-        if (bson_iter_init_find (&iter, get_document(), "value") &&
-            BSON_ITER_HOLDS_INT64(&iter)) {
-            return bson_iter_int64(&iter);
-        } else{
-            if(BSON_ITER_HOLDS_DOUBLE(&iter)){
-                return (int) bson_iter_double(&iter);
-            }
-            return 0;
-        }
+        return MongoObject::get_int64("value");
     } else{
         return link->get_target_value_int();
     }
 }
 
 bool Port::is_fixed(){
-    bson_iter_t iter;
-    if (bson_iter_init_find (&iter, get_document(), "fixed") &&
-        BSON_ITER_HOLDS_BOOL(&iter)) {
-        return bson_iter_bool(&iter);
-    } else{
-        return true;
-    }
+    return MongoObject::get_bool("fixed");
 }
 
 void Port::set_value(double v) {
 
-    bson_iter_t iter;
-    if (bson_iter_init_find(&iter, get_document(), "value") &&
-        BSON_ITER_HOLDS_DOUBLE(&iter)) {
-        bson_iter_overwrite_double(&iter, v);
-    }
-
-    if (bson_iter_init_find(&iter, get_document(), "value") &&
-        BSON_ITER_HOLDS_INT64(&iter)) {
-        bson_iter_overwrite_int64(&iter, (uint64_t) v);
-    }
+    set_double("value", v);
+    set_int64("value", (int64_t) v);
 
     if(link != nullptr){
         link->set_target_value(v);

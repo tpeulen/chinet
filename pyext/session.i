@@ -1,8 +1,6 @@
 %module(directors="1") chinet
 
-%include "std_vector.i";
-%include "std_map.i";
-%include "std_list.i";
+%include "std_set.i";
 
 %{
 #include "../include/Session.h"

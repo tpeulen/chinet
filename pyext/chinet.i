@@ -36,6 +36,7 @@ namespace std{
 %include "port.i"
 %include "link.i"
 %include "node.i"
+%include "nodecallback.i"
 %include "session.i"
 %include "pda.i"
 

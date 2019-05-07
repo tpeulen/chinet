@@ -5,10 +5,9 @@
 #ifndef CHINET_SESSION_H
 #define CHINET_SESSION_H
 
-#include <mongoc.h>
-#include <iostream>
 #include <set>
 #include <memory>
+#include "bson.h"
 
 #include "MongoObject.h"
 #include "Node.h"

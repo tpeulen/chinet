@@ -10,6 +10,8 @@
 #include <map>
 #include <vector>
 #include <memory>
+#include <cmath>
+
 #include <mongoc.h>
 
 
@@ -167,6 +169,65 @@ protected:
         bson_append_utf8(dst, key.c_str(), key.size(), content.c_str(), content.size());
     }
 
+    static const std::string get_string_by_key(bson_t *doc, const std::string key){
+        bson_iter_t iter;
+
+        if (bson_iter_init(&iter, doc) &&
+            bson_iter_find(&iter, key.c_str()) &&
+            BSON_ITER_HOLDS_UTF8(&iter)) {
+            const char* str;
+            uint32_t len;
+            str = bson_iter_utf8(&iter, &len);
+            return std::string(str, len);
+        }
+        return "";
+    }
+
+    const void set_double(std::string key, double v){
+        bson_iter_t iter;
+        if (bson_iter_init_find(&iter, &document, key.c_str()) &&
+            BSON_ITER_HOLDS_DOUBLE(&iter)) {
+            bson_iter_overwrite_double(&iter, v);
+        }
+    }
+
+    const double get_double(const char* key){
+        bson_iter_t iter;
+        if (bson_iter_init_find (&iter, &document, key) &&
+            BSON_ITER_HOLDS_DOUBLE(&iter)) {
+            return bson_iter_double(&iter);
+        } else{
+            return NAN;
+        }
+    }
+
+    const void set_int64(std::string key, int64_t v){
+        bson_iter_t iter;
+        if (bson_iter_init_find(&iter, &document, key.c_str()) &&
+            BSON_ITER_HOLDS_INT64(&iter)) {
+            bson_iter_overwrite_int64(&iter, (uint64_t) v);
+        }
+    }
+
+    const int64_t get_int64(const char* key){
+        bson_iter_t iter;
+        if (bson_iter_init_find (&iter, &document, key) &&
+            BSON_ITER_HOLDS_INT64(&iter)) {
+            return bson_iter_int64(&iter);
+        } else{
+            return 0;
+        }
+    }
+
+    const bool get_bool(const char* key){
+        bson_iter_t iter;
+        if (bson_iter_init_find (&iter, &document, key) &&
+            BSON_ITER_HOLDS_BOOL(&iter)) {
+            return bson_iter_bool(&iter);
+        } else{
+            return true;
+        }
+    }
 
 public:
 

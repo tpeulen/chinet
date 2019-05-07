@@ -5,11 +5,9 @@
 #ifndef CHINET_LINK_H
 #define CHINET_LINK_H
 
-#include <map>
-#include <vector>
-#include <bson.h>
 #include <Value.h>
 #include <memory>
+#include <cmath>
 
 #include "Port.h"
 
@@ -28,13 +26,6 @@ public:
     void set_target_value(double v);
     void set_target(std::shared_ptr<Port> v);
 
-    /*
-    Link(std::shared_ptr<Port> target, std::string key);
-    std::shared_ptr<Value<T>> get_target_value();
-    bson_t* to_bson();
-    std::string to_json();
-    bool set_target(std::shared_ptr<Port> target, std::string key);
-     */
 };
 
 
