@@ -9,6 +9,7 @@
 
 class Link;
 
+
 class Port : public MongoObject{
 
 private:
@@ -18,9 +19,21 @@ public:
 
     double get_double();
     int get_int();
+
     bool is_fixed();
-    void set_value(double v);
+    bool is_linked();
+
+    template <typename T>
+    void set_value(T v){
+        MongoObject::set_key("value", v);
+
+        if(link != nullptr){
+            link->set_target_value(v);
+        }
+    }
+
     void set_link(std::shared_ptr<Link> v);
+    void set_fixed(bool fixed);
 
     // Constructor
     //--------------------------------------------------------------------

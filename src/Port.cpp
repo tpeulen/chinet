@@ -11,7 +11,7 @@ double Port::get_double(){
 
 int Port::get_int(){
     if(link == nullptr){
-        return MongoObject::get_int64("value");
+        return (int) MongoObject::get_int64("value");
     } else{
         return link->get_target_value_int();
     }
@@ -21,15 +21,15 @@ bool Port::is_fixed(){
     return MongoObject::get_bool("fixed");
 }
 
-void Port::set_value(double v) {
-
-    set_double("value", v);
-    set_int64("value", (int64_t) v);
-
-    if(link != nullptr){
-        link->set_target_value(v);
-    }
+void Port::set_fixed(bool fixed){
+    MongoObject::set_key("fixed", fixed);
 }
+
+
+bool Port::is_linked(){
+    return (link != nullptr);
+}
+
 
 void Port::set_link(std::shared_ptr<Link> v) {
     overwrite_oid_in_field(v->get_oid(), "link");
@@ -78,23 +78,6 @@ std::vector<double> Port::operator[](std::string key){
 //--------------------------------------------------------------------
 
 /*
-std::string Port::get_name(){
-    bson_iter_t iter;
-    uint32_t len{0};
-    const char * str;
-
-    if (bson_iter_init (&iter, document) &&
-        bson_iter_find (&iter, "name") &&
-        BSON_ITER_HOLDS_UTF8 (&iter)) {
-        str = bson_iter_utf8(&iter, &len);
-        return std::string(str, len);
-    }
-    return "";
-}
- */
-
-
-/*
 std::vector<double> Port::value(const std::string &slot_key){
     bson_iter_t iter;
     bson_iter_t baz;
@@ -125,46 +108,6 @@ std::vector<double> Port::value(const std::string &slot_key){
  */
 
 /*
-std::map<std::string, std::vector<double>> Port::values(){
-
-    std::map<std::string, std::vector<double>> r;
-    bson_iter_t i0;
-    bson_iter_t i1;
-    bson_iter_t ik;
-
-    bson_t* doc = get_value();
-    if(doc != nullptr){
-        bson_iter_init(&i0, doc);
-        bson_iter_init(&ik, doc);
-        while (bson_iter_next (&ik)) {
-            std::string key = std::string(bson_iter_key(&ik));
-            std::string search_values = key + ".value";
-
-            bson_iter_init(&i0, doc);
-            if (bson_iter_init (&i0, doc) &&
-                bson_iter_find_descendant (&i0, search_values.c_str(), &i1) &&
-                (BSON_ITER_HOLDS_DOUBLE (&i1) || BSON_ITER_HOLDS_ARRAY(&i1))
-                ){
-
-                std::vector<double> slot_values;
-                if(BSON_ITER_HOLDS_ARRAY(&i1)){
-                    bson_iter_t iter_array;
-                    bson_iter_recurse (&i1, &iter_array);
-                    while (bson_iter_next (&iter_array)) {
-                        slot_values.push_back(bson_iter_double(&iter_array));
-                    }
-                }
-                if(BSON_ITER_HOLDS_DOUBLE (&i1)){
-                    slot_values.push_back(bson_iter_as_double (&i1));
-                }
-                r[key] = slot_values;
-            }
-        }
-    } else{
-        std::cerr << "Port document not initialized.";
-    }
-    return r;
-}
  */
 
 /*
@@ -195,11 +138,6 @@ std::vector<std::string> Port::keys(){
 }
  */
 
-/*
-std::shared_ptr<Port> Port::get_input(){
-    return input;
-}
- */
 
 // Setter
 //--------------------------------------------------------------------
@@ -241,12 +179,6 @@ std::shared_ptr<Port> Port::get_input(){
 //    return false;
 //}
 
-
-/*
-void Port::set_input(std::shared_ptr<Port> v){
-    this->input = v;
-}
- */
 
 /*
 bool Port::set_predecessor(bson_oid_t v){
@@ -299,31 +231,6 @@ void Port::from_json(const std::string &json_string){
 */
 
 
-/*
-bson_t *Port::to_bson(){
-    bson_t *doc;
-    doc = BCON_NEW(
-            "_id", BCON_OID(&oid),
-            "death", BCON_INT64(death)
-            );
-    for(auto &v : _values){
-
-        std::string key = v.first;
-        auto value = std::get<0>(v.second);
-        auto link = std::get<1>(v.second);
-
-        bson_t child;
-        bson_append_document_begin(doc, key.c_str(), key.size(), &child);
-        bson_append_oid(&child, "value", 5, &value->oid);
-        if(link != nullptr){
-            bson_append_oid(&child, "link", 4, &link->oid);
-        }
-        bson_append_document_end(doc, &child);
-
-    }
-    return doc;
-}
- */
 
 /*
 size_t Port::size(){
@@ -339,15 +246,4 @@ size_t Port::size(){
     return s;
 }
  */
-
-/*
-bool Port::add_port_to_collection(mongoc_collection_t * port_collection){
-    return mongoc_collection_insert_one(port_collection,
-            document,
-            nullptr, nullptr, nullptr
-            );
-}
-
- */
-
 

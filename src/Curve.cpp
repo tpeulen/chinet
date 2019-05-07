@@ -133,6 +133,7 @@ Curve Curve::operator*(Curve &v) {
     } else{
         // only multiply the y-values
         // the the same x-values (TODO)
+        return *this;
     }
 }
 

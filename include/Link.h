@@ -23,7 +23,16 @@ public:
     Link();
     double get_target_value_double();
     int get_target_value_int();
-    void set_target_value(double v);
+
+    template <typename T>
+    void set_target_value(T v){
+        if(target!= nullptr){
+            target->set_value(v);
+        } else{
+            std::cerr << "Error - class Link set_value: target is nullptr" << std::endl;
+        }
+    }
+
     void set_target(std::shared_ptr<Port> v);
 
 };

@@ -27,14 +27,6 @@ int Link::get_target_value_int(){
     }
 }
 
-void Link::set_target_value(double v){
-    if(target!= nullptr){
-        target->set_value(v);
-    } else{
-        std::cerr << "Error - class Link set_value: target is nullptr" << std::endl;
-    }
-}
-
 void Link::set_target(std::shared_ptr<Port> v) {
     overwrite_oid_in_field(v->get_oid(), "target");
     target = v;

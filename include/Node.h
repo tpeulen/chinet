@@ -5,7 +5,6 @@
 #include <vector>
 #include <memory>
 #include <map>
-
 #include "bson.h"
 #include <rttr/registration>
 

@@ -39,7 +39,7 @@ message ("-- Found librttr version \"${PACKAGE_VERSION}\"")
 
 # libmongoc
 ###############################
-find_package (libmongoc-1.0 1.7 REQUIRED)
+find_package (libmongoc-1.0)
 message ("-- Found mongoc version \"${MONGOC_VERSION}\"")
 message ("--   include path \"${MONGOC_INCLUDE_DIRS}\"")
 message ("--   libraries \"${MONGOC_LIBRARIES}\"")

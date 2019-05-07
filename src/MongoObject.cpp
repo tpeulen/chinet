@@ -261,6 +261,18 @@ bson_t MongoObject::get_bson(){
      * correspond to the attribute values
      */
 
+    for(auto &o : buff_int64_){
+        if (bson_iter_init_find(&iter, &document, o.first.c_str())) {
+            bson_iter_overwrite_int64(&iter, o.second);
+        }
+    }
+
+    for(auto &o : buff_double_){
+        if (bson_iter_init_find(&iter, &document, o.first.c_str())) {
+            bson_iter_overwrite_double(&iter, o.second);
+        }
+    }
+
     // oid_document
     if (bson_iter_init(&iter, &document) &&
         bson_iter_find(&iter, "_id") &&
@@ -289,6 +301,21 @@ bson_t MongoObject::get_bson(){
     }
 
     return document;
+}
+
+bson_t MongoObject::get_bson_excluding(...){
+    bson_t src = MongoObject::get_bson();
+    bson_t dst; bson_init (&dst);
+    va_list va;
+
+
+     // this is new in libmongoc=1.14.0
+    bson_copy_to_excluding_noinit_va(
+            &src, &dst,
+            "",
+            va
+            );
+    return dst;
 }
 
 std::string MongoObject::get_oid_string(){

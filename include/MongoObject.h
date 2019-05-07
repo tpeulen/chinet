@@ -25,6 +25,17 @@ private:
     bson_error_t error;
     mongoc_collection_t *collection;
 
+    // TODO: use buffers to minimize BSON access
+    std::map<std::string, double> buff_double_;
+    std::map<std::string, uint64_t> buff_int64_;
+    std::map<std::string, bool> buff_bool_;
+
+    std::map<std::string, std::vector<double>> buff_double_vector_;
+    std::map<std::string, std::vector<uint64_t>> buff_int64_vector_;
+    std::map<std::string, std::vector<bool>> buff_bool_vector_;
+
+    std::map<std::string, std::string> buff_string_;
+
 protected:
     bson_t document;
 
@@ -180,42 +191,68 @@ protected:
             str = bson_iter_utf8(&iter, &len);
             return std::string(str, len);
         }
+        std::cerr << "Error: the key does not contain an string" << std::endl;
         return "";
     }
 
-    const void set_double(std::string key, double v){
-        bson_iter_t iter;
-        if (bson_iter_init_find(&iter, &document, key.c_str()) &&
-            BSON_ITER_HOLDS_DOUBLE(&iter)) {
-            bson_iter_overwrite_double(&iter, v);
-        }
-    }
-
     const double get_double(const char* key){
-        bson_iter_t iter;
-        if (bson_iter_init_find (&iter, &document, key) &&
-            BSON_ITER_HOLDS_DOUBLE(&iter)) {
-            return bson_iter_double(&iter);
-        } else{
-            return NAN;
+        try {
+            return buff_double_.at(key);
+        }
+        catch (std::out_of_range &o){
+            double val;
+            bson_iter_t iter;
+            if (bson_iter_init_find (&iter, &document, key) &&
+                BSON_ITER_HOLDS_DOUBLE(&iter)) {
+                val = bson_iter_double(&iter);
+            } else{
+                std::cerr << "Error: the key does not contain an double" << std::endl;
+                val = NAN;
+            }
+            buff_double_[key] = val;
+            return val;
         }
     }
 
-    const void set_int64(std::string key, int64_t v){
-        bson_iter_t iter;
-        if (bson_iter_init_find(&iter, &document, key.c_str()) &&
-            BSON_ITER_HOLDS_INT64(&iter)) {
-            bson_iter_overwrite_int64(&iter, (uint64_t) v);
+    const std::vector<double> get_double_vector(const char* key){
+        try {
+            return buff_double_vector_.at(key);
+        }
+        catch (std::out_of_range &o){
+            std::vector<double> val;
+            bson_iter_t iter;
+            if (bson_iter_init(&iter, &document) &&
+                bson_iter_find(&iter, key) &&
+                BSON_ITER_HOLDS_ARRAY(&iter)) {
+                bson_iter_t iter_array;
+                bson_iter_recurse (&iter, &iter_array);
+                while (bson_iter_next (&iter_array)) {
+                    val.push_back(bson_iter_double(&iter_array));
+                }
+            } else{
+                std::cerr << "Error: the key does not contain an array" << std::endl;
+            }
+            buff_double_vector_[key] = val;
+            return val;
         }
     }
 
     const int64_t get_int64(const char* key){
-        bson_iter_t iter;
-        if (bson_iter_init_find (&iter, &document, key) &&
-            BSON_ITER_HOLDS_INT64(&iter)) {
-            return bson_iter_int64(&iter);
-        } else{
-            return 0;
+        try {
+            return buff_int64_.at(key);
+        }
+        catch (std::out_of_range &o){
+            int64_t val;
+            bson_iter_t iter;
+            if (bson_iter_init_find (&iter, &document, key) &&
+                BSON_ITER_HOLDS_INT64(&iter)) {
+                val = bson_iter_int64(&iter);
+            } else{
+                std::cerr << "Error: the key does not contain an int64" << std::endl;
+                val = 0;
+            }
+            buff_int64_[key] = val;
+            return val;
         }
     }
 
@@ -225,7 +262,32 @@ protected:
             BSON_ITER_HOLDS_BOOL(&iter)) {
             return bson_iter_bool(&iter);
         } else{
+            std::cerr << "Error: the key does not contain an bool" << std::endl;
             return true;
+        }
+    }
+
+    const void set_key(const char *key, double v){
+        buff_double_[key] = v;
+    }
+
+    const void set_key(const char *key, std::vector<double> v){
+        buff_double_vector_[key] = v;
+    }
+
+    const void set_key(const char *key, int64_t v){
+        buff_int64_[key] = v;
+    }
+
+    const void set_key(const char *key, int v){
+        buff_int64_[key] = v;
+    }
+
+    const void set_key(const char *key, bool v){
+        bson_iter_t iter;
+        if (bson_iter_init_find(&iter, &document, key) &&
+            BSON_ITER_HOLDS_BOOL(&iter)) {
+            bson_iter_overwrite_bool(&iter, v);
         }
     }
 
@@ -292,6 +354,7 @@ public:
     virtual bool read_from_db();
 
     virtual bson_t get_bson();
+    virtual bson_t get_bson_excluding(...);
 
     std::string get_json();
 

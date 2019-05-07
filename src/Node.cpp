@@ -145,6 +145,15 @@ bson_t Node::get_bson(){
             NULL
     );
 
+    /*
+    // TODO: use get_bson_excluding and va list move BSON stuff to MongoObject
+    bson_t dst = get_bson_excluding("input_ports",
+                                    "output_ports",
+                                    "callback",
+                                    "callback_type",
+                                    NULL);
+    */
+
     create_oid_dict_in_doc(&dst, "input_ports", input_ports);
     create_oid_dict_in_doc(&dst, "output_ports", output_ports);
     append_string(&dst, "callback", callback);
