@@ -2,6 +2,7 @@ import utils
 import os
 import unittest
 import sys
+import json
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 utils.set_search_paths(TOPDIR)
@@ -86,10 +87,9 @@ class Tests(unittest.TestCase):
         )
         print(port.get_json())
 
-        port.write_to_db()
-        self.assertEqual(True, True)
+        self.assertEqual(port.write_to_db(), True)
 
-    def test_db_restore(self):
+    def test_port_db_restore(self):
         uri_string = "mongodb://localhost:27017"
         db_string = "chinet"
         app_string = "chisurf"
@@ -108,7 +108,7 @@ class Tests(unittest.TestCase):
             app_string=app_string,
             collection_string=collection_string
         )
-        self.assertEqual(port.write_to_db(), True)
+        port.write_to_db()
 
         port_reload = cn.Port()
         port_reload.connect_to_db(
@@ -119,11 +119,10 @@ class Tests(unittest.TestCase):
         )
         self.assertEqual(port_reload.read_from_db(port.get_oid_string()), True)
 
-        self.assertEqual(port, port_reload)
-        self.assertEqual(port.get_array(), port_reload.get_array())
-        self.assertEqual(port.get_value(), port_reload.get_value())
-        self.assertEqual(port.is_fixed(), port_reload.is_fixed())
-        self.assertEqual(port.get_oid_string(), port_reload.get_oid_string())
+        dict_port = json.loads(port.get_json())
+        dict_port_restore = json.loads(port.get_json())
+
+        self.assertEqual(dict_port, dict_port_restore)
 
 
 if __name__ == '__main__':

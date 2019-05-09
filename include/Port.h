@@ -103,7 +103,6 @@ public:
     // Methods
     //--------------------------------------------------------------------
 
-
     void link(std::shared_ptr<Port> v);
     void unlink();
 

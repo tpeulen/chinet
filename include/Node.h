@@ -27,7 +27,6 @@ private:
     // Methods
     //--------------------------------------------------------------------
 
-
 public:
 
     std::map<std::string, std::shared_ptr<Port>> input_ports;
@@ -51,6 +50,7 @@ public:
     bool read_from_db(const std::string &oid_string) final;
     void update();
     bool is_valid();
+    bool write_to_db() final;
 
     // Getter
     //--------------------------------------------------------------------

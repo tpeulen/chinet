@@ -42,6 +42,26 @@ bool Node::read_from_db(const std::string &oid_string){
     return return_value;
 }
 
+bool Node::write_to_db() {
+    bool re = MongoObject::write_to_db();
+
+    for(auto o : input_ports){
+        if(!o.second->is_connected_to_db()){
+            re &= connect_object_to_db(o.second);
+        }
+        o.second->write_to_db();
+    }
+
+    for(auto o : output_ports){
+        if(!o.second->is_connected_to_db()){
+            re &= connect_object_to_db(o.second);
+        }
+        o.second->write_to_db();
+    }
+
+    return re;
+}
+
 // Getter
 //--------------------------------------------------------------------
 

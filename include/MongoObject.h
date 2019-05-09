@@ -182,14 +182,15 @@ protected:
             while (bson_iter_next (&child)) {
                 if (BSON_ITER_HOLDS_OID(&child)){
                     // read oid
-                    bson_oid_t new_oid;
-                    bson_oid_copy(bson_iter_oid(&child), &new_oid);
+                    bson_oid_t oid;
+                    bson_oid_copy(bson_iter_oid(&child), &oid);
                     // create new obj
                     auto o = std::make_shared<T>();
                     // connect obj to db
                     return_value &= connect_object_to_db(o);
                     // read obj from db
-                    o->read_from_db(oid_to_string(new_oid));
+                    std::cout << oid_to_string(oid) << std::endl;
+                    o->read_from_db(oid_to_string(oid));
                     std::string key = bson_iter_key(&child);
                     // add obj to the target map
                     target_map->insert(std::pair<std::string, std::shared_ptr<T>>(key, o));
@@ -264,7 +265,7 @@ public:
      *
      * @return true in case of a successful write.
      */
-    bool write_to_db(const bson_t &doc, int write_option = 0);
+    virtual bool write_to_db(const bson_t &doc, int write_option = 0);
 
     virtual bool write_to_db();
 
