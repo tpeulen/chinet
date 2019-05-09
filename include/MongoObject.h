@@ -30,8 +30,6 @@ private:
     //std::map<std::string, int> buff_int_;
 
     //std::map<std::string, std::vector<bool>> buff_bool_vector_;
-    //std::map<std::string, std::vector<int>> buff_int_vector_;
-    std::map<std::string, std::vector<double>> buff_double_vector_;
 
 protected:
 
@@ -99,37 +97,40 @@ protected:
     template <typename T>
     std::vector<T> get_array(const char* key){
         bson_iter_t iter;
+        std::vector<T> v{};
 
         // double
         if(std::is_same<T, double>::value){
-            try {
-                return buff_double_vector_.at(key);
-            }
-            catch (std::out_of_range &o){
-                std::vector<double> v;
-                if (bson_iter_init_find(&iter, &document, key) &&
-                    (BSON_ITER_HOLDS_ARRAY(&iter))){
-                    bson_iter_t iter_array;
-                    bson_iter_recurse (&iter, &iter_array);
-                    while (bson_iter_next (&iter_array) &&
-                           BSON_ITER_HOLDS_DOUBLE(&iter_array)) {
-                        v.push_back(bson_iter_double(&iter_array));
-                    }
+            if (bson_iter_init_find(&iter, &document, key) &&
+                (BSON_ITER_HOLDS_ARRAY(&iter))){
+                bson_iter_t iter_array;
+                bson_iter_recurse (&iter, &iter_array);
+                while (bson_iter_next (&iter_array) &&
+                       BSON_ITER_HOLDS_DOUBLE(&iter_array)) {
+                    v.push_back(bson_iter_double(&iter_array));
                 }
-                buff_double_vector_[key] = v;
-                return v;
             }
+            return v;
         }
-        std::vector<T> v{};
+        // int
+        else if(std::is_same<T, int>::value){
+            if (bson_iter_init_find(&iter, &document, key) &&
+                (BSON_ITER_HOLDS_ARRAY(&iter))) {
+                bson_iter_t iter_array;
+                bson_iter_recurse(&iter, &iter_array);
+                while (bson_iter_next(&iter_array) &&
+                       BSON_ITER_HOLDS_INT64(&iter_array)) {
+                    v.push_back((int) bson_iter_int64(&iter_array));
+                }
+            }
+            return v;
+        }
         return v;
     }
 
     template <typename T>
     void set_array(const char* key, T &value){
-        T v{value};
-        if(std::is_same<T, std::vector<double>>::value) {
-            buff_double_vector_[key] = v;
-        }
+        // TODO
     }
 
     static bool string_to_oid(const std::string &oid_string, bson_oid_t *oid);

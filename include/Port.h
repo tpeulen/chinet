@@ -6,10 +6,12 @@
 
 #include <Node.h>
 
+
 class Port : public MongoObject{
 
 private:
     std::shared_ptr<Port> link_;
+    std::vector<double> buff_double_vector_;
 
 public:
 
@@ -31,19 +33,22 @@ public:
     }
 
     template <typename T>
-    std::vector<T> get_array(){
+    T get_array(){
         if(link_ == nullptr){
-            return MongoObject::get_array<T>("value");
+            if(buff_double_vector_.empty()){
+                buff_double_vector_ = MongoObject::get_array<double>("vector");
+            }
+            return buff_double_vector_;
         } else{
             return link_->get_array<T>();
         }
     }
 
     template <typename T>
-    void set_array(std::vector<T> v){
-        MongoObject::set_array("value", v);
+    void set_array(T value){
+        buff_double_vector_ = value;
         if(link_ != nullptr){
-            link_->set_array(v);
+            link_->set_array(value);
         }
     }
 
