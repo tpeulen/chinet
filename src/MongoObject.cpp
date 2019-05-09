@@ -254,25 +254,6 @@ bson_t MongoObject::get_bson(){
 
     bson_iter_t iter;
 
-    /*
-     * make sure that values int the document
-     * correspond to the attribute values
-     */
-
-    /*
-    for(auto &o : buff_int_vector_){
-        if (bson_iter_init_find(&iter, &document, o.first.c_str())) {
-            bson_iter_overwrite_int64(&iter, o.second[0]);
-        }
-    }
-
-    for(auto &o : buff_double_vector_){
-        if (bson_iter_init_find(&iter, &document, o.first.c_str())) {
-            bson_iter_overwrite_double(&iter, o.second[0]);
-        }
-    }
-     */
-
     // oid_document
     if (bson_iter_init(&iter, &document) &&
         bson_iter_find(&iter, "_id") &&
@@ -497,15 +478,6 @@ void MongoObject::create_oid_dict_in_doc(
 }
 */
 
-void MongoObject::append_double_array(bson_t *doc, std::string key, std::vector<double> &values){
-    bson_t child;
-
-    bson_append_array_begin(doc, key.c_str(), key.size(), &child);
-    for(auto &v : values){
-        bson_append_double(&child, "", 0, v);
-    }
-    bson_append_array_end(doc, &child);
-}
 
 template <typename T>
 void MongoObject::create_oid_array_in_doc(

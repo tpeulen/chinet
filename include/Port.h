@@ -11,14 +11,49 @@ class Port : public MongoObject{
 
 private:
     std::shared_ptr<Port> link_;
-    std::vector<double> buff_double_vector_;
+    std::vector<double> buff_double_vector_{1};
 
 public:
+
+
+    bool is_fixed();
+
+    bool is_linked();
+
+    // Constructor
+    //--------------------------------------------------------------------
+    Port() :
+    link_(nullptr)
+    {
+        append_string(&document, "type", "port");
+        bson_append_double(&document, "singleton", 9, 1.0);
+        bson_append_bool(&document, "fixed", 5, false);
+        bson_append_oid(&document, "link", 4, &oid_document);
+    };
+
+    Port(std::vector<double> v) :
+    Port()
+    {
+        set_array(v);
+    };
+
+    Port(double v) :
+    Port()
+    {
+        set_value(v);
+    };
+
+    // Destructor
+    //--------------------------------------------------------------------
+    ~Port() = default;
+
+    // Getter & Setter
+    //--------------------------------------------------------------------
 
     template <typename T>
     T get_value(){
         if(link_ == nullptr){
-            return MongoObject::get_value<T>("value");
+            return MongoObject::get_value<T>("singleton");
         } else{
             return link_->get_value<T>();
         }
@@ -26,7 +61,7 @@ public:
 
     template <typename T>
     void set_value(T v){
-        MongoObject::set_value("value", v);
+        MongoObject::set_value("singleton", v);
         if(link_ != nullptr){
             link_->set_value(v);
         }
@@ -52,57 +87,37 @@ public:
         }
     }
 
-    bool is_fixed();
+    void set_fixed(bool fixed);
 
-    bool is_linked();
+    bson_t get_bson(){
+        bson_t src = MongoObject::get_bson();
+        bson_t dst; bson_init (&dst);
+        bson_copy_to_excluding_noinit(&src, &dst,
+                                      "vector",
+                                      NULL
+        );
+        MongoObject::append_number_array(&dst, "vector", buff_double_vector_);
+        return dst;
+    }
+
+    // Methods
+    //--------------------------------------------------------------------
+
 
     void link(std::shared_ptr<Port> v);
     void unlink();
 
-    void set_fixed(bool fixed);
+    bool write_to_db() {
+        bson_t doc = get_bson();
+        return MongoObject::write_to_db(doc, 0);
+    }
 
-    // Constructor
-    //--------------------------------------------------------------------
-    Port() :
-    link_(nullptr)
-    {
-        append_string(&document, "type", "port");
-        bson_append_double(&document, "value", 5, 1.0);
-        bson_append_bool(&document, "fixed", 5, false);
-        bson_append_oid(&document, "link", 4, &oid_document);
+    bool read_from_db(const std::string &oid_string){
+        bool re = MongoObject::read_from_db(oid_string);
+        buff_double_vector_ = MongoObject::get_array<double>("vector");
+        return re;
     };
 
-    Port(std::vector<double> v) :
-    Port()
-    {
-        set_array(v);
-    };
-
-    Port(double v) :
-    Port()
-    {
-        set_value(v);
-    };
-
-    // Destructor
-    //--------------------------------------------------------------------
-    ~Port() = default;
-
-    // Getter
-    //--------------------------------------------------------------------
-    //std::string get_name();
-
-    // Setter
-    //--------------------------------------------------------------------
-
-    // Operator
-    //--------------------------------------------------------------------
-    //std::shared_ptr<Port> operator +(std::shared_ptr<Port> v);
-    // std::vector<double> operator [](std::string key);
-
-    // Methods
-    //--------------------------------------------------------------------
-    //virtual size_t size();
 
 };
 

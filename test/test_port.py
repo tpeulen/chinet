@@ -65,6 +65,66 @@ class Tests(unittest.TestCase):
         p1.set_fixed(False)
         self.assertEqual(p1.is_fixed(), False)
 
+    def test_db_write(self):
+        uri_string = "mongodb://localhost:27017"
+        db_string = "chinet"
+        app_string = "chisurf"
+        collection_string = "test_collection"
+
+        value_array = (1, 2, 3, 5, 8, 13)
+        value = 17
+
+        port = cn.Port(value)
+        port.set_array(value_array)
+        port.set_fixed(True)
+
+        port.connect_to_db(
+            uri_string=uri_string,
+            db_string=db_string,
+            app_string=app_string,
+            collection_string=collection_string
+        )
+        print(port.get_json())
+
+        port.write_to_db()
+        self.assertEqual(True, True)
+
+    def test_db_restore(self):
+        uri_string = "mongodb://localhost:27017"
+        db_string = "chinet"
+        app_string = "chisurf"
+        collection_string = "test_collection"
+
+        value_array = (1, 2, 3, 5, 8, 13)
+        value = 17
+
+        port = cn.Port()
+        port.set_value(value)
+        port.set_array(value_array)
+
+        port.connect_to_db(
+            uri_string=uri_string,
+            db_string=db_string,
+            app_string=app_string,
+            collection_string=collection_string
+        )
+        self.assertEqual(port.write_to_db(), True)
+
+        port_reload = cn.Port()
+        port_reload.connect_to_db(
+            uri_string=uri_string,
+            db_string=db_string,
+            app_string=app_string,
+            collection_string=collection_string
+        )
+        self.assertEqual(port_reload.read_from_db(port.get_oid_string()), True)
+
+        self.assertEqual(port, port_reload)
+        self.assertEqual(port.get_array(), port_reload.get_array())
+        self.assertEqual(port.get_value(), port_reload.get_value())
+        self.assertEqual(port.is_fixed(), port_reload.is_fixed())
+        self.assertEqual(port.get_oid_string(), port_reload.get_oid_string())
+
 
 if __name__ == '__main__':
     unittest.main()

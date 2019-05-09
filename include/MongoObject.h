@@ -24,12 +24,6 @@ private:
     bson_error_t error;
     mongoc_collection_t *collection;
 
-    // TODO: use buffers to minimize BSON access
-    //std::map<std::string, bool> buff_bool_;
-    //std::map<std::string, double> buff_double_;
-    //std::map<std::string, int> buff_int_;
-
-    //std::map<std::string, std::vector<bool>> buff_bool_vector_;
 
 protected:
 
@@ -130,7 +124,14 @@ protected:
 
     template <typename T>
     void set_array(const char* key, T &value){
-        // TODO
+        bson_t src = MongoObject::get_bson();
+        bson_t dst; bson_init (&dst);
+        bson_copy_to_excluding_noinit(&src, &dst,
+                                      key,
+                                      NULL
+        );
+        append_number_array(&dst, key, value);
+        bson_copy_to(&dst, &document);
     }
 
     static bool string_to_oid(const std::string &oid_string, bson_oid_t *oid);
@@ -150,7 +151,15 @@ protected:
         bson_append_document_end(doc, &child);
     }
 
-    void append_double_array(bson_t *doc, std::string key, std::vector<double> &values);
+    template <typename T>
+    void append_number_array(bson_t *doc, std::string key, T &values){
+        bson_t child;
+        bson_append_array_begin(doc, key.c_str(), key.size(), &child);
+        for(auto &v : values){
+            bson_append_double(&child, "", 0, (double) v);
+        }
+        bson_append_array_end(doc, &child);
+    }
 
     template <typename T>
     void create_oid_array_in_doc(
