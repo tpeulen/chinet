@@ -154,8 +154,9 @@ bson_t Node::get_bson(){
                                     NULL);
     */
 
-    create_oid_dict_in_doc(&dst, "input_ports", input_ports);
-    create_oid_dict_in_doc(&dst, "output_ports", output_ports);
+    create_oid_dict_in_doc<Port>(&dst, "input_ports", input_ports);
+    create_oid_dict_in_doc<Port>(&dst, "output_ports", output_ports);
+
     append_string(&dst, "callback", callback);
     append_string(&dst, "callback_type", callback_type);
 

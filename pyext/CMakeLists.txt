@@ -1,10 +1,6 @@
 cmake_policy(SET CMP0078 NEW)
 cmake_policy(SET CMP0086 NEW)
 
-FIND_PACKAGE(SWIG REQUIRED)
-INCLUDE(${SWIG_USE_FILE})
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-
 
 FIND_PACKAGE(Python COMPONENTS Interpreter Development)
 FIND_PACKAGE(PythonLibs)
@@ -42,13 +38,33 @@ INCLUDE_DIRECTORIES(${Python_NumPy_PATH})
 
 
 SET(MODULE_NAME chinet)
+
+FIND_PACKAGE(SWIG REQUIRED)
+INCLUDE(${SWIG_USE_FILE})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+
 SET(CMAKE_SWIG_FLAGS "")
 SET(SWIG_SRC chinet.i)
+
 # The output path is controlled by the setup.py
 #SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/pyext)
 
-SET_PROPERTY(SOURCE chinet.i PROPERTY CPLUSPLUS ON)
-file(GLOB SRC_files "../src/*.cpp")
+#FILE(GLOB SRC_files "../src/*.cpp")
+FILE(GLOB SRC_files
+        "../src/MongoObject.cpp"
+        "../src/Functions.cpp"
+        "../src/Port.cpp"
+        "../src/Node.cpp"
+        "../src/NodeCallback.cpp"
+        )
+
+SET_PROPERTY(
+        SOURCE
+        chinet.i
+        PROPERTY
+        CPLUSPLUS ON
+)
+
 SWIG_ADD_LIBRARY(
         ${MODULE_NAME}
         LANGUAGE python

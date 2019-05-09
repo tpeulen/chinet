@@ -6,14 +6,10 @@
 
 %{
 #include "../include/Node.h"
+#include "../include/MongoObject.h"
 %}
 
-%shared_ptr(Value)
 %shared_ptr(Link)
 %shared_ptr(Node)
 
 %include "../include/Node.h"
-
-namespace std{
-        %template(map_string_port) map<string, shared_ptr<Port>>;
-}

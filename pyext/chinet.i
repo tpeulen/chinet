@@ -1,13 +1,17 @@
-%module chinet
+%module(directors="1") chinet
+
 %include "documentation.i"
 
 %{
 #define SWIG_FILE_WITH_INIT
+    /*
 #include "../include/Curve.h"
 #include "../include/Functions.h"
 #include "../include/Decay.h"
 #include "../include/Node.h"
 #include "../include/Pda.h"
+#include "../include/MongoObject.h"
+     */
 %}
 
 %include <typemaps.i>
@@ -21,24 +25,25 @@
 
 %include "numpy.i"
 %init %{
-import_array();
+    import_array();
 %}
 
 namespace std{
-        %template(map_string_string) map<string, string>;
-        %template(vector_double) vector<double>;
-        %template(vector_string) vector<string>;
+    %template(map_string_string) map<string, string>;
+    %template(vector_double) vector<double>;
+    %template(vector_string) vector<string>;
 }
 
 %include "mongo.i"
-%include "curve.i"
-%include "decay.i"
 %include "port.i"
-%include "link.i"
 %include "node.i"
 %include "nodecallback.i"
+
+/*
+%include "curve.i"
+%include "decay.i"
 %include "session.i"
 %include "pda.i"
-
+*/
 
 

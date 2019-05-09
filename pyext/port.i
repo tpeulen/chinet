@@ -9,7 +9,8 @@
 %include "../include/Port.h"
 
 //%template(intPort) Port<int>;
-%template(set_value_vector) Port::set_value<std::vector<double>>;
-%template(set_value_double) Port::set_value<double>;
-%template(set_value_int) Port::set_value<int>;
+%template(get_value) Port::get_value<double>;
 %template(set_value) Port::set_value<double>;
+%template(get_array) Port::get_array<double>;
+%template(set_array) Port::set_array<double>;
+

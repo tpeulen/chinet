@@ -3,22 +3,17 @@
 //using namespace rttr;
 
 
-void NodeCallback::run(
-        std::map<std::string, std::shared_ptr<Port>> inputs,
-        std::map<std::string, std::shared_ptr<Port>> outputs){
-    std::cout << "This print from C++" << std::endl;
-}
-
-void node_callback_test(
+void multiply(
         std::map<std::string, std::shared_ptr<Port>> inputs,
         std::map<std::string, std::shared_ptr<Port>> outputs){
 
-    std::cout << "This is node_callback_test from C++:" << std::endl;
-
-    std::cout << "Inputs:\n";
+    double mul = 1.0;
     for(auto &o : inputs){
-        std::cout << o.first << ":" << o.second->get_double() << std::endl;
+        std::cout << o.first << ":" << o.second->get_value<double>() << std::endl;
+        mul *= o.second->get_value<double>();
     }
+
+    outputs["portC"]->set_value<double>(mul);
 }
 
 void convolve_sum_of_exponentials_periodic(
@@ -50,6 +45,6 @@ void convolve_sum_of_exponentials_periodic(
 RTTR_REGISTRATION {
     using namespace rttr;
     registration::class_<NodeCallback>("NodeCallback").constructor<>().method("run", &NodeCallback::run);
-    registration::method("NodeCallbackTest", &node_callback_test);
+    registration::method("multiply", &multiply);
     registration::method("convolve", &convolve_sum_of_exponentials_periodic);
 }

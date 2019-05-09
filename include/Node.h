@@ -5,7 +5,6 @@
 #include <vector>
 #include <memory>
 #include <map>
-#include "bson.h"
 #include <rttr/registration>
 
 #include "MongoObject.h"
@@ -13,13 +12,12 @@
 #include "NodeCallback.h"
 
 
-class Port;
-class NodeCallback;
-
 // Node
 //====================================================================
 
 
+class Port;
+class NodeCallback;
 class Node : public MongoObject{
 
 private:

@@ -5,44 +5,78 @@
 #include <memory>
 
 #include <Node.h>
-#include <Link.h>
-
-class Link;
-
 
 class Port : public MongoObject{
 
 private:
-    std::shared_ptr<Link> link;
+    std::shared_ptr<Port> link_;
 
 public:
 
-    double get_double();
-    int get_int();
-
-    bool is_fixed();
-    bool is_linked();
-
     template <typename T>
-    void set_value(T v){
-        MongoObject::set_key("value", v);
-
-        if(link != nullptr){
-            link->set_target_value(v);
+    T get_value(){
+        if(link_ == nullptr){
+            return MongoObject::get_value<T>("value");
+        } else{
+            return link_->get_value<T>();
         }
     }
 
-    void set_link(std::shared_ptr<Link> v);
+    template <typename T>
+    void set_value(T v){
+        MongoObject::set_value("value", v);
+        if(link_ != nullptr){
+            link_->set_value(v);
+        }
+    }
+
+    template <typename T>
+    std::vector<T> get_array(){
+        if(link_ == nullptr){
+            return MongoObject::get_array<T>("value");
+        } else{
+            return link_->get_array<T>();
+        }
+    }
+
+    template <typename T>
+    void set_array(std::vector<T> v){
+        MongoObject::set_array("value", v);
+        if(link_ != nullptr){
+            link_->set_array(v);
+        }
+    }
+
+    bool is_fixed();
+
+    bool is_linked();
+
+    void link(std::shared_ptr<Port> v);
+    void unlink();
+
     void set_fixed(bool fixed);
 
     // Constructor
     //--------------------------------------------------------------------
-    Port()
+    Port() :
+    link_(nullptr)
     {
-        bson_append_utf8(&document, "type", 4, "port", 4);
+        append_string(&document, "type", "port");
         bson_append_double(&document, "value", 5, 1.0);
         bson_append_bool(&document, "fixed", 5, false);
         bson_append_oid(&document, "link", 4, &oid_document);
+    };
+
+    Port(std::vector<double> v) :
+    Port()
+    {
+        set_array(v);
+    };
+
+    Port(double v) :
+    Port()
+    {
+        set_value(v);
     };
 
     // Destructor
@@ -51,31 +85,10 @@ public:
 
     // Getter
     //--------------------------------------------------------------------
-    //bson_t* get_value();
     //std::string get_name();
-    //std::shared_ptr<Port> get_input();
-    /*
-    /// returns the value of a slot for a given key (slot name)
-    std::vector<double> value(const std::string &slot_key);
-    /// returns the values of all the slots as an vector
-    std::map<std::string, std::vector<double>> values();
-    /// returns the keys of all the slots as an vector
-    std::vector<std::string> keys();
-     */
-    //std::shared_ptr<Port> shared_ptr();
-    //std::string get_oid();
 
     // Setter
     //--------------------------------------------------------------------
-    //void set_input(std::shared_ptr<Port> v);
-    //bool set_slot_value(std::string slot_key, std::vector<double> values);
-    //void set_oid(std::string v);
-    //void set_node(std::shared_ptr<Node> node);
-    /*
-    bool set_predecessor(bson_oid_t v);
-    bool set_death_time(uint64_t v);
-    bool set_birth_time(uint64_t v);
-     */
 
     // Operator
     //--------------------------------------------------------------------
@@ -84,28 +97,7 @@ public:
 
     // Methods
     //--------------------------------------------------------------------
-    //void from_json(const std::string &json_string);
-    //bool add_port_to_collection(mongoc_collection_t * port_collection);
-    //void new_oid();
     //virtual size_t size();
-    // bson_t *to_bson();
-
-    //std::shared_ptr<Node> node;
-
-    /*
-    T get_v(std::string key);
-
-    bool set_v(std::string key, T v, std::shared_ptr<Link> l);
-    */
-    //std::shared_ptr<Link> link(std::string key, Port *target_port, std::string target_key);
-
-    /*
-    Port(std::string json_string);
-    Port(bson_oid_t oid);
-    Port(const char *uri, bson_oid_t oid);
-     */
-    //Port(std::shared_ptr<Node> node);
-    //Port(std::string json_string, std::shared_ptr<Node> node);
 
 };
 

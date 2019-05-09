@@ -18,11 +18,13 @@ class Port;
 class NodeCallback{
 
 public:
-    std::string name;
     virtual void run(
             std::map<std::string, std::shared_ptr<Port>>,
             std::map<std::string, std::shared_ptr<Port>>
-            );
+            ){
+        std::cout << "This print by NodeCallback class from C++" << std::endl;
+    }
+
     NodeCallback() {};
     virtual ~NodeCallback() {};
 };

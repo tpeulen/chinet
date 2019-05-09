@@ -1,39 +1,68 @@
 #include "Port.h"
 
 
-double Port::get_double(){
+/*
+template <typename T>
+T Port::get_value(){
     if(link == nullptr){
-        return MongoObject::get_double("value");
+        return MongoObject::get_value<T>("value");
     } else{
-        return link->get_target_value_double();
+        return link->get_value<T>();
     }
 }
+ */
 
-int Port::get_int(){
+/*
+template <typename T>
+std::vector<T> Port::get_array(){
     if(link == nullptr){
-        return (int) MongoObject::get_int64("value");
+        return MongoObject::get_array<T>("value");
     } else{
-        return link->get_target_value_int();
+        return link->get_array<T>();
     }
 }
+ */
 
 bool Port::is_fixed(){
-    return MongoObject::get_bool("fixed");
+    return MongoObject::get_value<bool>("fixed");
+}
+
+bool Port::is_linked(){
+    return (link_ != nullptr);
+}
+
+/*
+template <typename T>
+void Port::set_value(T v){
+    MongoObject::set_value("value", v);
+    if(link != nullptr){
+        link->set_value(v);
+    }
+}
+*/
+
+/*
+template <typename T>
+void Port::set_array(T v){
+    MongoObject::set_array("value", v);
+    if(link != nullptr){
+        link->set_array(v);
+    }
+}
+ */
+
+void Port::link(std::shared_ptr<Port> v){
+    MongoObject::set_value("link", v->get_oid());
+    link_ = v;
+}
+
+void Port::unlink(){
+    MongoObject::set_value("link", get_oid());
+    link_ = nullptr;
 }
 
 void Port::set_fixed(bool fixed){
-    MongoObject::set_key("fixed", fixed);
-}
-
-
-bool Port::is_linked(){
-    return (link != nullptr);
-}
-
-
-void Port::set_link(std::shared_ptr<Link> v) {
-    overwrite_oid_in_field(v->get_oid(), "link");
-    link = v;
+    MongoObject::set_value("fixed", fixed);
 }
 
 
@@ -42,10 +71,7 @@ void Port::set_link(std::shared_ptr<Link> v) {
 
 // Destructor
 //--------------------------------------------------------------------
-//Port::~Port() {
-//    bson_destroy(document);
-//}
-//
+
 
 // Operator
 //--------------------------------------------------------------------
