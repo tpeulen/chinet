@@ -9,6 +9,12 @@ Node::Node(){
     append_string(&document, "type", "node");
 }
 
+Node::Node(std::string name) :
+MongoObject(name)
+{
+    append_string(&document, "type", "node");
+}
+
 Node::Node(std::map<std::string, std::shared_ptr<Port>> input_ports,
            std::map<std::string, std::shared_ptr<Port>> output_ports) :
            Node(){
@@ -83,6 +89,8 @@ bool Node::write_to_db() {
 
 std::string Node::get_name(){
     std::string r;
+    r.append(object_name);
+    r.append(", ");
     r.append(callback);
     r.append(": ");
     r.append("(");

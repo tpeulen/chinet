@@ -42,10 +42,13 @@ class Tests(unittest.TestCase):
         portOut1 = cn.Port()
         node.add_output_port("portC", portOut1)
 
-        self.assertEqual(node.get_name(), ": (portA,portB,)->(portC,)")
+        self.assertEqual(node.get_name(), ", : (portA,portB,)->(portC,)")
 
         node.set_callback("multiply", "C")
-        self.assertEqual(node.get_name(), "multiply: (portA,portB,)->(portC,)")
+        self.assertEqual(node.get_name(), ", multiply: (portA,portB,)->(portC,)")
+
+        node.set_name("NodeName")
+        self.assertEqual(node.get_name(), "NodeName, multiply: (portA,portB,)->(portC,)")
 
     def test_node_ports(self):
         node = cn.Node()

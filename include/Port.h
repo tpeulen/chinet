@@ -6,7 +6,6 @@
 
 #include <Node.h>
 
-
 class Port : public MongoObject{
 
 private:
@@ -15,12 +14,7 @@ private:
 
 public:
 
-
-    bool is_fixed();
-
-    bool is_linked();
-
-    // Constructor
+    // Constructor & Destructor
     //--------------------------------------------------------------------
     Port() :
     link_(nullptr)
@@ -73,8 +67,6 @@ public:
         link(linked_port);
     };
 
-    // Destructor
-    //--------------------------------------------------------------------
     ~Port() = default;
 
     // Getter & Setter
@@ -118,6 +110,8 @@ public:
     }
 
     void set_fixed(bool fixed);
+    bool is_fixed();
+    bool is_linked();
 
     bson_t get_bson(){
         bson_t src = MongoObject::get_bson();

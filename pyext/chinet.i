@@ -38,11 +38,11 @@ namespace std{
 %include "port.i"
 %include "node.i"
 %include "nodecallback.i"
+%include "session.i"
 
 /*
 %include "curve.i"
 %include "decay.i"
-%include "session.i"
 %include "pda.i"
 */
 

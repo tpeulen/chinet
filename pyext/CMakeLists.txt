@@ -56,6 +56,7 @@ FILE(GLOB SRC_files
         "../src/Port.cpp"
         "../src/Node.cpp"
         "../src/NodeCallback.cpp"
+        "../src/Session.cpp"
         )
 
 SET_PROPERTY(

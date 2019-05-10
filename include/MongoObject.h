@@ -2,8 +2,8 @@
 #define CHINET_MONGOOBJECT_H
 
 #include <iostream>
-#include <set>
 #include <map>
+#include <set>
 #include <vector>
 #include <memory>
 #include <cmath>
@@ -27,6 +27,8 @@ private:
 
 protected:
 
+    std::string object_name;
+
     bson_t document;
 
     std::string uri_string;
@@ -37,6 +39,17 @@ protected:
     bson_oid_t oid_document;
     bson_oid_t oid_precursor;
     uint64_t time_of_death;
+
+    // Getter & Setter
+    //--------------------------------------------------------------------
+
+    bson_oid_t get_bson_oid();
+
+
+    virtual bson_t get_bson();
+    virtual bson_t get_bson_excluding(...);
+    const bson_t* get_document();
+
 
     template<typename T>
     T get_value(const char* key){
@@ -134,6 +147,23 @@ protected:
         bson_copy_to(&dst, &document);
     }
 
+    // Methods
+    //--------------------------------------------------------------------
+
+
+    /// Writes a BSON document to the connected MongoDB
+    /*!
+     *
+     * @param doc a pointer to the BSON document that is written to the MongoDB
+     * @param write_option integer specifying the write mode - 1: replaces the document (no upsert), 2: insert
+     * the document das a new document, default: updates an existing document.
+     *
+     * @return true in case of a successful write.
+     */
+    virtual bool write_to_db(const bson_t &doc, int write_option = 0);
+
+    virtual bool read_from_db();
+
     static bool string_to_oid(const std::string &oid_string, bson_oid_t *oid);
 
     template <typename T>
@@ -165,7 +195,16 @@ protected:
     void create_oid_array_in_doc(
             bson_t *doc,
             std::string target_field_name,
-            const std::set<std::shared_ptr<T>> &mongo_obj_array);
+            const std::map<std::string, std::shared_ptr<T>> &mongo_obj_array){
+
+        bson_t child;
+        bson_append_array_begin(doc, target_field_name.c_str(), target_field_name.size(), &child);
+        for(auto &v : mongo_obj_array){
+            const bson_oid_t b = v.second->get_bson_oid();
+            bson_append_oid(&child, "", 0, &b);
+        }
+        bson_append_array_end(doc, &child);
+    }
 
     template <typename T>
     bool create_and_connect_objects_from_oid_doc(
@@ -207,17 +246,44 @@ protected:
     bool create_and_connect_objects_from_oid_array(
             const bson_t *doc,
             const char *array_name,
-            std::set<std::shared_ptr<T>> *target_set);
+            std::map<std::string, std::shared_ptr<T>> *target_map){
+        bool return_value = true;
 
-    static void append_string(bson_t *dst, std::string key, std::string content);
+        bson_iter_t iter;
+        bson_iter_t child;
+        if (bson_iter_init_find (&iter, doc, array_name) &&
+            BSON_ITER_HOLDS_ARRAY (&iter) &&
+            bson_iter_recurse (&iter, &child)) {
+            while (bson_iter_next (&child)) {
+                if (BSON_ITER_HOLDS_OID(&child)){
+                    // read oid
+                    bson_oid_t new_oid;
+                    bson_oid_copy(bson_iter_oid(&child), &new_oid);
+                    // create new obj
+                    std::shared_ptr<T> o = std::make_shared<T>();
+                    // connect obj to db
+                    return_value &= connect_object_to_db(o);
+                    // read obj from db
+                    o->read_from_db(oid_to_string(new_oid));
+                    // add obj to the target set
+                    target_map->insert(std::make_pair(o->get_oid(), o));
+                }
+            }
+        } else{
+            std::cerr << "Error: no nodes section in Session" << std::endl;
+            return_value &= false;
+        }
+        return return_value;
+    }
+
+    static void append_string(bson_t *dst, std::string key, std::string content, size_t size=0);
 
     static const std::string get_string_by_key(bson_t *doc, std::string key);
-
-    bson_oid_t get_bson_oid();
 
 public:
 
     MongoObject();
+    MongoObject(std::string name);
     ~MongoObject();
 
     /// Connects the instance of @class MongoObject to a database
@@ -258,33 +324,15 @@ public:
         return std::string(oid_str, 25);
     }
 
-    /// Writes a BSON document to the connected MongoDB
-    /*!
-     *
-     * @param doc a pointer to the BSON document that is written to the MongoDB
-     * @param write_option integer specifying the write mode - 1: replaces the document (no upsert), 2: insert
-     * the document das a new document, default: updates an existing document.
-     *
-     * @return true in case of a successful write.
-     */
-    virtual bool write_to_db(const bson_t &doc, int write_option = 0);
-
     virtual bool write_to_db();
 
     std::string create_copy();
 
     virtual bool read_from_db(const std::string &oid_string);
 
-    virtual bool read_from_db();
-
-    virtual bson_t get_bson();
-    virtual bson_t get_bson_excluding(...);
-
     std::string get_json();
 
     std::string get_oid();
-
-    const bson_t* get_document();
 
     bool operator==(MongoObject const& b){
         return (
@@ -292,6 +340,14 @@ public:
                 (uri_string == b.uri_string)
         );
     };
+
+    void set_name(std::string name){
+        object_name = name;
+    }
+
+    virtual std::string get_name(){
+        return object_name;
+    }
 
 };
 

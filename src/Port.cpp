@@ -1,27 +1,6 @@
 #include "Port.h"
 
 
-/*
-template <typename T>
-T Port::get_value(){
-    if(link == nullptr){
-        return MongoObject::get_value<T>("value");
-    } else{
-        return link->get_value<T>();
-    }
-}
- */
-
-/*
-template <typename T>
-std::vector<T> Port::get_array(){
-    if(link == nullptr){
-        return MongoObject::get_array<T>("value");
-    } else{
-        return link->get_array<T>();
-    }
-}
- */
 
 bool Port::is_fixed(){
     return MongoObject::get_value<bool>("fixed");
@@ -30,26 +9,6 @@ bool Port::is_fixed(){
 bool Port::is_linked(){
     return (link_ != nullptr);
 }
-
-/*
-template <typename T>
-void Port::set_value(T v){
-    MongoObject::set_value("value", v);
-    if(link != nullptr){
-        link->set_value(v);
-    }
-}
-*/
-
-/*
-template <typename T>
-void Port::set_array(T v){
-    MongoObject::set_array("value", v);
-    if(link != nullptr){
-        link->set_array(v);
-    }
-}
- */
 
 void Port::link(std::shared_ptr<Port> v){
     MongoObject::set_value("link", v->get_bson_oid());
@@ -102,39 +61,6 @@ std::vector<double> Port::operator[](std::string key){
 
 // Getter
 //--------------------------------------------------------------------
-
-/*
-std::vector<double> Port::value(const std::string &slot_key){
-    bson_iter_t iter;
-    bson_iter_t baz;
-    std::vector<double> v;
-
-    //std::string search_values = "slots." + slot_key + ".value";
-    std::string search_values = slot_key + ".value";
-    bson_t* doc = get_value();
-    if(doc != nullptr){
-        if (bson_iter_init (&iter, doc) && bson_iter_find_descendant (&iter, search_values.c_str(), &baz)) {
-            if(BSON_ITER_HOLDS_DOUBLE (&baz)){
-                v.push_back(bson_iter_double(&baz));
-            }
-            if(BSON_ITER_HOLDS_ARRAY(&baz)){
-                bson_iter_t iter_array;
-                bson_iter_recurse (&iter, &iter_array);
-                while (bson_iter_next (&iter_array)) {
-                    v.push_back(bson_iter_double(&iter_array));
-                }
-            }
-        }
-    } else{
-        std::cerr << "Port document not initialized.";
-        v.push_back(NAN);
-    }
-    return v;
-}
- */
-
-/*
- */
 
 /*
 std::vector<std::string> Port::keys(){

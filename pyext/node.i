@@ -13,9 +13,7 @@
 %shared_ptr(Node)
 %shared_ptr(Port)
 
-namespace std{
-    %template(map_string_port) map<string, shared_ptr<Port>>;
-    %template(map_string_double) map<string, double>;
-}
+%template(map_string_port) std::map<std::string, std::shared_ptr<Port>>;
+%template(map_string_double) std::map<std::string, double>;
 
 %include "../include/Node.h"

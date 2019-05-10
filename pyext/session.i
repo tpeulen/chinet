@@ -8,10 +8,7 @@
 
 %shared_ptr(Session)
 
+%template(map_string_node) std::map<std::string, std::shared_ptr<Node>>;
+
 %include "../include/Session.h"
 
-namespace std{
-        %template(set_node) std::set<std::shared_ptr<Node>>;
-        %template(set_link) std::set<std::shared_ptr<Link>>;
-        %template(set_port) std::set<std::shared_ptr<Port>>;
-}

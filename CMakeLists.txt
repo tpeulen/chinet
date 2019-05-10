@@ -3,10 +3,10 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.13)
 SET(PROJECT_NAME chinet)
 PROJECT(${PROJECT_NAME})
 
-# Set minimum C++ to 2011 standards
+# Set minimum C++ to 2014 standards
 ###############################
 ENABLE_LANGUAGE(CXX)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest")
@@ -25,17 +25,29 @@ IF(USE_OpenMP)
 ENDIF()
 
 
+# Cpp-taskflow
+###############################
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/cpp-taskflow/)
+
+
 # Boost
 ###############################
-FIND_PACKAGE(Boost 1.40 COMPONENTS system REQUIRED )
+FIND_PACKAGE(Boost 1.50 COMPONENTS system REQUIRED)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR} )
 LINK_LIBRARIES(${Boost_LIBRARIES})
+
+#[[
+# Boost histogram
+###############################
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/histogram/include/)
+]]#
 
 # RTTR
 ###############################
 find_package(RTTR CONFIG REQUIRED Core)
 link_libraries(RTTR::Core)
 message ("-- Found librttr version \"${PACKAGE_VERSION}\"")
+
 
 # libmongoc
 ###############################

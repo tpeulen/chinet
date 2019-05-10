@@ -41,6 +41,7 @@ public:
     // Constructor & Destructor
     //--------------------------------------------------------------------
     Node();
+    Node(std::string name);
 
     Node(std::map<std::string, std::shared_ptr<Port>> input_ports,
          std::map<std::string, std::shared_ptr<Port>> output_ports);

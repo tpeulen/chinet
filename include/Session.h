@@ -5,54 +5,49 @@
 #ifndef CHINET_SESSION_H
 #define CHINET_SESSION_H
 
-#include <set>
+#include <map>
 #include <memory>
 #include "bson.h"
 
 #include "MongoObject.h"
 #include "Node.h"
 #include "Port.h"
-#include "Link.h"
-
 
 class Session : public MongoObject{
 
 protected:
-
-    bool add_and_connect_object(std::shared_ptr<MongoObject> object){
-        registered_objects.push_back(object);
-        return connect_object_to_db(object);
-    }
+    bson_t get_bson() final;
 
 public:
-    std::vector<std::shared_ptr<MongoObject>> registered_objects;
 
-    std::set<std::shared_ptr<Node>> nodes;
-    std::set<std::shared_ptr<Port>> ports;
-    std::set<std::shared_ptr<Link>> links;
+    std::map<std::string, std::shared_ptr<Node>> nodes;
 
     Session(){
         bson_append_utf8(&document, "type", 4, "session", 7);
     };
 
-    void add_node(std::shared_ptr<Node> object){
-        nodes.insert(object);
-        add_and_connect_object(object);
+    Session(std::map<std::string, std::shared_ptr<Node>> nodes) :
+    Session()
+    {
+        for(auto &o : nodes){
+            add_node(o.first, o.second);
+        }
+    };
+
+    void add_node(std::string name, std::shared_ptr<Node> object){
+        nodes[name] = object;
+        object->set_name(name);
+        if(is_connected_to_db()){
+            connect_object_to_db(object);
+        }
     }
 
-    void add_port(std::shared_ptr<Port> object){
-        ports.insert(object);
-        add_and_connect_object(object);
-    }
-
-    void add_link(std::shared_ptr<Link> object){
-        links.insert(object);
-        add_and_connect_object(object);
+    std::map<std::string, std::shared_ptr<Node>> get_nodes(){
+        return nodes;
     }
 
     bool write_to_db() final;
     bool read_from_db(const std::string &oid_string) final;
-    bson_t get_bson() final;
 
 };
 

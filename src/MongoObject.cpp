@@ -7,6 +7,7 @@ db_string(""),
 app_string(""),
 collection_string(""),
 time_of_death(0),
+object_name(""),
 is_connected_to_db_(false)
 {
     bson_oid_init(&oid_document, nullptr);
@@ -24,6 +25,12 @@ is_connected_to_db_(false)
     bson_init(&document);
     bson_copy_to(doc, &document);
 
+}
+
+MongoObject::MongoObject(std::string name) :
+MongoObject()
+{
+    set_name(name);
 }
 
 MongoObject::~MongoObject() {
@@ -109,7 +116,7 @@ bool MongoObject::write_to_db(const bson_t &doc, int write_option) {
         switch (write_option){
 
             case 1:
-                // option 1 - write as an replacement
+                // option 1 - write as a replacement
                 if(!mongoc_collection_replace_one(collection, query, &doc, nullptr, &reply, &error))
                 {
                     std::cerr << error.message;
@@ -118,7 +125,7 @@ bool MongoObject::write_to_db(const bson_t &doc, int write_option) {
                 break;
 
             case 2:
-                // option 2 - insert as an new document
+                // option 2 - insert as a new document
                 if(!mongoc_collection_insert_one(collection, &doc, nullptr, &reply, &error))
                 {
                     std::cerr << error.message;
@@ -127,7 +134,7 @@ bool MongoObject::write_to_db(const bson_t &doc, int write_option) {
                 break;
 
             default:
-                // option 0 - write as an update
+                // option 0 - write as a update
                 update = BCON_NEW ("$set", BCON_DOCUMENT(&doc));
                 if(!mongoc_collection_find_and_modify(
                         collection,
@@ -253,35 +260,40 @@ std::string MongoObject::get_json() {
 bson_t MongoObject::get_bson(){
 
     bson_iter_t iter;
+    bson_t doc; bson_init(&doc);
+    bson_copy_to(&document, &doc);
 
     // oid_document
-    if (bson_iter_init(&iter, &document) &&
+    if (bson_iter_init(&iter, &doc) &&
         bson_iter_find(&iter, "_id") &&
         BSON_ITER_HOLDS_OID(&iter)) {
         bson_iter_overwrite_oid(&iter, &oid_document);
     } else{
-        bson_append_oid(&document, "_id", 3, &oid_document);
+        bson_append_oid(&doc, "_id", 3, &oid_document);
     }
 
     // oid_precursor
-    if (bson_iter_init(&iter, &document) &&
+    if (bson_iter_init(&iter, &doc) &&
         bson_iter_find(&iter, "precursor") &&
         BSON_ITER_HOLDS_OID(&iter)) {
         bson_iter_overwrite_oid(&iter, &oid_precursor);
     } else{
-        bson_append_oid(&document, "precursor", 9, &oid_precursor);
+        bson_append_oid(&doc, "precursor", 9, &oid_precursor);
     }
 
     // time of death
-    if (bson_iter_init(&iter, &document) &&
+    if (bson_iter_init(&iter, &doc) &&
         bson_iter_find(&iter, "death") &&
         BSON_ITER_HOLDS_INT64(&iter)) {
         bson_iter_overwrite_int64(&iter, time_of_death);
     } else{
-        bson_append_int64(&document, "death", 5, time_of_death);
+        bson_append_int64(&doc, "death", 5, time_of_death);
     }
 
-    return document;
+    // name
+    append_string(&doc, "name", object_name);
+
+    return doc;
 }
 
 bson_t MongoObject::get_bson_excluding(...){
@@ -347,58 +359,6 @@ bool MongoObject::is_connected_to_db() {
 }
 
 
-/*
-template<typename T>
-T MongoObject::get_value(const char* key) {
-    T v(0);
-    bson_iter_t iter;
-    if(std::is_same<T, int>::value) {
-        if (bson_iter_init_find(&iter, &document, key) &&
-            (BSON_ITER_HOLDS_INT64(&iter))) {
-            return (int) bson_iter_int64(&iter);
-        }
-    }
-    else if(std::is_same<T, double>::value) {
-        if (bson_iter_init_find(&iter, &document, key) &&
-            (BSON_ITER_HOLDS_DOUBLE(&iter))) {
-            return bson_iter_double(&iter);
-        }
-    }
-    else if(std::is_same<T, bool>::value) {
-        if (bson_iter_init_find(&iter, &document, key) &&
-            (BSON_ITER_HOLDS_BOOL(&iter))) {
-            return bson_iter_bool(&iter);
-        }
-    }
-    return v;
-}
- */
-
-/*
-template <typename T>
-void MongoObject::set_value(const char* key, T value){
-    bson_iter_t iter;
-    if(std::is_same<T, bool>::value) {
-        if (bson_iter_init_find(&iter, &document, key) &&
-            BSON_ITER_HOLDS_BOOL(&iter)) {
-            bson_iter_overwrite_bool(&iter, value);
-        }
-    }
-    else if(std::is_same<T, double>::value) {
-        if (bson_iter_init_find(&iter, &document, key) &&
-            BSON_ITER_HOLDS_DOUBLE(&iter)) {
-            bson_iter_overwrite_double(&iter, value);
-        }
-    }
-    else if(std::is_same<T, int>::value) {
-        if (bson_iter_init_find(&iter, &document, key) &&
-            BSON_ITER_HOLDS_INT64(&iter)) {
-            bson_iter_overwrite_int64(&iter, value);
-        }
-    }
-}
-*/
-
 void MongoObject::set_value(const char* key, bson_oid_t value){
     bson_iter_t iter;
     if (bson_iter_init_find(&iter, &document, key) &&
@@ -406,48 +366,6 @@ void MongoObject::set_value(const char* key, bson_oid_t value){
         bson_iter_overwrite_oid(&iter, &value);
     }
 }
-
-
-/*
-template <typename T>
-std::vector<T> MongoObject::get_array(const char* key){
-    bson_iter_t iter;
-
-    // double
-    if(std::is_same<T, std::vector<double>>::value){
-        try {
-            return buff_double_vector_.at(key);
-        }
-        catch (std::out_of_range &o){
-            std::vector<double> v;
-            if (bson_iter_init_find(&iter, &document, key) &&
-                (BSON_ITER_HOLDS_ARRAY(&iter))){
-                bson_iter_t iter_array;
-                bson_iter_recurse (&iter, &iter_array);
-                while (bson_iter_next (&iter_array) &&
-                       BSON_ITER_HOLDS_DOUBLE(&iter_array)) {
-                    v.push_back(bson_iter_double(&iter_array));
-                }
-            }
-            buff_double_vector_[key] = v;
-            return v;
-        }
-    }
-    std::vector<T> v{};
-    return v;
-}
- */
-
-/*
-template <typename T>
-void MongoObject::set_array(const char* key, T &value){
-    T v{value};
-    if(std::is_same<T, std::vector<double>>::value) {
-        buff_double_vector_[key] = v;
-    }
-}
- */
-
 
 bool MongoObject::string_to_oid(const std::string &oid_string, bson_oid_t *oid){
     if (bson_oid_is_valid(oid_string.c_str(), oid_string.size())) {
@@ -461,112 +379,12 @@ bool MongoObject::string_to_oid(const std::string &oid_string, bson_oid_t *oid){
     }
 }
 
-/*
-template <typename T>
-void MongoObject::create_oid_dict_in_doc(
-        bson_t *doc,
-        std::string key,
-        const std::map<std::string, std::shared_ptr<T>> &mongo_obj_array){
-
-    bson_t child;
-    bson_append_document_begin(doc, key.c_str(), key.size(), &child);
-    for(auto &v : mongo_obj_array){
-        const bson_oid_t b = v.second->get_oid();
-        bson_append_oid(&child, v.first.c_str(), v.first.size(), &b);
-    }
-    bson_append_document_end(doc, &child);
-}
-*/
-
-
-template <typename T>
-void MongoObject::create_oid_array_in_doc(
-        bson_t *doc,
-        std::string target_field_name,
-        const std::set<std::shared_ptr<T>> &mongo_obj_array){
-
-    bson_t child;
-    bson_append_array_begin(doc, target_field_name.c_str(), target_field_name.size(), &child);
-    for(auto &v : mongo_obj_array){
-        const bson_oid_t b = v->get_oid();
-        bson_append_oid(&child, "", 0, &b);
-    }
-    bson_append_array_end(doc, &child);
-}
-
-/*
-template <typename T>
-bool MongoObject::create_and_connect_objects_from_oid_doc(
-        const bson_t *doc,
-        const char *document_name,
-        std::map<std::string, std::shared_ptr<T>> *target_map){
-    bool return_value = true;
-
-    bson_iter_t iter;
-    bson_iter_t child;
-    if (bson_iter_init_find (&iter, doc, document_name) &&
-        BSON_ITER_HOLDS_DOCUMENT (&iter) &&
-        bson_iter_recurse (&iter, &child)) {
-        while (bson_iter_next (&child)) {
-            if (BSON_ITER_HOLDS_OID(&child)){
-                // read oid
-                bson_oid_t new_oid;
-                bson_oid_copy(bson_iter_oid(&child), &new_oid);
-                // create new obj
-                auto o = std::make_shared<T>();
-                // connect obj to db
-                return_value &= connect_object_to_db(o);
-                // read obj from db
-                o->read_from_db(oid_to_string(new_oid));
-                std::string key = bson_iter_key(&child);
-                // add obj to the target map
-                target_map->insert(std::pair<std::string, std::shared_ptr<T>>(key, o));
-            }
-        }
+void MongoObject::append_string(bson_t *dst, const std::string key, const std::string content, size_t size){
+    if (size!=0){
+        bson_append_utf8(dst, key.c_str(), key.size(), content.c_str(), size);
     } else{
-        std::cerr << "Error: no nodes section in Session" << std::endl;
-        return_value &= false;
+        bson_append_utf8(dst, key.c_str(), key.size(), content.c_str(), content.size());
     }
-    return return_value;
-}
-*/
-
-template <typename T>
-bool MongoObject::create_and_connect_objects_from_oid_array(
-        const bson_t *doc,
-        const char *array_name,
-        std::set<std::shared_ptr<T>> *target_set){
-    bool return_value = true;
-
-    bson_iter_t iter;
-    bson_iter_t child;
-    if (bson_iter_init_find (&iter, doc, array_name) &&
-        BSON_ITER_HOLDS_ARRAY (&iter) &&
-        bson_iter_recurse (&iter, &child)) {
-        while (bson_iter_next (&child)) {
-            if (BSON_ITER_HOLDS_OID(&child)){
-                // read oid
-                bson_oid_t new_oid;
-                bson_oid_copy(bson_iter_oid(&child), &new_oid);
-                // create new obj
-                std::shared_ptr<T> o = std::make_shared<T>();
-                // connect obj to db
-                return_value &= connect_object_to_db(o);
-                // read obj from db
-                o->read_from_db(oid_to_string(new_oid));
-                // add obj to the target set
-                target_set->insert(o);
-            }
-        }
-    } else{
-        std::cerr << "Error: no nodes section in Session" << std::endl;
-        return_value &= false;
-    }
-    return return_value;
-}
-
-void MongoObject::append_string(bson_t *dst, const std::string key, const std::string content){
-    bson_append_utf8(dst, key.c_str(), key.size(), content.c_str(), content.size());
 }
 
 const std::string MongoObject::get_string_by_key(bson_t *doc, const std::string key){

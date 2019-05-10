@@ -6,9 +6,13 @@
 
 %shared_ptr(MongoObject)
 
-%include "../include/MongoObject.h"
+%template(map_string_double_vector) std::map<std::string, std::vector<double>>;
 
-namespace std{
-    %template(map_string_double_vector) std::map<std::string, std::vector<double>>;
+%extend MongoObject {
+    std::string __repr__()
+    {
+        return $self->get_json();
+    }
 }
 
+%include "../include/MongoObject.h"
