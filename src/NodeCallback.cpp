@@ -13,7 +13,7 @@ void multiply(
         mul *= o.second->get_value<double>();
     }
 
-    outputs["portC"]->set_value<double>(mul);
+    outputs["outA"]->set_value<double>(mul);
 }
 
 void convolve_sum_of_exponentials_periodic(

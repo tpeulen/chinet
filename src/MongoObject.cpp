@@ -296,18 +296,12 @@ bson_t MongoObject::get_bson(){
     return doc;
 }
 
-bson_t MongoObject::get_bson_excluding(...){
+bson_t MongoObject::get_bson_excluding(const char *first, ...){
     bson_t src = MongoObject::get_bson();
     bson_t dst; bson_init (&dst);
     va_list va;
-
-
-     // this is new in libmongoc=1.14.0
-    bson_copy_to_excluding_noinit_va(
-            &src, &dst,
-            "",
-            va
-            );
+    va_start(va, first);
+    bson_copy_to_excluding_noinit_va(&src, &dst, "", va);
     return dst;
 }
 

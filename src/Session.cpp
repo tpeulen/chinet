@@ -26,17 +26,8 @@ bool Session::write_to_db(){
 }
 
 bson_t Session::get_bson(){
-    bson_t doc2 = MongoObject::get_bson();
-
-    bson_t doc; bson_init (&doc);
-    bson_copy_to_excluding_noinit(
-            &doc2, &doc,
-            "nodes",
-            NULL
-            );
-
+    bson_t doc = MongoObject::get_bson_excluding("nodes", NULL);
     create_oid_array_in_doc(&doc, "nodes", nodes);
-
     return doc;
 }
 

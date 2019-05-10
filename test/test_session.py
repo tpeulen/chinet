@@ -51,6 +51,10 @@ class Tests(unittest.TestCase):
         # the nodes are references
         self.assertEqual(na1.get_name(), na2.get_name())
 
+        na1 = s1.get_nodes()['nodeA']
+        na2 = s2.get_nodes()['nodeA']
+
+
 
 if __name__ == '__main__':
     unittest.main()

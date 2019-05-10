@@ -24,6 +24,12 @@ void Port::set_fixed(bool fixed){
     MongoObject::set_value("fixed", fixed);
 }
 
+bson_t Port::get_bson() {
+    bson_t dst = MongoObject::get_bson_excluding("vector", NULL);
+    MongoObject::append_number_array(&dst, "vector", buff_double_vector_);
+    return dst;
+}
+
 
 // Constructor
 //--------------------------------------------------------------------

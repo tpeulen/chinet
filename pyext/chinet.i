@@ -28,11 +28,9 @@
     import_array();
 %}
 
-namespace std{
-    %template(map_string_string) map<string, string>;
-    %template(vector_double) vector<double>;
-    %template(vector_string) vector<string>;
-}
+%template(map_string_string) std::map<std::string, std::string>;
+%template(vector_double) std::vector<double>;
+%template(vector_string) std::vector<std::string>;
 
 %include "mongo.i"
 %include "port.i"

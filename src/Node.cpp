@@ -187,15 +187,12 @@ void Node::add_output_port(std::string key, std::shared_ptr<Port> port) {
 }
 
 bson_t Node::get_bson(){
-
-    bson_t src = MongoObject::get_bson();
-    bson_t dst; bson_init (&dst);
-    bson_copy_to_excluding_noinit(&src, &dst,
+    bson_t dst = MongoObject::get_bson_excluding(
             "input_ports",
             "output_ports",
-            "callback",
-            "callback_type",
-            NULL
+             "callback",
+             "callback_type",
+             NULL
     );
 
     create_oid_dict_in_doc<Port>(&dst, "input_ports", input_ports);

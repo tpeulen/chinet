@@ -31,24 +31,24 @@ class Tests(unittest.TestCase):
     def test_node_name(self):
         node = cn.Node()
 
-        portA_name = "portA"
+        portA_name = "inA"
         portA = cn.Port(17)
         node.add_input_port(portA_name, portA)
 
-        portB_name = "portB"
+        portB_name = "inB"
         portB = cn.Port(23)
         node.add_input_port(portB_name, portB)
 
         portOut1 = cn.Port()
-        node.add_output_port("portC", portOut1)
+        node.add_output_port("outA", portOut1)
 
-        self.assertEqual(node.get_name(), ", : (portA,portB,)->(portC,)")
+        self.assertEqual(node.get_name(), ", : (inA,inB,)->(outA,)")
 
         node.set_callback("multiply", "C")
-        self.assertEqual(node.get_name(), ", multiply: (portA,portB,)->(portC,)")
+        self.assertEqual(node.get_name(), ", multiply: (inA,inB,)->(outA,)")
 
         node.set_name("NodeName")
-        self.assertEqual(node.get_name(), "NodeName, multiply: (portA,portB,)->(portC,)")
+        self.assertEqual(node.get_name(), "NodeName, multiply: (inA,inB,)->(outA,)")
 
     def test_node_ports(self):
         node = cn.Node()
@@ -69,13 +69,13 @@ class Tests(unittest.TestCase):
         node = cn.Node()
 
         portIn1 = cn.Port(55)
-        node.add_input_port("portA", portIn1)
+        node.add_input_port("inA", portIn1)
 
         portIn2 = cn.Port(2)
-        node.add_input_port("portB", portIn2)
+        node.add_input_port("inB", portIn2)
 
         portOut1 = cn.Port()
-        node.add_output_port("portC", portOut1)
+        node.add_output_port("outA", portOut1)
 
         node.set_callback("multiply", "C")
 

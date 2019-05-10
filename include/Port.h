@@ -113,16 +113,7 @@ public:
     bool is_fixed();
     bool is_linked();
 
-    bson_t get_bson(){
-        bson_t src = MongoObject::get_bson();
-        bson_t dst; bson_init (&dst);
-        bson_copy_to_excluding_noinit(&src, &dst,
-                                      "vector",
-                                      NULL
-        );
-        MongoObject::append_number_array(&dst, "vector", buff_double_vector_);
-        return dst;
-    }
+    bson_t get_bson() final;
 
     // Methods
     //--------------------------------------------------------------------

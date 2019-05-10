@@ -47,7 +47,7 @@ protected:
 
 
     virtual bson_t get_bson();
-    virtual bson_t get_bson_excluding(...);
+    virtual bson_t get_bson_excluding(const char* first, ...);
     const bson_t* get_document();
 
 
