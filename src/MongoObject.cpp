@@ -299,11 +299,11 @@ bson_t MongoObject::get_bson_excluding(...){
     return dst;
 }
 
-std::string MongoObject::get_oid_string(){
+std::string MongoObject::get_oid(){
     return oid_to_string(oid_document);
 }
 
-bson_oid_t MongoObject::get_oid() {
+bson_oid_t MongoObject::get_bson_oid() {
     return oid_document;
 }
 

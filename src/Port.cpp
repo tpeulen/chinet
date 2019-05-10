@@ -52,12 +52,12 @@ void Port::set_array(T v){
  */
 
 void Port::link(std::shared_ptr<Port> v){
-    MongoObject::set_value("link", v->get_oid());
+    MongoObject::set_value("link", v->get_bson_oid());
     link_ = v;
 }
 
 void Port::unlink(){
-    MongoObject::set_value("link", get_oid());
+    MongoObject::set_value("link", get_bson_oid());
     link_ = nullptr;
 }
 

@@ -37,10 +37,40 @@ public:
         set_array(v);
     };
 
+    Port(std::vector<double> v, bool fix) :
+            Port()
+    {
+        set_array(v);
+        set_fixed(fix);
+    };
+
+    Port(std::vector<double> v, bool fix, std::shared_ptr<Port> linked_port) :
+            Port()
+    {
+        set_array(v);
+        set_fixed(fix);
+        link(linked_port);
+    };
+
     Port(double v) :
     Port()
     {
         set_value(v);
+    };
+
+    Port(double v, bool fix) :
+            Port()
+    {
+        set_value(v);
+        set_fixed(fix);
+    };
+
+    Port(double v, bool fix, std::shared_ptr<Port> linked_port) :
+            Port()
+    {
+        set_value(v);
+        set_fixed(fix);
+        link(linked_port);
     };
 
     // Destructor

@@ -1,4 +1,4 @@
-%module(directors="1") chinet
+%module chinet
 
 %include "std_vector.i";
 %include "std_map.i";
@@ -7,9 +7,15 @@
 %{
 #include "../include/Node.h"
 #include "../include/MongoObject.h"
+#include "../include/Port.h"
 %}
 
-%shared_ptr(Link)
 %shared_ptr(Node)
+%shared_ptr(Port)
+
+namespace std{
+    %template(map_string_port) map<string, shared_ptr<Port>>;
+    %template(map_string_double) map<string, double>;
+}
 
 %include "../include/Node.h"

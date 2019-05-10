@@ -8,9 +8,6 @@
 #include "../include/NodeCallback.h"
 %}
 
-namespace std{
-        %template(map_string_port) map<string, shared_ptr<Port>>;
-}
 
 /* turn on director wrapping Callback */
 %feature("director") NodeCallback;

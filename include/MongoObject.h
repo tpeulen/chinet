@@ -145,7 +145,7 @@ protected:
         bson_t child;
         bson_append_document_begin(doc, key.c_str(), key.size(), &child);
         for(auto &v : mongo_obj_array){
-            const bson_oid_t b = v.second->get_oid();
+            const bson_oid_t b = v.second->get_bson_oid();
             bson_append_oid(&child, v.first.c_str(), v.first.size(), &b);
         }
         bson_append_document_end(doc, &child);
@@ -212,6 +212,8 @@ protected:
     static void append_string(bson_t *dst, std::string key, std::string content);
 
     static const std::string get_string_by_key(bson_t *doc, std::string key);
+
+    bson_oid_t get_bson_oid();
 
 public:
 
@@ -280,9 +282,7 @@ public:
 
     std::string get_json();
 
-    std::string get_oid_string();
-
-    bson_oid_t get_oid();
+    std::string get_oid();
 
     const bson_t* get_document();
 

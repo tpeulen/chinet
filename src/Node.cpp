@@ -9,6 +9,27 @@ Node::Node(){
     append_string(&document, "type", "node");
 }
 
+Node::Node(std::map<std::string, std::shared_ptr<Port>> input_ports,
+           std::map<std::string, std::shared_ptr<Port>> output_ports) :
+           Node(){
+    this->input_ports = input_ports;
+    this->output_ports = output_ports;
+}
+
+/*
+Node::Node(std::map<std::string, double> input_ports,
+           std::map<std::string, double> output_ports) :
+        Node(){
+    for(auto o : input_ports){
+        auto p = std::make_shared<Port>(o.second);
+        add_input_port(o.first, p);
+    }
+    for(auto o : output_ports){
+        auto p = std::make_shared<Port>(o.second);
+        add_output_port(o.first, p);
+    }
+}
+ */
 
 // Destructor
 //--------------------------------------------------------------------
@@ -18,11 +39,6 @@ Node::~Node() {
 
 // Methods
 //--------------------------------------------------------------------
-
-
-void Node::set_callback(std::shared_ptr<NodeCallback> cb){
-    callback_class = cb;
-}
 
 bool Node::read_from_db(const std::string &oid_string){
     bool return_value = true;
@@ -99,7 +115,7 @@ std::shared_ptr<Port> Node::get_output_port(const std::string &port_name){
 std::vector<std::string> Node::get_input_port_oids(){
     std::vector<std::string> re;
     for(auto const &v : input_ports){
-        re.emplace_back(v.second->get_oid_string());
+        re.emplace_back(v.second->get_oid());
     }
     return re;
 }
@@ -107,9 +123,17 @@ std::vector<std::string> Node::get_input_port_oids(){
 std::vector<std::string> Node::get_output_port_oids(){
     std::vector<std::string> re;
     for(auto const &v : output_ports){
-        re.emplace_back(v.second->get_oid_string());
+        re.emplace_back(v.second->get_oid());
     }
     return re;
+}
+
+std::map<std::string, std::shared_ptr<Port>> Node::get_input_ports(){
+    return input_ports;
+}
+
+std::map<std::string, std::shared_ptr<Port>> Node::get_output_ports(){
+    return output_ports;
 }
 
 std::vector<std::string> Node::get_port_oids(){
@@ -123,10 +147,8 @@ std::vector<std::string> Node::get_port_oids(){
     return re;
 }
 
-
 // Setter
 //--------------------------------------------------------------------
-
 void Node::set_callback(const std::string s_callback, const std::string s_callback_type){
     this->callback = s_callback;
     this->callback_type = s_callback_type;
@@ -139,12 +161,15 @@ void Node::set_callback(const std::string s_callback, const std::string s_callba
     }
 }
 
+void Node::set_callback(std::shared_ptr<NodeCallback> cb){
+    callback_class = cb;
+}
+
 // Private
 //--------------------------------------------------------------------
 
 // Methods
 //--------------------------------------------------------------------
-
 void Node::add_input_port(std::string key, std::shared_ptr<Port> port) {
     input_ports[key] = port;
 }
@@ -174,8 +199,7 @@ bson_t Node::get_bson(){
     return dst;
 }
 
-
-void Node::update(){
+void Node::evaluate(){
     if(input_ports.empty() || output_ports.empty()) {
         return;
     }
@@ -192,7 +216,6 @@ void Node::update(){
     }
 }
 
-
 bool Node::is_valid(){
     if(input_ports.empty()){
         return true;
@@ -200,109 +223,6 @@ bool Node::is_valid(){
         return node_valid_;
     }
 }
-
-
-/*
-void Node::from_bson(const bson_t *doc){
-    std::clog << "bson:" << std::endl;
-    document = bson_copy(doc);
-
-    bson_iter_t iter;
-    bson_oid_t port_oid;
-    char *oid_s = new char[25];
-
-    // set oid
-    if (bson_iter_init(&iter, document) &&
-        bson_iter_find(&iter, "_id") &&
-        BSON_ITER_HOLDS_OID(&iter)) {
-        oid = *bson_iter_oid(&iter);
-        bson_oid_to_string(&oid, oid_s);
-        std::clog << "    node_oid: " << oid_s << std::endl;
-    }
-
-    // set input
-    if (bson_iter_init(&iter, document) &&
-        bson_iter_find(&iter, "input_port_oid") &&
-        BSON_ITER_HOLDS_OID(&iter)) {
-        port_oid = *bson_iter_oid(&iter);
-        bson_oid_to_string(&port_oid, oid_s);
-        std::clog << "    input_port_oid: " << oid_s << std::endl;
-        input_port = get_port(&port_oid);
-    }
-
-    // set output
-    if (bson_iter_init(&iter, document) &&
-        bson_iter_find(&iter, "output_port_oid") &&
-        BSON_ITER_HOLDS_OID(&iter)) {
-        port_oid = *bson_iter_oid(&iter);
-        bson_oid_to_string(&port_oid, oid_s);
-        std::clog << "    output_port_oid: " << oid_s << std::endl;
-        output_port = get_port(&port_oid);
-    }
-
-    // set callback
-    std::string s_callback;
-    std::string s_callback_type;
-    if (bson_iter_init(&iter, document) &&
-        bson_iter_find(&iter, "callback") &&
-        BSON_ITER_HOLDS_UTF8(&iter)) {
-        uint32_t l;
-        const char *s = bson_iter_utf8(&iter, &l);
-        s_callback = std::string(s, l);
-        std::clog << "    callback: " << s_callback << std::endl;
-    }
-    if (bson_iter_init(&iter, document) &&
-        bson_iter_find(&iter, "callback_type") &&
-        BSON_ITER_HOLDS_UTF8(&iter)) {
-        uint32_t l;
-        const char *s = bson_iter_utf8(&iter, &l);
-        s_callback_type = std::string(s, l);
-        std::clog << "    callback_type: " << s_callback_type << std::endl;
-    }
-    set_callback(s_callback, s_callback_type);
-}
-
- */
-
-
-/*
-void Node::set_input_port(std::shared_ptr<Port> input) {
-    input_port = input;
-    input_port_oid = input->oid;
-
-    bson_iter_t iter;
-    if (bson_iter_init (&iter, document) &&
-        bson_iter_find (&iter, "input_port_oid") &&
-        BSON_ITER_HOLDS_OID (&iter)) {
-        bson_iter_overwrite_oid(&iter, &(input->oid));
-        std::clog << "new input_port_oid: " << input->get_oid() << std::endl;
-    }
-}
-
-void Node::set_input_port(Port* input) {
-    set_input_port(input->shared_ptr());
-}
-
-void Node::set_output_port(Port* output) {
-    set_output_port(output->shared_ptr());
-}
- */
-
-
-/*
-void Node::set_output_port(std::shared_ptr<Port> output){
-    output_port = output;
-    output_port_oid = output->oid;
-
-    bson_iter_t iter;
-    if (bson_iter_init (&iter, document) &&
-        bson_iter_find (&iter, "output_port_oid") &&
-        BSON_ITER_HOLDS_OID (&iter)) {
-        bson_iter_overwrite_oid(&iter, &(output->oid));
-        std::clog << "new output_port_oid: " << output->get_oid() << std::endl;
-    }
-}
- */
 
 /*
 std::shared_ptr<Port> Node::get_port(bson_oid_t *oid_port){
@@ -335,12 +255,6 @@ std::shared_ptr<Port> Node::get_port(bson_oid_t *oid_port){
     return p;
 }
 
-std::shared_ptr<Port> Node::get_port(const char* oid_string){
-    // convert the string to an bson_oid_t
-    bson_oid_t oid_port;
-    bson_oid_init_from_string(&oid_port, oid_string);
-    return get_port(&oid_port);
-}
 
  */
 
@@ -379,18 +293,3 @@ void Node::init_node(
 }
  */
 
-/*
-
-std::vector<bson_oid_t> Node::get_input_port_oids(){
-    bson_iter_t iter;
-    if (bson_iter_init (&iter, document) &&
-        bson_iter_find (&iter, "input_port_oids") &&
-        BSON_ITER_HOLDS_OID (&iter))
-    {
-        bson_iter_overwrite_oid(&iter, &(output->oid));
-        std::clog << "new output_port_oid: " << output->get_oid() << std::endl;
-    }
-
-}
-
-*/

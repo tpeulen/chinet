@@ -9,6 +9,6 @@
 %include "../include/MongoObject.h"
 
 namespace std{
-        %template(map_string_double) std::map<std::string, std::vector<double>>;
+    %template(map_string_double_vector) std::map<std::string, std::vector<double>>;
 }
 

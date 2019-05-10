@@ -12,13 +12,47 @@ import chinet as cn
 
 class Tests(unittest.TestCase):
 
-    def test_port_init_value(self):
+    def test_port_init_singelton(self):
         """Test chinet Port class set_value and get_value"""
-        value = 23.0
+        v1 = 23.0
+        v2 = 29.0
         p1 = cn.Port()
-        p1.set_value(value)
-        p2 = cn.Port(value)
+        p1.set_value(v1)
+
+        # check setting of value
+        p2 = cn.Port(v1)
         self.assertEqual(p1.get_value(), p2.get_value())
+
+        # check fixing
+        p3 = cn.Port(v1, True)
+        self.assertEqual(p3.is_fixed(), True)
+        p4 = cn.Port(v1, False)
+        self.assertEqual(p4.is_fixed(), False)
+
+        # check linking
+        p5 = cn.Port(v2, False, p4)
+        self.assertEqual(p5.get_value(), p4.get_value())
+
+    def test_port_init_vector(self):
+        """Test chinet Port class set_value and get_value"""
+        v1 = [1, 2, 3, 5, 8]
+        v2 = [1, 2, 4, 8, 16]
+        p1 = cn.Port()
+        p1.set_array(v1)
+
+        # check setting of value
+        p2 = cn.Port(v1)
+        self.assertEqual(p1.get_array(), p2.get_array())
+
+        # check fixing
+        p3 = cn.Port(v1, True)
+        self.assertEqual(p3.is_fixed(), True)
+        p4 = cn.Port(v1, False)
+        self.assertEqual(p4.is_fixed(), False)
+
+        # check linking
+        p5 = cn.Port(v2, False, p4)
+        self.assertEqual(p5.get_array(), p4.get_array())
 
     def test_port_init_array(self):
         """Test chinet Port class set_value and get_value"""
@@ -117,7 +151,7 @@ class Tests(unittest.TestCase):
             app_string=app_string,
             collection_string=collection_string
         )
-        self.assertEqual(port_reload.read_from_db(port.get_oid_string()), True)
+        self.assertEqual(port_reload.read_from_db(port.get_oid()), True)
 
         dict_port = json.loads(port.get_json())
         dict_port_restore = json.loads(port.get_json())
