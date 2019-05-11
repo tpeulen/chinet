@@ -3,7 +3,7 @@
 [![Anaconda-Server Badge](https://anaconda.org/tpeulen/chinet/badges/installer/conda.svg)](https://conda.anaconda.org/tpeulen)
 [![Anaconda-Server Version](https://anaconda.org/tpeulen/chinet/badges/version.svg)](https://anaconda.org/tpeulen/chinet)
 [![Anaconda-Server Badge](https://anaconda.org/tpeulen/chinet/badges/platforms.svg)](https://anaconda.org/tpeulen/chinet)
-[![Linux Build Status](https://travis-ci.org/Fluorescence-Tools/LabelLib.svg?branch=master)](https://travis-ci.org/Fluorescence-Tools/LabelLib)
+[![Linux Build Status](https://travis-ci.org/tpeulen/chinet.svg?branch=master)](https://travis-ci.org/tpeulen/chinet)
 
 ## General description
 
