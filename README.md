@@ -1,39 +1,30 @@
- # chinet
-[![Linux Build Status](https://travis-ci.org/Fluorescence-Tools/LabelLib.svg?branch=master)](https://travis-ci.org/Fluorescence-Tools/LabelLib)
+# chinet
+
+[![Anaconda-Server Badge](https://anaconda.org/tpeulen/chinet/badges/installer/conda.svg)](https://conda.anaconda.org/tpeulen)
 [![Anaconda-Server Version](https://anaconda.org/tpeulen/chinet/badges/version.svg)](https://anaconda.org/tpeulen/chinet)
-[![Anaconda-Server Downloads](https://anaconda.org/tpeulen/chinet/badges/downloads.svg)](https://anaconda.org/tpeulen/chinet)
+[![Anaconda-Server Badge](https://anaconda.org/tpeulen/chinet/badges/platforms.svg)](https://anaconda.org/tpeulen/chinet)
+[![Linux Build Status](https://travis-ci.org/Fluorescence-Tools/LabelLib.svg?branch=master)](https://travis-ci.org/Fluorescence-Tools/LabelLib)
 
 ## General description
 
-chinet is a file format agnostic low level, high performance API to read and process time-tagged-time resolved (TTTR) 
-data acquired by  PicoQuant (PQ) and Becker&Hickl measurement devices/cards or TTTR files in the open Photon-HDF format.
+chinet is a C++ library to create global fluorescence models. A global
+fluorescence model is a model jointly describing multiple data-sets.
+chinet can be used to model the 
 
-The library chinet facilitates the work with files containing time-tagged time resolved photon streams by providing 
-a vendor independent C++ application programming interface (API) for TTTR files that is wrapped by SWIG (Simplified 
-Wrapper and Interface Generator) for common scripting languages as Python as target languages and non-scripting 
-languages such as C# and Java including Octave, Scilab and R.
+graph
+parallel execution
 
+database backend 
 
-* Multi-dimensional histograms
-* Correlation analysis
-* Time-window analysis
-* Photon distribution anaylsis
-* FLIM image generation and analysis
-
-chinet is NOT intended as ready-to-use software for specific application purposes.
+MongoDB
 
 
-## Supported file formats
 
-### PicoQuant (PQ)
-* PicoHarp ptu, T2/T3
-* HydraHarp ptu, T2/T3
-* HydraHarp ht3, PTU
+reactive evaluation of computing nodes   
+dataflow
 
-
-### Becker & Hickl (BH)
-* spc132 
-* spc630 (256 & 4096 mode)
+chinet is NOT intended as ready-to-use software for specific application 
+purposes.
 
 
 ## Design goals
@@ -49,8 +40,8 @@ chinet is NOT intended as ready-to-use software for specific application purpose
 * Generation / analysis of fluorescence decays
 * Time window analysis
 * Correlation of time event traces
-* Filtering of time event traces to generate instrument response functions for fluorescence decays 
-analysis without the need of independent measurements.. 
+* Filtering of time event traces to generate instrument response 
+functions for fluorescence decays analysis without the need of independent measurements.. 
 * Fast photon distribution analysis
 * Fast selection of photons from a photon stream
 
@@ -79,11 +70,13 @@ sudo make install
 On Linux you can build and install a package instead (prefered):
 
 ## Python bindings
-The Python bindings can be either be installed by downloading and compiling the source code or by using a 
-precompiled distribution for Python anaconda environment.
+The Python bindings can be either be installed by downloading and 
+compiling the source code or by using a precompiled distribution for 
+Python anaconda environment.
 
 
-The following commands can be used to download and compile the source code:
+The following commands can be used to download and compile the source 
+code:
 
 ```console
 git clone --recursive https://github.com/tpeulen/chinet.git
@@ -91,13 +84,15 @@ cd chinet
 sudo python setup.py install
 ```
 
-In an [anaconda](https://www.anaconda.com/) environment the library can be installed by the following command: 
+In an [anaconda](https://www.anaconda.com/) environment the library can 
+be installed by the following command: 
 ```console
 conda install -c tpeulen chinet
 ```
 
-For most users the later approach is recommended. Currently, pre-compiled packages for the anaconda distribution
-system are available for:
+For most users the later approach is recommended. Currently, 
+pre-compiled packages for the anaconda distribution system are 
+available for:
 
 * Windows: Python 2.7, Python 3.7 (x64)
 * Linux: Python 2.7, Python 3.7 (x64)
@@ -112,8 +107,6 @@ Legacy 32-bit platforms are currently not supported.
 
 ```
   
-  
-
 
 # License
 
