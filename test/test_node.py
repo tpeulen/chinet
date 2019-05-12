@@ -115,36 +115,35 @@ class Tests(unittest.TestCase):
         self.assertEqual(portOut1.get_value(), portIn1.get_value() * portIn2.get_value())
 
     def test_node_write_to_db(self):
-        uri_string = "mongodb://localhost:27017"
-        db_string = "chinet"
-        app_string = "chisurf"
-        collection_string = "test_collection"
+        db_dict = {
+            'uri_string': "mongodb://localhost:27017",
+            'db_string': "chinet",
+            'app_string': "chisurf",
+            'collection_string': "test_collection"
+        }
 
-        node = cn.Node()
-        node.connect_to_db(
-            uri_string=uri_string,
-            db_string=db_string,
-            app_string=app_string,
-            collection_string=collection_string
+        node = cn.Node(
+            {
+                'portA': cn.Port(55),
+                'portB': cn.Port(2)
+            },
+            {
+                'portC': cn.Port()
+            }
         )
-
-        portIn1 = cn.Port(55)
-        node.add_input_port("portA", portIn1)
-
-        portIn2 = cn.Port(2)
-        node.add_input_port("portB", portIn2)
-
-        portOut1 = cn.Port()
-        node.add_output_port("portC", portOut1)
-
         node.set_callback("multiply", "C")
+
+        node.connect_to_db(**db_dict)
+
         self.assertEqual(node.write_to_db(), True)
 
     def test_node_restore_from_db(self):
-        uri_string = "mongodb://localhost:27017"
-        db_string = "chinet"
-        app_string = "chisurf"
-        collection_string = "test_collection"
+        db_dict = {
+            'uri_string': "mongodb://localhost:27017",
+            'db_string': "chinet",
+            'app_string': "chisurf",
+            'collection_string': "test_collection"
+        }
 
         node = cn.Node(
             {
@@ -155,23 +154,12 @@ class Tests(unittest.TestCase):
                 'portC': cn.Port(1.0)
             }
         )
-        node.connect_to_db(
-            uri_string=uri_string,
-            db_string=db_string,
-            app_string=app_string,
-            collection_string=collection_string
-        )
-
         node.set_callback("multiply", "C")
+        node.connect_to_db(**db_dict)
         node.write_to_db()
 
         node_restore = cn.Node()
-        node_restore.connect_to_db(
-            uri_string=uri_string,
-            db_string=db_string,
-            app_string=app_string,
-            collection_string=collection_string
-        )
+        node_restore.connect_to_db(**db_dict)
         node_restore.read_from_db(node.get_oid())
 
         dict_restore = json.loads(node_restore.get_json())

@@ -6,6 +6,7 @@
 
 %shared_ptr(MongoObject)
 
+
 %template(map_string_double_vector) std::map<std::string, std::vector<double>>;
 
 %extend MongoObject {

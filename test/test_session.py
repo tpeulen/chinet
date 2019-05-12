@@ -55,6 +55,5 @@ class Tests(unittest.TestCase):
         na2 = s2.get_nodes()['nodeA']
 
 
-
 if __name__ == '__main__':
     unittest.main()

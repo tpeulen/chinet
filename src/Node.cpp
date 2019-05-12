@@ -19,7 +19,14 @@ Node::Node(std::map<std::string, std::shared_ptr<Port>> input_ports,
            std::map<std::string, std::shared_ptr<Port>> output_ports) :
            Node(){
     this->input_ports = input_ports;
+    for(auto &o: input_ports){
+        o.second->set_name(o.first);
+    }
+
     this->output_ports = output_ports;
+    for(auto &o: output_ports){
+        o.second->set_name(o.first);
+    }
 }
 
 /*

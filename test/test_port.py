@@ -101,10 +101,12 @@ class Tests(unittest.TestCase):
         self.assertEqual(p1.is_fixed(), False)
 
     def test_db_write(self):
-        uri_string = "mongodb://localhost:27017"
-        db_string = "chinet"
-        app_string = "chisurf"
-        collection_string = "test_collection"
+        db_dict = {
+            'uri_string': "mongodb://localhost:27017",
+            'db_string': "chinet",
+            'app_string': "chisurf",
+            'collection_string': "test_collection"
+        }
 
         value_array = (1, 2, 3, 5, 8, 13)
         value = 17
@@ -113,21 +115,18 @@ class Tests(unittest.TestCase):
         port.set_array(value_array)
         port.set_fixed(True)
 
-        port.connect_to_db(
-            uri_string=uri_string,
-            db_string=db_string,
-            app_string=app_string,
-            collection_string=collection_string
-        )
+        port.connect_to_db(**db_dict)
         print(port.get_json())
 
         self.assertEqual(port.write_to_db(), True)
 
     def test_port_db_restore(self):
-        uri_string = "mongodb://localhost:27017"
-        db_string = "chinet"
-        app_string = "chisurf"
-        collection_string = "test_collection"
+        db_dict = {
+            'uri_string': "mongodb://localhost:27017",
+            'db_string': "chinet",
+            'app_string': "chisurf",
+            'collection_string': "test_collection"
+        }
 
         value_array = (1, 2, 3, 5, 8, 13)
         value = 17
@@ -136,21 +135,11 @@ class Tests(unittest.TestCase):
         port.set_value(value)
         port.set_array(value_array)
 
-        port.connect_to_db(
-            uri_string=uri_string,
-            db_string=db_string,
-            app_string=app_string,
-            collection_string=collection_string
-        )
+        port.connect_to_db(**db_dict)
         port.write_to_db()
 
         port_reload = cn.Port()
-        port_reload.connect_to_db(
-            uri_string=uri_string,
-            db_string=db_string,
-            app_string=app_string,
-            collection_string=collection_string
-        )
+        port_reload.connect_to_db(**db_dict)
         self.assertEqual(port_reload.read_from_db(port.get_oid()), True)
 
         dict_port = json.loads(port.get_json())

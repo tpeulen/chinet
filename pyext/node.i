@@ -16,7 +16,6 @@
 %template(map_string_port) std::map<std::string, std::shared_ptr<Port>>;
 %template(map_string_double) std::map<std::string, double>;
 
-
 %include "../include/Node.h"
 
 %extend Node{

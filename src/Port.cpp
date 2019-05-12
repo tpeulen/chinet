@@ -11,8 +11,10 @@ bool Port::is_linked(){
 }
 
 void Port::link(std::shared_ptr<Port> v){
-    MongoObject::set_value("link", v->get_bson_oid());
-    link_ = v;
+    if(v != nullptr){
+        MongoObject::set_value("link", v->get_bson_oid());
+        link_ = v;
+    }
 }
 
 void Port::unlink(){

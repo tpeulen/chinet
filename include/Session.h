@@ -16,6 +16,7 @@
 class Session : public MongoObject{
 
 protected:
+
     bson_t get_bson() final;
 
 public:
