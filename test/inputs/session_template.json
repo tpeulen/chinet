@@ -1,0 +1,49 @@
+{
+  "nodes": {
+    "nodeA": {
+      "ports": {
+        "portA": {
+          "singleton": 3.0,
+          "vector": [1,2,3,4],
+          "fixed": true
+        },
+        "portB": {
+          "singleton": 2.0,
+          "fixed": true
+        },
+        "portC": {
+          "singleton": 2.0,
+          "fixed": true
+        }
+      },
+      "callback": "multiply",
+      "callback_type": "C"
+    },
+    "nodeB": {
+      "ports": {
+        "portA": {
+          "singleton": 1.0,
+          "fixed": true
+        },
+        "portB": {
+          "singleton": 2.0,
+          "fixed": true
+        },
+        "portC": {
+          "singleton": 1.0,
+          "fixed": true
+        }
+      },
+      "callback": "multiply",
+      "callback_type": "C"
+    }
+  },
+  "links": [
+    {
+      "node": "nodeA",
+      "port": "portA",
+      "target_node": "nodeB",
+      "target_port": "portB"
+    }
+  ]
+}

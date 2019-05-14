@@ -17,20 +17,16 @@ class Tests(unittest.TestCase):
         n1 = cn.Node(
             {
                 'portA': cn.Port(1),
-                'portB': cn.Port(2)
-            },
-            {
+                'portB': cn.Port(2),
                 'portC': cn.Port(3)
-            }
+            },
         )
         n2 = cn.Node(
             {
                 'inA': cn.Port(5),
-                'inB': cn.Port(7)
-            },
-            {
-                'outA': cn.Port(11),
-                'outB': cn.Port(13)
+                'inB': cn.Port(7),
+                'outA': cn.Port(11, False, True),
+                'outB': cn.Port(13, False, True)
             }
         )
 
@@ -48,11 +44,33 @@ class Tests(unittest.TestCase):
         na1 = s1.get_nodes()['nodeA']
         na2 = s2.get_nodes()['nodeA']
         na1.set_name("new name")
+
         # the nodes are references
         self.assertEqual(na1.get_name(), na2.get_name())
 
-        na1 = s1.get_nodes()['nodeA']
-        na2 = s2.get_nodes()['nodeA']
+    def test_read_template(self):
+        import chinet as cn
+
+        template_file = "./test/inputs/session_template.json"
+
+        json_string = ""
+        with open(template_file, 'r') as fp:
+            json_string = fp.read()
+
+        s = cn.Session()
+        s.read_session_template(json_string)
+        print(s.get_nodes().keys())
+
+        print(
+            s.get_nodes()[s.get_nodes().keys()[0]].get_input_ports().keys()
+        )
+        print(
+            [d.get_value() for d in s.get_nodes()[s.get_nodes().keys()[0]].get_input_ports().values()]
+        )
+        print(
+            [d.get_array() for d in s.get_nodes()[s.get_nodes().keys()[0]].get_input_ports().values()]
+        )
+
 
 
 if __name__ == '__main__':

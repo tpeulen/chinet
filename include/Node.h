@@ -23,8 +23,7 @@ class Node : public MongoObject{
 private:
 
     bool node_valid_ = true;
-    std::map<std::string, std::shared_ptr<Port>> input_ports;
-    std::map<std::string, std::shared_ptr<Port>> output_ports;
+    std::map<std::string, std::shared_ptr<Port>> ports;
 
     // Methods
     //--------------------------------------------------------------------
@@ -43,12 +42,7 @@ public:
     Node();
     Node(std::string name);
 
-    Node(std::map<std::string, std::shared_ptr<Port>> input_ports,
-         std::map<std::string, std::shared_ptr<Port>> output_ports);
-    /*
-    Node(std::map<std::string, double> input_ports,
-         std::map<std::string, double> output_ports);
-    */
+    Node(std::map<std::string, std::shared_ptr<Port>> ports);
     ~Node();
 
     // Methods
@@ -62,19 +56,18 @@ public:
     //--------------------------------------------------------------------
     bson_t get_bson();
     std::string get_name();
-    std::vector<std::string> get_port_oids();
-
-    std::vector<std::string> get_input_port_oids();
-    std::vector<std::string> get_output_port_oids();
 
     std::map<std::string, std::shared_ptr<Port>> get_input_ports();
     std::map<std::string, std::shared_ptr<Port>> get_output_ports();
 
-    std::shared_ptr<Port> get_input_port(const std::string &port_name);
-    std::shared_ptr<Port> get_output_port(const std::string &port_name);
-
+    std::map<std::string, std::shared_ptr<Port>> get_ports();
+    std::shared_ptr<Port> get_port(const std::string &port_name);
+    void add_port(std::string key, std::shared_ptr<Port>, bool is_source);
     void add_input_port(std::string key, std::shared_ptr<Port>);
     void add_output_port(std::string key, std::shared_ptr<Port>);
+
+    std::shared_ptr<Port> get_input_port(const std::string &port_name);
+    std::shared_ptr<Port> get_output_port(const std::string &port_name);
 
     // Setter
     //--------------------------------------------------------------------
@@ -85,15 +78,10 @@ public:
     //--------------------------------------------------------------------
     std::shared_ptr<Port> operator[](std::string key){
         try {
-            return input_ports.at(key);
+            return ports.at(key);
         }
         catch (std::out_of_range e){
-            try {
-                return output_ports.at(key);
-            }
-            catch (std::out_of_range e){
-                return nullptr;
-            }
+            return nullptr;
         }
     };
 

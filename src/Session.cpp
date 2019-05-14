@@ -31,5 +31,47 @@ bson_t Session::get_bson(){
     return doc;
 }
 
+std::shared_ptr<Port> Session::read_port_template(json j, std::string &node_key, std::string &port_key) {
+    auto port = std::make_shared<Port>();
+
+    auto port_ = j["nodes"][node_key]["inputs"][port_key];
+    for (json::iterator it_val = port_.begin(); it_val != port_.end(); ++it_val) {
+        if (it_val.key() == "singleton") {
+            port->set_value(j["nodes"][node_key]["inputs"][port_key]["singleton"].get<double>());
+        } else if (it_val.key() == "fixed") {
+            auto b = j["nodes"][node_key]["inputs"][port_key]["fixed"].get<bool>();
+            port->set_fixed(b);
+        } else if (it_val.key() == "vector") {
+            auto b = j["nodes"][node_key]["inputs"][port_key]["vector"].get<std::vector<double>>();
+            port->set_array(b);
+        }
+    }
+    port->set_name(port_key);
+    return port;
+}
+
+std::shared_ptr<Node> Session::read_node_template(json j, std::string &node_key){
+    auto node = std::make_shared<Node>(node_key);
+
+    auto inputs_ = j["nodes"][node_key]["ports"];
+    for (json::iterator it = inputs_.begin(); it != inputs_.end(); ++it) {
+        std::string port_key = it.key();
+        auto port = read_port_template(j, node_key, port_key);
+        node->add_port(port_key, port, port->is_output());
+    }
+
+    return node;
+}
 
 
+bool Session::read_session_template(const std::string &json_string){
+    json j = json::parse(json_string);
+
+    // read nodes
+    auto n = j["nodes"];
+    for (json::iterator it = n.begin(); it != n.end(); ++it) {
+        std::string node_key = it.key();
+        add_node(node_key, read_node_template(j, node_key));
+    }
+    return true;
+}

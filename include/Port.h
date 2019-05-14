@@ -6,36 +6,48 @@
 
 #include <Node.h>
 
+
 class Port : public MongoObject {
 
 private:
     std::shared_ptr<Port> link_;
-    std::vector<double> buff_double_vector_{1};
+    std::vector<double> buff_double_vector_{};
 
 public:
 
     // Constructor & Destructor
     //--------------------------------------------------------------------
-    Port() :
-            link_(nullptr) {
+
+    Port(){
         append_string(&document, "type", "port");
         bson_append_double(&document, "singleton", 9, 1.0);
+        bson_append_bool(&document, "is_output", 9, false);
         bson_append_bool(&document, "fixed", 5, false);
         bson_append_oid(&document, "link", 4, &oid_document);
-    };
+    }
 
-    Port(std::vector<double> array, bool fix = false, std::shared_ptr<Port> linked_port = nullptr) :
-            Port() {
-        set_array(array);
-        set_fixed(fix);
-        link(linked_port);
-    };
+    Port(double value,
+         bool fixed = false,
+         bool is_output = true
+    ) :
+    Port()
+    {
 
-    Port(double value, bool fix = false, std::shared_ptr<Port> linked_port = nullptr) :
-            Port() {
         set_value(value);
-        set_fixed(fix);
-        link(linked_port);
+        set_fixed(fixed);
+        set_port_type(is_output);
+
+    };
+
+    Port(std::vector<double> array,
+         bool fixed = false,
+         bool is_output = true
+    ) :
+    Port(){
+
+        set_fixed(fixed);
+        set_port_type(is_output);
+        set_array(array);
     };
 
     ~Port() = default;
@@ -58,6 +70,14 @@ public:
         if (link_ != nullptr) {
             link_->set_value(v);
         }
+    }
+
+    void set_port_type(bool is_output){
+        MongoObject::set_value("is_output", is_output);
+    }
+
+    bool is_output(){
+        return MongoObject::get_value<bool>("is_output");
     }
 
     template<typename T>
@@ -91,7 +111,7 @@ public:
     // Methods
     //--------------------------------------------------------------------
 
-    void link(std::shared_ptr<Port> v);
+    void link(std::shared_ptr<Port> &v);
 
     void unlink();
 
@@ -105,7 +125,6 @@ public:
         buff_double_vector_ = MongoObject::get_array<double>("vector");
         return re;
     };
-
 
 };
 

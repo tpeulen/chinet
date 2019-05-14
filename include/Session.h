@@ -8,10 +8,13 @@
 #include <map>
 #include <memory>
 #include "bson.h"
+#include <nlohmann/json.hpp>
 
 #include "MongoObject.h"
 #include "Node.h"
 #include "Port.h"
+
+using nlohmann::json;
 
 class Session : public MongoObject{
 
@@ -27,7 +30,7 @@ public:
         bson_append_utf8(&document, "type", 4, "session", 7);
     };
 
-    Session(std::map<std::string, std::shared_ptr<Node>> nodes) :
+    Session(std::map<std::string, std::shared_ptr<Node>> &nodes) :
     Session()
     {
         for(auto &o : nodes){
@@ -49,6 +52,10 @@ public:
 
     bool write_to_db() final;
     bool read_from_db(const std::string &oid_string) final;
+
+    std::shared_ptr<Port> read_port_template(json j, std::string &node_key, std::string &port_key);
+    std::shared_ptr<Node> read_node_template(json j, std::string &node_key);
+    bool read_session_template(const std::string &json_string);
 
 };
 

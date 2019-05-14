@@ -3,6 +3,7 @@ import os
 import unittest
 import sys
 import json
+import numpy as np
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 utils.set_search_paths(TOPDIR)
@@ -30,7 +31,8 @@ class Tests(unittest.TestCase):
         self.assertEqual(p4.is_fixed(), False)
 
         # check linking
-        p5 = cn.Port(v2, False, p4)
+        p5 = cn.Port(v2)
+        p5.link(p4)
         self.assertEqual(p5.get_value(), p4.get_value())
 
     def test_port_init_vector(self):
@@ -51,15 +53,18 @@ class Tests(unittest.TestCase):
         self.assertEqual(p4.is_fixed(), False)
 
         # check linking
-        p5 = cn.Port(v2, False, p4)
+        p5 = cn.Port(v2, False)
+        p5.link(p4)
         self.assertEqual(p5.get_array(), p4.get_array())
 
     def test_port_init_array(self):
         """Test chinet Port class set_value and get_value"""
-        value = (1, 2, 3, 5, 8, 13)
+        import numpy as np
+        array = np.array([1, 2, 3, 5, 8, 13], dtype=np.double)
         p1 = cn.Port()
-        p1.set_array(value)
-        p2 = cn.Port(value)
+        p1.set_array(array)
+        # there is still a problem with the SWIG wrapper
+        p2 = cn.Port(array)
         self.assertEqual(p1.get_array(), p2.get_array())
 
     def test_set_get_value(self):
@@ -93,7 +98,6 @@ class Tests(unittest.TestCase):
 
     def test_port_fixed(self):
         p1 = cn.Port(12)
-
         p1.set_fixed(True)
         self.assertEqual(p1.is_fixed(), True)
 

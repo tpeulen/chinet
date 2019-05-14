@@ -13,20 +13,17 @@ import chinet as cn
 class Tests(unittest.TestCase):
 
     def test_node_init(self):
-        node_simple = cn.Node()
-
-        inputs = {
-            'portA': cn.Port(7.0),
-            'portB': cn.Port(13.0)
+        ports = {
+            'inA': cn.Port(7.0),
+            'inB': cn.Port(13.0),
+            'outC': cn.Port(0.0, False, True)
         }
-        outputs = {
-            'portC': cn.Port(),
-        }
-        node_with_ports = cn.Node(inputs, outputs)
-        self.assertEqual(node_with_ports.get_input_ports().keys(), ['portA', 'portB'])
+        node_with_ports = cn.Node(ports)
 
-        values = [v.get_value() for v in node_with_ports.get_input_ports().values()]
-        self.assertEqual(values, [7.0, 13.0])
+        self.assertEqual(node_with_ports.get_input_ports().keys(), ['inA', 'inB'])
+
+        values = [v.get_value() for v in node_with_ports.get_ports().values()]
+        self.assertEqual(values, [7.0, 13.0, 0.0])
 
     def test_node_name(self):
         node = cn.Node()
@@ -83,6 +80,23 @@ class Tests(unittest.TestCase):
 
         self.assertEqual(portOut1.get_value(), portIn1.get_value() * portIn2.get_value())
 
+    def test_node_C_RTTR_callback_2(self):
+        """Test chinet RTTR C callbacks"""
+        node = cn.Node(
+            {
+                "inA": cn.Port(2, False, False),
+                "inB": cn.Port(3, False, False),
+                "outA": cn.Port(0, False, True)
+            }
+        )
+        node.set_callback("multiply", "C")
+        node.evaluate()
+        outA = node.get_ports()["outA"]
+        inA = node.get_ports()["inA"]
+        inB = node.get_ports()["inB"]
+
+        self.assertEqual(outA.get_value(), inA.get_value() * inB.get_value())
+
     def test_node_python_callback(self):
         """Test chinet Node class python callbacks"""
 
@@ -125,9 +139,7 @@ class Tests(unittest.TestCase):
         node = cn.Node(
             {
                 'portA': cn.Port(55),
-                'portB': cn.Port(2)
-            },
-            {
+                'portB': cn.Port(2),
                 'portC': cn.Port()
             }
         )
@@ -148,9 +160,7 @@ class Tests(unittest.TestCase):
         node = cn.Node(
             {
                 'portA': cn.Port(13.0),
-                'portB': cn.Port(2.0)
-            },
-            {
+                'portB': cn.Port(2.0),
                 'portC': cn.Port(1.0)
             }
         )

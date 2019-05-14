@@ -78,11 +78,12 @@ include_directories(${LIBMONGOCXX_INCLUDE_DIRS})
 message("-- libmongocxx libraries \"${LIBMONGOCXX_LIBRARIES}\"")
 message("-- libmongocxx include \"${LIBMONGOCXX_INCLUDE_DIRS}\"")
 
+]]
+
 # JSON
 ###############################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/json/single_include/)
 
-]]
 
 # Project
 ###############################

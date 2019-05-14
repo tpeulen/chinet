@@ -15,16 +15,10 @@ MongoObject(name)
     append_string(&document, "type", "node");
 }
 
-Node::Node(std::map<std::string, std::shared_ptr<Port>> input_ports,
-           std::map<std::string, std::shared_ptr<Port>> output_ports) :
+Node::Node(std::map<std::string, std::shared_ptr<Port>> ports) :
            Node(){
-    this->input_ports = input_ports;
-    for(auto &o: input_ports){
-        o.second->set_name(o.first);
-    }
-
-    this->output_ports = output_ports;
-    for(auto &o: output_ports){
+    this->ports = ports;
+    for(auto &o: ports){
         o.second->set_name(o.first);
     }
 }
@@ -57,8 +51,7 @@ bool Node::read_from_db(const std::string &oid_string){
     bool return_value = true;
 
     return_value &= MongoObject::read_from_db(oid_string);
-    return_value &= create_and_connect_objects_from_oid_doc(&document, "input_ports", &input_ports);
-    return_value &= create_and_connect_objects_from_oid_doc(&document, "output_ports", &output_ports);
+    return_value &= create_and_connect_objects_from_oid_doc(&document, "ports", &ports);
 
     std::cout << "callback-restore: " << get_string_by_key(&document, "callback") << std::endl;
     std::cout << "callback_type-restore: " << get_string_by_key(&document, "callback_type") << std::endl;
@@ -74,14 +67,7 @@ bool Node::read_from_db(const std::string &oid_string){
 bool Node::write_to_db() {
     bool re = MongoObject::write_to_db();
 
-    for(auto o : input_ports){
-        if(!o.second->is_connected_to_db()){
-            re &= connect_object_to_db(o.second);
-        }
-        o.second->write_to_db();
-    }
-
-    for(auto o : output_ports){
+    for(auto &o : ports){
         if(!o.second->is_connected_to_db()){
             re &= connect_object_to_db(o.second);
         }
@@ -101,7 +87,7 @@ std::string Node::get_name(){
     r.append(callback);
     r.append(": ");
     r.append("(");
-    for(auto const &n : input_ports){
+    for(auto const &n : get_input_ports()){
         r.append(n.first);
         r.append(",");
     }
@@ -110,7 +96,7 @@ std::string Node::get_name(){
     r.append("->");
 
     r.append("(");
-    for(auto const &n : output_ports){
+    for(auto const &n : get_output_ports()){
         r.append(n.first);
         r.append(",");
     }
@@ -119,45 +105,38 @@ std::string Node::get_name(){
     return r;
 }
 
+std::map<std::string, std::shared_ptr<Port>> Node::get_ports(){
+    return ports;
+}
+
+std::shared_ptr<Port> Node::get_port(const std::string &port_name){
+    return ports[port_name];
+}
+
 std::shared_ptr<Port> Node::get_input_port(const std::string &port_name){
-    return input_ports[port_name];
+    return get_input_ports()[port_name];
 }
 
 std::shared_ptr<Port> Node::get_output_port(const std::string &port_name){
-    return output_ports[port_name];
-}
-
-std::vector<std::string> Node::get_input_port_oids(){
-    std::vector<std::string> re;
-    for(auto const &v : input_ports){
-        re.emplace_back(v.second->get_oid());
-    }
-    return re;
-}
-
-std::vector<std::string> Node::get_output_port_oids(){
-    std::vector<std::string> re;
-    for(auto const &v : output_ports){
-        re.emplace_back(v.second->get_oid());
-    }
-    return re;
+    return get_output_ports()[port_name];
 }
 
 std::map<std::string, std::shared_ptr<Port>> Node::get_input_ports(){
-    return input_ports;
+    std::map<std::string, std::shared_ptr<Port>> re;
+    for(auto o: ports){
+        if(!o.second->is_output()){
+            re[o.first] = o.second;
+        }
+    }
+    return re;
 }
 
 std::map<std::string, std::shared_ptr<Port>> Node::get_output_ports(){
-    return output_ports;
-}
-
-std::vector<std::string> Node::get_port_oids(){
-    std::vector<std::string> re;
-    for(auto const &v : get_input_port_oids()){
-        re.push_back(v);
-    }
-    for(auto const &v : get_output_port_oids()){
-        re.push_back(v);
+    std::map<std::string, std::shared_ptr<Port>> re;
+    for(auto o: ports){
+        if(o.second->is_output()){
+            re[o.first] = o.second;
+        }
     }
     return re;
 }
@@ -185,12 +164,17 @@ void Node::set_callback(std::shared_ptr<NodeCallback> cb){
 
 // Methods
 //--------------------------------------------------------------------
+void Node::add_port(std::string key, std::shared_ptr<Port> port, bool is_output) {
+    port->set_port_type(is_output);
+    ports[key] = port;
+}
+
 void Node::add_input_port(std::string key, std::shared_ptr<Port> port) {
-    input_ports[key] = port;
+    add_port(key, port, false);
 }
 
 void Node::add_output_port(std::string key, std::shared_ptr<Port> port) {
-    output_ports[key] = port;
+    add_port(key, port, true);
 }
 
 bson_t Node::get_bson(){
@@ -202,8 +186,7 @@ bson_t Node::get_bson(){
              NULL
     );
 
-    create_oid_dict_in_doc<Port>(&dst, "input_ports", input_ports);
-    create_oid_dict_in_doc<Port>(&dst, "output_ports", output_ports);
+    create_oid_dict_in_doc<Port>(&dst, "ports", ports);
 
     append_string(&dst, "callback", callback);
     append_string(&dst, "callback_type", callback_type);
@@ -212,7 +195,7 @@ bson_t Node::get_bson(){
 }
 
 void Node::evaluate(){
-    if(input_ports.empty() || output_ports.empty()) {
+    if(ports.empty()) {
         return;
     }
     std::clog << "update:callback_type:" << callback_type;
@@ -221,15 +204,15 @@ void Node::evaluate(){
         std::clog << ":registered C function"  << std::endl;
         rttr::method meth = rttr::type::get_global_method(callback);
         if (meth) {
-            rttr::variant return_value = meth.invoke({}, input_ports, output_ports);
+            rttr::variant return_value = meth.invoke({}, get_input_ports(), get_output_ports());
         }
     } else if (callback_class != nullptr) {
-            callback_class->run(input_ports, output_ports);
+            callback_class->run(get_input_ports(), get_output_ports());
     }
 }
 
 bool Node::is_valid(){
-    if(input_ports.empty()){
+    if(get_input_ports().empty()){
         return true;
     } else{
         return node_valid_;
