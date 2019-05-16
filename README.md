@@ -5,6 +5,7 @@
 [![Anaconda-Server Badge](https://anaconda.org/tpeulen/chinet/badges/platforms.svg)](https://anaconda.org/tpeulen/chinet)
 [![Linux Build Status](https://travis-ci.org/tpeulen/chinet.svg?branch=master)](https://travis-ci.org/tpeulen/chinet)
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9b8528bd067148d68d55cb3edeb10fe6)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tpeulen/chinet&amp;utm_campaign=Badge_Grade)
 ## General description
 
 chinet is a C++ library to create global fluorescence models. A global
