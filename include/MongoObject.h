@@ -47,7 +47,7 @@ protected:
 
 
     virtual bson_t get_bson();
-    virtual bson_t get_bson_excluding(const char* first, ...);
+    bson_t get_bson_excluding(const char* first, ...);
     const bson_t* get_document();
 
     // Methods
@@ -63,9 +63,9 @@ protected:
      *
      * @return true in case of a successful write.
      */
-    virtual bool write_to_db(const bson_t &doc, int write_option = 0);
+    bool write_to_db(const bson_t &doc, int write_option = 0);
 
-    virtual bool read_from_db();
+    bool read_from_db();
 
     static bool string_to_oid(const std::string &oid_string, bson_oid_t *oid);
 

@@ -13,7 +13,6 @@ import chinet as cn
 class Tests(unittest.TestCase):
 
     def test_session_init(self):
-        """Test chinet Port class set_value and get_value"""
         n1 = cn.Node(
             {
                 'portA': cn.Port(1),
@@ -34,12 +33,11 @@ class Tests(unittest.TestCase):
         s1.add_node("nodeA", n1)
         s1.add_node("nodeB", n2)
 
-        s2 = cn.Session(
-            {
-                'nodeA': n1,
-                'nodeB': n2
-            }
-        )
+        nodes = {
+            "nodeA": n1,
+            "nodeB": n2
+        }
+        s2 = cn.Session(nodes)
 
         na1 = s1.get_nodes()['nodeA']
         na2 = s2.get_nodes()['nodeA']
@@ -51,7 +49,7 @@ class Tests(unittest.TestCase):
     def test_read_template(self):
         import chinet as cn
 
-        template_file = "./test/inputs/session_template.json"
+        template_file = "./inputs/session_template.json"
 
         json_string = ""
         with open(template_file, 'r') as fp:

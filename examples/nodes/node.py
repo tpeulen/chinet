@@ -1,3 +1,4 @@
+from __future__ import print_function
 
 # creating a Node object
 ########################
@@ -7,7 +8,6 @@
 # "mongodb://localhost:27017", the local MongoDB server,
 # and creates of new Node entry in the "db_chinet.nodes" collection
 # the ports are written/added to the DB
-from __future__ import print_function
 import chinet as cn
 
 portA = cn.Port(open('./examples/nodes/input.json').read())

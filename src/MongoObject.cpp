@@ -36,9 +36,11 @@ MongoObject()
 
 MongoObject::~MongoObject() {
     time_of_death = Functions::get_time();
-    std::clog << "Time of death: " << time_of_death << std::endl;
-    write_to_db();
-    disconnect_from_db();
+    if(is_connected_to_db()){
+        std::clog << "Time of death: " << time_of_death << std::endl;
+        write_to_db();
+        disconnect_from_db();
+    }
 }
 
 bool MongoObject::connect_to_db(
@@ -300,6 +302,7 @@ bson_t MongoObject::get_bson_excluding(const char *first, ...){
     va_list va;
     va_start(va, first);
     bson_copy_to_excluding_noinit_va(&src, &dst, "", va);
+    va_end(va);
     return dst;
 }
 

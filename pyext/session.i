@@ -6,9 +6,9 @@
 #include "../include/Session.h"
 %}
 
+%template(MapStringNode) std::map<std::string, std::shared_ptr<Node>>;
 %shared_ptr(Session)
 
-%template(map_string_node) std::map<std::string, std::shared_ptr<Node>>;
-
 %include "../include/Session.h"
+
 
