@@ -7,7 +7,8 @@
 #include <Node.h>
 
 
-class Port : public MongoObject {
+class Port : public MongoObject
+{
 
 private:
     std::shared_ptr<Port> link_;
@@ -18,7 +19,8 @@ public:
     // Constructor & Destructor
     //--------------------------------------------------------------------
 
-    Port(){
+    Port()
+    {
         append_string(&document, "type", "port");
         bson_append_double(&document, "singleton", 9, 1.0);
         bson_append_bool(&document, "is_output", 9, false);
@@ -28,9 +30,9 @@ public:
 
     Port(double value,
          bool fixed = false,
-         bool is_output = true
+         bool is_output = false
     ) :
-    Port()
+            Port()
     {
         set_value(value);
         set_fixed(fixed);
@@ -40,9 +42,10 @@ public:
 
     Port(std::vector<double> array,
          bool fixed = false,
-         bool is_output = true
+         bool is_output = false
     ) :
-    Port(){
+            Port()
+    {
         set_fixed(fixed);
         set_port_type(is_output);
         set_value(array.data(), array.size());
@@ -53,15 +56,18 @@ public:
     // Getter & Setter
     //--------------------------------------------------------------------
 
-    void set_port_type(bool is_output){
+    void set_port_type(bool is_output)
+    {
         MongoObject::set_singleton("is_output", is_output);
     }
 
-    bool is_output(){
+    bool is_output()
+    {
         return MongoObject::get_singleton<bool>("is_output");
     }
 
-    std::vector<double> get_value() {
+    std::vector<double> get_value()
+    {
         if (link_ == nullptr) {
             if (buff_double_vector_.empty()) {
                 buff_double_vector_ = MongoObject::get_array<double>("value");
@@ -72,7 +78,8 @@ public:
         }
     }
 
-    void get_value(double **out, int *nbr_out) {
+    void get_value(double **out, int *nbr_out)
+    {
         if (link_ == nullptr) {
             if (buff_double_vector_.empty()) {
                 buff_double_vector_ = MongoObject::get_array<double>("value");
@@ -84,18 +91,21 @@ public:
         }
     }
 
-    void set_value(double *in, int nbr_in) {
+    void set_value(double *in, int nbr_in)
+    {
         buff_double_vector_.assign(in, in + nbr_in);
         if (link_ != nullptr) {
             link_->set_value(in, nbr_in);
         }
     }
 
-    void set_value(std::vector<double> &values) {
+    void set_value(std::vector<double> &values)
+    {
         set_value(values.data(), values.size());
     }
 
-    void set_value(double value) {
+    void set_value(double value)
+    {
         auto v = std::vector<double>{value};
         set_value(v.data(), v.size());
     }
@@ -115,12 +125,14 @@ public:
 
     void unlink();
 
-    bool write_to_db() {
+    bool write_to_db()
+    {
         bson_t doc = get_bson();
         return MongoObject::write_to_db(doc, 0);
     }
 
-    bool read_from_db(const std::string &oid_string) {
+    bool read_from_db(const std::string &oid_string)
+    {
         bool re = MongoObject::read_from_db(oid_string);
         buff_double_vector_ = MongoObject::get_array<double>("value");
         return re;

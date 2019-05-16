@@ -19,7 +19,8 @@ is_connected_to_db_(false)
     bson_t *doc = BCON_NEW(
             "_id", BCON_OID(&oid_document),
             "precursor", BCON_OID(&oid_document),
-            "death", BCON_INT64(time_of_death)
+            "death", BCON_INT64(time_of_death),
+            "name", ""
     );
 
     bson_init(&document);
@@ -289,9 +290,6 @@ bson_t MongoObject::get_bson(){
     } else{
         bson_append_int64(&doc, "death", 5, time_of_death);
     }
-
-    // name
-    append_string(&doc, "name", object_name);
 
     return doc;
 }

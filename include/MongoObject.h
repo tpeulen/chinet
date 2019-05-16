@@ -50,113 +50,6 @@ protected:
     virtual bson_t get_bson_excluding(const char* first, ...);
     const bson_t* get_document();
 
-
-    template<typename T>
-    T get_singleton(const char *key){
-        T v(0);
-        bson_iter_t iter;
-        if(std::is_same<T, int>::value) {
-            if (bson_iter_init_find(&iter, &document, key) &&
-                (BSON_ITER_HOLDS_INT64(&iter))) {
-                return (int) bson_iter_int64(&iter);
-            }
-        }
-        else if(std::is_same<T, double>::value) {
-            if (bson_iter_init_find(&iter, &document, key) &&
-                (BSON_ITER_HOLDS_DOUBLE(&iter))) {
-                return bson_iter_double(&iter);
-            }
-        }
-        else if(std::is_same<T, bool>::value) {
-            if (bson_iter_init_find(&iter, &document, key) &&
-                (BSON_ITER_HOLDS_BOOL(&iter))) {
-                return bson_iter_bool(&iter);
-            }
-        }
-        return v;
-    }
-
-    template <typename T>
-    void set_singleton(const char *key, T value){
-        bson_iter_t iter;
-        if(std::is_same<T, bool>::value) {
-            if (bson_iter_init_find(&iter, &document, key) &&
-                BSON_ITER_HOLDS_BOOL(&iter)) {
-                bson_iter_overwrite_bool(&iter, value);
-            }
-        }
-        else if(std::is_same<T, double>::value) {
-            if (bson_iter_init_find(&iter, &document, key) &&
-                BSON_ITER_HOLDS_DOUBLE(&iter)) {
-                bson_iter_overwrite_double(&iter, value);
-            }
-        }
-        else if(std::is_same<T, int>::value) {
-            if (bson_iter_init_find(&iter, &document, key) &&
-                BSON_ITER_HOLDS_INT64(&iter)) {
-                bson_iter_overwrite_int64(&iter, value);
-            }
-        }
-    }
-
-    void set_singleton(const char* key, bson_oid_t value);
-
-    template <typename T>
-    std::vector<T> get_array(const char* key){
-        bson_iter_t iter;
-        std::vector<T> v{};
-
-        if(std::is_same<T, double>::value){
-            if (bson_iter_init_find(&iter, &document, key) &&
-                (BSON_ITER_HOLDS_ARRAY(&iter))){
-                bson_iter_t iter_array;
-                bson_iter_recurse (&iter, &iter_array);
-                while (bson_iter_next (&iter_array) &&
-                       BSON_ITER_HOLDS_DOUBLE(&iter_array)) {
-                    v.push_back(bson_iter_double(&iter_array));
-                }
-            }
-            return v;
-        }
-        else if(std::is_same<T, int>::value){
-            if (bson_iter_init_find(&iter, &document, key) &&
-                (BSON_ITER_HOLDS_ARRAY(&iter))) {
-                bson_iter_t iter_array;
-                bson_iter_recurse(&iter, &iter_array);
-                while (bson_iter_next(&iter_array) &&
-                       BSON_ITER_HOLDS_INT64(&iter_array)) {
-                    v.push_back((int) bson_iter_int64(&iter_array));
-                }
-            }
-            return v;
-        }
-        else if(std::is_same<T, bool>::value){
-            if (bson_iter_init_find(&iter, &document, key) &&
-                (BSON_ITER_HOLDS_ARRAY(&iter))) {
-                bson_iter_t iter_array;
-                bson_iter_recurse(&iter, &iter_array);
-                while (bson_iter_next(&iter_array) &&
-                       BSON_ITER_HOLDS_BOOL(&iter_array)) {
-                    v.push_back((int) bson_iter_bool(&iter_array));
-                }
-            }
-            return v;
-        }
-        return v;
-    }
-
-    template <typename T>
-    void set_array(const char* key, T &value){
-        bson_t src = MongoObject::get_bson();
-        bson_t dst; bson_init (&dst);
-        bson_copy_to_excluding_noinit(&src, &dst,
-                                      key,
-                                      NULL
-        );
-        append_number_array(&dst, key, value);
-        bson_copy_to(&dst, &document);
-    }
-
     // Methods
     //--------------------------------------------------------------------
 
@@ -358,6 +251,113 @@ public:
     virtual std::string get_name(){
         return object_name;
     }
+
+    template<typename T>
+    T get_singleton(const char *key){
+        T v(0);
+        bson_iter_t iter;
+        if(std::is_same<T, int>::value) {
+            if (bson_iter_init_find(&iter, &document, key) &&
+                (BSON_ITER_HOLDS_INT64(&iter))) {
+                return (int) bson_iter_int64(&iter);
+            }
+        }
+        else if(std::is_same<T, double>::value) {
+            if (bson_iter_init_find(&iter, &document, key) &&
+                (BSON_ITER_HOLDS_DOUBLE(&iter))) {
+                return bson_iter_double(&iter);
+            }
+        }
+        else if(std::is_same<T, bool>::value) {
+            if (bson_iter_init_find(&iter, &document, key) &&
+                (BSON_ITER_HOLDS_BOOL(&iter))) {
+                return bson_iter_bool(&iter);
+            }
+        }
+        return v;
+    }
+
+    template <typename T>
+    void set_singleton(const char *key, T value){
+        bson_iter_t iter;
+        if(std::is_same<T, bool>::value) {
+            if (bson_iter_init_find(&iter, &document, key) &&
+                BSON_ITER_HOLDS_BOOL(&iter)) {
+                bson_iter_overwrite_bool(&iter, value);
+            }
+        }
+        else if(std::is_same<T, double>::value) {
+            if (bson_iter_init_find(&iter, &document, key) &&
+                BSON_ITER_HOLDS_DOUBLE(&iter)) {
+                bson_iter_overwrite_double(&iter, value);
+            }
+        }
+        else if(std::is_same<T, int>::value) {
+            if (bson_iter_init_find(&iter, &document, key) &&
+                BSON_ITER_HOLDS_INT64(&iter)) {
+                bson_iter_overwrite_int64(&iter, value);
+            }
+        }
+    }
+
+    void set_singleton(const char* key, bson_oid_t value);
+
+    template <typename T>
+    std::vector<T> get_array(const char* key){
+        bson_iter_t iter;
+        std::vector<T> v{};
+
+        if(std::is_same<T, double>::value){
+            if (bson_iter_init_find(&iter, &document, key) &&
+                (BSON_ITER_HOLDS_ARRAY(&iter))){
+                bson_iter_t iter_array;
+                bson_iter_recurse (&iter, &iter_array);
+                while (bson_iter_next (&iter_array) &&
+                       BSON_ITER_HOLDS_DOUBLE(&iter_array)) {
+                    v.push_back(bson_iter_double(&iter_array));
+                }
+            }
+            return v;
+        }
+        else if(std::is_same<T, int>::value){
+            if (bson_iter_init_find(&iter, &document, key) &&
+                (BSON_ITER_HOLDS_ARRAY(&iter))) {
+                bson_iter_t iter_array;
+                bson_iter_recurse(&iter, &iter_array);
+                while (bson_iter_next(&iter_array) &&
+                       BSON_ITER_HOLDS_INT64(&iter_array)) {
+                    v.push_back((int) bson_iter_int64(&iter_array));
+                }
+            }
+            return v;
+        }
+        else if(std::is_same<T, bool>::value){
+            if (bson_iter_init_find(&iter, &document, key) &&
+                (BSON_ITER_HOLDS_ARRAY(&iter))) {
+                bson_iter_t iter_array;
+                bson_iter_recurse(&iter, &iter_array);
+                while (bson_iter_next(&iter_array) &&
+                       BSON_ITER_HOLDS_BOOL(&iter_array)) {
+                    v.push_back((int) bson_iter_bool(&iter_array));
+                }
+            }
+            return v;
+        }
+        return v;
+    }
+
+    template <typename T>
+    void set_array(const char* key, std::vector<T> value){
+        bson_t src = MongoObject::get_bson();
+        bson_t dst; bson_init (&dst);
+        bson_copy_to_excluding_noinit(&src, &dst,
+                                      key,
+                                      NULL
+        );
+        append_number_array(&dst, key, value);
+        bson_copy_to(&dst, &document);
+    }
+
 
 };
 

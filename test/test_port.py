@@ -44,7 +44,7 @@ class Tests(unittest.TestCase):
 
         # check setting of value
         p2 = cn.Port(v1)
-        self.assertEqual(p1.get_value(), p2.get_value())
+        self.assertEqual((p2.get_value() == p1.get_value()).all(), True)
 
         # check fixing
         p3 = cn.Port(v1, True)
@@ -55,7 +55,7 @@ class Tests(unittest.TestCase):
         # check linking
         p5 = cn.Port(v2, False)
         p5.link(p4)
-        self.assertEqual(p5.get_value(), p4.get_value())
+        self.assertEqual((p5.get_value() == p4.get_value()).all(), True)
 
     def test_port_init_array(self):
         """Test chinet Port class set_value and get_value"""
@@ -63,9 +63,8 @@ class Tests(unittest.TestCase):
         array = np.array([1, 2, 3, 5, 8, 13], dtype=np.double)
         p1 = cn.Port()
         p1.set_value(array)
-        # there is still a problem with the SWIG wrapper
         p2 = cn.Port(array)
-        self.assertEqual(p1.get_value(), p2.get_value())
+        self.assertEqual((p1.get_value() == p2.get_value()).all(), True)
 
     def test_set_get_value(self):
         """Test chinet Port class set_value and get_value"""
@@ -75,7 +74,7 @@ class Tests(unittest.TestCase):
 
     def test_set_get_value(self):
         """Test chinet Port class set_value and get_value"""
-        value = (1, 2, 3, 5, 8, 13)
+        value = (1,)
         port = cn.Port()
         port.set_value(value)
         self.assertEqual(port.get_value(), value)

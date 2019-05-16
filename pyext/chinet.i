@@ -26,9 +26,10 @@
 %template(map_string_string) std::map<std::string, std::string>;
 %template(vector_string) std::vector<std::string>;
 
-// Check if this helps
-%template(DoubleVector) std::vector<double>;
+%template(VectorDouble) std::vector<double>;
+
 %extend vector<double> {
+
     string __str__(){
         std::ostringstream os;
         os << "Double Vector: [ ";
@@ -50,8 +51,7 @@
         os << "]";
         return os.str();
     }
-}
-%extend vector<double> {
+
     string __repr__(){
         std::ostringstream os;
         os << "DoubleVector( [";
@@ -61,6 +61,7 @@
         os << "] )";
         return os.str();
     }
+
 }
 
 

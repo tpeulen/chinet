@@ -18,6 +18,7 @@ void multiply(
             m *= v;
         }
         mul[i] = m;
+        i++;
     }
 
     outputs["outA"]->set_value(mul);

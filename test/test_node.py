@@ -65,27 +65,24 @@ class Tests(unittest.TestCase):
         """Test chinet RTTR C callbacks"""
         node = cn.Node()
 
-        portIn1 = cn.Port(55)
-        node.add_input_port("inA", portIn1)
+        inA = cn.Port([2., 3., 4.])
+        node.add_input_port("inA", inA)
 
-        portIn2 = cn.Port(2)
-        node.add_input_port("inB", portIn2)
-
-        portOut1 = cn.Port()
-        node.add_output_port("outA", portOut1)
+        outA = cn.Port()
+        node.add_output_port("outA", outA)
 
         node.set_callback("multiply", "C")
 
         node.evaluate()
 
-        self.assertEqual(portOut1.get_value(), portIn1.get_value() * portIn2.get_value())
+        print(outA.get_value(), inA.get_value())
+        self.assertEqual((inA.get_value().prod() == outA.get_value()).all(), True)
 
     def test_node_C_RTTR_callback_2(self):
         """Test chinet RTTR C callbacks"""
         node = cn.Node(
             {
-                "inA": cn.Port(2, False, False),
-                "inB": cn.Port(3, False, False),
+                "inA": cn.Port([2., 3., 4.], False, False),
                 "outA": cn.Port(0, False, True)
             }
         )
@@ -93,9 +90,8 @@ class Tests(unittest.TestCase):
         node.evaluate()
         outA = node.get_ports()["outA"]
         inA = node.get_ports()["inA"]
-        inB = node.get_ports()["inB"]
 
-        self.assertEqual(outA.get_value(), inA.get_value() * inB.get_value())
+        self.assertEqual((inA.get_value().prod() == outA.get_value()).all(), True)
 
     def test_node_python_callback(self):
         """Test chinet Node class python callbacks"""
