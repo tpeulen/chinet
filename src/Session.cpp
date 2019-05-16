@@ -31,19 +31,18 @@ bson_t Session::get_bson(){
     return doc;
 }
 
+/*
 std::shared_ptr<Port> Session::read_port_template(json j, std::string &node_key, std::string &port_key) {
     auto port = std::make_shared<Port>();
 
     auto port_ = j["nodes"][node_key]["inputs"][port_key];
     for (json::iterator it_val = port_.begin(); it_val != port_.end(); ++it_val) {
-        if (it_val.key() == "singleton") {
-            port->set_value(j["nodes"][node_key]["inputs"][port_key]["singleton"].get<double>());
-        } else if (it_val.key() == "fixed") {
+        if (it_val.key() == "fixed") {
             auto b = j["nodes"][node_key]["inputs"][port_key]["fixed"].get<bool>();
             port->set_fixed(b);
-        } else if (it_val.key() == "vector") {
-            auto b = j["nodes"][node_key]["inputs"][port_key]["vector"].get<std::vector<double>>();
-            port->set_array(b);
+        } else if (it_val.key() == "value") {
+            auto b = j["nodes"][node_key]["inputs"][port_key]["value"].get<std::vector<double>>();
+            port->set_value(b.data(), b.size());
         }
     }
     port->set_name(port_key);
@@ -75,3 +74,4 @@ bool Session::read_session_template(const std::string &json_string){
     }
     return true;
 }
+*/

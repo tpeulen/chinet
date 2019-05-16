@@ -52,7 +52,7 @@ protected:
 
 
     template<typename T>
-    T get_value(const char* key){
+    T get_singleton(const char *key){
         T v(0);
         bson_iter_t iter;
         if(std::is_same<T, int>::value) {
@@ -77,7 +77,7 @@ protected:
     }
 
     template <typename T>
-    void set_value(const char* key, T value){
+    void set_singleton(const char *key, T value){
         bson_iter_t iter;
         if(std::is_same<T, bool>::value) {
             if (bson_iter_init_find(&iter, &document, key) &&
@@ -99,14 +99,13 @@ protected:
         }
     }
 
-    void set_value(const char* key, bson_oid_t value);
+    void set_singleton(const char* key, bson_oid_t value);
 
     template <typename T>
     std::vector<T> get_array(const char* key){
         bson_iter_t iter;
         std::vector<T> v{};
 
-        // double
         if(std::is_same<T, double>::value){
             if (bson_iter_init_find(&iter, &document, key) &&
                 (BSON_ITER_HOLDS_ARRAY(&iter))){
@@ -119,7 +118,6 @@ protected:
             }
             return v;
         }
-        // int
         else if(std::is_same<T, int>::value){
             if (bson_iter_init_find(&iter, &document, key) &&
                 (BSON_ITER_HOLDS_ARRAY(&iter))) {
@@ -128,6 +126,18 @@ protected:
                 while (bson_iter_next(&iter_array) &&
                        BSON_ITER_HOLDS_INT64(&iter_array)) {
                     v.push_back((int) bson_iter_int64(&iter_array));
+                }
+            }
+            return v;
+        }
+        else if(std::is_same<T, bool>::value){
+            if (bson_iter_init_find(&iter, &document, key) &&
+                (BSON_ITER_HOLDS_ARRAY(&iter))) {
+                bson_iter_t iter_array;
+                bson_iter_recurse(&iter, &iter_array);
+                while (bson_iter_next(&iter_array) &&
+                       BSON_ITER_HOLDS_BOOL(&iter_array)) {
+                    v.push_back((int) bson_iter_bool(&iter_array));
                 }
             }
             return v;

@@ -40,11 +40,11 @@ class Tests(unittest.TestCase):
         v1 = [1, 2, 3, 5, 8]
         v2 = [1, 2, 4, 8, 16]
         p1 = cn.Port()
-        p1.set_array(v1)
+        p1.set_value(v1)
 
         # check setting of value
         p2 = cn.Port(v1)
-        self.assertEqual(p1.get_array(), p2.get_array())
+        self.assertEqual(p1.get_value(), p2.get_value())
 
         # check fixing
         p3 = cn.Port(v1, True)
@@ -55,17 +55,17 @@ class Tests(unittest.TestCase):
         # check linking
         p5 = cn.Port(v2, False)
         p5.link(p4)
-        self.assertEqual(p5.get_array(), p4.get_array())
+        self.assertEqual(p5.get_value(), p4.get_value())
 
     def test_port_init_array(self):
         """Test chinet Port class set_value and get_value"""
         import numpy as np
         array = np.array([1, 2, 3, 5, 8, 13], dtype=np.double)
         p1 = cn.Port()
-        p1.set_array(array)
+        p1.set_value(array)
         # there is still a problem with the SWIG wrapper
         p2 = cn.Port(array)
-        self.assertEqual(p1.get_array(), p2.get_array())
+        self.assertEqual(p1.get_value(), p2.get_value())
 
     def test_set_get_value(self):
         """Test chinet Port class set_value and get_value"""
@@ -73,16 +73,16 @@ class Tests(unittest.TestCase):
         port = cn.Port(value)
         self.assertEqual(port.get_value(), value)
 
-    def test_set_get_array(self):
-        """Test chinet Port class set_array and get_array"""
+    def test_set_get_value(self):
+        """Test chinet Port class set_value and get_value"""
         value = (1, 2, 3, 5, 8, 13)
         port = cn.Port()
-        port.set_array(value)
-        self.assertEqual(port.get_array(), value)
+        port.set_value(value)
+        self.assertEqual(port.get_value(), value)
 
     def test_port_link_value(self):
-        value1 = 12
-        value2 = 6
+        value1 = np.array([12], dtype=np.double)
+        value2 = np.array([6], dtype=np.double)
         p1 = cn.Port(value1)
         p2 = cn.Port(value2)
 
@@ -116,7 +116,7 @@ class Tests(unittest.TestCase):
         value = 17
 
         port = cn.Port(value)
-        port.set_array(value_array)
+        port.set_value(value_array)
         port.set_fixed(True)
 
         port.connect_to_db(**db_dict)
@@ -137,7 +137,7 @@ class Tests(unittest.TestCase):
 
         port = cn.Port()
         port.set_value(value)
-        port.set_array(value_array)
+        port.set_value(value_array)
 
         port.connect_to_db(**db_dict)
         port.write_to_db()

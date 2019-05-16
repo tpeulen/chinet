@@ -31,7 +31,6 @@
 %template(map_string_string) std::map<std::string, std::string>;
 %template(vector_string) std::vector<std::string>;
 
-/*
 // Check if this helps
 %template(DoubleVector) std::vector<double>;
 %extend vector<double> {
@@ -68,7 +67,6 @@
         return os.str();
     }
 }
- */
 
 
 %include "mongo.i"

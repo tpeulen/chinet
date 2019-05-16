@@ -32,7 +32,6 @@ public:
     ) :
     Port()
     {
-
         set_value(value);
         set_fixed(fixed);
         set_port_type(is_output);
@@ -44,10 +43,9 @@ public:
          bool is_output = true
     ) :
     Port(){
-
         set_fixed(fixed);
         set_port_type(is_output);
-        set_array(array);
+        set_value(array.data(), array.size());
     };
 
     ~Port() = default;
@@ -55,49 +53,51 @@ public:
     // Getter & Setter
     //--------------------------------------------------------------------
 
-    template<typename T>
-    T get_value() {
-        if (link_ == nullptr) {
-            return MongoObject::get_value<T>("singleton");
-        } else {
-            return link_->get_value<T>();
-        }
-    }
-
-    template<typename T>
-    void set_value(T v) {
-        MongoObject::set_value("singleton", v);
-        if (link_ != nullptr) {
-            link_->set_value(v);
-        }
-    }
-
     void set_port_type(bool is_output){
-        MongoObject::set_value("is_output", is_output);
+        MongoObject::set_singleton("is_output", is_output);
     }
 
     bool is_output(){
-        return MongoObject::get_value<bool>("is_output");
+        return MongoObject::get_singleton<bool>("is_output");
     }
 
-    template<typename T>
-    T get_array() {
+    std::vector<double> get_value() {
         if (link_ == nullptr) {
             if (buff_double_vector_.empty()) {
-                buff_double_vector_ = MongoObject::get_array<double>("vector");
+                buff_double_vector_ = MongoObject::get_array<double>("value");
             }
             return buff_double_vector_;
         } else {
-            return link_->get_array<T>();
+            return link_->get_value();
         }
     }
 
-    template<typename T>
-    void set_array(T value) {
-        buff_double_vector_ = value;
-        if (link_ != nullptr) {
-            link_->set_array(value);
+    void get_value(double **out, int *nbr_out) {
+        if (link_ == nullptr) {
+            if (buff_double_vector_.empty()) {
+                buff_double_vector_ = MongoObject::get_array<double>("value");
+            }
+            *nbr_out = buff_double_vector_.size();
+            *out = buff_double_vector_.data();
+        } else {
+            link_->get_value(out, nbr_out);
         }
+    }
+
+    void set_value(double *in, int nbr_in) {
+        buff_double_vector_.assign(in, in + nbr_in);
+        if (link_ != nullptr) {
+            link_->set_value(in, nbr_in);
+        }
+    }
+
+    void set_value(std::vector<double> &values) {
+        set_value(values.data(), values.size());
+    }
+
+    void set_value(double value) {
+        auto v = std::vector<double>{value};
+        set_value(v.data(), v.size());
     }
 
     void set_fixed(bool fixed);
@@ -122,7 +122,7 @@ public:
 
     bool read_from_db(const std::string &oid_string) {
         bool re = MongoObject::read_from_db(oid_string);
-        buff_double_vector_ = MongoObject::get_array<double>("vector");
+        buff_double_vector_ = MongoObject::get_array<double>("value");
         return re;
     };
 

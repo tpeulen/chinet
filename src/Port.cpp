@@ -3,7 +3,7 @@
 
 
 bool Port::is_fixed(){
-    return MongoObject::get_value<bool>("fixed");
+    return MongoObject::get_singleton<bool>("fixed");
 }
 
 bool Port::is_linked(){
@@ -12,23 +12,23 @@ bool Port::is_linked(){
 
 void Port::link(std::shared_ptr<Port> &v){
     if(v != nullptr){
-        MongoObject::set_value("link", v->get_bson_oid());
+        MongoObject::set_singleton("link", v->get_bson_oid());
         link_ = v;
     }
 }
 
 void Port::unlink(){
-    MongoObject::set_value("link", get_bson_oid());
+    MongoObject::set_singleton("link", get_bson_oid());
     link_ = nullptr;
 }
 
 void Port::set_fixed(bool fixed){
-    MongoObject::set_value("fixed", fixed);
+    MongoObject::set_singleton("fixed", fixed);
 }
 
 bson_t Port::get_bson() {
-    bson_t dst = MongoObject::get_bson_excluding("vector", NULL);
-    MongoObject::append_number_array(&dst, "vector", buff_double_vector_);
+    bson_t dst = MongoObject::get_bson_excluding("value", NULL);
+    MongoObject::append_number_array(&dst, "value", buff_double_vector_);
     return dst;
 }
 

@@ -7,13 +7,20 @@ void multiply(
         std::map<std::string, std::shared_ptr<Port>> inputs,
         std::map<std::string, std::shared_ptr<Port>> outputs){
 
-    double mul = 1.0;
+    std::vector<double> mul;
+    mul.resize(inputs.size());
+
+    int i = 0;
     for(auto &o : inputs){
-        std::cout << o.first << ":" << o.second->get_value<double>() << std::endl;
-        mul *= o.second->get_value<double>();
+        std::cout << o.first << std::endl;
+        double m = 1.0;
+        for(auto &v : o.second->get_value()){
+            m *= v;
+        }
+        mul[i] = m;
     }
 
-    outputs["outA"]->set_value<double>(mul);
+    outputs["outA"]->set_value(mul);
 }
 
 void convolve_sum_of_exponentials_periodic(
