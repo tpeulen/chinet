@@ -44,7 +44,7 @@ class Tests(unittest.TestCase):
 
         # check setting of value
         p2 = cn.Port(v1)
-        self.assertEqual((p2.get_value() == p1.get_value()).all(), True)
+        self.assertListEqual(list(p2.get_value()), list(p1.get_value()))
 
         # check fixing
         p3 = cn.Port(v1, True)
@@ -55,7 +55,7 @@ class Tests(unittest.TestCase):
         # check linking
         p5 = cn.Port(v2, False)
         p5.link(p4)
-        self.assertEqual((p5.get_value() == p4.get_value()).all(), True)
+        self.assertListEqual(list(p5.get_value()), list(p4.get_value()))
 
     def test_port_init_array(self):
         """Test chinet Port class set_value and get_value"""
@@ -64,7 +64,7 @@ class Tests(unittest.TestCase):
         p1 = cn.Port()
         p1.set_value(array)
         p2 = cn.Port(array)
-        self.assertEqual((p1.get_value() == p2.get_value()).all(), True)
+        self.assertListEqual(list(p1.get_value()), list(p2.get_value()))
 
     def test_set_get_value(self):
         """Test chinet Port class set_value and get_value"""

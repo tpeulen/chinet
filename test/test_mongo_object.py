@@ -27,6 +27,54 @@ class Tests(unittest.TestCase):
         }
         mo = cn.MongoObject()
         self.assertEqual(mo.connect_to_db(**db_dict), True)
+        self.assertEqual(mo.is_connected_to_db(), True)
+        mo.write_to_db()
+        mo.disconnect_from_db()
+        self.assertEqual(mo.is_connected_to_db(), False)
+
+        mo2 = cn.MongoObject()
+        mo.connect_object_to_db_mongo(mo2)
+        self.assertEqual(mo2.is_connected_to_db(), True)
+        mo2.disconnect_from_db()
+        self.assertEqual(mo2.is_connected_to_db(), False)
+
+        mo3 = cn.MongoObject()
+        mo3.connect_to_db(
+            **db_dict
+        )
+        mo3.read_from_db(mo.get_oid())
+        self.assertEqual(mo3.read_from_db(mo.get_oid()), True)
+
+    def test_mongo_oid(self):
+        mo = cn.MongoObject()
+        self.assertEqual(len(mo.get_oid()), 25)
+
+    def test_mongo_json(self):
+        mo = cn.MongoObject("test_name")
+        d = json.loads(mo.get_json())
+        self.assertEqual(set(d.keys()), set(['_id', 'precursor', 'death', 'name']))
+
+    def test_singleton(self):
+        mo = cn.MongoObject()
+        mo.set_singleton_double("d", 22.3)
+        self.assertAlmostEqual(mo.get_singleton_double("d"), 22.3)
+
+        mo.set_singleton_int("i", 13)
+        self.assertEqual(mo.get_singleton_int("i"), 13)
+
+        mo.set_singleton_bool("b1", True)
+        self.assertEqual(mo.get_singleton_bool("b1"), True)
+
+        mo.set_singleton_bool("b2", False)
+        self.assertEqual(mo.get_singleton_bool("b2"), False)
+
+    def test_array(self):
+        mo = cn.MongoObject()
+        mo.set_array_double("d", (1.1, 2.2))
+        self.assertTupleEqual(mo.get_array_double("d"), (1.1, 2.2))
+
+        mo.set_array_int("i", [3, 4])
+        self.assertEqual(mo.get_array_int("i"), (3, 4))
 
 
 if __name__ == '__main__':

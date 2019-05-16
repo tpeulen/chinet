@@ -27,6 +27,7 @@
 %template(vector_string) std::vector<std::string>;
 
 %template(VectorDouble) std::vector<double>;
+%template(VectorInt) std::vector<int>;
 
 %extend vector<double> {
 
@@ -63,7 +64,6 @@
     }
 
 }
-
 
 %include "mongo.i"
 %include "port.i"

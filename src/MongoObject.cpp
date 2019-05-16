@@ -350,8 +350,7 @@ bool MongoObject::is_connected_to_db() {
     return is_connected_to_db_;
 }
 
-
-void MongoObject::set_singleton(const char* key, bson_oid_t value){
+void MongoObject::set_oid(const char* key, bson_oid_t value){
     bson_iter_t iter;
     if (bson_iter_init_find(&iter, &document, key) &&
         BSON_ITER_HOLDS_OID(&iter)) {

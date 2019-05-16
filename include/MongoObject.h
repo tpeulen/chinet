@@ -88,9 +88,23 @@ protected:
     void append_number_array(bson_t *doc, std::string key, T &values){
         bson_t child;
         bson_append_array_begin(doc, key.c_str(), key.size(), &child);
-        for(auto &v : values){
-            bson_append_double(&child, "", 0, (double) v);
+
+        if(std::is_same<T, std::vector<int>>::value){
+            for(auto &v : values){
+                bson_append_int64(&child, "", 0, v);
+            }
         }
+        else if(std::is_same<T, std::vector<double>>::value){
+            for(auto &v : values){
+                bson_append_double(&child, "", 0, v);
+            }
+        }
+        else if(std::is_same<T, std::vector<bool>>::value){
+            for(auto &v : values){
+                bson_append_bool(&child, "", 0, v);
+            }
+        }
+
         bson_append_array_end(doc, &child);
     }
 
@@ -183,6 +197,13 @@ protected:
 
     static const std::string get_string_by_key(bson_t *doc, std::string key);
 
+    static std::string oid_to_string(bson_oid_t oid){
+        char oid_str[25];
+        bson_oid_to_string(&oid, oid_str);
+        return std::string(oid_str, 25);
+    }
+
+
 public:
 
     MongoObject();
@@ -220,12 +241,6 @@ public:
 
     /// Returns true if the instance of the @class MongoObject is connected to the DB
     bool is_connected_to_db();
-
-    static std::string oid_to_string(bson_oid_t oid){
-        char oid_str[25];
-        bson_oid_to_string(&oid, oid_str);
-        return std::string(oid_str, 25);
-    }
 
     virtual bool write_to_db();
 
@@ -284,23 +299,29 @@ public:
             if (bson_iter_init_find(&iter, &document, key) &&
                 BSON_ITER_HOLDS_BOOL(&iter)) {
                 bson_iter_overwrite_bool(&iter, value);
+            } else{
+                bson_append_bool(&document, key, -1, value);
             }
         }
         else if(std::is_same<T, double>::value) {
             if (bson_iter_init_find(&iter, &document, key) &&
                 BSON_ITER_HOLDS_DOUBLE(&iter)) {
                 bson_iter_overwrite_double(&iter, value);
+            } else{
+                bson_append_double(&document, key, -1, value);
             }
         }
         else if(std::is_same<T, int>::value) {
             if (bson_iter_init_find(&iter, &document, key) &&
                 BSON_ITER_HOLDS_INT64(&iter)) {
                 bson_iter_overwrite_int64(&iter, value);
+            } else{
+                bson_append_int64(&document, key, -1, value);
             }
         }
     }
 
-    void set_singleton(const char* key, bson_oid_t value);
+    void set_oid(const char* key, bson_oid_t value);
 
     template <typename T>
     std::vector<T> get_array(const char* key){

@@ -12,13 +12,13 @@ bool Port::is_linked(){
 
 void Port::link(std::shared_ptr<Port> &v){
     if(v != nullptr){
-        MongoObject::set_singleton("link", v->get_bson_oid());
+        MongoObject::set_oid("link", v->get_bson_oid());
         link_ = v;
     }
 }
 
 void Port::unlink(){
-    MongoObject::set_singleton("link", get_bson_oid());
+    MongoObject::set_oid("link", get_bson_oid());
     link_ = nullptr;
 }
 
