@@ -8,13 +8,13 @@
 #include <map>
 #include <memory>
 #include "bson.h"
-//#include <nlohmann/json.hpp>
+#include <nlohmann/json.hpp>
 
 #include "MongoObject.h"
 #include "Node.h"
 #include "Port.h"
 
-//using nlohmann::json;
+using nlohmann::json;
 
 class Session : public MongoObject{
 

@@ -23,11 +23,6 @@
 %include "std_list.i";
 %include "std_shared_ptr.i"
 
-%include "numpy.i"
-%init %{
-    import_array();
-%}
-
 %template(map_string_string) std::map<std::string, std::string>;
 %template(vector_string) std::vector<std::string>;
 
