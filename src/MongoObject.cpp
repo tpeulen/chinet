@@ -395,3 +395,13 @@ const std::string MongoObject::get_string_by_key(bson_t *doc, const std::string 
     std::cerr << "Error: the key does not contain an string" << std::endl;
     return "";
 }
+
+bson_t MongoObject::read_json(std::string json_string){
+    bson_t b;
+    bson_error_t error;
+    if(!bson_init_from_json(&b, json_string.c_str(), json_string.size(), &error))
+    {
+        std::cerr << "Error reading JSON: " << error.message << std::endl;
+    }
+    return b;
+}

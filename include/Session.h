@@ -29,8 +29,7 @@ public:
         append_string(&document, "type", "session");
     };
 
-    Session(std::map<std::string, std::shared_ptr<Node>> nodes)
-    //: Session()
+    Session(std::map<std::string, std::shared_ptr<Node>> nodes) : Session()
     {
         for(auto &o : nodes){
             add_node(o.first, o.second);

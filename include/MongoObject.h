@@ -45,10 +45,10 @@ protected:
 
     bson_oid_t get_bson_oid();
 
-
     virtual bson_t get_bson();
+
     bson_t get_bson_excluding(const char* first, ...);
-    const bson_t* get_document();
+
 
     // Methods
     //--------------------------------------------------------------------
@@ -66,8 +66,6 @@ protected:
     bool write_to_db(const bson_t &doc, int write_option = 0);
 
     bool read_from_db();
-
-    static bool string_to_oid(const std::string &oid_string, bson_oid_t *oid);
 
     template <typename T>
     void create_oid_dict_in_doc(
@@ -203,6 +201,7 @@ protected:
         return std::string(oid_str, 25);
     }
 
+    static bool string_to_oid(const std::string &oid_string, bson_oid_t *oid);
 
 public:
 
@@ -250,14 +249,9 @@ public:
 
     std::string get_json();
 
-    std::string get_oid();
+    static bson_t read_json(std::string json_string);
 
-    bool operator==(MongoObject const& b){
-        return (
-                bson_oid_equal(&b.oid_document, &oid_document) &&
-                (uri_string == b.uri_string)
-        );
-    };
+    std::string get_oid();
 
     void set_name(std::string name){
         object_name = name;
@@ -379,6 +373,18 @@ public:
         bson_copy_to(&dst, &document);
     }
 
+    bool operator==(MongoObject const& b){
+        return (
+                bson_oid_equal(&b.oid_document, &oid_document) &&
+                (uri_string == b.uri_string)
+        );
+    };
+
+    const bson_t* get_document();
+
+    const void set_document(bson_t b){
+        document = b;
+    }
 
 };
 
