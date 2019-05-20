@@ -22,10 +22,7 @@ is_connected_to_db_(false)
             "death", BCON_INT64(time_of_death),
             "name", ""
     );
-
-    bson_init(&document);
-    bson_copy_to(doc, &document);
-
+    set_document(doc);
 }
 
 MongoObject::MongoObject(std::string name) :
@@ -252,12 +249,8 @@ bool MongoObject::read_from_db() {
 std::string MongoObject::get_json() {
     size_t len;
     bson_t doc = get_bson();
-    if(&doc){
-        char* str = bson_as_json (&doc, &len);
-        return std::string(str, len);
-    } else{
-        return "";
-    }
+    char* str = bson_as_json (&doc, &len);
+    return std::string(str, len);
 }
 
 bson_t MongoObject::get_bson(){
@@ -396,12 +389,16 @@ const std::string MongoObject::get_string_by_key(bson_t *doc, const std::string 
     return "";
 }
 
-bson_t MongoObject::read_json(std::string json_string){
+bool MongoObject::read_json(std::string json_string){
     bson_t b;
     bson_error_t error;
     if(!bson_init_from_json(&b, json_string.c_str(), json_string.size(), &error))
     {
         std::cerr << "Error reading JSON: " << error.message << std::endl;
+        return false;
+    } else{
+        bson_reinit(&document);
+        bson_copy_to(&b, &document);
+        return true;
     }
-    return b;
 }

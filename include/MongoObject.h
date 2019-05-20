@@ -7,10 +7,49 @@
 #include <vector>
 #include <memory>
 #include <cmath>
+#include <iterator>
 
 #include <mongoc.h>
 
 #include "Functions.h"
+
+
+
+class myit
+{
+private:
+    int value_;
+    class intholder
+    {
+        int value_;
+    public:
+        intholder(int value): value_(value) {}
+        int operator*() { return value_; }
+    };
+public:
+    // Previously provided by std::iterator - see update below
+    typedef int                     value_type;
+    typedef std::ptrdiff_t          difference_type;
+    typedef int*                    pointer;
+    typedef int&                    reference;
+    typedef std::input_iterator_tag iterator_category;
+
+    explicit myit(int value) : value_(value) {}
+    int operator*() const { return value_; }
+    bool operator==(const myit& other) const { return value_ == other.value_; }
+    bool operator!=(const myit& other) const { return !(*this == other); }
+    intholder operator++(int)
+    {
+        intholder ret(value_);
+        ++*this;
+        return ret;
+    }
+    myit& operator++()
+    {
+        ++value_;
+        return *this;
+    }
+};
 
 
 class MongoObject{
@@ -49,10 +88,19 @@ protected:
 
     bson_t get_bson_excluding(const char* first, ...);
 
+    const bson_t* get_document();
+
+    const void set_document(bson_t b){
+        document = b;
+    }
+
+    const void set_document(bson_t *doc){
+        bson_init(&document);
+        bson_copy_to(doc, &document);
+    }
 
     // Methods
     //--------------------------------------------------------------------
-
 
     /// Writes a BSON document to the connected MongoDB
     /*!
@@ -249,7 +297,7 @@ public:
 
     std::string get_json();
 
-    static bson_t read_json(std::string json_string);
+    bool read_json(std::string json_string);
 
     std::string get_oid();
 
@@ -373,18 +421,53 @@ public:
         bson_copy_to(&dst, &document);
     }
 
+    std::string get_json(const char *key){
+
+        std::string re;
+
+        bson_iter_t iter, desc;
+
+        bson_iter_init (&iter, &document);
+        if(bson_iter_find_descendant (&iter, key, &desc)){
+            if (BSON_ITER_HOLDS_DOCUMENT (&desc)) {
+                char *str = NULL;
+                bson_t *arr;
+                const uint8_t *data = NULL;
+                uint32_t len = 0;
+
+                bson_iter_document (&desc, &len, &data);
+
+                arr = bson_new_from_data (data, len);
+
+                str = bson_as_json (arr, NULL);
+
+                re.assign(str);
+
+                bson_free (str);
+
+                bson_destroy (arr);
+            }
+        }
+        return re;
+    }
+
+    // Operators
+    //--------------------------------------------------------------------
+
+    std::shared_ptr<MongoObject> operator[](std::string key){
+        auto mo = std::make_shared<MongoObject>();
+        mo->read_json(
+                get_json(key.c_str())
+                );
+        return mo;
+    };
+
     bool operator==(MongoObject const& b){
         return (
                 bson_oid_equal(&b.oid_document, &oid_document) &&
                 (uri_string == b.uri_string)
         );
     };
-
-    const bson_t* get_document();
-
-    const void set_document(bson_t b){
-        document = b;
-    }
 
 };
 

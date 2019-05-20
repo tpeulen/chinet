@@ -76,23 +76,35 @@ class Tests(unittest.TestCase):
         mo.set_array_int("i", [3, 4])
         self.assertEqual(mo.get_array_int("i"), (3, 4))
 
-    def read_json(self):
-        json_file = "./inputs/session_template.json"
+    def test_read_json(self):
+        json_file = "./test/inputs/session_template.json"
 
         json_string = ""
         with open(json_file, 'r') as fp:
             json_string = fp.read()
 
         mo = cn.MongoObject()
-        bson_doc = mo.read_json(json_string)
+        mo.read_json(json_string)
+        sub_json = mo.get_json("nodes")
 
         mo2 = cn.MongoObject()
-        mo2.set_document(bson_doc)
+        mo2.read_json(sub_json)
 
-        self.assertDictEqual(
-            json.loads(mo.get_json()),
-            json.loads(mo2.get_json())
+        subset = json.loads(json_string)
+        superset = json.loads(mo2.get_json())
+
+        self.assertEqual(
+            all(item in superset.items() for item in subset.items()),
+            True
         )
+
+        subset = json.loads(json_string)
+        superset = json.loads(mo["nodes"].get_json())
+        self.assertEqual(
+            all(item in superset.items() for item in subset.items()),
+            True
+        )
+
 
 
 if __name__ == '__main__':

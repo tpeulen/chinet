@@ -74,18 +74,6 @@ public:
     void set_callback(std::shared_ptr<NodeCallback> cb);
     void set_callback(std::string callback, std::string callback_type);
 
-    // Operators
-    //--------------------------------------------------------------------
-    std::shared_ptr<Port> operator[](std::string key){
-        try {
-            return ports.at(key);
-        }
-        catch (std::out_of_range e){
-            return nullptr;
-        }
-    };
-
-
 };
 
 

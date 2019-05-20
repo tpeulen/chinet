@@ -18,8 +18,3 @@
 
 %include "../include/Node.h"
 
-%extend Node{
-        std::shared_ptr<Port> __getitem__(std::string key){
-            return (*self)[key];
-        };
-};

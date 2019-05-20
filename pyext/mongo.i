@@ -34,5 +34,17 @@
     {
         return $self->get_json();
     }
+
+    std::shared_ptr<MongoObject> __getitem__(std::string key){
+        return (*self)[key];
+    };
+
 }
 
+/*
+%extend Node{
+        std::shared_ptr<Port> __getitem__(std::string key){
+            return (*self)[key];
+        };
+};
+ */
