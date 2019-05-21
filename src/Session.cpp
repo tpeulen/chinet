@@ -34,14 +34,19 @@ bson_t Session::get_bson(){
 std::shared_ptr<Port> Session::read_port_template(json j, std::string &node_key, std::string &port_key) {
     auto port = std::make_shared<Port>();
 
-    auto port_ = j["nodes"][node_key]["inputs"][port_key];
+    auto port_ = j["nodes"][node_key]["ports"][port_key];
     for (json::iterator it_val = port_.begin(); it_val != port_.end(); ++it_val) {
         if (it_val.key() == "fixed") {
-            auto b = j["nodes"][node_key]["inputs"][port_key]["fixed"].get<bool>();
-            port->set_fixed(b);
+            port->set_fixed(
+                    j["nodes"][node_key]["ports"][port_key]["fixed"].get<bool>()
+                    );
         } else if (it_val.key() == "value") {
-            auto b = j["nodes"][node_key]["inputs"][port_key]["value"].get<std::vector<double>>();
+            auto b = j["nodes"][node_key]["ports"][port_key]["value"].get<std::vector<double>>();
             port->set_value(b.data(), b.size());
+        } else if (it_val.key() == "is_output"){
+            port->set_port_type(
+                    j["nodes"][node_key]["ports"][port_key]["is_output"].get<bool>()
+            );
         }
     }
     port->set_name(port_key);
@@ -62,22 +67,14 @@ std::shared_ptr<Node> Session::read_node_template(json j, std::string &node_key)
 }
 
 bool Session::read_session_template(const std::string &json_string){
-    auto mo = MongoObject();
-    if(mo.read_json(json_string)){
-        auto ns = mo["nodes"];
-        // read nodes
+    json j = json::parse(json_string);
 
-        json n = json::parse(ns->get_json());
-        for (json::iterator it = n.begin(); it != n.end(); ++it) {
-            std::string node_key = it.key();
-            auto node = read_node_template(n[node_key], node_key);
-            add_node(node_key, read_node_template(n, node_key));
-        }
-
-        return true;
-    } else{
-        return false;
+    // read nodes
+    auto n = j["nodes"];
+    for (json::iterator it = n.begin(); it != n.end(); ++it) {
+        std::string node_key = it.key();
+        add_node(node_key, read_node_template(j, node_key));
     }
-
-
+    return true;
 }
+

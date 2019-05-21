@@ -3,16 +3,16 @@
     "nodeA": {
       "ports": {
         "portA": {
-          "singleton": 3.0,
-          "vector": [1,2,3,4],
-          "fixed": true
+          "value": [1,2,3,4],
+          "fixed": true,
+          "is_output": true
         },
         "portB": {
-          "singleton": 2.0,
+          "value": [1,2,3,4],
           "fixed": true
         },
         "portC": {
-          "singleton": 2.0,
+          "value": [1,2,3,4],
           "fixed": true
         }
       },
@@ -22,15 +22,15 @@
     "nodeB": {
       "ports": {
         "portA": {
-          "singleton": 1.0,
+          "value": [1,2,3,4],
           "fixed": true
         },
         "portB": {
-          "singleton": 2.0,
+          "value": [1,2,3,4],
           "fixed": true
         },
         "portC": {
-          "singleton": 1.0,
+          "value": [1,2,3,4],
           "fixed": true
         }
       },

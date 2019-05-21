@@ -49,7 +49,7 @@ class Tests(unittest.TestCase):
     def test_read_template(self):
         import chinet as cn
 
-        template_file = "./inputs/session_template.json"
+        template_file = "./test/inputs/session_template.json"
 
         json_string = ""
         with open(template_file, 'r') as fp:
@@ -64,9 +64,6 @@ class Tests(unittest.TestCase):
         )
         print(
             [d.get_value() for d in s.get_nodes()[s.get_nodes().keys()[0]].get_input_ports().values()]
-        )
-        print(
-            [d.get_array() for d in s.get_nodes()[s.get_nodes().keys()[0]].get_input_ports().values()]
         )
 
 
