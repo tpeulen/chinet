@@ -3,8 +3,8 @@
 //using namespace rttr;
 
 void multiply(
-        std::map<std::string, std::shared_ptr<Port>> inputs,
-        std::map<std::string, std::shared_ptr<Port>> outputs){
+        const std::map<std::string, std::shared_ptr<Port>> &inputs,
+        std::map<std::string, std::shared_ptr<Port>> &outputs){
 
     std::vector<double> mul;
     mul.resize(inputs.size());
@@ -33,14 +33,14 @@ void multiply(
 
 
 void nothing(
-        const std::map<std::string, std::shared_ptr<Port>> inputs,
-        const std::map<std::string, std::shared_ptr<Port>> outputs){
+        const std::map<std::string, std::shared_ptr<Port>> &inputs,
+        const std::map<std::string, std::shared_ptr<Port>> &outputs){
 }
 
 
 void convolve_sum_of_exponentials_periodic(
-        std::map<std::string, std::shared_ptr<Port>> inputs,
-        std::map<std::string, std::shared_ptr<Port>> output){
+        const std::map<std::string, std::shared_ptr<Port>> &inputs,
+        std::map<std::string, std::shared_ptr<Port>> &output){
     /*
     std::vector<double> irf = input_map["irf"]->value();
     std::vector<double> decay = input_map["decay"]->value();

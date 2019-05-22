@@ -1,6 +1,0 @@
-{
-  "death": 0,
-  "_id" : { "$oid" : "5caea5d371323f06b6473262" },
-  "predecessor" : { "$oid" : "5caea5d371323f06b6473262" },
-  "target": { "$oid" : "5caea5d371323f06b6473262" }
-}

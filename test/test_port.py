@@ -66,13 +66,13 @@ class Tests(unittest.TestCase):
         p2 = cn.Port(array)
         self.assertListEqual(list(p1.get_value()), list(p2.get_value()))
 
-    def test_set_get_value(self):
+    def test_set_get_value_1(self):
         """Test chinet Port class set_value and get_value"""
         value = 23.0
         port = cn.Port(value)
         self.assertEqual(port.get_value(), value)
 
-    def test_set_get_value(self):
+    def test_set_get_value_2(self):
         """Test chinet Port class set_value and get_value"""
         value = (1,)
         port = cn.Port()
