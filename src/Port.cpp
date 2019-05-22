@@ -32,6 +32,12 @@ bson_t Port::get_bson() {
     return dst;
 }
 
+void Port::set_port_type(bool is_output)
+{
+    MongoObject::set_singleton("is_output", is_output);
+}
+
+
 
 // Constructor
 //--------------------------------------------------------------------

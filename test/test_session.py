@@ -49,7 +49,7 @@ class Tests(unittest.TestCase):
     def test_read_template(self):
         import chinet as cn
 
-        template_file = "./test/inputs/session_template.json"
+        template_file = "./inputs/session_template.json"
 
         json_string = ""
         with open(template_file, 'r') as fp:
@@ -59,13 +59,18 @@ class Tests(unittest.TestCase):
         s.read_session_template(json_string)
         print(s.get_nodes().keys())
 
+        nodeA = s.get_nodes()[s.get_nodes().keys()[0]]
         print(
-            s.get_nodes()[s.get_nodes().keys()[0]].get_input_ports().keys()
+            nodeA.get_input_ports().keys()
         )
         print(
-            [d.get_value() for d in s.get_nodes()[s.get_nodes().keys()[0]].get_input_ports().values()]
+            [d.get_value() for d in nodeA.get_input_ports().values()]
         )
+        nodeA.evaluate()
 
+        print(
+            [d.get_value() for d in nodeA.get_output_ports().values()]
+        )
 
 
 if __name__ == '__main__':

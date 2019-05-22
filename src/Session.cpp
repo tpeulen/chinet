@@ -62,6 +62,10 @@ std::shared_ptr<Node> Session::read_node_template(json j, std::string &node_key)
         auto port = read_port_template(j, node_key, port_key);
         node->add_port(port_key, port, port->is_output());
     }
+    node->set_callback(
+            j["nodes"][node_key]["callback"].get<std::string>(),
+            j["nodes"][node_key]["callback_type"].get<std::string>()
+            );
 
     return node;
 }

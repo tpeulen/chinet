@@ -2,7 +2,6 @@
 
 //using namespace rttr;
 
-
 void multiply(
         std::map<std::string, std::shared_ptr<Port>> inputs,
         std::map<std::string, std::shared_ptr<Port>> outputs){
@@ -12,17 +11,32 @@ void multiply(
 
     int i = 0;
     for(auto &o : inputs){
+        #if CHINET_DEBUG
         std::cout << o.first << std::endl;
+        #endif
         double m = 1.0;
         for(auto &v : o.second->get_value()){
+            #if CHINET_DEBUG
+            std::cout << v << ":" << std::endl;
+            #endif
             m *= v;
         }
         mul[i] = m;
         i++;
     }
-
-    outputs["outA"]->set_value(mul);
+    if (outputs.find("outA") == outputs.end() ) {
+        std::cerr << "Error: Node does not define output port with the name 'outA' " << std::endl;
+    } else {
+        outputs["outA"]->set_value(mul);
+    }
 }
+
+
+void nothing(
+        std::map<std::string, std::shared_ptr<Port>> inputs,
+        std::map<std::string, std::shared_ptr<Port>> outputs){
+}
+
 
 void convolve_sum_of_exponentials_periodic(
         std::map<std::string, std::shared_ptr<Port>> inputs,
@@ -54,5 +68,6 @@ RTTR_REGISTRATION {
     using namespace rttr;
     registration::class_<NodeCallback>("NodeCallback").constructor<>().method("run", &NodeCallback::run);
     registration::method("multiply", &multiply);
+    registration::method("nothing", &nothing);
     registration::method("convolve", &convolve_sum_of_exponentials_periodic);
 }

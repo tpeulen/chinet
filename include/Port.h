@@ -6,7 +6,7 @@
 
 #include <Node.h>
 
-
+class Node;
 class Port : public MongoObject
 {
 
@@ -32,7 +32,7 @@ public:
          bool fixed = false,
          bool is_output = false
     ) :
-            Port()
+    Port()
     {
         set_value(value);
         set_fixed(fixed);
@@ -44,7 +44,7 @@ public:
          bool fixed = false,
          bool is_output = false
     ) :
-            Port()
+    Port()
     {
         set_fixed(fixed);
         set_port_type(is_output);
@@ -56,10 +56,7 @@ public:
     // Getter & Setter
     //--------------------------------------------------------------------
 
-    void set_port_type(bool is_output)
-    {
-        MongoObject::set_singleton("is_output", is_output);
-    }
+    void set_port_type(bool is_output);
 
     bool is_output()
     {

@@ -21,6 +21,7 @@ Node::Node(std::map<std::string, std::shared_ptr<Port>> ports) :
     for(auto &o: ports){
         o.second->set_name(o.first);
     }
+    fill_input_output_port_lookups();
 }
 
 /*
@@ -52,9 +53,10 @@ bool Node::read_from_db(const std::string &oid_string){
 
     return_value &= MongoObject::read_from_db(oid_string);
     return_value &= create_and_connect_objects_from_oid_doc(&document, "ports", &ports);
-
+#if CHINET_DEBUG
     std::cout << "callback-restore: " << get_string_by_key(&document, "callback") << std::endl;
     std::cout << "callback_type-restore: " << get_string_by_key(&document, "callback_type") << std::endl;
+#endif
 
     set_callback(
             get_string_by_key(&document, "callback"),
@@ -114,49 +116,41 @@ std::shared_ptr<Port> Node::get_port(const std::string &port_name){
 }
 
 std::shared_ptr<Port> Node::get_input_port(const std::string &port_name){
-    return get_input_ports()[port_name];
+    return in_[port_name];
 }
 
 std::shared_ptr<Port> Node::get_output_port(const std::string &port_name){
-    return get_output_ports()[port_name];
+    return out_[port_name];
 }
 
 std::map<std::string, std::shared_ptr<Port>> Node::get_input_ports(){
-    std::map<std::string, std::shared_ptr<Port>> re;
-    for(auto o: ports){
-        if(!o.second->is_output()){
-            re[o.first] = o.second;
-        }
-    }
-    return re;
+    return in_;
 }
 
 std::map<std::string, std::shared_ptr<Port>> Node::get_output_ports(){
-    std::map<std::string, std::shared_ptr<Port>> re;
-    for(auto o: ports){
-        if(o.second->is_output()){
-            re[o.first] = o.second;
-        }
-    }
-    return re;
+    return out_;
 }
 
 // Setter
 //--------------------------------------------------------------------
-void Node::set_callback(const std::string s_callback, const std::string s_callback_type){
+void Node::set_callback(std::string s_callback, std::string s_callback_type){
     this->callback = s_callback;
-    this->callback_type = s_callback_type;
+    this->callback_type_string = s_callback_type;
     if(s_callback_type == "C"){
-        rttr::method meth = rttr::type::get_global_method(callback);
-        if(!meth){
+        callback_type = 0;
+        meth_ = rttr::type::get_global_method(callback);
+        if(!meth_){
+#if CHINET_DEBUG
             std::cerr << "The class type " << callback << " does not exist." <<
                       " No callback set. " << std::endl;
+#endif
         }
     }
 }
 
 void Node::set_callback(std::shared_ptr<NodeCallback> cb){
     callback_class = cb;
+    callback_type = 1;
 }
 
 // Private
@@ -167,14 +161,17 @@ void Node::set_callback(std::shared_ptr<NodeCallback> cb){
 void Node::add_port(std::string key, std::shared_ptr<Port> port, bool is_output) {
     port->set_port_type(is_output);
     ports[key] = port;
+    fill_input_output_port_lookups();
 }
 
 void Node::add_input_port(std::string key, std::shared_ptr<Port> port) {
     add_port(key, port, false);
+    fill_input_output_port_lookups();
 }
 
 void Node::add_output_port(std::string key, std::shared_ptr<Port> port) {
     add_port(key, port, true);
+    fill_input_output_port_lookups();
 }
 
 bson_t Node::get_bson(){
@@ -189,25 +186,23 @@ bson_t Node::get_bson(){
     create_oid_dict_in_doc<Port>(&dst, "ports", ports);
 
     append_string(&dst, "callback", callback);
-    append_string(&dst, "callback_type", callback_type);
+    append_string(&dst, "callback_type", callback_type_string);
 
     return dst;
 }
 
 void Node::evaluate(){
-    if(ports.empty()) {
-        return;
-    }
+    #if CHINET_DEBUG
     std::clog << "update:callback_type:" << callback_type;
-    if(callback_type == "C")
+    #endif
+    if(callback_type == 0)
     {
+        #if CHINET_DEBUG
         std::clog << ":registered C function"  << std::endl;
-        rttr::method meth = rttr::type::get_global_method(callback);
-        if (meth) {
-            rttr::variant return_value = meth.invoke({}, get_input_ports(), get_output_ports());
-        }
+        #endif
+        rttr::variant return_value = meth_.invoke({}, in_, out_);
     } else if (callback_class != nullptr) {
-            callback_class->run(get_input_ports(), get_output_ports());
+            callback_class->run(in_, out_);
     }
 }
 
@@ -218,6 +213,20 @@ bool Node::is_valid(){
         return node_valid_;
     }
 }
+
+void Node::fill_input_output_port_lookups(){
+    out_.clear();
+    in_.clear();
+
+    for(auto o: ports){
+        if(o.second->is_output()){
+            out_[o.first] = o.second;
+        } else{
+            in_[o.first] = o.second;
+        }
+    }
+}
+
 
 /*
 std::shared_ptr<Port> Node::get_port(bson_oid_t *oid_port){

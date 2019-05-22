@@ -21,6 +21,7 @@ class NodeCallback;
 class Node : public MongoObject{
 
 private:
+    friend Port;
 
     bool node_valid_ = true;
     std::map<std::string, std::shared_ptr<Port>> ports;
@@ -28,14 +29,21 @@ private:
     // Methods
     //--------------------------------------------------------------------
 
+protected:
+    void fill_input_output_port_lookups();
+    rttr::method meth_ = rttr::type::get_global_method("nothing");
+    std::map<std::string, std::shared_ptr<Port>> in_;
+    std::map<std::string, std::shared_ptr<Port>> out_;
+
+    std::string callback;
+    std::string callback_type_string;
+    int callback_type;
+
 public:
 
     /// A pointer to a function that operates on an input Port instance (first argument)
     /// and writes to an output Port instance (second argument)
     std::shared_ptr<NodeCallback> callback_class;
-
-    std::string callback;
-    std::string callback_type;
 
     // Constructor & Destructor
     //--------------------------------------------------------------------

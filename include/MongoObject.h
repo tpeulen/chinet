@@ -154,7 +154,9 @@ protected:
                     // connect obj to db
                     return_value &= connect_object_to_db(o);
                     // read obj from db
+#if CHINET_DEBUG
                     std::cout << oid_to_string(oid) << std::endl;
+#endif
                     o->read_from_db(oid_to_string(oid));
                     std::string key = bson_iter_key(&child);
                     // add obj to the target map
@@ -162,7 +164,9 @@ protected:
                 }
             }
         } else{
+#if CHINET_DEBUG
             std::cerr << "Error: no nodes section in Session" << std::endl;
+#endif
             return_value &= false;
         }
         return return_value;
@@ -196,7 +200,9 @@ protected:
                 }
             }
         } else{
+#if CHINET_DEBUG
             std::cerr << "Error: no nodes section in Session" << std::endl;
+#endif
             return_value &= false;
         }
         return return_value;

@@ -74,8 +74,6 @@ class Tests(unittest.TestCase):
         node.set_callback("multiply", "C")
 
         node.evaluate()
-
-        print(outA.get_value(), inA.get_value())
         self.assertEqual((inA.get_value().prod() == outA.get_value()).all(), True)
 
     def test_node_C_RTTR_callback_2(self):
@@ -140,9 +138,7 @@ class Tests(unittest.TestCase):
             }
         )
         node.set_callback("multiply", "C")
-
-        node.connect_to_db(**db_dict)
-
+        self.assertEqual(node.connect_to_db(**db_dict), True)
         self.assertEqual(node.write_to_db(), True)
 
     def test_node_restore_from_db(self):
