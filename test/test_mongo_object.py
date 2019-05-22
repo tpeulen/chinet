@@ -1,7 +1,6 @@
 import utils
 import os
 import unittest
-import sys
 import json
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))

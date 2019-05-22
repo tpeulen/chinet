@@ -77,8 +77,12 @@ link_libraries(${LIBMONGOCXX_LIBRARIES})
 include_directories(${LIBMONGOCXX_INCLUDE_DIRS})
 message("-- libmongocxx libraries \"${LIBMONGOCXX_LIBRARIES}\"")
 message("-- libmongocxx include \"${LIBMONGOCXX_INCLUDE_DIRS}\"")
-
 ]]
+
+# LabelLib
+###############################
+find_package (FlexLabel REQUIRED)
+
 
 # JSON
 ###############################

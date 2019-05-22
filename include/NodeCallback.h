@@ -9,6 +9,7 @@
 #include <Port.h>
 #include <Node.h>
 #include <Functions.h>
+#include <FlexLabel/FlexLabel.h>
 
 class Port;
 

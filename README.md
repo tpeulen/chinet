@@ -4,51 +4,59 @@
 [![Anaconda-Server Version](https://anaconda.org/tpeulen/chinet/badges/version.svg)](https://anaconda.org/tpeulen/chinet)
 [![Anaconda-Server Badge](https://anaconda.org/tpeulen/chinet/badges/platforms.svg)](https://anaconda.org/tpeulen/chinet)
 [![Linux Build Status](https://travis-ci.org/tpeulen/chinet.svg?branch=master)](https://travis-ci.org/tpeulen/chinet)
-
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9b8528bd067148d68d55cb3edeb10fe6)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tpeulen/chinet&amp;utm_campaign=Badge_Grade)
+
 ## General description
 
-chinet is a C++ library to create global fluorescence models. A global
-fluorescence model is a model jointly describing multiple data-sets.
-chinet can be used to model the 
+chinet is a C++ library to create optimize, sample, and archive global 
+models. A global model is a model, that unites multiple data-sets and
+seeks for a joint description of the united dataset.
 
-graph
-parallel execution
+Global models can unite datasets of the same kind or datasets of 
+different types. A typical examples of a global model in fluorescence 
+experiments is the joint description of multiple fluorescence 
+correlation curves in a titration and the joint description of multiple
+fluorescence decay curves reporting on FRET in a biomolecular structure
+by a single structural model.
 
-database backend 
+Computing a gobal model with a large diverse set of different data 
+can be computationally expensive. To reduce the computational costs
+and to decrease the evaluation time of a global model defined by chinet,
+the mutual dependencies of the model parameters are modeled by a graph
+structure that connects "computing nodes". When a a set of parameters is
+changed only computing nodes that are affected by these changes are 
+evaluated. Independent nodes are evaluated in parallel. 
 
-MongoDB
-
-
-
-reactive evaluation of computing nodes   
-dataflow
+The state of the evaluation graph can be written to a database for 
+documentation purposes and reconstructed using unique identifies 
+provided by the database. 
 
 chinet is NOT intended as ready-to-use software for specific application 
 purposes.
 
+## Goals
 
-## Design goals
-
-* Low memory footprint (keep objective large datasets, e.g.  FLIM in memory). 
-  Particulary useful for FLIM.
-* Platform independent C/C++ library with interfaces for scripting libraries 
-
+*  reactive dataflow model framework 
+*  fast inter computation node communication
+*  define and store models jointly with associated data identifies in
+   data base.
+*  Low memory footprint (keep objective large datasets, e.g.  FLIM in memory). 
+   Particulary useful for FLIM.
+*  Platform independent C/C++ library with interfaces for scripting libraries 
 
 ## Capabilities
 
-* Fast (IO limited) Reading TTTR files
-* Generation / analysis of fluorescence decays
-* Time window analysis
-* Correlation of time event traces
-* Filtering of time event traces to generate instrument response 
-functions for fluorescence decays analysis without the need of independent measurements.. 
-* Fast photon distribution analysis
-* Fast selection of photons from a photon stream
+*  Fast (IO limited) Reading TTTR files
+*  Generation / analysis of fluorescence decays
+*  Time window analysis
+*  Correlation of time event traces
+*  Filtering of time event traces to generate instrument response 
+   functions for fluorescence decays analysis without the need of independent measurements.. 
+*  Fast photon distribution analysis
+*  Fast selection of photons from a photon stream
 
 Generation of fluorescence decay histograms chinet outperforms pure numpy and Python based
 libraries by a factor of ~40  
-
 
 ## Implementation
 
@@ -95,13 +103,13 @@ For most users the later approach is recommended. Currently,
 pre-compiled packages for the anaconda distribution system are 
 available for:
 
-* Windows: Python 2.7, Python 3.7 (x64)
-* Linux: Python 2.7, Python 3.7 (x64)
-* MacOs: Python 2.7 (x64)
+*  Windows: Python 2.7, Python 3.7 (x64)
+*  Linux: Python 2.7, Python 3.7 (x64)
+*  MacOs: Python 2.7 (x64)
 
-Legacy 32-bit platforms are currently not supported.
+Legacy 32-bit platforms are not supported.
 
-# Examples
+## Examples
 
 
 ```python
@@ -109,7 +117,7 @@ Legacy 32-bit platforms are currently not supported.
 ```
   
 
-# License
+## License
 
 chinet is released under the open source MIT license.
 
