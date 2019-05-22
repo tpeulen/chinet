@@ -76,9 +76,43 @@ bool Session::read_session_template(const std::string &json_string){
     // read nodes
     auto n = j["nodes"];
     for (json::iterator it = n.begin(); it != n.end(); ++it) {
-        std::string node_key = it.key();
+        auto node_key = it.key();
         add_node(node_key, read_node_template(j, node_key));
     }
+
+    auto l = j["links"];
+    for (json::iterator it = l.begin(); it != l.end(); ++it) {
+        auto v = it.value();
+        link_nodes(
+                v["node"].get<std::string>(),
+                v["port"].get<std::string>(),
+                v["target_node"].get<std::string>(),
+                v["target_port"].get<std::string>()
+                );
+    }
+
     return true;
 }
+
+bool Session::link_nodes(
+        const std::string node_name,
+        const std::string port_name,
+        const std::string target_node_name,
+        const std::string target_port_name){
+    auto itn = nodes.find(node_name);
+    auto itnt = nodes.find(target_node_name);
+
+    if(itn != nodes.end() && itnt != nodes.end()){
+        auto ports = nodes[node_name]->get_ports();
+        auto target_ports = nodes[target_node_name]->get_ports();
+        auto itp = ports.find(port_name);
+        auto itpt = ports.find(target_port_name);
+        if(itp != ports.end() && itpt != target_ports.end()){
+            ports[port_name]->link(target_ports[target_port_name]);
+            return true;
+        }
+    }
+    return false;
+}
+
 

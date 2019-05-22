@@ -2,11 +2,11 @@
   "nodes": {
     "nodeA": {
       "ports": {
-        "portB": {
+        "portA": {
           "value": [1,2,3,4,5],
           "fixed": true
         },
-        "portC": {
+        "portB": {
           "value": [1,2,3,4],
           "fixed": true
         },
@@ -16,7 +16,7 @@
           "is_output": true
         }
       },
-      "callback": "nothing",
+      "callback": "multiply",
       "callback_type": "C"
     },
     "nodeB": {
@@ -26,7 +26,7 @@
           "fixed": true
         },
         "portB": {
-          "value": [1,2,3,4],
+          "value": [1,2],
           "fixed": true
         },
         "portC": {

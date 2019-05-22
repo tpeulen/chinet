@@ -3,6 +3,7 @@ import os
 import unittest
 import sys
 import json
+import numpy as np
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 utils.set_search_paths(TOPDIR)
@@ -57,20 +58,43 @@ class Tests(unittest.TestCase):
 
         s = cn.Session()
         s.read_session_template(json_string)
-        print(s.get_nodes().keys())
 
         nodeA = s.get_nodes()[s.get_nodes().keys()[0]]
-        print(
-            nodeA.get_input_ports().keys()
+        nodeB = s.get_nodes()[s.get_nodes().keys()[1]]
+
+        # test reading of nodes
+        self.assertListEqual(
+            s.nodes.keys(),
+            ['nodeA', 'nodeB']
         )
-        print(
-            [d.get_value() for d in nodeA.get_input_ports().values()]
+
+        # test reading of ports
+        self.assertListEqual(
+            nodeA.get_input_ports().keys(),
+            ['portA', 'portB']
         )
+
+        # test reading of port values
+        v = list(np.hstack([d.get_value() for d in nodeA.get_input_ports().values()]))
+        self.assertListEqual(
+            v,
+            [1, 2, 1, 2, 3, 4]
+        )
+
+        nA_pA = nodeA.get_port("portA")
+        nB_pB = nodeB.get_port("portB")
+
+        # test links
+        self.assertListEqual(
+            list(nA_pA.get_value()),
+            list(nB_pB.get_value())
+        )
+
+        # test evaluate
         nodeA.evaluate()
 
-        print(
-            [d.get_value() for d in nodeA.get_output_ports().values()]
-        )
+        v = list(np.hstack([d.get_value() for d in nodeA.get_output_ports().values()]))
+        self.assertListEqual(v, [2, 24])
 
 
 if __name__ == '__main__':

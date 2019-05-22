@@ -33,8 +33,8 @@ void multiply(
 
 
 void nothing(
-        std::map<std::string, std::shared_ptr<Port>> inputs,
-        std::map<std::string, std::shared_ptr<Port>> outputs){
+        const std::map<std::string, std::shared_ptr<Port>> inputs,
+        const std::map<std::string, std::shared_ptr<Port>> outputs){
 }
 
 
