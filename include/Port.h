@@ -106,6 +106,9 @@ public:
     void set_value(std::vector<double> &values);
     void set_value(double value);
     void set_fixed(bool fixed);
+    void set_is_reactive(bool reactive){
+        is_reactive_ = reactive;
+    }
 
     bool is_fixed();
     bool is_linked();

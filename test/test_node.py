@@ -10,6 +10,27 @@ utils.set_search_paths(TOPDIR)
 import chinet as cn
 
 
+class CallbackNodePassOn(cn.NodeCallback):
+
+    def __init__(self, *args, **kwargs):
+        cn.NodeCallback.__init__(self, *args, **kwargs)
+
+    def run(self, inputs, outputs):
+        outputs["outA"].set_value(inputs["inA"].get_value())
+
+
+class NodeCallbackMultiply(cn.NodeCallback):
+
+    def __init__(self, *args, **kwargs):
+        cn.NodeCallback.__init__(self, *args, **kwargs)
+
+    def run(self, inputs, outputs):
+        mul = 1.0
+        for key in inputs:
+            mul *= inputs[key].get_value()
+        outputs["portC"].set_value(mul)
+
+
 class Tests(unittest.TestCase):
 
     def test_node_init(self):
@@ -98,17 +119,6 @@ class Tests(unittest.TestCase):
     def test_node_python_callback_1(self):
         """Test chinet Node class python callbacks"""
 
-        class NodeCallback(cn.NodeCallback):
-
-            def __init__(self, *args, **kwargs):
-                cn.NodeCallback.__init__(self, *args, **kwargs)
-
-            def run(self, inputs, outputs):
-                mul = 1.0
-                for key in inputs:
-                    mul *= inputs[key].get_value()
-                outputs["portC"].set_value(mul)
-
         node = cn.Node()
 
         portIn1 = cn.Port(55)
@@ -120,7 +130,7 @@ class Tests(unittest.TestCase):
         portOut1 = cn.Port()
         node.add_output_port("portC", portOut1)
 
-        cb = NodeCallback()
+        cb = NodeCallbackMultiply()
         node.set_callback(cb)
         node.evaluate()
 
@@ -184,14 +194,6 @@ class Tests(unittest.TestCase):
         when it is evaluated. When a node is initialized it is invalid.
         """
 
-        class NodeCallback(cn.NodeCallback):
-
-            def __init__(self, *args, **kwargs):
-                cn.NodeCallback.__init__(self, *args, **kwargs)
-
-            def run(self, inputs, outputs):
-                outputs["outA"].set_value(inputs["inA"].get_value())
-
         out_node_1 = cn.Port(1.0, False, True)
         in_node_1 = cn.Port(3.0)
         node_1 = cn.Node(
@@ -200,7 +202,7 @@ class Tests(unittest.TestCase):
                 'outA': out_node_1
             }
         )
-        cb = NodeCallback()
+        cb = CallbackNodePassOn()
         node_1.set_callback(cb)
 
         self.assertListEqual(
@@ -225,16 +227,6 @@ class Tests(unittest.TestCase):
         the node is evaluated.
         """
 
-        import chinet as cn
-
-        class NodeCallback(cn.NodeCallback):
-
-            def __init__(self, *args, **kwargs):
-                cn.NodeCallback.__init__(self, *args, **kwargs)
-
-            def run(self, inputs, outputs):
-                outputs["outA"].set_value(inputs["inA"].get_value())
-
         out_node_1 = cn.Port(1.0, False, True)
         in_node_1 = cn.Port(3.0, False, False, True)  # is_fixed, is_output, is_reactive
         node_1 = cn.Node(
@@ -243,7 +235,7 @@ class Tests(unittest.TestCase):
                 'outA': out_node_1
             }
         )
-        cb = NodeCallback()
+        cb = CallbackNodePassOn()
         node_1.set_callback(cb)
 
         self.assertEqual(node_1.is_valid(), False)

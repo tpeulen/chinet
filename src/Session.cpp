@@ -47,6 +47,10 @@ std::shared_ptr<Port> Session::read_port_template(json j, std::string &node_key,
             port->set_port_type(
                     j["nodes"][node_key]["ports"][port_key]["is_output"].get<bool>()
             );
+        } else if (it_val.key() == "is_reactive"){
+            port->set_is_reactive(
+                    j["nodes"][node_key]["ports"][port_key]["is_reactive"].get<bool>()
+            );
         }
     }
     port->set_name(port_key);

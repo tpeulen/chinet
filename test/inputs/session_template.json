@@ -8,7 +8,8 @@
         },
         "portB": {
           "value": [1,2,3,4],
-          "fixed": true
+          "fixed": true,
+          "is_reactive": true
         },
         "outA": {
           "value": [],
