@@ -1,0 +1,102 @@
+\href{https://travis-ci.org/tpeulen/chinet}{\tt } \href{https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tpeulen/chinet&amp;utm_campaign=Badge_Grade}{\tt } \href{https://conda.anaconda.org/tpeulen}{\tt } \href{https://anaconda.org/tpeulen/chinet}{\tt } \href{https://anaconda.org/tpeulen/chinet}{\tt }
+
+\subsection*{General description}
+
+chinet is a C++ library to create optimize, sample, and archive global models. A global model is a model, that unites multiple data-\/sets and seeks for a joint description of the united dataset.
+
+Global models can unite datasets of the same kind or datasets of different types. A typical examples of a global model in fluorescence experiments is the joint description of multiple fluorescence correlation curves in a titration and the joint description of multiple fluorescence decay curves reporting on F\+R\+ET in a biomolecular structure by a single structural model.
+
+Computing a gobal model with a large diverse set of different data can be computationally expensive. To reduce the computational costs and to decrease the evaluation time of a global model defined by chinet, the mutual dependencies of the model parameters are modeled by a graph structure that connects \char`\"{}computing nodes\char`\"{}. When a a set of parameters is changed only computing nodes that are affected by these changes are evaluated. Independent nodes are evaluated in parallel.
+
+The state of the evaluation graph can be written to a database for documentation purposes and reconstructed using unique identifies provided by the database.
+
+chinet is N\+OT intended as ready-\/to-\/use software for specific application purposes.
+
+\subsection*{Goals}
+
+
+\begin{DoxyItemize}
+\item reactive dataflow model framework
+\item fast inter computation node communication
+\item define and store models jointly with associated data identifies in data base.
+\item Low memory footprint (keep objective large datasets, e.\+g. F\+L\+IM in memory). Particulary useful for F\+L\+IM.
+\item Platform independent C/\+C++ library with interfaces for scripting libraries
+\end{DoxyItemize}
+
+\subsection*{Capabilities}
+
+
+\begin{DoxyItemize}
+\item Fast (IO limited) Reading T\+T\+TR files
+\item Generation / analysis of fluorescence decays
+\item Time window analysis
+\item Correlation of time event traces
+\item Filtering of time event traces to generate instrument response functions for fluorescence decays analysis without the need of independent measurements..
+\item Fast photon distribution analysis
+\item Fast selection of photons from a photon stream
+\end{DoxyItemize}
+
+Generation of fluorescence decay histograms chinet outperforms pure numpy and Python based libraries by a factor of $\sim$40
+
+\subsection*{Implementation}
+
+Pure pure C/\+C++ and C\+U\+DA based high performance algorithms for real-\/time and interactive analysis of T\+T\+TR data.
+
+\section*{Building and Installation}
+
+\subsection*{C++ shared library}
+
+The C++ shared library can be installed from source with \href{https://cmake.org/}{\tt cmake}\+:
+
+
+\begin{DoxyCode}
+git clone --recursive https://github.com/tpeulen/chinet.git
+mkdir chinet/build; cd chinet/build
+cmake ..
+sudo make install
+\end{DoxyCode}
+
+
+On Linux you can build and install a package instead (prefered)\+:
+
+\subsection*{Python bindings}
+
+The Python bindings can be either be installed by downloading and compiling the source code or by using a precompiled distribution for Python anaconda environment.
+
+The following commands can be used to download and compile the source code\+:
+
+
+\begin{DoxyCode}
+git clone --recursive https://github.com/tpeulen/chinet.git
+cd chinet
+sudo python setup.py install
+\end{DoxyCode}
+
+
+In an \href{https://www.anaconda.com/}{\tt anaconda} environment the library can be installed by the following command\+: 
+\begin{DoxyCode}
+conda install -c tpeulen chinet
+\end{DoxyCode}
+
+
+For most users the later approach is recommended. Currently, pre-\/compiled packages for the anaconda distribution system are available for\+:
+
+
+\begin{DoxyItemize}
+\item Windows\+: Python 2.\+7, Python 3.\+7 (x64)
+\item Linux\+: Python 2.\+7, Python 3.\+7 (x64)
+\item Mac\+Os\+: Python 2.\+7 (x64)
+\end{DoxyItemize}
+
+Legacy 32-\/bit platforms are not supported.
+
+\subsection*{Examples}
+
+
+\begin{DoxyCode}
+\end{DoxyCode}
+
+
+\subsection*{License}
+
+chinet is released under the open source M\+IT license. 

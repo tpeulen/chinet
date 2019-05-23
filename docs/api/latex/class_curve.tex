@@ -1,0 +1,389 @@
+\hypertarget{class_curve}{}\section{Curve Class Reference}
+\label{class_curve}\index{Curve@{Curve}}
+
+
+{\ttfamily \#include $<$Curve.\+h$>$}
+
+Inheritance diagram for Curve\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_curve}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_curve_a5a43592686a79c9d4e794eec1cb693ac}{set\+\_\+x} (double $\ast$in, int n\+\_\+in)
+\item 
+void \hyperlink{class_curve_a94659672cb6627ce6a226c9e77652e84}{set\+\_\+x} (std\+::vector$<$ double $>$ x\+\_\+)
+\item 
+void \hyperlink{class_curve_ab3e5da7ebd194f1c4655d4a1e1099541}{set\+\_\+ex} (double $\ast$in, int n\+\_\+in)
+\item 
+void \hyperlink{class_curve_a8170b7da97887fa363250bf34bb53859}{set\+\_\+x\+\_\+name} (std\+::string v)
+\item 
+void \hyperlink{class_curve_a16534fa18b0982751ebf2c19eb092949}{set\+\_\+y} (double $\ast$in, int n\+\_\+in)
+\item 
+void \hyperlink{class_curve_a4c87680fa04d360bc5094112fe9c91b1}{set\+\_\+y} (std\+::vector$<$ double $>$ y\+\_\+)
+\item 
+void \hyperlink{class_curve_a11bda872bbbac4856b941eb645ecdd22}{set\+\_\+ey} (double $\ast$in, int n\+\_\+in)
+\item 
+void \hyperlink{class_curve_a562c865538b8f3ea74cd195d5644bb4f}{set\+\_\+y\+\_\+name} (std\+::string v)
+\item 
+void \hyperlink{class_curve_aa4c5bd9700d1db6073179b2d1b61775b}{get\+\_\+x} (double $\ast$$\ast$out, int $\ast$n\+\_\+out)
+\item 
+void \hyperlink{class_curve_ab7fbad5767e33a69754db0e0a1f42bae}{get\+\_\+y} (double $\ast$$\ast$out, int $\ast$n\+\_\+out)
+\item 
+std\+::vector$<$ double $>$ \hyperlink{class_curve_a69eed37c328a574ba58cd9fa5f15dd9d}{get\+\_\+x} ()
+\item 
+std\+::vector$<$ double $>$ \hyperlink{class_curve_a1cd5680f5bbfdfb575860b6cc73700ab}{get\+\_\+y} ()
+\item 
+double \hyperlink{class_curve_a6d554f1ab79e7b741eea5abded25874b}{sum} ()
+\item 
+size\+\_\+t \hyperlink{class_curve_add93ea6b8418185dcc647273fd85bcef}{size} ()
+\item 
+std\+::vector$<$ double $>$ \hyperlink{class_curve_a1e74c35667105b4ce24c913b4963000a}{get\+\_\+dx} ()
+\item 
+std\+::vector$<$ double $>$ \hyperlink{class_curve_aaa80e048e9d96c5c82a7e83d05269140}{get\+\_\+dy} ()
+\item 
+\hyperlink{class_curve_a627534496c4472dedcb5c8bd67f579d0}{Curve} (double $\ast$\hyperlink{class_curve_ae97afae63534c34353e3fc6f5e9d7a8d}{x}, unsigned int nx, double $\ast$\hyperlink{class_curve_a81ad07dc5dccb7a05870b6341ae78364}{y}, unsigned int ny, double $\ast$\hyperlink{class_curve_a76092a26c2894325fda94d4f64326b52}{ey}, unsigned int ney, std\+::string \hyperlink{class_curve_a5ac159e573a921630bed5093ac3ceae5}{name\+\_\+x}, std\+::string \hyperlink{class_curve_aecd575bb016b03dd2c1777153f72931a}{name\+\_\+y})
+\item 
+\hyperlink{class_curve_a25dc8db43ed446103e71652dd37f4822}{Curve} (double $\ast$\hyperlink{class_curve_ae97afae63534c34353e3fc6f5e9d7a8d}{x}, unsigned int nx, double $\ast$\hyperlink{class_curve_a81ad07dc5dccb7a05870b6341ae78364}{y}, unsigned int ny, std\+::string \hyperlink{class_curve_a5ac159e573a921630bed5093ac3ceae5}{name\+\_\+x}, std\+::string \hyperlink{class_curve_aecd575bb016b03dd2c1777153f72931a}{name\+\_\+y})
+\item 
+\hyperlink{class_curve_aff266ab3a4e4d4b40555692e67c3a914}{Curve} (double $\ast$\hyperlink{class_curve_ae97afae63534c34353e3fc6f5e9d7a8d}{x}, unsigned int nx, double $\ast$\hyperlink{class_curve_a81ad07dc5dccb7a05870b6341ae78364}{y}, unsigned int ny, double $\ast$\hyperlink{class_curve_a76092a26c2894325fda94d4f64326b52}{ey}, unsigned int ney)
+\item 
+\hyperlink{class_curve_a56ee024f888ced5ca73b38bde3fbc7aa}{Curve} (double $\ast$\hyperlink{class_curve_ae97afae63534c34353e3fc6f5e9d7a8d}{x}, unsigned int nx, double $\ast$\hyperlink{class_curve_a81ad07dc5dccb7a05870b6341ae78364}{y}, unsigned int ny)
+\item 
+\hyperlink{class_curve_a5447f926f128f5eca036a89d1b1d4e3f}{Curve} (double dt, unsigned int nx)
+\item 
+\hyperlink{class_curve_a09c87588b0ceab57603fb6e193875b20}{Curve} ()=default
+\item 
+\hyperlink{class_curve_a7ce6ff79064e9795241423ed47166539}{$\sim$\+Curve} ()
+\item 
+void \hyperlink{class_curve_aaefb5086df5ad824628b9aaef7f27714}{shift} (double value)
+\item 
+\hyperlink{class_curve}{Curve} \hyperlink{class_curve_a015ca17f63cc971bb7c2885b2d2de2df}{operator+} (\hyperlink{class_curve}{Curve} \&v)
+\item 
+\hyperlink{class_curve}{Curve} \hyperlink{class_curve_a03352202f80edde95e6581485ee78e1c}{operator+} (double v)
+\item 
+\hyperlink{class_curve}{Curve} \hyperlink{class_curve_a55facce84fd4b5bd58124772735c9248}{operator-\/} (\hyperlink{class_curve}{Curve} \&v)
+\item 
+\hyperlink{class_curve}{Curve} \hyperlink{class_curve_a1f487e5943b841112dd72c077dee56f6}{operator-\/} (double v)
+\item 
+\hyperlink{class_curve}{Curve} \hyperlink{class_curve_a671fb149eecca0baf80672a6e2ffc8a5}{operator$\ast$} (\hyperlink{class_curve}{Curve} \&v)
+\item 
+\hyperlink{class_curve}{Curve} \hyperlink{class_curve_a9ed9c49020ce01f29587000711963beb}{operator$\ast$} (double v)
+\item 
+\hyperlink{class_curve}{Curve} \hyperlink{class_curve_abec3bbbc40b1c643ccb31299dfd53a4d}{operator/} (\hyperlink{class_curve}{Curve} \&v)
+\item 
+\hyperlink{class_curve}{Curve} \hyperlink{class_curve_aff93a6c6139f9cc008d202ca5ea995e0}{operator/} (double v)
+\item 
+void \hyperlink{class_curve_a69f0cd9336dba793efe1398a6997c5a0}{resize} (size\+\_\+t v)
+\item 
+virtual void \hyperlink{class_curve_a6c16b3a6a4f4bd9540780d4e68d90545}{to\+\_\+json} (std\+::string filename)
+\item 
+virtual void \hyperlink{class_curve_aa4b45f195d903ae171dd7572cc5fb796}{from\+\_\+json} (std\+::string filename)
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \hyperlink{class_curve_a5ac159e573a921630bed5093ac3ceae5}{name\+\_\+x}
+\item 
+std\+::string \hyperlink{class_curve_aecd575bb016b03dd2c1777153f72931a}{name\+\_\+y}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{class_curve_ae97afae63534c34353e3fc6f5e9d7a8d}{x}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{class_curve_aaabf36e61b8b305b761587e4cc9737e3}{ex}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{class_curve_a81ad07dc5dccb7a05870b6341ae78364}{y}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{class_curve_a76092a26c2894325fda94d4f64326b52}{ey}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This method multiplies to the y-\/values of the current instance of a object the y-\/values of another
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & An object of the type\\
+\hline
+{\em valid} & If this parameter is false (default value) the y-\/values are directly multiplied without check for overlap. If this parameter is true only the overlapping y-\/values are multiplied. The overlap is judged by the values of the x-\/axis (T\+O\+DO). \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_curve_a627534496c4472dedcb5c8bd67f579d0}\label{class_curve_a627534496c4472dedcb5c8bd67f579d0}} 
+\index{Curve@{Curve}!Curve@{Curve}}
+\index{Curve@{Curve}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{Curve()}{Curve()}\hspace{0.1cm}{\footnotesize\ttfamily [1/6]}}
+{\footnotesize\ttfamily Curve\+::\+Curve (\begin{DoxyParamCaption}\item[{double $\ast$}]{x,  }\item[{unsigned int}]{nx,  }\item[{double $\ast$}]{y,  }\item[{unsigned int}]{ny,  }\item[{double $\ast$}]{ey,  }\item[{unsigned int}]{ney,  }\item[{std\+::string}]{name\+\_\+x,  }\item[{std\+::string}]{name\+\_\+y }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a25dc8db43ed446103e71652dd37f4822}\label{class_curve_a25dc8db43ed446103e71652dd37f4822}} 
+\index{Curve@{Curve}!Curve@{Curve}}
+\index{Curve@{Curve}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{Curve()}{Curve()}\hspace{0.1cm}{\footnotesize\ttfamily [2/6]}}
+{\footnotesize\ttfamily Curve\+::\+Curve (\begin{DoxyParamCaption}\item[{double $\ast$}]{x,  }\item[{unsigned int}]{nx,  }\item[{double $\ast$}]{y,  }\item[{unsigned int}]{ny,  }\item[{std\+::string}]{name\+\_\+x,  }\item[{std\+::string}]{name\+\_\+y }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_aff266ab3a4e4d4b40555692e67c3a914}\label{class_curve_aff266ab3a4e4d4b40555692e67c3a914}} 
+\index{Curve@{Curve}!Curve@{Curve}}
+\index{Curve@{Curve}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{Curve()}{Curve()}\hspace{0.1cm}{\footnotesize\ttfamily [3/6]}}
+{\footnotesize\ttfamily Curve\+::\+Curve (\begin{DoxyParamCaption}\item[{double $\ast$}]{x,  }\item[{unsigned int}]{nx,  }\item[{double $\ast$}]{y,  }\item[{unsigned int}]{ny,  }\item[{double $\ast$}]{ey,  }\item[{unsigned int}]{ney }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a56ee024f888ced5ca73b38bde3fbc7aa}\label{class_curve_a56ee024f888ced5ca73b38bde3fbc7aa}} 
+\index{Curve@{Curve}!Curve@{Curve}}
+\index{Curve@{Curve}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{Curve()}{Curve()}\hspace{0.1cm}{\footnotesize\ttfamily [4/6]}}
+{\footnotesize\ttfamily Curve\+::\+Curve (\begin{DoxyParamCaption}\item[{double $\ast$}]{x,  }\item[{unsigned int}]{nx,  }\item[{double $\ast$}]{y,  }\item[{unsigned int}]{ny }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a5447f926f128f5eca036a89d1b1d4e3f}\label{class_curve_a5447f926f128f5eca036a89d1b1d4e3f}} 
+\index{Curve@{Curve}!Curve@{Curve}}
+\index{Curve@{Curve}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{Curve()}{Curve()}\hspace{0.1cm}{\footnotesize\ttfamily [5/6]}}
+{\footnotesize\ttfamily Curve\+::\+Curve (\begin{DoxyParamCaption}\item[{double}]{dt,  }\item[{unsigned int}]{nx }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a09c87588b0ceab57603fb6e193875b20}\label{class_curve_a09c87588b0ceab57603fb6e193875b20}} 
+\index{Curve@{Curve}!Curve@{Curve}}
+\index{Curve@{Curve}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{Curve()}{Curve()}\hspace{0.1cm}{\footnotesize\ttfamily [6/6]}}
+{\footnotesize\ttfamily Curve\+::\+Curve (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\mbox{\Hypertarget{class_curve_a7ce6ff79064e9795241423ed47166539}\label{class_curve_a7ce6ff79064e9795241423ed47166539}} 
+\index{Curve@{Curve}!````~Curve@{$\sim$\+Curve}}
+\index{````~Curve@{$\sim$\+Curve}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{$\sim$\+Curve()}{~Curve()}}
+{\footnotesize\ttfamily Curve\+::$\sim$\+Curve (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_curve_aa4b45f195d903ae171dd7572cc5fb796}\label{class_curve_aa4b45f195d903ae171dd7572cc5fb796}} 
+\index{Curve@{Curve}!from\+\_\+json@{from\+\_\+json}}
+\index{from\+\_\+json@{from\+\_\+json}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{from\+\_\+json()}{from\_json()}}
+{\footnotesize\ttfamily virtual void Curve\+::from\+\_\+json (\begin{DoxyParamCaption}\item[{std\+::string}]{filename }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\mbox{\Hypertarget{class_curve_a1e74c35667105b4ce24c913b4963000a}\label{class_curve_a1e74c35667105b4ce24c913b4963000a}} 
+\index{Curve@{Curve}!get\+\_\+dx@{get\+\_\+dx}}
+\index{get\+\_\+dx@{get\+\_\+dx}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{get\+\_\+dx()}{get\_dx()}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ Curve\+::get\+\_\+dx (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Calculates the difference between the x-\/\+Axis values \begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_curve_aaa80e048e9d96c5c82a7e83d05269140}\label{class_curve_aaa80e048e9d96c5c82a7e83d05269140}} 
+\index{Curve@{Curve}!get\+\_\+dy@{get\+\_\+dy}}
+\index{get\+\_\+dy@{get\+\_\+dy}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{get\+\_\+dy()}{get\_dy()}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ Curve\+::get\+\_\+dy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Calculates the difference between the y-\/\+Axis values \begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_curve_aa4c5bd9700d1db6073179b2d1b61775b}\label{class_curve_aa4c5bd9700d1db6073179b2d1b61775b}} 
+\index{Curve@{Curve}!get\+\_\+x@{get\+\_\+x}}
+\index{get\+\_\+x@{get\+\_\+x}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{get\+\_\+x()}{get\_x()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Curve\+::get\+\_\+x (\begin{DoxyParamCaption}\item[{double $\ast$$\ast$}]{out,  }\item[{int $\ast$}]{n\+\_\+out }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a69eed37c328a574ba58cd9fa5f15dd9d}\label{class_curve_a69eed37c328a574ba58cd9fa5f15dd9d}} 
+\index{Curve@{Curve}!get\+\_\+x@{get\+\_\+x}}
+\index{get\+\_\+x@{get\+\_\+x}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{get\+\_\+x()}{get\_x()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ Curve\+::get\+\_\+x (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_ab7fbad5767e33a69754db0e0a1f42bae}\label{class_curve_ab7fbad5767e33a69754db0e0a1f42bae}} 
+\index{Curve@{Curve}!get\+\_\+y@{get\+\_\+y}}
+\index{get\+\_\+y@{get\+\_\+y}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{get\+\_\+y()}{get\_y()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Curve\+::get\+\_\+y (\begin{DoxyParamCaption}\item[{double $\ast$$\ast$}]{out,  }\item[{int $\ast$}]{n\+\_\+out }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a1cd5680f5bbfdfb575860b6cc73700ab}\label{class_curve_a1cd5680f5bbfdfb575860b6cc73700ab}} 
+\index{Curve@{Curve}!get\+\_\+y@{get\+\_\+y}}
+\index{get\+\_\+y@{get\+\_\+y}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{get\+\_\+y()}{get\_y()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ Curve\+::get\+\_\+y (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a671fb149eecca0baf80672a6e2ffc8a5}\label{class_curve_a671fb149eecca0baf80672a6e2ffc8a5}} 
+\index{Curve@{Curve}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{operator$\ast$()}{operator*()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \hyperlink{class_curve}{Curve} Curve\+::operator$\ast$ (\begin{DoxyParamCaption}\item[{\hyperlink{class_curve}{Curve} \&}]{v }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a9ed9c49020ce01f29587000711963beb}\label{class_curve_a9ed9c49020ce01f29587000711963beb}} 
+\index{Curve@{Curve}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{operator$\ast$()}{operator*()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \hyperlink{class_curve}{Curve} Curve\+::operator$\ast$ (\begin{DoxyParamCaption}\item[{double}]{v }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a015ca17f63cc971bb7c2885b2d2de2df}\label{class_curve_a015ca17f63cc971bb7c2885b2d2de2df}} 
+\index{Curve@{Curve}!operator+@{operator+}}
+\index{operator+@{operator+}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{operator+()}{operator+()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \hyperlink{class_curve}{Curve} Curve\+::operator+ (\begin{DoxyParamCaption}\item[{\hyperlink{class_curve}{Curve} \&}]{v }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a03352202f80edde95e6581485ee78e1c}\label{class_curve_a03352202f80edde95e6581485ee78e1c}} 
+\index{Curve@{Curve}!operator+@{operator+}}
+\index{operator+@{operator+}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{operator+()}{operator+()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \hyperlink{class_curve}{Curve} Curve\+::operator+ (\begin{DoxyParamCaption}\item[{double}]{v }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a55facce84fd4b5bd58124772735c9248}\label{class_curve_a55facce84fd4b5bd58124772735c9248}} 
+\index{Curve@{Curve}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{operator-\/()}{operator-()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \hyperlink{class_curve}{Curve} Curve\+::operator-\/ (\begin{DoxyParamCaption}\item[{\hyperlink{class_curve}{Curve} \&}]{v }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a1f487e5943b841112dd72c077dee56f6}\label{class_curve_a1f487e5943b841112dd72c077dee56f6}} 
+\index{Curve@{Curve}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{operator-\/()}{operator-()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \hyperlink{class_curve}{Curve} Curve\+::operator-\/ (\begin{DoxyParamCaption}\item[{double}]{v }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_abec3bbbc40b1c643ccb31299dfd53a4d}\label{class_curve_abec3bbbc40b1c643ccb31299dfd53a4d}} 
+\index{Curve@{Curve}!operator/@{operator/}}
+\index{operator/@{operator/}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{operator/()}{operator/()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \hyperlink{class_curve}{Curve} Curve\+::operator/ (\begin{DoxyParamCaption}\item[{\hyperlink{class_curve}{Curve} \&}]{v }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_aff93a6c6139f9cc008d202ca5ea995e0}\label{class_curve_aff93a6c6139f9cc008d202ca5ea995e0}} 
+\index{Curve@{Curve}!operator/@{operator/}}
+\index{operator/@{operator/}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{operator/()}{operator/()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \hyperlink{class_curve}{Curve} Curve\+::operator/ (\begin{DoxyParamCaption}\item[{double}]{v }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a69f0cd9336dba793efe1398a6997c5a0}\label{class_curve_a69f0cd9336dba793efe1398a6997c5a0}} 
+\index{Curve@{Curve}!resize@{resize}}
+\index{resize@{resize}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{resize()}{resize()}}
+{\footnotesize\ttfamily void Curve\+::resize (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{v }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_ab3e5da7ebd194f1c4655d4a1e1099541}\label{class_curve_ab3e5da7ebd194f1c4655d4a1e1099541}} 
+\index{Curve@{Curve}!set\+\_\+ex@{set\+\_\+ex}}
+\index{set\+\_\+ex@{set\+\_\+ex}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{set\+\_\+ex()}{set\_ex()}}
+{\footnotesize\ttfamily void Curve\+::set\+\_\+ex (\begin{DoxyParamCaption}\item[{double $\ast$}]{in,  }\item[{int}]{n\+\_\+in }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a11bda872bbbac4856b941eb645ecdd22}\label{class_curve_a11bda872bbbac4856b941eb645ecdd22}} 
+\index{Curve@{Curve}!set\+\_\+ey@{set\+\_\+ey}}
+\index{set\+\_\+ey@{set\+\_\+ey}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{set\+\_\+ey()}{set\_ey()}}
+{\footnotesize\ttfamily void Curve\+::set\+\_\+ey (\begin{DoxyParamCaption}\item[{double $\ast$}]{in,  }\item[{int}]{n\+\_\+in }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a5a43592686a79c9d4e794eec1cb693ac}\label{class_curve_a5a43592686a79c9d4e794eec1cb693ac}} 
+\index{Curve@{Curve}!set\+\_\+x@{set\+\_\+x}}
+\index{set\+\_\+x@{set\+\_\+x}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{set\+\_\+x()}{set\_x()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Curve\+::set\+\_\+x (\begin{DoxyParamCaption}\item[{double $\ast$}]{in,  }\item[{int}]{n\+\_\+in }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a94659672cb6627ce6a226c9e77652e84}\label{class_curve_a94659672cb6627ce6a226c9e77652e84}} 
+\index{Curve@{Curve}!set\+\_\+x@{set\+\_\+x}}
+\index{set\+\_\+x@{set\+\_\+x}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{set\+\_\+x()}{set\_x()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Curve\+::set\+\_\+x (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$}]{x\+\_\+ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a8170b7da97887fa363250bf34bb53859}\label{class_curve_a8170b7da97887fa363250bf34bb53859}} 
+\index{Curve@{Curve}!set\+\_\+x\+\_\+name@{set\+\_\+x\+\_\+name}}
+\index{set\+\_\+x\+\_\+name@{set\+\_\+x\+\_\+name}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{set\+\_\+x\+\_\+name()}{set\_x\_name()}}
+{\footnotesize\ttfamily void Curve\+::set\+\_\+x\+\_\+name (\begin{DoxyParamCaption}\item[{std\+::string}]{v }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a16534fa18b0982751ebf2c19eb092949}\label{class_curve_a16534fa18b0982751ebf2c19eb092949}} 
+\index{Curve@{Curve}!set\+\_\+y@{set\+\_\+y}}
+\index{set\+\_\+y@{set\+\_\+y}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{set\+\_\+y()}{set\_y()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Curve\+::set\+\_\+y (\begin{DoxyParamCaption}\item[{double $\ast$}]{in,  }\item[{int}]{n\+\_\+in }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a4c87680fa04d360bc5094112fe9c91b1}\label{class_curve_a4c87680fa04d360bc5094112fe9c91b1}} 
+\index{Curve@{Curve}!set\+\_\+y@{set\+\_\+y}}
+\index{set\+\_\+y@{set\+\_\+y}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{set\+\_\+y()}{set\_y()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Curve\+::set\+\_\+y (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$}]{y\+\_\+ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a562c865538b8f3ea74cd195d5644bb4f}\label{class_curve_a562c865538b8f3ea74cd195d5644bb4f}} 
+\index{Curve@{Curve}!set\+\_\+y\+\_\+name@{set\+\_\+y\+\_\+name}}
+\index{set\+\_\+y\+\_\+name@{set\+\_\+y\+\_\+name}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{set\+\_\+y\+\_\+name()}{set\_y\_name()}}
+{\footnotesize\ttfamily void Curve\+::set\+\_\+y\+\_\+name (\begin{DoxyParamCaption}\item[{std\+::string}]{v }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_aaefb5086df5ad824628b9aaef7f27714}\label{class_curve_aaefb5086df5ad824628b9aaef7f27714}} 
+\index{Curve@{Curve}!shift@{shift}}
+\index{shift@{shift}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{shift()}{shift()}}
+{\footnotesize\ttfamily void Curve\+::shift (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+Shifts the x Axis by a floating point number.
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_curve_add93ea6b8418185dcc647273fd85bcef}\label{class_curve_add93ea6b8418185dcc647273fd85bcef}} 
+\index{Curve@{Curve}!size@{size}}
+\index{size@{size}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{size()}{size()}}
+{\footnotesize\ttfamily size\+\_\+t Curve\+::size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a6d554f1ab79e7b741eea5abded25874b}\label{class_curve_a6d554f1ab79e7b741eea5abded25874b}} 
+\index{Curve@{Curve}!sum@{sum}}
+\index{sum@{sum}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{sum()}{sum()}}
+{\footnotesize\ttfamily double Curve\+::sum (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_curve_a6c16b3a6a4f4bd9540780d4e68d90545}\label{class_curve_a6c16b3a6a4f4bd9540780d4e68d90545}} 
+\index{Curve@{Curve}!to\+\_\+json@{to\+\_\+json}}
+\index{to\+\_\+json@{to\+\_\+json}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{to\+\_\+json()}{to\_json()}}
+{\footnotesize\ttfamily virtual void Curve\+::to\+\_\+json (\begin{DoxyParamCaption}\item[{std\+::string}]{filename }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented in \hyperlink{class_decay_afb84196cbc6cc532bf0ce5db85f39616}{Decay}.
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_curve_aaabf36e61b8b305b761587e4cc9737e3}\label{class_curve_aaabf36e61b8b305b761587e4cc9737e3}} 
+\index{Curve@{Curve}!ex@{ex}}
+\index{ex@{ex}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{ex}{ex}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ Curve\+::ex\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_curve_a76092a26c2894325fda94d4f64326b52}\label{class_curve_a76092a26c2894325fda94d4f64326b52}} 
+\index{Curve@{Curve}!ey@{ey}}
+\index{ey@{ey}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{ey}{ey}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ Curve\+::ey\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_curve_a5ac159e573a921630bed5093ac3ceae5}\label{class_curve_a5ac159e573a921630bed5093ac3ceae5}} 
+\index{Curve@{Curve}!name\+\_\+x@{name\+\_\+x}}
+\index{name\+\_\+x@{name\+\_\+x}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{name\+\_\+x}{name\_x}}
+{\footnotesize\ttfamily std\+::string Curve\+::name\+\_\+x\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_curve_aecd575bb016b03dd2c1777153f72931a}\label{class_curve_aecd575bb016b03dd2c1777153f72931a}} 
+\index{Curve@{Curve}!name\+\_\+y@{name\+\_\+y}}
+\index{name\+\_\+y@{name\+\_\+y}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{name\+\_\+y}{name\_y}}
+{\footnotesize\ttfamily std\+::string Curve\+::name\+\_\+y\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_curve_ae97afae63534c34353e3fc6f5e9d7a8d}\label{class_curve_ae97afae63534c34353e3fc6f5e9d7a8d}} 
+\index{Curve@{Curve}!x@{x}}
+\index{x@{x}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{x}{x}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ Curve\+::x\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_curve_a81ad07dc5dccb7a05870b6341ae78364}\label{class_curve_a81ad07dc5dccb7a05870b6341ae78364}} 
+\index{Curve@{Curve}!y@{y}}
+\index{y@{y}!Curve@{Curve}}
+\subsubsection{\texorpdfstring{y}{y}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ Curve\+::y\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{_curve_8h}{Curve.\+h}\end{DoxyCompactItemize}

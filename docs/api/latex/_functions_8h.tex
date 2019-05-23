@@ -1,0 +1,62 @@
+\hypertarget{_functions_8h}{}\section{include/\+Functions.h File Reference}
+\label{_functions_8h}\index{include/\+Functions.\+h@{include/\+Functions.\+h}}
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$algorithm$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$chrono$>$}\newline
+{\ttfamily \#include $<$bson.\+h$>$}\newline
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespace_functions}{Functions}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{_functions_8h_afa99ec4acc4ecb2dc3c2d05da15d0e3f}{M\+AX}(a,  b)~(((a) $>$ (b)) ? (a) \+: (b))
+\item 
+\#define \hyperlink{_functions_8h_a3acffbd305ee72dcd4593c0d8af64a4f}{M\+IN}(a,  b)~(((a) $<$ (b)) ? (a) \+: (b))
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{namespace_functions_a9327d93975ced0eda3d86e7cc0eaa2ce}{Functions\+::shift} (double value, std\+::vector$<$ double $>$ \&x)
+\item 
+void \hyperlink{namespace_functions_a3f9558335e568ef96875e356712737d5}{Functions\+::roll} (int value, std\+::vector$<$ double $>$ \&y)
+\item 
+void \hyperlink{namespace_functions_a2f190c8d48a79957846060e91638daf0}{Functions\+::copy\+\_\+vector\+\_\+to\+\_\+array} (std\+::vector$<$ double $>$ \&v, double $\ast$$\ast$out, int $\ast$nout)
+\item 
+void \hyperlink{namespace_functions_a89a9951b3cfcc5c8e51d53a95361a722}{Functions\+::copy\+\_\+vector\+\_\+to\+\_\+array} (std\+::vector$<$ double $>$ \&v, double $\ast$out, int nout)
+\item 
+void \hyperlink{namespace_functions_a680d81633db9ad1074e4053e49aab936}{Functions\+::copy\+\_\+array\+\_\+to\+\_\+vector} (double $\ast$in, int nin, std\+::vector$<$ double $>$ \&v)
+\item 
+void \hyperlink{namespace_functions_a8e230f278da41398c7475369f9dcf100}{Functions\+::copy\+\_\+two\+\_\+vectors\+\_\+to\+\_\+interleaved\+\_\+array} (std\+::vector$<$ double $>$ \&v1, std\+::vector$<$ double $>$ \&v2, double $\ast$$\ast$out, int $\ast$nout)
+\item 
+void \hyperlink{namespace_functions_a2ba36946f1e5125d51a9970f3b8300ea}{Functions\+::convolve\+\_\+sum\+\_\+of\+\_\+exponentials} (double $\ast$out, int n\+\_\+out, const double $\ast$lifetime\+\_\+spectrum, int n\+\_\+lifetime\+\_\+spectrum, const double $\ast$irf, int n\+\_\+irf, int convolution\+\_\+stop, double dt)
+\item 
+void \hyperlink{namespace_functions_ae70edf0473b6bebe1325e50b3971ef22}{Functions\+::convolve\+\_\+sum\+\_\+of\+\_\+exponentials\+\_\+periodic} (double $\ast$out, int n\+\_\+out, const double $\ast$lifetime, int n\+\_\+lifetimes, const double $\ast$irf, int n\+\_\+irf, int start, int stop, double dt, double period)
+\item 
+std\+::vector$<$ double $>$ \hyperlink{namespace_functions_af4928f5c5dcc2034838ac8cd3c1ad2a4}{Functions\+::diff} (std\+::vector$<$ double $>$ v)
+\item 
+uint64\+\_\+t \hyperlink{namespace_functions_a0f3325eb8b88e73ff76e558290d3b346}{Functions\+::get\+\_\+time} ()
+\item 
+void \hyperlink{namespace_functions_ae254385436f80c3069a0a2f74df4d741}{Functions\+::add\+\_\+documents} (bson\+\_\+t $\ast$src, bson\+\_\+t $\ast$dst, std\+::vector$<$ std\+::string $>$ skip)
+\item 
+bool \hyperlink{namespace_functions_a7948d719f3f38161f1fe1572072224bc}{Functions\+::bson\+\_\+iter\+\_\+skip} (bson\+\_\+iter\+\_\+t $\ast$iter, std\+::vector$<$ std\+::string $>$ $\ast$skip)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{_functions_8h_afa99ec4acc4ecb2dc3c2d05da15d0e3f}\label{_functions_8h_afa99ec4acc4ecb2dc3c2d05da15d0e3f}} 
+\index{Functions.\+h@{Functions.\+h}!M\+AX@{M\+AX}}
+\index{M\+AX@{M\+AX}!Functions.\+h@{Functions.\+h}}
+\subsubsection{\texorpdfstring{M\+AX}{MAX}}
+{\footnotesize\ttfamily \#define M\+AX(\begin{DoxyParamCaption}\item[{}]{a,  }\item[{}]{b }\end{DoxyParamCaption})~(((a) $>$ (b)) ? (a) \+: (b))}
+
+\mbox{\Hypertarget{_functions_8h_a3acffbd305ee72dcd4593c0d8af64a4f}\label{_functions_8h_a3acffbd305ee72dcd4593c0d8af64a4f}} 
+\index{Functions.\+h@{Functions.\+h}!M\+IN@{M\+IN}}
+\index{M\+IN@{M\+IN}!Functions.\+h@{Functions.\+h}}
+\subsubsection{\texorpdfstring{M\+IN}{MIN}}
+{\footnotesize\ttfamily \#define M\+IN(\begin{DoxyParamCaption}\item[{}]{a,  }\item[{}]{b }\end{DoxyParamCaption})~(((a) $<$ (b)) ? (a) \+: (b))}
+

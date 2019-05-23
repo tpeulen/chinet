@@ -1,0 +1,681 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="namespace_functions" kind="namespace" language="C++">
+    <compoundname>Functions</compoundname>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="namespace_functions_1a9327d93975ced0eda3d86e7cc0eaa2ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Functions::shift</definition>
+        <argsstring>(double value, std::vector&lt; double &gt; &amp;x)</argsstring>
+        <name>shift</name>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Shifts a vector by a floating number.</para><para>This function shifts the y-axis and consider non-integer values by determining the integer part of the shift and the floating part of the shift value, e.g., for the shift 4.66 the integer part is 4 and the floating part is 0.66. Next the array is shifted by the integer part and a copy of the array is shifted by the integer part + 1. Finally, the weighted sum of the both arrays is calculated. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>x</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Functions.h" line="34" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespace_functions_1a3f9558335e568ef96875e356712737d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Functions::roll</definition>
+        <argsstring>(int value, std::vector&lt; double &gt; &amp;y)</argsstring>
+        <name>roll</name>
+        <param>
+          <type>int</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Rolls a vector by an integer</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Functions.h" line="43" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespace_functions_1a2f190c8d48a79957846060e91638daf0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Functions::copy_vector_to_array</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;v, double **out, int *nout)</argsstring>
+        <name>copy_vector_to_array</name>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>double **</type>
+          <declname>out</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>nout</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Allocates memory on a pointer to an array and copies the content of a vector to the newly allocated memory.</para><para>This function is mainly used for numpy array SWIGs</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>v</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>out</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>nout</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Functions.h" line="56" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespace_functions_1a89a9951b3cfcc5c8e51d53a95361a722" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Functions::copy_vector_to_array</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;v, double *out, int nout)</argsstring>
+        <name>copy_vector_to_array</name>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>out</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>nout</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Copy an array and copies the content of a vector to already allocated memory.</para><para>This function is mainly used for numpy array SWIGs</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>v</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>out</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>nout</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Functions.h" line="70" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespace_functions_1a680d81633db9ad1074e4053e49aab936" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Functions::copy_array_to_vector</definition>
+        <argsstring>(double *in, int nin, std::vector&lt; double &gt; &amp;v)</argsstring>
+        <name>copy_array_to_vector</name>
+        <param>
+          <type>double *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>nin</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>nin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>v</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Functions.h" line="80" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespace_functions_1a8e230f278da41398c7475369f9dcf100" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Functions::copy_two_vectors_to_interleaved_array</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;v1, std::vector&lt; double &gt; &amp;v2, double **out, int *nout)</argsstring>
+        <name>copy_two_vectors_to_interleaved_array</name>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>v1</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>v2</declname>
+        </param>
+        <param>
+          <type>double **</type>
+          <declname>out</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>nout</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>This function copies two vectors of equal size to an interleaved array</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>v1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>v2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>out</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>nout</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Functions.h" line="91" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespace_functions_1a2ba36946f1e5125d51a9970f3b8300ea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Functions::convolve_sum_of_exponentials</definition>
+        <argsstring>(double *out, int n_out, const double *lifetime_spectrum, int n_lifetime_spectrum, const double *irf, int n_irf, int convolution_stop, double dt)</argsstring>
+        <name>convolve_sum_of_exponentials</name>
+        <param>
+          <type>double *</type>
+          <declname>out</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>n_out</declname>
+        </param>
+        <param>
+          <type>const double *</type>
+          <declname>lifetime_spectrum</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>n_lifetime_spectrum</declname>
+        </param>
+        <param>
+          <type>const double *</type>
+          <declname>irf</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>n_irf</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>convolution_stop</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>This function convolves a sum of exponential decays with an instrument response function (IRF)</para><para>The sum of exponential decays is passed by the lifetime array <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>lifetime_spectrum</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>that contains the amplitudes and the corresponding fluorescence lifetimes in an interleaved array (amplitude_1, lifetime_1, amplitude_2, lifetime_2, ...). The instrument response function is passed by the array </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>irf.</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The IRF and the and the sum of exponential decays are convolved up to the index </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>convolution_stop.</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>In this convolution, the time axis is uniform an linear with a time interval specified by the parameter </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dt.</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>out</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The array to which the convoluted decay is written to </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_out</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of elements in the output array </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>lifetime_spectrum</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The array containing the fluorescence lifetimes and the amplitudes </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_lifetime_spectrum</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of fluorescence lifetimes </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>irf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The array containing the instrument response function </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_irf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of elements of the instrument response function </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>convolution_stop</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The stop of the convolution </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The time resolution </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Functions.h" line="117" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespace_functions_1ae70edf0473b6bebe1325e50b3971ef22" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Functions::convolve_sum_of_exponentials_periodic</definition>
+        <argsstring>(double *out, int n_out, const double *lifetime, int n_lifetimes, const double *irf, int n_irf, int start, int stop, double dt, double period)</argsstring>
+        <name>convolve_sum_of_exponentials_periodic</name>
+        <param>
+          <type>double *</type>
+          <declname>out</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>n_out</declname>
+        </param>
+        <param>
+          <type>const double *</type>
+          <declname>lifetime</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>n_lifetimes</declname>
+        </param>
+        <param>
+          <type>const double *</type>
+          <declname>irf</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>n_irf</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>start</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>stop</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dt</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>period</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>This function convolves a sum of exponential decays with an instrument response function (IRF)</para><para>The sum of exponential decays is passed by the lifetime array <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>lifetime</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>that contains the amplitudes and the corresponding fluorescence lifetimes in an interleaved array (amplitude_1, lifetime_1, amplitude_2, lifetime_2, ...). The instrument response function is passed by the array </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>irf.</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The IRF and the and the sum of exponential decays are convolved up to the index </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>convolution_stop.</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>In this convolution, the time axis is uniform an linear with a time interval specified by the parameter </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dt.</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>out</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The array to which the convoluted decay is written to </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_out</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of elements in the output array </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>lifetime</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The array containing the fluorescence lifetimes and the amplitudes </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_lifetimes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of fluorescence lifetimes </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>irf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The array containing the instrument response function </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_irf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of elements of the instrument response function </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>start</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The start index of the convolution </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>stop</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The stop index of the convolution </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The time resolution </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>period</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The time between repeated excitation intervals </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Functions.h" line="145" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespace_functions_1af4928f5c5dcc2034838ac8cd3c1ad2a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; Functions::diff</definition>
+        <argsstring>(std::vector&lt; double &gt; v)</argsstring>
+        <name>diff</name>
+        <param>
+          <type>std::vector&lt; double &gt;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Calculates the discrete difference for an vector</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>v</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para></para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Functions.h" line="161" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespace_functions_1a0f3325eb8b88e73ff76e558290d3b346" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>uint64_t</type>
+        <definition>uint64_t Functions::get_time</definition>
+        <argsstring>()</argsstring>
+        <name>get_time</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the current time in milliseconds as a uint64 <simplesect kind="return"><para></para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Functions.h" line="167" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespace_functions_1ae254385436f80c3069a0a2f74df4d741" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Functions::add_documents</definition>
+        <argsstring>(bson_t *src, bson_t *dst, std::vector&lt; std::string &gt; skip)</argsstring>
+        <name>add_documents</name>
+        <param>
+          <type>bson_t *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>bson_t *</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::string &gt;</type>
+          <declname>skip</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Adds the content in the bson_t document src to the document dst omitting the keys provided by the vector skip. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Functions.h" line="173" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespace_functions_1a7948d719f3f38161f1fe1572072224bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Functions::bson_iter_skip</definition>
+        <argsstring>(bson_iter_t *iter, std::vector&lt; std::string &gt; *skip)</argsstring>
+        <name>bson_iter_skip</name>
+        <param>
+          <type>bson_iter_t *</type>
+          <declname>iter</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::string &gt; *</type>
+          <declname>skip</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns true if the key associated to <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>iter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>is in the list of vectors </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>skip</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>iter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>pointer to a bson_iter_t </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>skip</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>vector of strings containing keys that are skipped by iter </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Functions.h" line="181" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/Functions.h" line="18" column="1"/>
+  </compounddef>
+</doxygen>

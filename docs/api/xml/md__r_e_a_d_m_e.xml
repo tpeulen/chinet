@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="md__r_e_a_d_m_e" kind="page">
+    <compoundname>md_README</compoundname>
+    <title>chinet</title>
+    <detaileddescription>
+<para><ulink url="https://travis-ci.org/tpeulen/chinet"></ulink> <ulink url="https://www.codacy.com?utm_source=github.com&amp;amp;utm_medium=referral&amp;amp;utm_content=tpeulen/chinet&amp;amp;utm_campaign=Badge_Grade"></ulink> <ulink url="https://conda.anaconda.org/tpeulen"></ulink> <ulink url="https://anaconda.org/tpeulen/chinet"></ulink> <ulink url="https://anaconda.org/tpeulen/chinet"></ulink></para><para><heading level="2">General description</heading>
+</para><para>chinet is a C++ library to create optimize, sample, and archive global models. A global model is a model, that unites multiple data-sets and seeks for a joint description of the united dataset.</para><para>Global models can unite datasets of the same kind or datasets of different types. A typical examples of a global model in fluorescence experiments is the joint description of multiple fluorescence correlation curves in a titration and the joint description of multiple fluorescence decay curves reporting on FRET in a biomolecular structure by a single structural model.</para><para>Computing a gobal model with a large diverse set of different data can be computationally expensive. To reduce the computational costs and to decrease the evaluation time of a global model defined by chinet, the mutual dependencies of the model parameters are modeled by a graph structure that connects &quot;computing nodes&quot;. When a a set of parameters is changed only computing nodes that are affected by these changes are evaluated. Independent nodes are evaluated in parallel.</para><para>The state of the evaluation graph can be written to a database for documentation purposes and reconstructed using unique identifies provided by the database.</para><para>chinet is NOT intended as ready-to-use software for specific application purposes.</para><para><heading level="2">Goals</heading>
+</para><para><itemizedlist>
+<listitem><para>reactive dataflow model framework</para></listitem><listitem><para>fast inter computation node communication</para></listitem><listitem><para>define and store models jointly with associated data identifies in data base.</para></listitem><listitem><para>Low memory footprint (keep objective large datasets, e.g. FLIM in memory). Particulary useful for FLIM.</para></listitem><listitem><para>Platform independent C/C++ library with interfaces for scripting libraries</para></listitem></itemizedlist>
+</para><para><heading level="2">Capabilities</heading>
+</para><para><itemizedlist>
+<listitem><para>Fast (IO limited) Reading TTTR files</para></listitem><listitem><para>Generation / analysis of fluorescence decays</para></listitem><listitem><para>Time window analysis</para></listitem><listitem><para>Correlation of time event traces</para></listitem><listitem><para>Filtering of time event traces to generate instrument response functions for fluorescence decays analysis without the need of independent measurements..</para></listitem><listitem><para>Fast photon distribution analysis</para></listitem><listitem><para>Fast selection of photons from a photon stream</para></listitem></itemizedlist>
+</para><para>Generation of fluorescence decay histograms chinet outperforms pure numpy and Python based libraries by a factor of ~40</para><para><heading level="2">Implementation</heading>
+</para><para>Pure pure C/C++ and CUDA based high performance algorithms for real-time and interactive analysis of TTTR data.</para><para><heading level="1">Building and Installation</heading>
+</para><para><heading level="2">C++ shared library</heading>
+</para><para>The C++ shared library can be installed from source with <ulink url="https://cmake.org/">cmake</ulink>:</para><para><programlisting><codeline><highlight class="normal">git<sp/>clone<sp/>--recursive<sp/>https://github.com/tpeulen/chinet.git</highlight></codeline>
+<codeline><highlight class="normal">mkdir<sp/>chinet/build;<sp/>cd<sp/>chinet/build</highlight></codeline>
+<codeline><highlight class="normal">cmake<sp/>..</highlight></codeline>
+<codeline><highlight class="normal">sudo<sp/>make<sp/>install</highlight></codeline>
+</programlisting></para><para>On Linux you can build and install a package instead (prefered):</para><para><heading level="2">Python bindings</heading>
+</para><para>The Python bindings can be either be installed by downloading and compiling the source code or by using a precompiled distribution for Python anaconda environment.</para><para>The following commands can be used to download and compile the source code:</para><para><programlisting><codeline><highlight class="normal">git<sp/>clone<sp/>--recursive<sp/>https://github.com/tpeulen/chinet.git</highlight></codeline>
+<codeline><highlight class="normal">cd<sp/>chinet</highlight></codeline>
+<codeline><highlight class="normal">sudo<sp/>python<sp/>setup.py<sp/>install</highlight></codeline>
+</programlisting></para><para>In an <ulink url="https://www.anaconda.com/">anaconda</ulink> environment the library can be installed by the following command: <programlisting><codeline><highlight class="normal">conda<sp/>install<sp/>-c<sp/>tpeulen<sp/>chinet</highlight></codeline>
+</programlisting></para><para>For most users the later approach is recommended. Currently, pre-compiled packages for the anaconda distribution system are available for:</para><para><itemizedlist>
+<listitem><para>Windows: Python 2.7, Python 3.7 (x64)</para></listitem><listitem><para>Linux: Python 2.7, Python 3.7 (x64)</para></listitem><listitem><para>MacOs: Python 2.7 (x64)</para></listitem></itemizedlist>
+</para><para>Legacy 32-bit platforms are not supported.</para><para><heading level="2">Examples</heading>
+</para><para><programlisting></programlisting></para><para><heading level="2">License</heading>
+</para><para>chinet is released under the open source MIT license. </para>    </detaileddescription>
+  </compounddef>
+</doxygen>

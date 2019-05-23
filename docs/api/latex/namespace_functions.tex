@@ -1,0 +1,256 @@
+\hypertarget{namespace_functions}{}\section{Functions Namespace Reference}
+\label{namespace_functions}\index{Functions@{Functions}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{namespace_functions_a9327d93975ced0eda3d86e7cc0eaa2ce}{shift} (double value, std\+::vector$<$ double $>$ \&x)
+\item 
+void \hyperlink{namespace_functions_a3f9558335e568ef96875e356712737d5}{roll} (int value, std\+::vector$<$ double $>$ \&y)
+\item 
+void \hyperlink{namespace_functions_a2f190c8d48a79957846060e91638daf0}{copy\+\_\+vector\+\_\+to\+\_\+array} (std\+::vector$<$ double $>$ \&v, double $\ast$$\ast$out, int $\ast$nout)
+\item 
+void \hyperlink{namespace_functions_a89a9951b3cfcc5c8e51d53a95361a722}{copy\+\_\+vector\+\_\+to\+\_\+array} (std\+::vector$<$ double $>$ \&v, double $\ast$out, int nout)
+\item 
+void \hyperlink{namespace_functions_a680d81633db9ad1074e4053e49aab936}{copy\+\_\+array\+\_\+to\+\_\+vector} (double $\ast$in, int nin, std\+::vector$<$ double $>$ \&v)
+\item 
+void \hyperlink{namespace_functions_a8e230f278da41398c7475369f9dcf100}{copy\+\_\+two\+\_\+vectors\+\_\+to\+\_\+interleaved\+\_\+array} (std\+::vector$<$ double $>$ \&v1, std\+::vector$<$ double $>$ \&v2, double $\ast$$\ast$out, int $\ast$nout)
+\item 
+void \hyperlink{namespace_functions_a2ba36946f1e5125d51a9970f3b8300ea}{convolve\+\_\+sum\+\_\+of\+\_\+exponentials} (double $\ast$out, int n\+\_\+out, const double $\ast$lifetime\+\_\+spectrum, int n\+\_\+lifetime\+\_\+spectrum, const double $\ast$irf, int n\+\_\+irf, int convolution\+\_\+stop, double dt)
+\item 
+void \hyperlink{namespace_functions_ae70edf0473b6bebe1325e50b3971ef22}{convolve\+\_\+sum\+\_\+of\+\_\+exponentials\+\_\+periodic} (double $\ast$out, int n\+\_\+out, const double $\ast$lifetime, int n\+\_\+lifetimes, const double $\ast$irf, int n\+\_\+irf, int start, int stop, double dt, double period)
+\item 
+std\+::vector$<$ double $>$ \hyperlink{namespace_functions_af4928f5c5dcc2034838ac8cd3c1ad2a4}{diff} (std\+::vector$<$ double $>$ v)
+\item 
+uint64\+\_\+t \hyperlink{namespace_functions_a0f3325eb8b88e73ff76e558290d3b346}{get\+\_\+time} ()
+\item 
+void \hyperlink{namespace_functions_ae254385436f80c3069a0a2f74df4d741}{add\+\_\+documents} (bson\+\_\+t $\ast$src, bson\+\_\+t $\ast$dst, std\+::vector$<$ std\+::string $>$ skip)
+\item 
+bool \hyperlink{namespace_functions_a7948d719f3f38161f1fe1572072224bc}{bson\+\_\+iter\+\_\+skip} (bson\+\_\+iter\+\_\+t $\ast$iter, std\+::vector$<$ std\+::string $>$ $\ast$skip)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespace_functions_ae254385436f80c3069a0a2f74df4d741}\label{namespace_functions_ae254385436f80c3069a0a2f74df4d741}} 
+\index{Functions@{Functions}!add\+\_\+documents@{add\+\_\+documents}}
+\index{add\+\_\+documents@{add\+\_\+documents}!Functions@{Functions}}
+\subsubsection{\texorpdfstring{add\+\_\+documents()}{add\_documents()}}
+{\footnotesize\ttfamily void Functions\+::add\+\_\+documents (\begin{DoxyParamCaption}\item[{bson\+\_\+t $\ast$}]{src,  }\item[{bson\+\_\+t $\ast$}]{dst,  }\item[{std\+::vector$<$ std\+::string $>$}]{skip }\end{DoxyParamCaption})}
+
+Adds the content in the bson\+\_\+t document src to the document dst omitting the keys provided by the vector skip. \mbox{\Hypertarget{namespace_functions_a7948d719f3f38161f1fe1572072224bc}\label{namespace_functions_a7948d719f3f38161f1fe1572072224bc}} 
+\index{Functions@{Functions}!bson\+\_\+iter\+\_\+skip@{bson\+\_\+iter\+\_\+skip}}
+\index{bson\+\_\+iter\+\_\+skip@{bson\+\_\+iter\+\_\+skip}!Functions@{Functions}}
+\subsubsection{\texorpdfstring{bson\+\_\+iter\+\_\+skip()}{bson\_iter\_skip()}}
+{\footnotesize\ttfamily bool Functions\+::bson\+\_\+iter\+\_\+skip (\begin{DoxyParamCaption}\item[{bson\+\_\+iter\+\_\+t $\ast$}]{iter,  }\item[{std\+::vector$<$ std\+::string $>$ $\ast$}]{skip }\end{DoxyParamCaption})}
+
+Returns true if the key associated to 
+\begin{DoxyParams}{Parameters}
+{\em iter} & is in the list of vectors \\
+\hline
+{\em skip} & \\
+\hline
+{\em iter} & pointer to a bson\+\_\+iter\+\_\+t \\
+\hline
+{\em skip} & vector of strings containing keys that are skipped by iter \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespace_functions_a2ba36946f1e5125d51a9970f3b8300ea}\label{namespace_functions_a2ba36946f1e5125d51a9970f3b8300ea}} 
+\index{Functions@{Functions}!convolve\+\_\+sum\+\_\+of\+\_\+exponentials@{convolve\+\_\+sum\+\_\+of\+\_\+exponentials}}
+\index{convolve\+\_\+sum\+\_\+of\+\_\+exponentials@{convolve\+\_\+sum\+\_\+of\+\_\+exponentials}!Functions@{Functions}}
+\subsubsection{\texorpdfstring{convolve\+\_\+sum\+\_\+of\+\_\+exponentials()}{convolve\_sum\_of\_exponentials()}}
+{\footnotesize\ttfamily void Functions\+::convolve\+\_\+sum\+\_\+of\+\_\+exponentials (\begin{DoxyParamCaption}\item[{double $\ast$}]{out,  }\item[{int}]{n\+\_\+out,  }\item[{const double $\ast$}]{lifetime\+\_\+spectrum,  }\item[{int}]{n\+\_\+lifetime\+\_\+spectrum,  }\item[{const double $\ast$}]{irf,  }\item[{int}]{n\+\_\+irf,  }\item[{int}]{convolution\+\_\+stop,  }\item[{double}]{dt }\end{DoxyParamCaption})}
+
+This function convolves a sum of exponential decays with an instrument response function (I\+RF)
+
+The sum of exponential decays is passed by the lifetime array 
+\begin{DoxyParams}{Parameters}
+{\em lifetime\+\_\+spectrum} & that contains the amplitudes and the corresponding fluorescence lifetimes in an interleaved array (amplitude\+\_\+1, lifetime\+\_\+1, amplitude\+\_\+2, lifetime\+\_\+2, ...). The instrument response function is passed by the array \\
+\hline
+{\em irf.} & The I\+RF and the and the sum of exponential decays are convolved up to the index \\
+\hline
+{\em convolution\+\_\+stop.} & In this convolution, the time axis is uniform an linear with a time interval specified by the parameter \\
+\hline
+{\em dt.} & \\
+\hline
+{\em out} & The array to which the convoluted decay is written to \\
+\hline
+{\em n\+\_\+out} & The number of elements in the output array \\
+\hline
+{\em lifetime\+\_\+spectrum} & The array containing the fluorescence lifetimes and the amplitudes \\
+\hline
+{\em n\+\_\+lifetime\+\_\+spectrum} & The number of fluorescence lifetimes \\
+\hline
+{\em irf} & The array containing the instrument response function \\
+\hline
+{\em n\+\_\+irf} & The number of elements of the instrument response function \\
+\hline
+{\em convolution\+\_\+stop} & The stop of the convolution \\
+\hline
+{\em dt} & The time resolution \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespace_functions_ae70edf0473b6bebe1325e50b3971ef22}\label{namespace_functions_ae70edf0473b6bebe1325e50b3971ef22}} 
+\index{Functions@{Functions}!convolve\+\_\+sum\+\_\+of\+\_\+exponentials\+\_\+periodic@{convolve\+\_\+sum\+\_\+of\+\_\+exponentials\+\_\+periodic}}
+\index{convolve\+\_\+sum\+\_\+of\+\_\+exponentials\+\_\+periodic@{convolve\+\_\+sum\+\_\+of\+\_\+exponentials\+\_\+periodic}!Functions@{Functions}}
+\subsubsection{\texorpdfstring{convolve\+\_\+sum\+\_\+of\+\_\+exponentials\+\_\+periodic()}{convolve\_sum\_of\_exponentials\_periodic()}}
+{\footnotesize\ttfamily void Functions\+::convolve\+\_\+sum\+\_\+of\+\_\+exponentials\+\_\+periodic (\begin{DoxyParamCaption}\item[{double $\ast$}]{out,  }\item[{int}]{n\+\_\+out,  }\item[{const double $\ast$}]{lifetime,  }\item[{int}]{n\+\_\+lifetimes,  }\item[{const double $\ast$}]{irf,  }\item[{int}]{n\+\_\+irf,  }\item[{int}]{start,  }\item[{int}]{stop,  }\item[{double}]{dt,  }\item[{double}]{period }\end{DoxyParamCaption})}
+
+This function convolves a sum of exponential decays with an instrument response function (I\+RF)
+
+The sum of exponential decays is passed by the lifetime array 
+\begin{DoxyParams}{Parameters}
+{\em lifetime} & that contains the amplitudes and the corresponding fluorescence lifetimes in an interleaved array (amplitude\+\_\+1, lifetime\+\_\+1, amplitude\+\_\+2, lifetime\+\_\+2, ...). The instrument response function is passed by the array \\
+\hline
+{\em irf.} & The I\+RF and the and the sum of exponential decays are convolved up to the index \\
+\hline
+{\em convolution\+\_\+stop.} & In this convolution, the time axis is uniform an linear with a time interval specified by the parameter \\
+\hline
+{\em dt.} & \\
+\hline
+{\em out} & The array to which the convoluted decay is written to \\
+\hline
+{\em n\+\_\+out} & The number of elements in the output array \\
+\hline
+{\em lifetime} & The array containing the fluorescence lifetimes and the amplitudes \\
+\hline
+{\em n\+\_\+lifetimes} & The number of fluorescence lifetimes \\
+\hline
+{\em irf} & The array containing the instrument response function \\
+\hline
+{\em n\+\_\+irf} & The number of elements of the instrument response function \\
+\hline
+{\em start} & The start index of the convolution \\
+\hline
+{\em stop} & The stop index of the convolution \\
+\hline
+{\em dt} & The time resolution \\
+\hline
+{\em period} & The time between repeated excitation intervals \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespace_functions_a680d81633db9ad1074e4053e49aab936}\label{namespace_functions_a680d81633db9ad1074e4053e49aab936}} 
+\index{Functions@{Functions}!copy\+\_\+array\+\_\+to\+\_\+vector@{copy\+\_\+array\+\_\+to\+\_\+vector}}
+\index{copy\+\_\+array\+\_\+to\+\_\+vector@{copy\+\_\+array\+\_\+to\+\_\+vector}!Functions@{Functions}}
+\subsubsection{\texorpdfstring{copy\+\_\+array\+\_\+to\+\_\+vector()}{copy\_array\_to\_vector()}}
+{\footnotesize\ttfamily void Functions\+::copy\+\_\+array\+\_\+to\+\_\+vector (\begin{DoxyParamCaption}\item[{double $\ast$}]{in,  }\item[{int}]{nin,  }\item[{std\+::vector$<$ double $>$ \&}]{v }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em in} & \\
+\hline
+{\em nin} & \\
+\hline
+{\em v} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespace_functions_a8e230f278da41398c7475369f9dcf100}\label{namespace_functions_a8e230f278da41398c7475369f9dcf100}} 
+\index{Functions@{Functions}!copy\+\_\+two\+\_\+vectors\+\_\+to\+\_\+interleaved\+\_\+array@{copy\+\_\+two\+\_\+vectors\+\_\+to\+\_\+interleaved\+\_\+array}}
+\index{copy\+\_\+two\+\_\+vectors\+\_\+to\+\_\+interleaved\+\_\+array@{copy\+\_\+two\+\_\+vectors\+\_\+to\+\_\+interleaved\+\_\+array}!Functions@{Functions}}
+\subsubsection{\texorpdfstring{copy\+\_\+two\+\_\+vectors\+\_\+to\+\_\+interleaved\+\_\+array()}{copy\_two\_vectors\_to\_interleaved\_array()}}
+{\footnotesize\ttfamily void Functions\+::copy\+\_\+two\+\_\+vectors\+\_\+to\+\_\+interleaved\+\_\+array (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{v1,  }\item[{std\+::vector$<$ double $>$ \&}]{v2,  }\item[{double $\ast$$\ast$}]{out,  }\item[{int $\ast$}]{nout }\end{DoxyParamCaption})}
+
+This function copies two vectors of equal size to an interleaved array
+
+
+\begin{DoxyParams}{Parameters}
+{\em v1} & \\
+\hline
+{\em v2} & \\
+\hline
+{\em out} & \\
+\hline
+{\em nout} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespace_functions_a2f190c8d48a79957846060e91638daf0}\label{namespace_functions_a2f190c8d48a79957846060e91638daf0}} 
+\index{Functions@{Functions}!copy\+\_\+vector\+\_\+to\+\_\+array@{copy\+\_\+vector\+\_\+to\+\_\+array}}
+\index{copy\+\_\+vector\+\_\+to\+\_\+array@{copy\+\_\+vector\+\_\+to\+\_\+array}!Functions@{Functions}}
+\subsubsection{\texorpdfstring{copy\+\_\+vector\+\_\+to\+\_\+array()}{copy\_vector\_to\_array()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Functions\+::copy\+\_\+vector\+\_\+to\+\_\+array (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{v,  }\item[{double $\ast$$\ast$}]{out,  }\item[{int $\ast$}]{nout }\end{DoxyParamCaption})}
+
+Allocates memory on a pointer to an array and copies the content of a vector to the newly allocated memory.
+
+This function is mainly used for numpy array S\+W\+I\+Gs
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & \\
+\hline
+{\em out} & \\
+\hline
+{\em nout} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespace_functions_a89a9951b3cfcc5c8e51d53a95361a722}\label{namespace_functions_a89a9951b3cfcc5c8e51d53a95361a722}} 
+\index{Functions@{Functions}!copy\+\_\+vector\+\_\+to\+\_\+array@{copy\+\_\+vector\+\_\+to\+\_\+array}}
+\index{copy\+\_\+vector\+\_\+to\+\_\+array@{copy\+\_\+vector\+\_\+to\+\_\+array}!Functions@{Functions}}
+\subsubsection{\texorpdfstring{copy\+\_\+vector\+\_\+to\+\_\+array()}{copy\_vector\_to\_array()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Functions\+::copy\+\_\+vector\+\_\+to\+\_\+array (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{v,  }\item[{double $\ast$}]{out,  }\item[{int}]{nout }\end{DoxyParamCaption})}
+
+Copy an array and copies the content of a vector to already allocated memory.
+
+This function is mainly used for numpy array S\+W\+I\+Gs
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & \\
+\hline
+{\em out} & \\
+\hline
+{\em nout} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespace_functions_af4928f5c5dcc2034838ac8cd3c1ad2a4}\label{namespace_functions_af4928f5c5dcc2034838ac8cd3c1ad2a4}} 
+\index{Functions@{Functions}!diff@{diff}}
+\index{diff@{diff}!Functions@{Functions}}
+\subsubsection{\texorpdfstring{diff()}{diff()}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ Functions\+::diff (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$}]{v }\end{DoxyParamCaption})}
+
+Calculates the discrete difference for an vector
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespace_functions_a0f3325eb8b88e73ff76e558290d3b346}\label{namespace_functions_a0f3325eb8b88e73ff76e558290d3b346}} 
+\index{Functions@{Functions}!get\+\_\+time@{get\+\_\+time}}
+\index{get\+\_\+time@{get\+\_\+time}!Functions@{Functions}}
+\subsubsection{\texorpdfstring{get\+\_\+time()}{get\_time()}}
+{\footnotesize\ttfamily uint64\+\_\+t Functions\+::get\+\_\+time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns the current time in milliseconds as a uint64 \begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespace_functions_a3f9558335e568ef96875e356712737d5}\label{namespace_functions_a3f9558335e568ef96875e356712737d5}} 
+\index{Functions@{Functions}!roll@{roll}}
+\index{roll@{roll}!Functions@{Functions}}
+\subsubsection{\texorpdfstring{roll()}{roll()}}
+{\footnotesize\ttfamily void Functions\+::roll (\begin{DoxyParamCaption}\item[{int}]{value,  }\item[{std\+::vector$<$ double $>$ \&}]{y }\end{DoxyParamCaption})}
+
+Rolls a vector by an integer
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & \\
+\hline
+{\em y} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespace_functions_a9327d93975ced0eda3d86e7cc0eaa2ce}\label{namespace_functions_a9327d93975ced0eda3d86e7cc0eaa2ce}} 
+\index{Functions@{Functions}!shift@{shift}}
+\index{shift@{shift}!Functions@{Functions}}
+\subsubsection{\texorpdfstring{shift()}{shift()}}
+{\footnotesize\ttfamily void Functions\+::shift (\begin{DoxyParamCaption}\item[{double}]{value,  }\item[{std\+::vector$<$ double $>$ \&}]{x }\end{DoxyParamCaption})}
+
+Shifts a vector by a floating number.
+
+This function shifts the y-\/axis and consider non-\/integer values by determining the integer part of the shift and the floating part of the shift value, e.\+g., for the shift 4.\+66 the integer part is 4 and the floating part is 0.\+66. Next the array is shifted by the integer part and a copy of the array is shifted by the integer part + 1. Finally, the weighted sum of the both arrays is calculated. 
+\begin{DoxyParams}{Parameters}
+{\em value} & \\
+\hline
+{\em x} & \\
+\hline
+\end{DoxyParams}

@@ -1,0 +1,220 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="_node_callback_8h" kind="file" language="C++">
+    <compoundname>NodeCallback.h</compoundname>
+    <includes local="no">rttr/registration</includes>
+    <includes refid="_port_8h" local="no">Port.h</includes>
+    <includes refid="_node_8h" local="no">Node.h</includes>
+    <includes refid="_functions_8h" local="no">Functions.h</includes>
+    <includes local="no">FlexLabel/FlexLabel.h</includes>
+    <includedby refid="_node_8h" local="yes">include/Node.h</includedby>
+    <incdepgraph>
+      <node id="96">
+        <label>iterator</label>
+      </node>
+      <node id="86">
+        <label>cstdint</label>
+      </node>
+      <node id="95">
+        <label>cmath</label>
+      </node>
+      <node id="89">
+        <label>string</label>
+      </node>
+      <node id="91">
+        <label>map</label>
+      </node>
+      <node id="85">
+        <label>Port.h</label>
+        <link refid="_port_8h"/>
+        <childnode refid="86" relation="include">
+        </childnode>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="88" relation="include">
+        </childnode>
+      </node>
+      <node id="88">
+        <label>Node.h</label>
+        <link refid="_node_8h"/>
+        <childnode refid="89" relation="include">
+        </childnode>
+        <childnode refid="90" relation="include">
+        </childnode>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="91" relation="include">
+        </childnode>
+        <childnode refid="84" relation="include">
+        </childnode>
+        <childnode refid="92" relation="include">
+        </childnode>
+        <childnode refid="85" relation="include">
+        </childnode>
+        <childnode refid="83" relation="include">
+        </childnode>
+      </node>
+      <node id="83">
+        <label>include/NodeCallback.h</label>
+        <link refid="_node_callback_8h"/>
+        <childnode refid="84" relation="include">
+        </childnode>
+        <childnode refid="85" relation="include">
+        </childnode>
+        <childnode refid="88" relation="include">
+        </childnode>
+        <childnode refid="98" relation="include">
+        </childnode>
+        <childnode refid="103" relation="include">
+        </childnode>
+      </node>
+      <node id="90">
+        <label>vector</label>
+      </node>
+      <node id="102">
+        <label>bson.h</label>
+      </node>
+      <node id="84">
+        <label>rttr/registration</label>
+      </node>
+      <node id="97">
+        <label>mongoc.h</label>
+      </node>
+      <node id="100">
+        <label>math.h</label>
+      </node>
+      <node id="93">
+        <label>iostream</label>
+      </node>
+      <node id="92">
+        <label>MongoObject.h</label>
+        <link refid="_mongo_object_8h"/>
+        <childnode refid="93" relation="include">
+        </childnode>
+        <childnode refid="91" relation="include">
+        </childnode>
+        <childnode refid="94" relation="include">
+        </childnode>
+        <childnode refid="90" relation="include">
+        </childnode>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="95" relation="include">
+        </childnode>
+        <childnode refid="96" relation="include">
+        </childnode>
+        <childnode refid="97" relation="include">
+        </childnode>
+        <childnode refid="98" relation="include">
+        </childnode>
+      </node>
+      <node id="101">
+        <label>chrono</label>
+      </node>
+      <node id="94">
+        <label>set</label>
+      </node>
+      <node id="103">
+        <label>FlexLabel/FlexLabel.h</label>
+      </node>
+      <node id="99">
+        <label>algorithm</label>
+      </node>
+      <node id="98">
+        <label>Functions.h</label>
+        <link refid="_functions_8h"/>
+        <childnode refid="90" relation="include">
+        </childnode>
+        <childnode refid="99" relation="include">
+        </childnode>
+        <childnode refid="100" relation="include">
+        </childnode>
+        <childnode refid="93" relation="include">
+        </childnode>
+        <childnode refid="101" relation="include">
+        </childnode>
+        <childnode refid="102" relation="include">
+        </childnode>
+      </node>
+      <node id="87">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="107">
+        <label>include/Session.h</label>
+        <link refid="_session_8h"/>
+      </node>
+      <node id="106">
+        <label>include/Port.h</label>
+        <link refid="_port_8h"/>
+        <childnode refid="105" relation="include">
+        </childnode>
+        <childnode refid="104" relation="include">
+        </childnode>
+        <childnode refid="107" relation="include">
+        </childnode>
+      </node>
+      <node id="105">
+        <label>include/Node.h</label>
+        <link refid="_node_8h"/>
+        <childnode refid="106" relation="include">
+        </childnode>
+        <childnode refid="104" relation="include">
+        </childnode>
+        <childnode refid="107" relation="include">
+        </childnode>
+      </node>
+      <node id="104">
+        <label>include/NodeCallback.h</label>
+        <link refid="_node_callback_8h"/>
+        <childnode refid="105" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="class_node_callback" prot="public">NodeCallback</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Created<sp/>by<sp/>thomas<sp/>on<sp/>4/3/19.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>chinet_NODECALLBACK_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>chinet_NODECALLBACK_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;rttr/registration&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="_port_8h" kindref="compound">Port.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="_node_8h" kindref="compound">Node.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="_functions_8h" kindref="compound">Functions.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;FlexLabel/FlexLabel.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_port" kindref="compound">Port</ref>;</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="comment">//<sp/>NodeCallback</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="comment">//====================================================================</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19" refid="class_node_callback" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_node_callback" kindref="compound">NodeCallback</ref>{</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="22" refid="class_node_callback_1a94eb8c2fd7162ffcc4abff8bd2e852b3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_node_callback_1a94eb8c2fd7162ffcc4abff8bd2e852b3" kindref="member">run</ref>(</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::map&lt;std::string,<sp/>std::shared_ptr&lt;Port&gt;&gt;,</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::map&lt;std::string,<sp/>std::shared_ptr&lt;Port&gt;&gt;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>){</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;This<sp/>print<sp/>by<sp/>NodeCallback<sp/>class<sp/>from<sp/>C++&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29" refid="class_node_callback_1a91f8bc71a7bc6164d831ab4fb8144810" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_node_callback_1a91f8bc71a7bc6164d831ab4fb8144810" kindref="member">NodeCallback</ref>()<sp/>{};</highlight></codeline>
+<codeline lineno="30" refid="class_node_callback_1ac9474867612b9fa6327dfe5cc5d29bec" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/><ref refid="class_node_callback_1ac9474867612b9fa6327dfe5cc5d29bec" kindref="member">~NodeCallback</ref>()<sp/>{};</highlight></codeline>
+<codeline lineno="31"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/>//chinet_NODECALLBACK_H</highlight></codeline>
+    </programlisting>
+    <location file="include/NodeCallback.h"/>
+  </compounddef>
+</doxygen>

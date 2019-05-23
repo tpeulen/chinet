@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="dir_d44c64559bbebec7f509842c48db8b23" kind="dir">
+    <compoundname>include</compoundname>
+    <innerfile refid="_curve_8h">Curve.h</innerfile>
+    <innerfile refid="_decay_8h">Decay.h</innerfile>
+    <innerfile refid="_functions_8h">Functions.h</innerfile>
+    <innerfile refid="_mongo_object_8h">MongoObject.h</innerfile>
+    <innerfile refid="_node_8h">Node.h</innerfile>
+    <innerfile refid="_node_callback_8h">NodeCallback.h</innerfile>
+    <innerfile refid="_pda_8h">Pda.h</innerfile>
+    <innerfile refid="_port_8h">Port.h</innerfile>
+    <innerfile refid="_session_8h">Session.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/"/>
+  </compounddef>
+</doxygen>

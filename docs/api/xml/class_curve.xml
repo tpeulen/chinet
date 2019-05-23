@@ -1,0 +1,935 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="class_curve" kind="class" language="C++" prot="public">
+    <compoundname>Curve</compoundname>
+    <derivedcompoundref refid="class_decay" prot="public" virt="non-virtual">Decay</derivedcompoundref>
+    <includes refid="_curve_8h" local="no">Curve.h</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="class_curve_1ad9501b10345049f5bd24a413df3fc11d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend class</type>
+        <definition>friend class Decay</definition>
+        <argsstring></argsstring>
+        <name>Decay</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="19" column="1" bodyfile="include/Curve.h" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_curve_1ab7ceefeac77b85deb7171bfb3ddec51d" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Curve::valid_op</definition>
+        <argsstring></argsstring>
+        <name>valid_op</name>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="24" column="1" bodyfile="include/Curve.h" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_curve_1a1e58a2b1e3b6057e6aae33f1beca5fd1" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Curve::inplace_op</definition>
+        <argsstring></argsstring>
+        <name>inplace_op</name>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="28" column="1" bodyfile="include/Curve.h" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_curve_1a0898dd9d2d8c3554863e8c9a6ae28947" prot="private" static="no" mutable="no">
+        <type>bson_t</type>
+        <definition>bson_t Curve::document</definition>
+        <argsstring></argsstring>
+        <name>document</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="31" column="1" bodyfile="include/Curve.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="class_curve_1a5ac159e573a921630bed5093ac3ceae5" prot="protected" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string Curve::name_x</definition>
+        <argsstring></argsstring>
+        <name>name_x</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="34" column="1" bodyfile="include/Curve.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_curve_1aecd575bb016b03dd2c1777153f72931a" prot="protected" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string Curve::name_y</definition>
+        <argsstring></argsstring>
+        <name>name_y</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="35" column="1" bodyfile="include/Curve.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_curve_1ae97afae63534c34353e3fc6f5e9d7a8d" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; Curve::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="36" column="1" bodyfile="include/Curve.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_curve_1aaabf36e61b8b305b761587e4cc9737e3" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; Curve::ex</definition>
+        <argsstring></argsstring>
+        <name>ex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="37" column="1" bodyfile="include/Curve.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_curve_1a81ad07dc5dccb7a05870b6341ae78364" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; Curve::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="38" column="1" bodyfile="include/Curve.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_curve_1a76092a26c2894325fda94d4f64326b52" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; Curve::ey</definition>
+        <argsstring></argsstring>
+        <name>ey</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="39" column="1" bodyfile="include/Curve.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_curve_1a5a43592686a79c9d4e794eec1cb693ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Curve::set_x</definition>
+        <argsstring>(double *in, int n_in)</argsstring>
+        <name>set_x</name>
+        <param>
+          <type>double *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>n_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="45" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a94659672cb6627ce6a226c9e77652e84" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Curve::set_x</definition>
+        <argsstring>(std::vector&lt; double &gt; x_)</argsstring>
+        <name>set_x</name>
+        <param>
+          <type>std::vector&lt; double &gt;</type>
+          <declname>x_</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="46" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1ab3e5da7ebd194f1c4655d4a1e1099541" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Curve::set_ex</definition>
+        <argsstring>(double *in, int n_in)</argsstring>
+        <name>set_ex</name>
+        <param>
+          <type>double *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>n_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="48" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a8170b7da97887fa363250bf34bb53859" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Curve::set_x_name</definition>
+        <argsstring>(std::string v)</argsstring>
+        <name>set_x_name</name>
+        <param>
+          <type>std::string</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="49" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a16534fa18b0982751ebf2c19eb092949" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Curve::set_y</definition>
+        <argsstring>(double *in, int n_in)</argsstring>
+        <name>set_y</name>
+        <param>
+          <type>double *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>n_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="51" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a4c87680fa04d360bc5094112fe9c91b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Curve::set_y</definition>
+        <argsstring>(std::vector&lt; double &gt; y_)</argsstring>
+        <name>set_y</name>
+        <param>
+          <type>std::vector&lt; double &gt;</type>
+          <declname>y_</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="52" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a11bda872bbbac4856b941eb645ecdd22" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Curve::set_ey</definition>
+        <argsstring>(double *in, int n_in)</argsstring>
+        <name>set_ey</name>
+        <param>
+          <type>double *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>n_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="54" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a562c865538b8f3ea74cd195d5644bb4f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Curve::set_y_name</definition>
+        <argsstring>(std::string v)</argsstring>
+        <name>set_y_name</name>
+        <param>
+          <type>std::string</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="55" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1aa4c5bd9700d1db6073179b2d1b61775b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Curve::get_x</definition>
+        <argsstring>(double **out, int *n_out)</argsstring>
+        <name>get_x</name>
+        <param>
+          <type>double **</type>
+          <declname>out</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>n_out</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="58" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1ab7fbad5767e33a69754db0e0a1f42bae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Curve::get_y</definition>
+        <argsstring>(double **out, int *n_out)</argsstring>
+        <name>get_y</name>
+        <param>
+          <type>double **</type>
+          <declname>out</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>n_out</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="59" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a69eed37c328a574ba58cd9fa5f15dd9d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; Curve::get_x</definition>
+        <argsstring>()</argsstring>
+        <name>get_x</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="60" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a1cd5680f5bbfdfb575860b6cc73700ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; Curve::get_y</definition>
+        <argsstring>()</argsstring>
+        <name>get_y</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="61" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a6d554f1ab79e7b741eea5abded25874b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double Curve::sum</definition>
+        <argsstring>()</argsstring>
+        <name>sum</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="62" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1add93ea6b8418185dcc647273fd85bcef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t Curve::size</definition>
+        <argsstring>()</argsstring>
+        <name>size</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="63" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a1e74c35667105b4ce24c913b4963000a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; Curve::get_dx</definition>
+        <argsstring>()</argsstring>
+        <name>get_dx</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Calculates the difference between the x-Axis values <simplesect kind="return"><para></para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="69" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1aaa80e048e9d96c5c82a7e83d05269140" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; Curve::get_dy</definition>
+        <argsstring>()</argsstring>
+        <name>get_dy</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Calculates the difference between the y-Axis values <simplesect kind="return"><para></para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="75" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a627534496c4472dedcb5c8bd67f579d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Curve::Curve</definition>
+        <argsstring>(double *x, unsigned int nx, double *y, unsigned int ny, double *ey, unsigned int ney, std::string name_x, std::string name_y)</argsstring>
+        <name>Curve</name>
+        <param>
+          <type>double *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>nx</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>ny</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>ey</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>ney</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>name_x</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>name_y</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="81" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a25dc8db43ed446103e71652dd37f4822" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Curve::Curve</definition>
+        <argsstring>(double *x, unsigned int nx, double *y, unsigned int ny, std::string name_x, std::string name_y)</argsstring>
+        <name>Curve</name>
+        <param>
+          <type>double *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>nx</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>ny</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>name_x</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>name_y</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="89" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1aff266ab3a4e4d4b40555692e67c3a914" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Curve::Curve</definition>
+        <argsstring>(double *x, unsigned int nx, double *y, unsigned int ny, double *ey, unsigned int ney)</argsstring>
+        <name>Curve</name>
+        <param>
+          <type>double *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>nx</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>ny</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>ey</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>ney</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="96" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a56ee024f888ced5ca73b38bde3fbc7aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Curve::Curve</definition>
+        <argsstring>(double *x, unsigned int nx, double *y, unsigned int ny)</argsstring>
+        <name>Curve</name>
+        <param>
+          <type>double *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>nx</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>ny</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="102" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a5447f926f128f5eca036a89d1b1d4e3f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Curve::Curve</definition>
+        <argsstring>(double dt, unsigned int nx)</argsstring>
+        <name>Curve</name>
+        <param>
+          <type>double</type>
+          <declname>dt</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>nx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="107" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a09c87588b0ceab57603fb6e193875b20" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Curve::Curve</definition>
+        <argsstring>()=default</argsstring>
+        <name>Curve</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="111" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a7ce6ff79064e9795241423ed47166539" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Curve::~Curve</definition>
+        <argsstring>()</argsstring>
+        <name>~Curve</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="113" column="1" bodyfile="include/Curve.h" bodystart="113" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1aaefb5086df5ad824628b9aaef7f27714" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Curve::shift</definition>
+        <argsstring>(double value)</argsstring>
+        <name>shift</name>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Shifts the x Axis by a floating point number.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="122" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a015ca17f63cc971bb7c2885b2d2de2df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="class_curve" kindref="compound">Curve</ref></type>
+        <definition>Curve Curve::operator+</definition>
+        <argsstring>(Curve &amp;v)</argsstring>
+        <name>operator+</name>
+        <param>
+          <type><ref refid="class_curve" kindref="compound">Curve</ref> &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="134" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a03352202f80edde95e6581485ee78e1c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="class_curve" kindref="compound">Curve</ref></type>
+        <definition>Curve Curve::operator+</definition>
+        <argsstring>(double v)</argsstring>
+        <name>operator+</name>
+        <param>
+          <type>double</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="135" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a55facce84fd4b5bd58124772735c9248" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="class_curve" kindref="compound">Curve</ref></type>
+        <definition>Curve Curve::operator-</definition>
+        <argsstring>(Curve &amp;v)</argsstring>
+        <name>operator-</name>
+        <param>
+          <type><ref refid="class_curve" kindref="compound">Curve</ref> &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="137" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a1f487e5943b841112dd72c077dee56f6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="class_curve" kindref="compound">Curve</ref></type>
+        <definition>Curve Curve::operator-</definition>
+        <argsstring>(double v)</argsstring>
+        <name>operator-</name>
+        <param>
+          <type>double</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="138" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a671fb149eecca0baf80672a6e2ffc8a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="class_curve" kindref="compound">Curve</ref></type>
+        <definition>Curve Curve::operator*</definition>
+        <argsstring>(Curve &amp;v)</argsstring>
+        <name>operator*</name>
+        <param>
+          <type><ref refid="class_curve" kindref="compound">Curve</ref> &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="140" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a9ed9c49020ce01f29587000711963beb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="class_curve" kindref="compound">Curve</ref></type>
+        <definition>Curve Curve::operator*</definition>
+        <argsstring>(double v)</argsstring>
+        <name>operator*</name>
+        <param>
+          <type>double</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="141" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1abec3bbbc40b1c643ccb31299dfd53a4d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="class_curve" kindref="compound">Curve</ref></type>
+        <definition>Curve Curve::operator/</definition>
+        <argsstring>(Curve &amp;v)</argsstring>
+        <name>operator/</name>
+        <param>
+          <type><ref refid="class_curve" kindref="compound">Curve</ref> &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="143" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1aff93a6c6139f9cc008d202ca5ea995e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="class_curve" kindref="compound">Curve</ref></type>
+        <definition>Curve Curve::operator/</definition>
+        <argsstring>(double v)</argsstring>
+        <name>operator/</name>
+        <param>
+          <type>double</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="144" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a69f0cd9336dba793efe1398a6997c5a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Curve::resize</definition>
+        <argsstring>(size_t v)</argsstring>
+        <name>resize</name>
+        <param>
+          <type>size_t</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="146" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1a6c16b3a6a4f4bd9540780d4e68d90545" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>virtual void Curve::to_json</definition>
+        <argsstring>(std::string filename)</argsstring>
+        <name>to_json</name>
+        <reimplementedby refid="class_decay_1afb84196cbc6cc532bf0ce5db85f39616">to_json</reimplementedby>
+        <param>
+          <type>std::string</type>
+          <declname>filename</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="148" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_curve_1aa4b45f195d903ae171dd7572cc5fb796" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>virtual void Curve::from_json</definition>
+        <argsstring>(std::string filename)</argsstring>
+        <name>from_json</name>
+        <param>
+          <type>std::string</type>
+          <declname>filename</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Curve.h" line="149" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>This method multiplies to the y-values of the current instance of a object the y-values of another</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>v</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>An object of the type</para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>valid</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>If this parameter is false (default value) the y-values are directly multiplied without check for overlap. If this parameter is true only the overlapping y-values are multiplied. The overlap is judged by the values of the x-axis (TODO). </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>Decay</label>
+        <link refid="class_decay"/>
+        <childnode refid="0" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="0">
+        <label>Curve</label>
+        <link refid="class_curve"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5">
+        <label>std::vector&lt; double &gt;</label>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; char &gt;</label>
+      </node>
+      <node id="2">
+        <label>Curve</label>
+        <link refid="class_curve"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>name_x</edgelabel>
+          <edgelabel>name_y</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>x</edgelabel>
+          <edgelabel>y</edgelabel>
+          <edgelabel>ex</edgelabel>
+          <edgelabel>ey</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::string</label>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/Curve.h" line="17" column="1" bodyfile="include/Curve.h" bodystart="17" bodyend="152"/>
+    <listofallmembers>
+      <member refid="class_curve_1a627534496c4472dedcb5c8bd67f579d0" prot="public" virt="non-virtual"><scope>Curve</scope><name>Curve</name></member>
+      <member refid="class_curve_1a25dc8db43ed446103e71652dd37f4822" prot="public" virt="non-virtual"><scope>Curve</scope><name>Curve</name></member>
+      <member refid="class_curve_1aff266ab3a4e4d4b40555692e67c3a914" prot="public" virt="non-virtual"><scope>Curve</scope><name>Curve</name></member>
+      <member refid="class_curve_1a56ee024f888ced5ca73b38bde3fbc7aa" prot="public" virt="non-virtual"><scope>Curve</scope><name>Curve</name></member>
+      <member refid="class_curve_1a5447f926f128f5eca036a89d1b1d4e3f" prot="public" virt="non-virtual"><scope>Curve</scope><name>Curve</name></member>
+      <member refid="class_curve_1a09c87588b0ceab57603fb6e193875b20" prot="public" virt="non-virtual"><scope>Curve</scope><name>Curve</name></member>
+      <member refid="class_curve_1a0898dd9d2d8c3554863e8c9a6ae28947" prot="private" virt="non-virtual"><scope>Curve</scope><name>document</name></member>
+      <member refid="class_curve_1aaabf36e61b8b305b761587e4cc9737e3" prot="protected" virt="non-virtual"><scope>Curve</scope><name>ex</name></member>
+      <member refid="class_curve_1a76092a26c2894325fda94d4f64326b52" prot="protected" virt="non-virtual"><scope>Curve</scope><name>ey</name></member>
+      <member refid="class_curve_1aa4b45f195d903ae171dd7572cc5fb796" prot="public" virt="virtual"><scope>Curve</scope><name>from_json</name></member>
+      <member refid="class_curve_1a1e74c35667105b4ce24c913b4963000a" prot="public" virt="non-virtual"><scope>Curve</scope><name>get_dx</name></member>
+      <member refid="class_curve_1aaa80e048e9d96c5c82a7e83d05269140" prot="public" virt="non-virtual"><scope>Curve</scope><name>get_dy</name></member>
+      <member refid="class_curve_1aa4c5bd9700d1db6073179b2d1b61775b" prot="public" virt="non-virtual"><scope>Curve</scope><name>get_x</name></member>
+      <member refid="class_curve_1a69eed37c328a574ba58cd9fa5f15dd9d" prot="public" virt="non-virtual"><scope>Curve</scope><name>get_x</name></member>
+      <member refid="class_curve_1ab7fbad5767e33a69754db0e0a1f42bae" prot="public" virt="non-virtual"><scope>Curve</scope><name>get_y</name></member>
+      <member refid="class_curve_1a1cd5680f5bbfdfb575860b6cc73700ab" prot="public" virt="non-virtual"><scope>Curve</scope><name>get_y</name></member>
+      <member refid="class_curve_1a1e58a2b1e3b6057e6aae33f1beca5fd1" prot="private" virt="non-virtual"><scope>Curve</scope><name>inplace_op</name></member>
+      <member refid="class_curve_1a5ac159e573a921630bed5093ac3ceae5" prot="protected" virt="non-virtual"><scope>Curve</scope><name>name_x</name></member>
+      <member refid="class_curve_1aecd575bb016b03dd2c1777153f72931a" prot="protected" virt="non-virtual"><scope>Curve</scope><name>name_y</name></member>
+      <member refid="class_curve_1a671fb149eecca0baf80672a6e2ffc8a5" prot="public" virt="non-virtual"><scope>Curve</scope><name>operator*</name></member>
+      <member refid="class_curve_1a9ed9c49020ce01f29587000711963beb" prot="public" virt="non-virtual"><scope>Curve</scope><name>operator*</name></member>
+      <member refid="class_curve_1a015ca17f63cc971bb7c2885b2d2de2df" prot="public" virt="non-virtual"><scope>Curve</scope><name>operator+</name></member>
+      <member refid="class_curve_1a03352202f80edde95e6581485ee78e1c" prot="public" virt="non-virtual"><scope>Curve</scope><name>operator+</name></member>
+      <member refid="class_curve_1a55facce84fd4b5bd58124772735c9248" prot="public" virt="non-virtual"><scope>Curve</scope><name>operator-</name></member>
+      <member refid="class_curve_1a1f487e5943b841112dd72c077dee56f6" prot="public" virt="non-virtual"><scope>Curve</scope><name>operator-</name></member>
+      <member refid="class_curve_1abec3bbbc40b1c643ccb31299dfd53a4d" prot="public" virt="non-virtual"><scope>Curve</scope><name>operator/</name></member>
+      <member refid="class_curve_1aff93a6c6139f9cc008d202ca5ea995e0" prot="public" virt="non-virtual"><scope>Curve</scope><name>operator/</name></member>
+      <member refid="class_curve_1a69f0cd9336dba793efe1398a6997c5a0" prot="public" virt="non-virtual"><scope>Curve</scope><name>resize</name></member>
+      <member refid="class_curve_1ab3e5da7ebd194f1c4655d4a1e1099541" prot="public" virt="non-virtual"><scope>Curve</scope><name>set_ex</name></member>
+      <member refid="class_curve_1a11bda872bbbac4856b941eb645ecdd22" prot="public" virt="non-virtual"><scope>Curve</scope><name>set_ey</name></member>
+      <member refid="class_curve_1a5a43592686a79c9d4e794eec1cb693ac" prot="public" virt="non-virtual"><scope>Curve</scope><name>set_x</name></member>
+      <member refid="class_curve_1a94659672cb6627ce6a226c9e77652e84" prot="public" virt="non-virtual"><scope>Curve</scope><name>set_x</name></member>
+      <member refid="class_curve_1a8170b7da97887fa363250bf34bb53859" prot="public" virt="non-virtual"><scope>Curve</scope><name>set_x_name</name></member>
+      <member refid="class_curve_1a16534fa18b0982751ebf2c19eb092949" prot="public" virt="non-virtual"><scope>Curve</scope><name>set_y</name></member>
+      <member refid="class_curve_1a4c87680fa04d360bc5094112fe9c91b1" prot="public" virt="non-virtual"><scope>Curve</scope><name>set_y</name></member>
+      <member refid="class_curve_1a562c865538b8f3ea74cd195d5644bb4f" prot="public" virt="non-virtual"><scope>Curve</scope><name>set_y_name</name></member>
+      <member refid="class_curve_1aaefb5086df5ad824628b9aaef7f27714" prot="public" virt="non-virtual"><scope>Curve</scope><name>shift</name></member>
+      <member refid="class_curve_1add93ea6b8418185dcc647273fd85bcef" prot="public" virt="non-virtual"><scope>Curve</scope><name>size</name></member>
+      <member refid="class_curve_1a6d554f1ab79e7b741eea5abded25874b" prot="public" virt="non-virtual"><scope>Curve</scope><name>sum</name></member>
+      <member refid="class_curve_1a6c16b3a6a4f4bd9540780d4e68d90545" prot="public" virt="virtual"><scope>Curve</scope><name>to_json</name></member>
+      <member refid="class_curve_1ab7ceefeac77b85deb7171bfb3ddec51d" prot="private" virt="non-virtual"><scope>Curve</scope><name>valid_op</name></member>
+      <member refid="class_curve_1ae97afae63534c34353e3fc6f5e9d7a8d" prot="protected" virt="non-virtual"><scope>Curve</scope><name>x</name></member>
+      <member refid="class_curve_1a81ad07dc5dccb7a05870b6341ae78364" prot="protected" virt="non-virtual"><scope>Curve</scope><name>y</name></member>
+      <member refid="class_curve_1a7ce6ff79064e9795241423ed47166539" prot="public" virt="non-virtual"><scope>Curve</scope><name>~Curve</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

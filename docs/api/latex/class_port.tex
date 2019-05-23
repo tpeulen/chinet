@@ -1,0 +1,231 @@
+\hypertarget{class_port}{}\section{Port Class Reference}
+\label{class_port}\index{Port@{Port}}
+
+
+{\ttfamily \#include $<$Port.\+h$>$}
+
+Inheritance diagram for Port\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_port}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_port_a2cfb70a4b6d730e715042d646ec1d960}{Port} ()
+\item 
+\hyperlink{class_port_abc59e965682f281264a8488a46408a6f}{Port} (double value, bool fixed=false, bool \hyperlink{class_port_a0c7610af582f64a46f25f76f73de804c}{is\+\_\+output}=false, bool \hyperlink{class_port_a1f80bb4edc0bdc8268f4c93ef618bef4}{is\+\_\+reactive}=false)
+\item 
+\hyperlink{class_port_a7eb1db139cc954b15e0d182ad3244067}{Port} (std\+::vector$<$ double $>$ array, bool fixed=false, bool \hyperlink{class_port_a0c7610af582f64a46f25f76f73de804c}{is\+\_\+output}=false, bool \hyperlink{class_port_a1f80bb4edc0bdc8268f4c93ef618bef4}{is\+\_\+reactive}=false)
+\item 
+\hyperlink{class_port_aff000f05612ddb41fec4bff9087bb643}{$\sim$\+Port} ()=default
+\item 
+void \hyperlink{class_port_ab35e1343f0db5a0b258d9541958324bc}{set\+\_\+port\+\_\+type} (bool \hyperlink{class_port_a0c7610af582f64a46f25f76f73de804c}{is\+\_\+output})
+\item 
+void \hyperlink{class_port_a5dfef60c4b30386e97d2829a23a0d3d3}{set\+\_\+node} (\hyperlink{class_node}{Node} $\ast$node\+\_\+ptr)
+\item 
+\hyperlink{class_node}{Node} $\ast$ \hyperlink{class_port_a8659a2feee31ada701589c0fb4202b5b}{get\+\_\+node} ()
+\item 
+bool \hyperlink{class_port_a0c7610af582f64a46f25f76f73de804c}{is\+\_\+output} ()
+\item 
+std\+::vector$<$ double $>$ \hyperlink{class_port_a82509b87aa9d775d0a40e2b446f2b7ad}{get\+\_\+value} ()
+\item 
+void \hyperlink{class_port_acc11e1890530dd4bc0b9e3c7778ef5ff}{get\+\_\+value} (double $\ast$$\ast$out, int $\ast$nbr\+\_\+out)
+\item 
+void \hyperlink{class_port_a18b368a7d48acb802b6671693f54adcb}{set\+\_\+value} (double $\ast$in, int nbr\+\_\+in)
+\item 
+void \hyperlink{class_port_a664dff6ffb75509465fca1bd89f67ab2}{set\+\_\+value} (std\+::vector$<$ double $>$ \&values)
+\item 
+void \hyperlink{class_port_a28311c7a8fe9e2838aa8ae63a37d2d9a}{set\+\_\+value} (double value)
+\item 
+void \hyperlink{class_port_af913356cf60ebe37fb03d213db73b1bc}{set\+\_\+fixed} (bool fixed)
+\item 
+void \hyperlink{class_port_ae2808ef3b67c3dd01222aee10e35f6cd}{set\+\_\+is\+\_\+reactive} (bool reactive)
+\item 
+bool \hyperlink{class_port_a7fbe40665570e0acbd7e9f6c9a8c9272}{is\+\_\+fixed} ()
+\item 
+bool \hyperlink{class_port_a51a2db67f75c856f83d28cec818b0170}{is\+\_\+linked} ()
+\item 
+bool \hyperlink{class_port_a1f80bb4edc0bdc8268f4c93ef618bef4}{is\+\_\+reactive} ()
+\item 
+bson\+\_\+t \hyperlink{class_port_a746914b62d482cc81a901d254a03c560}{get\+\_\+bson} () final
+\item 
+void \hyperlink{class_port_aec33d8bfca05139b1e319f15d2b3a1b8}{link} (std\+::shared\+\_\+ptr$<$ \hyperlink{class_port}{Port} $>$ \&v)
+\item 
+void \hyperlink{class_port_aa6a264b13dc26edd20a2726c9466186c}{unlink} ()
+\item 
+bool \hyperlink{class_port_a052c0ba97e0a53e45d973d4bc31fa615}{write\+\_\+to\+\_\+db} ()
+\item 
+bool \hyperlink{class_port_a952b0b030c884147a36be7a04eb22183}{read\+\_\+from\+\_\+db} (const std\+::string \&oid\+\_\+string)
+\item 
+bool \hyperlink{class_port_acecdaea3f5917240a7ff36c5186b57d6}{operator==} (\hyperlink{class_port}{Port} \&b)
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_port_a2cfb70a4b6d730e715042d646ec1d960}\label{class_port_a2cfb70a4b6d730e715042d646ec1d960}} 
+\index{Port@{Port}!Port@{Port}}
+\index{Port@{Port}!Port@{Port}}
+\subsubsection{\texorpdfstring{Port()}{Port()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily Port\+::\+Port (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_port_abc59e965682f281264a8488a46408a6f}\label{class_port_abc59e965682f281264a8488a46408a6f}} 
+\index{Port@{Port}!Port@{Port}}
+\index{Port@{Port}!Port@{Port}}
+\subsubsection{\texorpdfstring{Port()}{Port()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily Port\+::\+Port (\begin{DoxyParamCaption}\item[{double}]{value,  }\item[{bool}]{fixed = {\ttfamily false},  }\item[{bool}]{is\+\_\+output = {\ttfamily false},  }\item[{bool}]{is\+\_\+reactive = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_port_a7eb1db139cc954b15e0d182ad3244067}\label{class_port_a7eb1db139cc954b15e0d182ad3244067}} 
+\index{Port@{Port}!Port@{Port}}
+\index{Port@{Port}!Port@{Port}}
+\subsubsection{\texorpdfstring{Port()}{Port()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily Port\+::\+Port (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$}]{array,  }\item[{bool}]{fixed = {\ttfamily false},  }\item[{bool}]{is\+\_\+output = {\ttfamily false},  }\item[{bool}]{is\+\_\+reactive = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_port_aff000f05612ddb41fec4bff9087bb643}\label{class_port_aff000f05612ddb41fec4bff9087bb643}} 
+\index{Port@{Port}!````~Port@{$\sim$\+Port}}
+\index{````~Port@{$\sim$\+Port}!Port@{Port}}
+\subsubsection{\texorpdfstring{$\sim$\+Port()}{~Port()}}
+{\footnotesize\ttfamily Port\+::$\sim$\+Port (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_port_a746914b62d482cc81a901d254a03c560}\label{class_port_a746914b62d482cc81a901d254a03c560}} 
+\index{Port@{Port}!get\+\_\+bson@{get\+\_\+bson}}
+\index{get\+\_\+bson@{get\+\_\+bson}!Port@{Port}}
+\subsubsection{\texorpdfstring{get\+\_\+bson()}{get\_bson()}}
+{\footnotesize\ttfamily bson\+\_\+t Port\+::get\+\_\+bson (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \hyperlink{class_mongo_object_ac21cbe104a818f7e6ee7dcfbb521e9e1}{Mongo\+Object}.
+
+\mbox{\Hypertarget{class_port_a8659a2feee31ada701589c0fb4202b5b}\label{class_port_a8659a2feee31ada701589c0fb4202b5b}} 
+\index{Port@{Port}!get\+\_\+node@{get\+\_\+node}}
+\index{get\+\_\+node@{get\+\_\+node}!Port@{Port}}
+\subsubsection{\texorpdfstring{get\+\_\+node()}{get\_node()}}
+{\footnotesize\ttfamily \hyperlink{class_node}{Node}$\ast$ Port\+::get\+\_\+node (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_port_a82509b87aa9d775d0a40e2b446f2b7ad}\label{class_port_a82509b87aa9d775d0a40e2b446f2b7ad}} 
+\index{Port@{Port}!get\+\_\+value@{get\+\_\+value}}
+\index{get\+\_\+value@{get\+\_\+value}!Port@{Port}}
+\subsubsection{\texorpdfstring{get\+\_\+value()}{get\_value()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ Port\+::get\+\_\+value (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_port_acc11e1890530dd4bc0b9e3c7778ef5ff}\label{class_port_acc11e1890530dd4bc0b9e3c7778ef5ff}} 
+\index{Port@{Port}!get\+\_\+value@{get\+\_\+value}}
+\index{get\+\_\+value@{get\+\_\+value}!Port@{Port}}
+\subsubsection{\texorpdfstring{get\+\_\+value()}{get\_value()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Port\+::get\+\_\+value (\begin{DoxyParamCaption}\item[{double $\ast$$\ast$}]{out,  }\item[{int $\ast$}]{nbr\+\_\+out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_port_a7fbe40665570e0acbd7e9f6c9a8c9272}\label{class_port_a7fbe40665570e0acbd7e9f6c9a8c9272}} 
+\index{Port@{Port}!is\+\_\+fixed@{is\+\_\+fixed}}
+\index{is\+\_\+fixed@{is\+\_\+fixed}!Port@{Port}}
+\subsubsection{\texorpdfstring{is\+\_\+fixed()}{is\_fixed()}}
+{\footnotesize\ttfamily bool Port\+::is\+\_\+fixed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_port_a51a2db67f75c856f83d28cec818b0170}\label{class_port_a51a2db67f75c856f83d28cec818b0170}} 
+\index{Port@{Port}!is\+\_\+linked@{is\+\_\+linked}}
+\index{is\+\_\+linked@{is\+\_\+linked}!Port@{Port}}
+\subsubsection{\texorpdfstring{is\+\_\+linked()}{is\_linked()}}
+{\footnotesize\ttfamily bool Port\+::is\+\_\+linked (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_port_a0c7610af582f64a46f25f76f73de804c}\label{class_port_a0c7610af582f64a46f25f76f73de804c}} 
+\index{Port@{Port}!is\+\_\+output@{is\+\_\+output}}
+\index{is\+\_\+output@{is\+\_\+output}!Port@{Port}}
+\subsubsection{\texorpdfstring{is\+\_\+output()}{is\_output()}}
+{\footnotesize\ttfamily bool Port\+::is\+\_\+output (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_port_a1f80bb4edc0bdc8268f4c93ef618bef4}\label{class_port_a1f80bb4edc0bdc8268f4c93ef618bef4}} 
+\index{Port@{Port}!is\+\_\+reactive@{is\+\_\+reactive}}
+\index{is\+\_\+reactive@{is\+\_\+reactive}!Port@{Port}}
+\subsubsection{\texorpdfstring{is\+\_\+reactive()}{is\_reactive()}}
+{\footnotesize\ttfamily bool Port\+::is\+\_\+reactive (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_port_aec33d8bfca05139b1e319f15d2b3a1b8}\label{class_port_aec33d8bfca05139b1e319f15d2b3a1b8}} 
+\index{Port@{Port}!link@{link}}
+\index{link@{link}!Port@{Port}}
+\subsubsection{\texorpdfstring{link()}{link()}}
+{\footnotesize\ttfamily void Port\+::link (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \hyperlink{class_port}{Port} $>$ \&}]{v }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_port_acecdaea3f5917240a7ff36c5186b57d6}\label{class_port_acecdaea3f5917240a7ff36c5186b57d6}} 
+\index{Port@{Port}!operator==@{operator==}}
+\index{operator==@{operator==}!Port@{Port}}
+\subsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily bool Port\+::operator== (\begin{DoxyParamCaption}\item[{\hyperlink{class_port}{Port} \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_port_a952b0b030c884147a36be7a04eb22183}\label{class_port_a952b0b030c884147a36be7a04eb22183}} 
+\index{Port@{Port}!read\+\_\+from\+\_\+db@{read\+\_\+from\+\_\+db}}
+\index{read\+\_\+from\+\_\+db@{read\+\_\+from\+\_\+db}!Port@{Port}}
+\subsubsection{\texorpdfstring{read\+\_\+from\+\_\+db()}{read\_from\_db()}}
+{\footnotesize\ttfamily bool Port\+::read\+\_\+from\+\_\+db (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{oid\+\_\+string }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \hyperlink{class_mongo_object_a729412e226c9964e13ba80688c3f5e00}{Mongo\+Object}.
+
+\mbox{\Hypertarget{class_port_af913356cf60ebe37fb03d213db73b1bc}\label{class_port_af913356cf60ebe37fb03d213db73b1bc}} 
+\index{Port@{Port}!set\+\_\+fixed@{set\+\_\+fixed}}
+\index{set\+\_\+fixed@{set\+\_\+fixed}!Port@{Port}}
+\subsubsection{\texorpdfstring{set\+\_\+fixed()}{set\_fixed()}}
+{\footnotesize\ttfamily void Port\+::set\+\_\+fixed (\begin{DoxyParamCaption}\item[{bool}]{fixed }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_port_ae2808ef3b67c3dd01222aee10e35f6cd}\label{class_port_ae2808ef3b67c3dd01222aee10e35f6cd}} 
+\index{Port@{Port}!set\+\_\+is\+\_\+reactive@{set\+\_\+is\+\_\+reactive}}
+\index{set\+\_\+is\+\_\+reactive@{set\+\_\+is\+\_\+reactive}!Port@{Port}}
+\subsubsection{\texorpdfstring{set\+\_\+is\+\_\+reactive()}{set\_is\_reactive()}}
+{\footnotesize\ttfamily void Port\+::set\+\_\+is\+\_\+reactive (\begin{DoxyParamCaption}\item[{bool}]{reactive }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_port_a5dfef60c4b30386e97d2829a23a0d3d3}\label{class_port_a5dfef60c4b30386e97d2829a23a0d3d3}} 
+\index{Port@{Port}!set\+\_\+node@{set\+\_\+node}}
+\index{set\+\_\+node@{set\+\_\+node}!Port@{Port}}
+\subsubsection{\texorpdfstring{set\+\_\+node()}{set\_node()}}
+{\footnotesize\ttfamily void Port\+::set\+\_\+node (\begin{DoxyParamCaption}\item[{\hyperlink{class_node}{Node} $\ast$}]{node\+\_\+ptr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_port_ab35e1343f0db5a0b258d9541958324bc}\label{class_port_ab35e1343f0db5a0b258d9541958324bc}} 
+\index{Port@{Port}!set\+\_\+port\+\_\+type@{set\+\_\+port\+\_\+type}}
+\index{set\+\_\+port\+\_\+type@{set\+\_\+port\+\_\+type}!Port@{Port}}
+\subsubsection{\texorpdfstring{set\+\_\+port\+\_\+type()}{set\_port\_type()}}
+{\footnotesize\ttfamily void Port\+::set\+\_\+port\+\_\+type (\begin{DoxyParamCaption}\item[{bool}]{is\+\_\+output }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_port_a18b368a7d48acb802b6671693f54adcb}\label{class_port_a18b368a7d48acb802b6671693f54adcb}} 
+\index{Port@{Port}!set\+\_\+value@{set\+\_\+value}}
+\index{set\+\_\+value@{set\+\_\+value}!Port@{Port}}
+\subsubsection{\texorpdfstring{set\+\_\+value()}{set\_value()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily void Port\+::set\+\_\+value (\begin{DoxyParamCaption}\item[{double $\ast$}]{in,  }\item[{int}]{nbr\+\_\+in }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_port_a664dff6ffb75509465fca1bd89f67ab2}\label{class_port_a664dff6ffb75509465fca1bd89f67ab2}} 
+\index{Port@{Port}!set\+\_\+value@{set\+\_\+value}}
+\index{set\+\_\+value@{set\+\_\+value}!Port@{Port}}
+\subsubsection{\texorpdfstring{set\+\_\+value()}{set\_value()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily void Port\+::set\+\_\+value (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{values }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_port_a28311c7a8fe9e2838aa8ae63a37d2d9a}\label{class_port_a28311c7a8fe9e2838aa8ae63a37d2d9a}} 
+\index{Port@{Port}!set\+\_\+value@{set\+\_\+value}}
+\index{set\+\_\+value@{set\+\_\+value}!Port@{Port}}
+\subsubsection{\texorpdfstring{set\+\_\+value()}{set\_value()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily void Port\+::set\+\_\+value (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_port_aa6a264b13dc26edd20a2726c9466186c}\label{class_port_aa6a264b13dc26edd20a2726c9466186c}} 
+\index{Port@{Port}!unlink@{unlink}}
+\index{unlink@{unlink}!Port@{Port}}
+\subsubsection{\texorpdfstring{unlink()}{unlink()}}
+{\footnotesize\ttfamily void Port\+::unlink (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_port_a052c0ba97e0a53e45d973d4bc31fa615}\label{class_port_a052c0ba97e0a53e45d973d4bc31fa615}} 
+\index{Port@{Port}!write\+\_\+to\+\_\+db@{write\+\_\+to\+\_\+db}}
+\index{write\+\_\+to\+\_\+db@{write\+\_\+to\+\_\+db}!Port@{Port}}
+\subsubsection{\texorpdfstring{write\+\_\+to\+\_\+db()}{write\_to\_db()}}
+{\footnotesize\ttfamily bool Port\+::write\+\_\+to\+\_\+db (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \hyperlink{class_mongo_object_a65971bad07dce8b649820f9dee5d0ae8}{Mongo\+Object}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{_port_8h}{Port.\+h}\end{DoxyCompactItemize}

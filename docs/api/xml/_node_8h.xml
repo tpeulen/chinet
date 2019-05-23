@@ -1,0 +1,279 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="_node_8h" kind="file" language="C++">
+    <compoundname>Node.h</compoundname>
+    <includes local="no">string</includes>
+    <includes local="no">vector</includes>
+    <includes local="no">memory</includes>
+    <includes local="no">map</includes>
+    <includes local="no">rttr/registration</includes>
+    <includes refid="_mongo_object_8h" local="yes">MongoObject.h</includes>
+    <includes refid="_port_8h" local="yes">Port.h</includes>
+    <includes refid="_node_callback_8h" local="yes">NodeCallback.h</includes>
+    <includedby refid="_port_8h" local="no">include/Port.h</includedby>
+    <includedby refid="_node_callback_8h" local="no">include/NodeCallback.h</includedby>
+    <includedby refid="_session_8h" local="yes">include/Session.h</includedby>
+    <incdepgraph>
+      <node id="68">
+        <label>iterator</label>
+      </node>
+      <node id="76">
+        <label>cstdint</label>
+      </node>
+      <node id="67">
+        <label>cmath</label>
+      </node>
+      <node id="59">
+        <label>string</label>
+      </node>
+      <node id="62">
+        <label>map</label>
+      </node>
+      <node id="75">
+        <label>Port.h</label>
+        <link refid="_port_8h"/>
+        <childnode refid="76" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="58">
+        <label>include/Node.h</label>
+        <link refid="_node_8h"/>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="77" relation="include">
+        </childnode>
+      </node>
+      <node id="77">
+        <label>NodeCallback.h</label>
+        <link refid="_node_callback_8h"/>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="78" relation="include">
+        </childnode>
+      </node>
+      <node id="60">
+        <label>vector</label>
+      </node>
+      <node id="74">
+        <label>bson.h</label>
+      </node>
+      <node id="63">
+        <label>rttr/registration</label>
+      </node>
+      <node id="69">
+        <label>mongoc.h</label>
+      </node>
+      <node id="72">
+        <label>math.h</label>
+      </node>
+      <node id="65">
+        <label>iostream</label>
+      </node>
+      <node id="64">
+        <label>MongoObject.h</label>
+        <link refid="_mongo_object_8h"/>
+        <childnode refid="65" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="67" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+      </node>
+      <node id="73">
+        <label>chrono</label>
+      </node>
+      <node id="66">
+        <label>set</label>
+      </node>
+      <node id="78">
+        <label>FlexLabel/FlexLabel.h</label>
+      </node>
+      <node id="71">
+        <label>algorithm</label>
+      </node>
+      <node id="70">
+        <label>Functions.h</label>
+        <link refid="_functions_8h"/>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+        <childnode refid="74" relation="include">
+        </childnode>
+      </node>
+      <node id="61">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="82">
+        <label>include/Session.h</label>
+        <link refid="_session_8h"/>
+      </node>
+      <node id="80">
+        <label>include/Port.h</label>
+        <link refid="_port_8h"/>
+        <childnode refid="79" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+      </node>
+      <node id="79">
+        <label>include/Node.h</label>
+        <link refid="_node_8h"/>
+        <childnode refid="80" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+      </node>
+      <node id="81">
+        <label>include/NodeCallback.h</label>
+        <link refid="_node_callback_8h"/>
+        <childnode refid="79" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="class_node" prot="public">Node</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>chinet_Node_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>chinet_Node_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;memory&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;map&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;rttr/registration&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="_mongo_object_8h" kindref="compound">MongoObject.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="_port_8h" kindref="compound">Port.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="_node_callback_8h" kindref="compound">NodeCallback.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Node</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="comment">//====================================================================</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_port" kindref="compound">Port</ref>;</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_node_callback" kindref="compound">NodeCallback</ref>;</highlight></codeline>
+<codeline lineno="21" refid="class_node" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_node" kindref="compound">Node</ref><sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="class_mongo_object" kindref="compound">MongoObject</ref>{</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/><ref refid="class_port" kindref="compound">Port</ref>;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>node_valid_<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>std::map&lt;std::string,<sp/>std::shared_ptr&lt;Port&gt;&gt;<sp/>ports;</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Methods</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//--------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_node_1a4ef31790680213bff2306ec34941941c" kindref="member">fill_input_output_port_lookups</ref>();</highlight></codeline>
+<codeline lineno="34" refid="class_node_1a34e4ef7089672adaa8aa31277aa5f159" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>rttr::method<sp/><ref refid="class_node_1a34e4ef7089672adaa8aa31277aa5f159" kindref="member">meth_</ref><sp/>=<sp/>rttr::type::get_global_method(</highlight><highlight class="stringliteral">&quot;nothing&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="35" refid="class_node_1a2970ced9f376dd6c5d512d0bbb7cbb54" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::map&lt;std::string,<sp/>std::shared_ptr&lt;Port&gt;&gt;<sp/><ref refid="class_node_1a2970ced9f376dd6c5d512d0bbb7cbb54" kindref="member">in_</ref>;</highlight></codeline>
+<codeline lineno="36" refid="class_node_1a324497db3924989e08e8ee0411d5972e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::map&lt;std::string,<sp/>std::shared_ptr&lt;Port&gt;&gt;<sp/><ref refid="class_node_1a324497db3924989e08e8ee0411d5972e" kindref="member">out_</ref>;</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38" refid="class_node_1a3755609fd44cf5b86c8a7d1f94d9747b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::string<sp/><ref refid="class_node_1a3755609fd44cf5b86c8a7d1f94d9747b" kindref="member">callback</ref>;</highlight></codeline>
+<codeline lineno="39" refid="class_node_1aa6465260fcaaecbb7bc8847dbbeb3ba6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::string<sp/><ref refid="class_node_1aa6465260fcaaecbb7bc8847dbbeb3ba6" kindref="member">callback_type_string</ref>;</highlight></codeline>
+<codeline lineno="40" refid="class_node_1a290c95a63ae639d150355764ea1f4b54" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="class_node_1a290c95a63ae639d150355764ea1f4b54" kindref="member">callback_type</ref>;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46" refid="class_node_1a9bc5e92a6565a4addbbcadea93889e85" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::shared_ptr&lt;NodeCallback&gt;<sp/><ref refid="class_node_1a9bc5e92a6565a4addbbcadea93889e85" kindref="member">callback_class</ref>;</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Constructor<sp/>&amp;<sp/>Destructor</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//--------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_node_1ad7a34779cad45d997bfd6d3d8043c75f" kindref="member">Node</ref>();</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_node_1ad7a34779cad45d997bfd6d3d8043c75f" kindref="member">Node</ref>(std::string<sp/>name);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_node_1ad7a34779cad45d997bfd6d3d8043c75f" kindref="member">Node</ref>(std::map&lt;std::string,<sp/>std::shared_ptr&lt;Port&gt;&gt;<sp/>ports);</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_node_1aa0840c3cb5c7159be6d992adecd2097c" kindref="member">~Node</ref>();</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Methods</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//--------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_mongo_object_1aecd244620f292e8368d1f593925eafbd" kindref="member">read_from_db</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;oid_string)<sp/></highlight><highlight class="keyword">final</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_node_1a0a3c8430a9e5b6b725c87bbcf7adc54b" kindref="member">evaluate</ref>();</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_node_1a8d821a6df3cd9504fefc551d5bd0a64f" kindref="member">is_valid</ref>();</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_node_1adb04f5aa8b454b19db663b3f240e9061" kindref="member">inputs_valid</ref>();</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_node_1ad5cacb320e423275faef1bfc8c7a365b" kindref="member">write_to_db</ref>()<sp/>final;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Getter</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//--------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/>bson_t<sp/><ref refid="class_node_1a9568e1bba3436d78e77862902e328592" kindref="member">get_bson</ref>();</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacestd" kindref="compound">std</ref>::</highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/><ref refid="class_node_1a0cc0386322fca056e49e49d869ade853" kindref="member">get_name</ref>();</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacestd" kindref="compound">std</ref>::map&lt;<ref refid="namespacestd" kindref="compound">std</ref>::</highlight><highlight class="keywordtype">string</highlight><highlight class="normal">,<sp/><ref refid="namespacestd" kindref="compound">std</ref>::shared_ptr&lt;<ref refid="class_port" kindref="compound">Port</ref>&gt;&gt;<sp/><ref refid="class_node_1aab2f990047525bd3bfe7be041a8a201c" kindref="member">get_input_ports</ref>();</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacestd" kindref="compound">std</ref>::map&lt;<ref refid="namespacestd" kindref="compound">std</ref>::</highlight><highlight class="keywordtype">string</highlight><highlight class="normal">,<sp/><ref refid="namespacestd" kindref="compound">std</ref>::shared_ptr&lt;<ref refid="class_port" kindref="compound">Port</ref>&gt;&gt;<sp/><ref refid="class_node_1a060160b85a15190fcf98fa0a3f9ec4e6" kindref="member">get_output_ports</ref>();</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacestd" kindref="compound">std</ref>::map&lt;<ref refid="namespacestd" kindref="compound">std</ref>::</highlight><highlight class="keywordtype">string</highlight><highlight class="normal">,<sp/><ref refid="namespacestd" kindref="compound">std</ref>::shared_ptr&lt;<ref refid="class_port" kindref="compound">Port</ref>&gt;&gt;<sp/><ref refid="class_node_1a90fc0096ba3a5094f0696dde1dd5b08d" kindref="member">get_ports</ref>();</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacestd" kindref="compound">std</ref>::shared_ptr&lt;<ref refid="class_port" kindref="compound">Port</ref>&gt;<sp/><ref refid="class_node_1a71b857799058e56ccb9593a69fc675bc" kindref="member">get_port</ref>(const<sp/><ref refid="namespacestd" kindref="compound">std</ref>::</highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>&amp;port_name);</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_node_1a139ab3c04753749cc35d2ff8c268c248" kindref="member">add_port</ref>(<ref refid="namespacestd" kindref="compound">std</ref>::</highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>key,<sp/><ref refid="namespacestd" kindref="compound">std</ref>::shared_ptr&lt;<ref refid="class_port" kindref="compound">Port</ref>&gt;,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>is_source,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>fill_in_out=true);</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_node_1ac0b67acb7c270cf38579356325ee6e9c" kindref="member">add_input_port</ref>(<ref refid="namespacestd" kindref="compound">std</ref>::</highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>key,<sp/><ref refid="namespacestd" kindref="compound">std</ref>::shared_ptr&lt;Port&gt;);</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_node_1a9df0ba6b43f1b59fd0bce26470b906ba" kindref="member">add_output_port</ref>(<ref refid="namespacestd" kindref="compound">std</ref>::</highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>key,<sp/><ref refid="namespacestd" kindref="compound">std</ref>::shared_ptr&lt;Port&gt;);</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacestd" kindref="compound">std</ref>::shared_ptr&lt;Port&gt;<sp/><ref refid="class_node_1a89e7f8e74b09395e5a2362bcef664ee9" kindref="member">get_input_port</ref>(const<sp/><ref refid="namespacestd" kindref="compound">std</ref>::</highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>&amp;port_name);</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacestd" kindref="compound">std</ref>::shared_ptr&lt;Port&gt;<sp/><ref refid="class_node_1a98f6937be16c29da2ea37b0ad51cb463" kindref="member">get_output_port</ref>(const<sp/><ref refid="namespacestd" kindref="compound">std</ref>::</highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>&amp;port_name);</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Setter</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//--------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_node_1a924146fb76ec67a78971f91e93418527" kindref="member">set_callback</ref>(<ref refid="namespacestd" kindref="compound">std</ref>::shared_ptr&lt;<ref refid="class_node_callback" kindref="compound">NodeCallback</ref>&gt;<sp/>cb);</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_node_1a924146fb76ec67a78971f91e93418527" kindref="member">set_callback</ref>(<ref refid="namespacestd" kindref="compound">std</ref>::</highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>callback,<sp/><ref refid="namespacestd" kindref="compound">std</ref>::</highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>callback_type);</highlight></codeline>
+<codeline lineno="85" refid="class_node_1ab9fe9ebcddc19a16dc518fd29e584da8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_node_1ab9fe9ebcddc19a16dc518fd29e584da8" kindref="member">set_node_to_invalid</ref>(){</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>node_valid_<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/>//chinet_Node_H</highlight></codeline>
+    </programlisting>
+    <location file="include/Node.h"/>
+  </compounddef>
+</doxygen>

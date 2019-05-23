@@ -1,0 +1,342 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="class_session" kind="class" language="C++" prot="public">
+    <compoundname>Session</compoundname>
+    <basecompoundref refid="class_mongo_object" prot="public" virt="non-virtual">MongoObject</basecompoundref>
+    <includes refid="_session_8h" local="no">Session.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="class_session_1a0b50e79f5e66081dd5112571107bc652" prot="public" static="no" mutable="no">
+        <type>std::map&lt; std::string, std::shared_ptr&lt; <ref refid="class_node" kindref="compound">Node</ref> &gt; &gt;</type>
+        <definition>std::map&lt;std::string, std::shared_ptr&lt;Node&gt; &gt; Session::nodes</definition>
+        <argsstring></argsstring>
+        <name>nodes</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Session.h" line="28" column="1" bodyfile="include/Session.h" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="class_session_1aa517fe6138a0cc32e27ddf1eb7331520" prot="protected" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
+        <type>bson_t</type>
+        <definition>bson_t Session::get_bson</definition>
+        <argsstring>() final</argsstring>
+        <name>get_bson</name>
+        <reimplements refid="class_mongo_object_1ac21cbe104a818f7e6ee7dcfbb521e9e1">get_bson</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Session.h" line="24" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_session_1ad92ef09b872c9227e38a6efdd4d8a837" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Session::Session</definition>
+        <argsstring>()</argsstring>
+        <name>Session</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Session.h" line="30" column="1" bodyfile="include/Session.h" bodystart="30" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="class_session_1a556c8971b03563ae3c94dc1d19cbed27" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Session::Session</definition>
+        <argsstring>(std::map&lt; std::string, std::shared_ptr&lt; Node &gt;&gt; nodes)</argsstring>
+        <name>Session</name>
+        <param>
+          <type>std::map&lt; std::string, std::shared_ptr&lt; <ref refid="class_node" kindref="compound">Node</ref> &gt;&gt;</type>
+          <declname>nodes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Session.h" line="35" column="1" bodyfile="include/Session.h" bodystart="35" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="class_session_1a7b5d3b9db809cc54e515639b78b0e811" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Session::add_node</definition>
+        <argsstring>(std::string name, std::shared_ptr&lt; Node &gt; object)</argsstring>
+        <name>add_node</name>
+        <param>
+          <type>std::string</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>std::shared_ptr&lt; <ref refid="class_node" kindref="compound">Node</ref> &gt;</type>
+          <declname>object</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Session.h" line="43" column="1" bodyfile="include/Session.h" bodystart="43" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="class_session_1af091cae3db4abcc5afe4a8abaef222f2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::map&lt; std::string, std::shared_ptr&lt; <ref refid="class_node" kindref="compound">Node</ref> &gt; &gt;</type>
+        <definition>std::map&lt;std::string, std::shared_ptr&lt;Node&gt; &gt; Session::get_nodes</definition>
+        <argsstring>()</argsstring>
+        <name>get_nodes</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Session.h" line="52" column="1" bodyfile="include/Session.h" bodystart="52" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="class_session_1a513e5436b4c990985300246bb39d9f5c" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
+        <type>bool</type>
+        <definition>bool Session::write_to_db</definition>
+        <argsstring>() final</argsstring>
+        <name>write_to_db</name>
+        <reimplements refid="class_mongo_object_1a65971bad07dce8b649820f9dee5d0ae8">write_to_db</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Session.h" line="57" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_session_1a4f09644fd155a1d5640cedefe4aa42fc" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
+        <type>bool</type>
+        <definition>bool Session::read_from_db</definition>
+        <argsstring>(const std::string &amp;oid_string) final</argsstring>
+        <name>read_from_db</name>
+        <reimplements refid="class_mongo_object_1a729412e226c9964e13ba80688c3f5e00">read_from_db</reimplements>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>oid_string</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Session.h" line="59" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_session_1a092e487a152de25de0a37ef16356da7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::shared_ptr&lt; <ref refid="class_port" kindref="compound">Port</ref> &gt;</type>
+        <definition>std::shared_ptr&lt;Port&gt; Session::read_port_template</definition>
+        <argsstring>(json j, std::string &amp;node_key, std::string &amp;port_key)</argsstring>
+        <name>read_port_template</name>
+        <param>
+          <type>json</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>std::string &amp;</type>
+          <declname>node_key</declname>
+        </param>
+        <param>
+          <type>std::string &amp;</type>
+          <declname>port_key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Session.h" line="61" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_session_1a8d085cbe91c4ab1632e4eed199120123" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::shared_ptr&lt; <ref refid="class_node" kindref="compound">Node</ref> &gt;</type>
+        <definition>std::shared_ptr&lt;Node&gt; Session::read_node_template</definition>
+        <argsstring>(json j, std::string &amp;node_key)</argsstring>
+        <name>read_node_template</name>
+        <param>
+          <type>json</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>std::string &amp;</type>
+          <declname>node_key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Session.h" line="63" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_session_1adb03e68fc271cf09c0175cb908b4afff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Session::read_session_template</definition>
+        <argsstring>(const std::string &amp;json_string)</argsstring>
+        <name>read_session_template</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>json_string</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Session.h" line="65" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_session_1a5eec7c1012a9a058f06347dd3cb18de3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Session::link_nodes</definition>
+        <argsstring>(std::string node_name, std::string port_name, std::string target_node_name, std::string target_port_name)</argsstring>
+        <name>link_nodes</name>
+        <param>
+          <type>std::string</type>
+          <declname>node_name</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>port_name</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>target_node_name</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>target_port_name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Session.h" line="67" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="38">
+        <label>MongoObject</label>
+        <link refid="class_mongo_object"/>
+      </node>
+      <node id="37">
+        <label>Session</label>
+        <link refid="class_session"/>
+        <childnode refid="38" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="42">
+        <label>std::basic_string&lt; char &gt;</label>
+      </node>
+      <node id="40">
+        <label>MongoObject</label>
+        <link refid="class_mongo_object"/>
+        <childnode refid="41" relation="usage">
+          <edgelabel>object_name</edgelabel>
+          <edgelabel>app_string</edgelabel>
+          <edgelabel>uri_string</edgelabel>
+          <edgelabel>collection_string</edgelabel>
+          <edgelabel>db_string</edgelabel>
+        </childnode>
+      </node>
+      <node id="39">
+        <label>Session</label>
+        <link refid="class_session"/>
+        <childnode refid="40" relation="public-inheritance">
+        </childnode>
+        <childnode refid="43" relation="usage">
+          <edgelabel>nodes</edgelabel>
+        </childnode>
+      </node>
+      <node id="43">
+        <label>std::map&lt; std::string, std::shared_ptr&lt; Node &gt; &gt;</label>
+        <childnode refid="41" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+      </node>
+      <node id="41">
+        <label>std::string</label>
+        <childnode refid="42" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/Session.h" line="20" column="1" bodyfile="include/Session.h" bodystart="19" bodyend="73"/>
+    <listofallmembers>
+      <member refid="class_session_1a7b5d3b9db809cc54e515639b78b0e811" prot="public" virt="non-virtual"><scope>Session</scope><name>add_node</name></member>
+      <member refid="class_mongo_object_1ace5148b45dd674c73077a044d0233ed8" prot="protected" virt="non-virtual"><scope>Session</scope><name>app_string</name></member>
+      <member refid="class_mongo_object_1a56dccd703ae3e3e2193d57d31df12fd0" prot="protected" virt="non-virtual"><scope>Session</scope><name>append_number_array</name></member>
+      <member refid="class_mongo_object_1ab659c54f28b5e13c6cb2fc0fc8ad4635" prot="protected" virt="non-virtual"><scope>Session</scope><name>append_string</name></member>
+      <member refid="class_mongo_object_1a59d2d926fd2f8048b1dab88b3e1fea5b" prot="protected" virt="non-virtual"><scope>Session</scope><name>collection_string</name></member>
+      <member refid="class_mongo_object_1adbb80b6af3e780c81cc455f480507749" prot="public" virt="non-virtual"><scope>Session</scope><name>connect_object_to_db</name></member>
+      <member refid="class_mongo_object_1a7ef98cecb5c625a9c3e9a57373be41b8" prot="public" virt="non-virtual"><scope>Session</scope><name>connect_to_db</name></member>
+      <member refid="class_mongo_object_1a830f8d398209664c866f2c437667cc5a" prot="protected" virt="non-virtual"><scope>Session</scope><name>create_and_connect_objects_from_oid_array</name></member>
+      <member refid="class_mongo_object_1ab879c65bc54d59dc56cc0ca652756e10" prot="protected" virt="non-virtual"><scope>Session</scope><name>create_and_connect_objects_from_oid_doc</name></member>
+      <member refid="class_mongo_object_1ad5165ed92020fba7d502a3556794ab4f" prot="public" virt="non-virtual"><scope>Session</scope><name>create_copy</name></member>
+      <member refid="class_mongo_object_1a0b94ea01312b792e42b944399a4eb45c" prot="protected" virt="non-virtual"><scope>Session</scope><name>create_oid_array_in_doc</name></member>
+      <member refid="class_mongo_object_1ae8d85ac8089beca73773bd6189a2530c" prot="protected" virt="non-virtual"><scope>Session</scope><name>create_oid_dict_in_doc</name></member>
+      <member refid="class_mongo_object_1a215dc4379af5ac81e19d245f5d5d37e0" prot="protected" virt="non-virtual"><scope>Session</scope><name>db_string</name></member>
+      <member refid="class_mongo_object_1ae541414f753a8fd792cf0be163117b99" prot="public" virt="non-virtual"><scope>Session</scope><name>disconnect_from_db</name></member>
+      <member refid="class_mongo_object_1aa143fbe117d6c12baf222be25555947b" prot="protected" virt="non-virtual"><scope>Session</scope><name>document</name></member>
+      <member refid="class_mongo_object_1ae1002573afb58658162fb7f53cd0bffc" prot="public" virt="non-virtual"><scope>Session</scope><name>get_array</name></member>
+      <member refid="class_session_1aa517fe6138a0cc32e27ddf1eb7331520" prot="protected" virt="virtual"><scope>Session</scope><name>get_bson</name></member>
+      <member refid="class_mongo_object_1ac35c66d91e7297eb46313b98d01751cb" prot="protected" virt="non-virtual"><scope>Session</scope><name>get_bson_excluding</name></member>
+      <member refid="class_mongo_object_1aaca278b427d042a63caf2962b5e76043" prot="protected" virt="non-virtual"><scope>Session</scope><name>get_bson_oid</name></member>
+      <member refid="class_mongo_object_1a196ea1b747a08f7ab525b8851ebc0b51" prot="protected" virt="non-virtual"><scope>Session</scope><name>get_document</name></member>
+      <member refid="class_mongo_object_1acde33629416d7f926737237264ac6ca1" prot="public" virt="non-virtual"><scope>Session</scope><name>get_json</name></member>
+      <member refid="class_mongo_object_1a9f71ae755dac1db3e37cdee85329d163" prot="public" virt="non-virtual"><scope>Session</scope><name>get_json</name></member>
+      <member refid="class_mongo_object_1abd49d2dcea0ce5f49ebe9a8a9df97164" prot="public" virt="virtual"><scope>Session</scope><name>get_name</name></member>
+      <member refid="class_session_1af091cae3db4abcc5afe4a8abaef222f2" prot="public" virt="non-virtual"><scope>Session</scope><name>get_nodes</name></member>
+      <member refid="class_mongo_object_1ad155a8808f999f8e3dd0cfc055b33e2a" prot="public" virt="non-virtual"><scope>Session</scope><name>get_oid</name></member>
+      <member refid="class_mongo_object_1af0cf1568e5b1b87a971e93bba4ec0a40" prot="public" virt="non-virtual"><scope>Session</scope><name>get_singleton</name></member>
+      <member refid="class_mongo_object_1a33799f83d7343fc5385869f5a907aeea" prot="protected" virt="non-virtual"><scope>Session</scope><name>get_string_by_key</name></member>
+      <member refid="class_mongo_object_1ae67113e87e4dadcd51c23aa373eba61d" prot="public" virt="non-virtual"><scope>Session</scope><name>is_connected_to_db</name></member>
+      <member refid="class_session_1a5eec7c1012a9a058f06347dd3cb18de3" prot="public" virt="non-virtual"><scope>Session</scope><name>link_nodes</name></member>
+      <member refid="class_mongo_object_1ae0438efeae33db2bfeb3972e1196a8a9" prot="public" virt="non-virtual"><scope>Session</scope><name>MongoObject</name></member>
+      <member refid="class_mongo_object_1a9e876f9d6e7cfcb7d4ce9046014e2b5f" prot="public" virt="non-virtual"><scope>Session</scope><name>MongoObject</name></member>
+      <member refid="class_session_1a0b50e79f5e66081dd5112571107bc652" prot="public" virt="non-virtual"><scope>Session</scope><name>nodes</name></member>
+      <member refid="class_mongo_object_1a451655d98b9b515d856f7178b46e4b01" prot="protected" virt="non-virtual"><scope>Session</scope><name>object_name</name></member>
+      <member refid="class_mongo_object_1a020a40224a752e6036d49ec22474d616" prot="protected" virt="non-virtual"><scope>Session</scope><name>oid_document</name></member>
+      <member refid="class_mongo_object_1a4905c165b7b18f471ee56f8eb3f5e0f1" prot="protected" virt="non-virtual"><scope>Session</scope><name>oid_precursor</name></member>
+      <member refid="class_mongo_object_1a9592c8baaed700c358dc26025e3bf166" prot="protected" virt="non-virtual"><scope>Session</scope><name>oid_to_string</name></member>
+      <member refid="class_mongo_object_1a0050194f5bc8690e0db3b8217086e421" prot="public" virt="non-virtual"><scope>Session</scope><name>operator==</name></member>
+      <member refid="class_mongo_object_1a2136ceace181debba3d2c4fe07f947d8" prot="public" virt="non-virtual"><scope>Session</scope><name>operator[]</name></member>
+      <member refid="class_session_1a4f09644fd155a1d5640cedefe4aa42fc" prot="public" virt="virtual"><scope>Session</scope><name>read_from_db</name></member>
+      <member refid="class_mongo_object_1aecd244620f292e8368d1f593925eafbd" prot="protected" virt="non-virtual" ambiguityscope="MongoObject::"><scope>Session</scope><name>read_from_db</name></member>
+      <member refid="class_mongo_object_1adce8ffc4811a9d1c94701711f574bc34" prot="public" virt="non-virtual"><scope>Session</scope><name>read_json</name></member>
+      <member refid="class_session_1a8d085cbe91c4ab1632e4eed199120123" prot="public" virt="non-virtual"><scope>Session</scope><name>read_node_template</name></member>
+      <member refid="class_session_1a092e487a152de25de0a37ef16356da7c" prot="public" virt="non-virtual"><scope>Session</scope><name>read_port_template</name></member>
+      <member refid="class_session_1adb03e68fc271cf09c0175cb908b4afff" prot="public" virt="non-virtual"><scope>Session</scope><name>read_session_template</name></member>
+      <member refid="class_session_1ad92ef09b872c9227e38a6efdd4d8a837" prot="public" virt="non-virtual"><scope>Session</scope><name>Session</name></member>
+      <member refid="class_session_1a556c8971b03563ae3c94dc1d19cbed27" prot="public" virt="non-virtual"><scope>Session</scope><name>Session</name></member>
+      <member refid="class_mongo_object_1ac251f38eef739fb9e1418a20e7fcc7f7" prot="public" virt="non-virtual"><scope>Session</scope><name>set_array</name></member>
+      <member refid="class_mongo_object_1adb597533d8e167c3d6bafd28baef349c" prot="protected" virt="non-virtual"><scope>Session</scope><name>set_document</name></member>
+      <member refid="class_mongo_object_1ae51714acc607a67518862306fac509ee" prot="protected" virt="non-virtual"><scope>Session</scope><name>set_document</name></member>
+      <member refid="class_mongo_object_1ac999ffe6b9b2ca261adff1eaf9da7e98" prot="public" virt="non-virtual"><scope>Session</scope><name>set_name</name></member>
+      <member refid="class_mongo_object_1a9e80e38e5a4f40754ef48f2504e1613c" prot="public" virt="non-virtual"><scope>Session</scope><name>set_oid</name></member>
+      <member refid="class_mongo_object_1a03a0d78b1f206aca81ff746edcd57c81" prot="public" virt="non-virtual"><scope>Session</scope><name>set_singleton</name></member>
+      <member refid="class_mongo_object_1ae9bff3fe8b82864f36e6cb7aa8f159b0" prot="protected" virt="non-virtual"><scope>Session</scope><name>string_to_oid</name></member>
+      <member refid="class_mongo_object_1a0ced4ff82fbee4e7213715994d690380" prot="protected" virt="non-virtual"><scope>Session</scope><name>time_of_death</name></member>
+      <member refid="class_mongo_object_1a71e3fa5196ad3b496d0aa326d61e84e8" prot="protected" virt="non-virtual"><scope>Session</scope><name>uri_string</name></member>
+      <member refid="class_session_1a513e5436b4c990985300246bb39d9f5c" prot="public" virt="virtual"><scope>Session</scope><name>write_to_db</name></member>
+      <member refid="class_mongo_object_1ab43c880a2ae99890946e7edf3d232e5a" prot="protected" virt="non-virtual" ambiguityscope="MongoObject::"><scope>Session</scope><name>write_to_db</name></member>
+      <member refid="class_mongo_object_1ac1aba6b5189bca3feb08a698a01c1c30" prot="public" virt="non-virtual"><scope>Session</scope><name>~MongoObject</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
