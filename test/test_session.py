@@ -46,8 +46,6 @@ class Tests(unittest.TestCase):
         self.assertEqual(na1.get_name(), na2.get_name())
 
     def test_read_template(self):
-        import chinet as cn
-
         template_file = "./inputs/session_template.json"
 
         json_string = ""

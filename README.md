@@ -1,10 +1,9 @@
 # chinet
-
+[![Linux Build Status](https://travis-ci.org/tpeulen/chinet.svg?branch=master)](https://travis-ci.org/tpeulen/chinet)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9b8528bd067148d68d55cb3edeb10fe6)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tpeulen/chinet&amp;utm_campaign=Badge_Grade)
 [![Anaconda-Server Badge](https://anaconda.org/tpeulen/chinet/badges/installer/conda.svg)](https://conda.anaconda.org/tpeulen)
 [![Anaconda-Server Version](https://anaconda.org/tpeulen/chinet/badges/version.svg)](https://anaconda.org/tpeulen/chinet)
 [![Anaconda-Server Badge](https://anaconda.org/tpeulen/chinet/badges/platforms.svg)](https://anaconda.org/tpeulen/chinet)
-[![Linux Build Status](https://travis-ci.org/tpeulen/chinet.svg?branch=master)](https://travis-ci.org/tpeulen/chinet)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9b8528bd067148d68d55cb3edeb10fe6)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tpeulen/chinet&amp;utm_campaign=Badge_Grade)
 
 ## General description
 
@@ -36,12 +35,11 @@ purposes.
 
 ## Goals
 
-*  reactive dataflow model framework 
+*  reactive dataflow model framework  
 *  fast inter computation node communication
-*  define and store models jointly with associated data identifies in
-   data base.
+*  define and store models jointly with associated data identifies in data base.
 *  Low memory footprint (keep objective large datasets, e.g.  FLIM in memory). 
-   Particulary useful for FLIM.
+  Particulary useful for FLIM.
 *  Platform independent C/C++ library with interfaces for scripting libraries 
 
 ## Capabilities
@@ -120,4 +118,3 @@ Legacy 32-bit platforms are not supported.
 ## License
 
 chinet is released under the open source MIT license.
-

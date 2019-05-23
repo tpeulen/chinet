@@ -23,7 +23,7 @@ class Node : public MongoObject{
 private:
     friend Port;
 
-    bool node_valid_ = true;
+    bool node_valid_ = false;
     std::map<std::string, std::shared_ptr<Port>> ports;
 
     // Methods
@@ -49,8 +49,8 @@ public:
     //--------------------------------------------------------------------
     Node();
     Node(std::string name);
-
     Node(std::map<std::string, std::shared_ptr<Port>> ports);
+
     ~Node();
 
     // Methods
@@ -58,6 +58,7 @@ public:
     bool read_from_db(const std::string &oid_string) final;
     void evaluate();
     bool is_valid();
+    bool inputs_valid();
     bool write_to_db() final;
 
     // Getter
@@ -70,7 +71,7 @@ public:
 
     std::map<std::string, std::shared_ptr<Port>> get_ports();
     std::shared_ptr<Port> get_port(const std::string &port_name);
-    void add_port(std::string key, std::shared_ptr<Port>, bool is_source);
+    void add_port(std::string key, std::shared_ptr<Port>, bool is_source, bool fill_in_out=true);
     void add_input_port(std::string key, std::shared_ptr<Port>);
     void add_output_port(std::string key, std::shared_ptr<Port>);
 
@@ -81,6 +82,9 @@ public:
     //--------------------------------------------------------------------
     void set_callback(std::shared_ptr<NodeCallback> cb);
     void set_callback(std::string callback, std::string callback_type);
+    void set_node_to_invalid(){
+        node_valid_ = false;
+    }
 
 };
 

@@ -24,7 +24,6 @@ IF(USE_OpenMP)
     ENDIF()
 ENDIF()
 
-
 # Cpp-taskflow
 ###############################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/cpp-taskflow/)
@@ -35,6 +34,15 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/cpp-taskflow/)
 FIND_PACKAGE(Boost 1.50 COMPONENTS system REQUIRED)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR} )
 LINK_LIBRARIES(${Boost_LIBRARIES})
+
+# Eigen3
+###############################
+FIND_PACKAGE(Eigen3 3.2 QUIET NO_MODULE)
+if (NOT TARGET Eigen3::Eigen)
+    MESSAGE(STATUS "Using thirdparty/Eigen")
+    SET(EIGEN3_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/thirdparty/eigen)
+endif (NOT TARGET Eigen3::Eigen)
+INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
 
 #[[
 # Boost histogram

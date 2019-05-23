@@ -13,13 +13,16 @@ class Port : public MongoObject
 private:
     std::shared_ptr<Port> link_;
     std::vector<double> buff_double_vector_{};
+    Node *node_;
+    bool is_reactive_;
 
 public:
 
     // Constructor & Destructor
     //--------------------------------------------------------------------
 
-    Port()
+    Port() :
+    node_(nullptr)
     {
         append_string(&document, "type", "port");
         bson_append_double(&document, "singleton", 9, 1.0);
@@ -30,25 +33,28 @@ public:
 
     Port(double value,
          bool fixed = false,
-         bool is_output = false
+         bool is_output = false,
+         bool is_reactive = false
     ) :
     Port()
     {
         set_value(value);
         set_fixed(fixed);
         set_port_type(is_output);
-
+        is_reactive_ = is_reactive;
     };
 
     Port(std::vector<double> array,
          bool fixed = false,
-         bool is_output = false
+         bool is_output = false,
+         bool is_reactive = false
     ) :
     Port()
     {
         set_fixed(fixed);
         set_port_type(is_output);
         set_value(array.data(), array.size());
+        is_reactive_ = is_reactive;
     };
 
     ~Port() = default;
@@ -57,6 +63,14 @@ public:
     //--------------------------------------------------------------------
 
     void set_port_type(bool is_output);
+
+    void set_node(Node *node_ptr){
+        node_ = node_ptr;
+    }
+
+    Node* get_node(){
+        return node_;
+    }
 
     bool is_output()
     {
@@ -88,30 +102,16 @@ public:
         }
     }
 
-    void set_value(double *in, int nbr_in)
-    {
-        buff_double_vector_.assign(in, in + nbr_in);
-        if (link_ != nullptr) {
-            link_->set_value(in, nbr_in);
-        }
-    }
-
-    void set_value(std::vector<double> &values)
-    {
-        set_value(values.data(), values.size());
-    }
-
-    void set_value(double value)
-    {
-        auto v = std::vector<double>{value};
-        set_value(v.data(), v.size());
-    }
-
+    void set_value(double *in, int nbr_in);
+    void set_value(std::vector<double> &values);
+    void set_value(double value);
     void set_fixed(bool fixed);
 
     bool is_fixed();
-
     bool is_linked();
+    bool is_reactive(){
+        return is_reactive_;
+    }
 
     bson_t get_bson() final;
 
@@ -133,6 +133,13 @@ public:
         bool re = MongoObject::read_from_db(oid_string);
         buff_double_vector_ = MongoObject::get_array<double>("value");
         return re;
+    };
+
+    bool operator==(Port &b){
+        return (
+                (b.get_oid() == get_oid()) ||
+                (b.link_.get() == this)
+                );
     };
 
 };

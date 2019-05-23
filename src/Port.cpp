@@ -38,6 +38,32 @@ void Port::set_port_type(bool is_output)
 }
 
 
+void Port::set_value(double *in, int nbr_in)
+{
+    buff_double_vector_.assign(in, in + nbr_in);
+    if (link_ != nullptr) {
+        link_->set_value(in, nbr_in);
+    }
+    if(node_ != nullptr){
+        node_->set_node_to_invalid();
+        if(is_reactive_){
+            node_->evaluate();
+        }
+    }
+}
+
+void Port::set_value(std::vector<double> &values)
+{
+    set_value(values.data(), values.size());
+}
+
+void Port::set_value(double value)
+{
+    auto v = std::vector<double>{value};
+    set_value(v.data(), v.size());
+}
+
+
 
 // Constructor
 //--------------------------------------------------------------------

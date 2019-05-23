@@ -1,7 +1,6 @@
 import utils
 import os
 import unittest
-import sys
 import json
 import numpy as np
 
@@ -35,6 +34,9 @@ class Tests(unittest.TestCase):
         p5.link(p4)
         self.assertEqual(p5.get_value(), p4.get_value())
 
+        # Linked ports are considered as equal
+        self.assertEqual(p5, p4)
+
     def test_port_init_vector(self):
         """Test chinet Port class set_value and get_value"""
         v1 = [1, 2, 3, 5, 8]
@@ -59,7 +61,6 @@ class Tests(unittest.TestCase):
 
     def test_port_init_array(self):
         """Test chinet Port class set_value and get_value"""
-        import numpy as np
         array = np.array([1, 2, 3, 5, 8, 13], dtype=np.double)
         p1 = cn.Port()
         p1.set_value(array)

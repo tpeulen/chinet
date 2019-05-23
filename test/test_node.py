@@ -85,13 +85,17 @@ class Tests(unittest.TestCase):
             }
         )
         node.set_callback("multiply", "C")
+        self.assertEqual(node.is_valid(), False)
+
         node.evaluate()
+        self.assertEqual(node.is_valid(), True)
+
         outA = node.get_ports()["outA"]
         inA = node.get_ports()["inA"]
 
         self.assertEqual((inA.get_value().prod() == outA.get_value()).all(), True)
 
-    def test_node_python_callback(self):
+    def test_node_python_callback_1(self):
         """Test chinet Node class python callbacks"""
 
         class NodeCallback(cn.NodeCallback):
@@ -168,6 +172,169 @@ class Tests(unittest.TestCase):
         dict_original = json.loads(node.get_json())
 
         self.assertEqual(dict_restore, dict_original)
+
+    def test_node_valid(self):
+        """
+        In this test the node node_1 has one inputs (inA) and one output:
+
+                 (inA)-(node_1)-(outA)
+
+        In this example all ports are "non-reactive" meaning, when the input
+        of a node changes, the node is set to invalid. A node is set to valid
+        when it is evaluated. When a node is initialized it is invalid.
+        """
+
+        class NodeCallback(cn.NodeCallback):
+
+            def __init__(self, *args, **kwargs):
+                cn.NodeCallback.__init__(self, *args, **kwargs)
+
+            def run(self, inputs, outputs):
+                outputs["outA"].set_value(inputs["inA"].get_value())
+
+        out_node_1 = cn.Port(1.0, False, True)
+        in_node_1 = cn.Port(3.0)
+        node_1 = cn.Node(
+            {
+                'inA': in_node_1,
+                'outA': out_node_1
+            }
+        )
+        cb = NodeCallback()
+        node_1.set_callback(cb)
+
+        self.assertListEqual(
+            list(out_node_1.get_value()),
+            [1.0]
+        )
+        self.assertListEqual(
+            list(in_node_1.get_value()),
+            [3.0]
+        )
+        self.assertEqual(node_1.is_valid(), False)
+        node_1.evaluate()
+        self.assertEqual(node_1.is_valid(), True)
+
+    def test_node_valid_reactive(self):
+        """
+        In this test the node node_1 has one inputs (inA) and one output:
+
+                 (inA)-(node_1)-(outA)
+
+        The input inA is reactive, meaning, when the value of inA changes
+        the node is evaluated.
+        """
+
+        import chinet as cn
+
+        class NodeCallback(cn.NodeCallback):
+
+            def __init__(self, *args, **kwargs):
+                cn.NodeCallback.__init__(self, *args, **kwargs)
+
+            def run(self, inputs, outputs):
+                outputs["outA"].set_value(inputs["inA"].get_value())
+
+        out_node_1 = cn.Port(1.0, False, True)
+        in_node_1 = cn.Port(3.0, False, False, True)  # is_fixed, is_output, is_reactive
+        node_1 = cn.Node(
+            {
+                'inA': in_node_1,
+                'outA': out_node_1
+            }
+        )
+        cb = NodeCallback()
+        node_1.set_callback(cb)
+
+        self.assertEqual(node_1.is_valid(), False)
+
+        # A reactive port calls Node::evaluate when its value changes
+        in_node_1.set_value(12)
+        self.assertEqual(node_1.is_valid(), True)
+
+        self.assertEqual(
+            list(out_node_1.get_value()),
+            [12]
+        )
+
+
+    '''
+
+    def test_node_valid_connected_nodes(self):
+        """
+        In this test the two nodes node_1 and node_2 are connected.
+
+        node_1 has one inputs (inA) and one output:
+
+                 (inA)-(node_1)-(outA)
+
+        node_2 has one input (inA) and one output. The input of node_2 is
+        connected to the output of node_1:
+
+                (inA->(Node1, outA))-(node_2)-(outA)
+
+        In this example all ports are "non-reactive" meaning, when the input
+        of a node changes, the node is set to invalid. A node is set to valid
+        when it is evaluated. When a node is initialized it is invalid.
+        """
+
+        import chinet as cn
+
+        class NodeCallback(cn.NodeCallback):
+
+            def __init__(self, *args, **kwargs):
+                cn.NodeCallback.__init__(self, *args, **kwargs)
+
+            def run(self, inputs, outputs):
+                outputs["outA"].set_value(inputs["inA"])
+
+        out_node_1 = cn.Port(1.0, False, True)
+        in_node_1 = cn.Port(3.0, False, False, True)  # is_fixed, is_output, is_reactive
+        node_1 = cn.Node(
+            {
+                'inA': in_node_1,
+                'outA': out_node_1
+            }
+        )
+        self.assertListEqual(
+            list(out_node_1.get_value()),
+            [1.0]
+        )
+        self.assertListEqual(
+            list(in_node_1.get_value()),
+            [3.0]
+        )
+        self.assertEqual(node_1.is_valid(), False)
+        node_1.evaluate()
+        self.assertEqual(node_1.is_valid(), True)
+
+
+        in_node_2 = cn.Port(13.0)
+        node_2 = cn.Node(
+            {
+                'inA': in_node_2,
+                'outA': cn.Port(1.0, False, True)
+            }
+        )
+
+        in_node_2.link(out_node_1)
+        self.assertEqual(node_1.is_valid(), False)
+        node_1.evaluate()
+        self.assertEqual(node_1.is_valid(), True)
+
+        self.assertEqual(node_2.is_valid(), False)
+        node_2.evaluate()
+        self.assertEqual(node_2.is_valid(), True)
+
+        in_node_2.set_value(2)
+        self.assertEqual(node_2.is_valid(), False)
+        node_2.evaluate()
+        self.assertEqual(node_2.is_valid(), True)
+
+        in_node_1.set_value(11)
+        self.assertEqual(node_1.is_valid(), False)
+        self.assertEqual(node_2.is_valid(), False)
+    '''
 
 
 if __name__ == '__main__':

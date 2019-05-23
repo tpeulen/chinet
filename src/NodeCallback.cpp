@@ -67,10 +67,11 @@ void convolve_sum_of_exponentials_periodic(
 void AV(
         const std::map<std::string, std::shared_ptr<Port>> &inputs,
         std::map<std::string, std::shared_ptr<Port>> &output){
-    
+    /*
     auto g = dyeDensity(
             
             );
+    */
 }
 
 RTTR_REGISTRATION {
