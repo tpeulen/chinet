@@ -350,7 +350,7 @@ class Tests(unittest.TestCase):
             [13.0]
         )
 
-    def test_node_valid_connected_nodes(self):
+    def test_node_valid_connected_nodes_reactive_ports(self):
         """
         In this test the two nodes node_1 and node_2 are connected.
 

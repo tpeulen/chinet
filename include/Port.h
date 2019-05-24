@@ -26,7 +26,9 @@ protected:
     std::shared_ptr<Port> link_;
 
     /*!
-     *
+     * @brief This attribute stores the Ports that are dependent on the value
+     * of this Port object. If this Port object is reactive a change of the
+     * value of this Port object is propagated to the dependent Ports.
      */
     std::vector<Port*> linked_to_;
 

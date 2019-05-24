@@ -89,13 +89,16 @@ void Port::set_port_type(bool is_output)
 
 void Port::set_value(double *in, int nbr_in)
 {
+#if CHINET_DEBUG
+    std::clog << "Node:" << get_name() << ".set_value" << std::endl;
+#endif
     _buff_double_vector.assign(in, in + nbr_in);
-    if (link_ != nullptr) {
-        link_->set_value(in, nbr_in);
+    for(auto &v : linked_to_){
+        v->set_value(in, nbr_in);
     }
     if(node_ != nullptr){
         node_->set_node_to_invalid();
-        if(_is_reactive){
+        if(_is_reactive && !is_output()){
             node_->evaluate();
         }
     }

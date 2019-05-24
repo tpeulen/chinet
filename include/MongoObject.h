@@ -13,6 +13,7 @@
 
 #include "Functions.h"
 
+#define CHINET_DEBUG 0
 
 
 class MongoObject{
