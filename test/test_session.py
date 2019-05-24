@@ -45,52 +45,50 @@ class Tests(unittest.TestCase):
         # the nodes are references
         self.assertEqual(na1.get_name(), na2.get_name())
 
-    def test_read_template(self):
+    def test_read_session_template(self):
         template_file = "./inputs/session_template.json"
 
-        json_string = ""
         with open(template_file, 'r') as fp:
             json_string = fp.read()
 
-        s = cn.Session()
-        s.read_session_template(json_string)
+            s = cn.Session()
+            s.read_session_template(json_string)
 
-        nodeA = s.get_nodes()[s.get_nodes().keys()[0]]
-        nodeB = s.get_nodes()[s.get_nodes().keys()[1]]
+            nodeA = s.get_nodes()[s.get_nodes().keys()[0]]
+            nodeB = s.get_nodes()[s.get_nodes().keys()[1]]
 
-        # test reading of nodes
-        self.assertListEqual(
-            s.nodes.keys(),
-            ['nodeA', 'nodeB']
-        )
+            # test reading of nodes
+            self.assertListEqual(
+                s.nodes.keys(),
+                ['nodeA', 'nodeB']
+            )
 
-        # test reading of ports
-        self.assertListEqual(
-            nodeA.get_input_ports().keys(),
-            ['portA', 'portB']
-        )
+            # test reading of ports
+            self.assertListEqual(
+                nodeA.get_input_ports().keys(),
+                ['inA']
+            )
 
-        # test reading of port values
-        v = list(np.hstack([d.get_value() for d in nodeA.get_input_ports().values()]))
-        self.assertListEqual(
-            v,
-            [1, 2, 1, 2, 3, 4]
-        )
+            # test reading of port values
+            self.assertListEqual(
+                list(np.hstack([d.get_value() for d in nodeA.get_input_ports().values()])),
+                [1., 2., 3., 4., 5.]
+            )
 
-        nA_pA = nodeA.get_port("portA")
-        nB_pB = nodeB.get_port("portB")
+            # test evaluate
+            nodeA.evaluate()
 
-        # test links
-        self.assertListEqual(
-            list(nA_pA.get_value()),
-            list(nB_pB.get_value())
-        )
+            nodeA_inA = nodeA.get_port("inA")
+            nodeB_inA = nodeB.get_port("inA")
 
-        # test evaluate
-        nodeA.evaluate()
+            # test links
+            self.assertListEqual(
+                list(nodeA_inA.get_value()),
+                list(nodeB_inA.get_value())
+            )
 
-        v = list(np.hstack([d.get_value() for d in nodeA.get_output_ports().values()]))
-        self.assertListEqual(v, [2, 24])
+            v = list(np.hstack([d.get_value() for d in nodeA.get_output_ports().values()]))
+            self.assertListEqual(v, [1., 2., 3., 4., 5.])
 
 
 if __name__ == '__main__':

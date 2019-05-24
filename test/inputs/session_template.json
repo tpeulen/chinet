@@ -2,49 +2,37 @@
   "nodes": {
     "nodeA": {
       "ports": {
-        "portA": {
+        "inA": {
           "value": [1,2,3,4,5],
           "is_fixed": true
         },
-        "portB": {
-          "value": [1,2,3,4],
-          "is_fixed": true,
-          "is_reactive": true
-        },
         "outA": {
           "value": [],
-          "is_fixed": true,
           "is_output": true
         }
       },
-      "callback": "multiply",
+      "callback": "passthrough",
       "callback_type": "C"
     },
     "nodeB": {
       "ports": {
-        "portA": {
-          "value": [1,2,3,4],
-          "is_fixed": true
+        "inA": {
+          "value": []
         },
-        "portB": {
-          "value": [1,2],
-          "is_fixed": true
-        },
-        "portC": {
-          "value": [1,2,3,4],
-          "is_fixed": true
+        "outA": {
+          "value": []
         }
       },
-      "callback": "nothing",
+      "callback": "passthrough",
       "callback_type": "C"
     }
   },
   "links": [
     {
-      "node": "nodeA",
-      "port": "portA",
-      "target_node": "nodeB",
-      "target_port": "portB"
+      "node": "nodeB",
+      "port": "inA",
+      "target_node": "nodeA",
+      "target_port": "outA"
     }
   ]
 }

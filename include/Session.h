@@ -40,35 +40,27 @@ public:
         }
     };
 
-    void add_node(std::string name, std::shared_ptr<Node> object)
-    {
-        nodes[name] = object;
-        object->set_name(name);
-        if (is_connected_to_db()) {
-            connect_object_to_db(object);
-        }
-    }
+    void add_node(std::string name, std::shared_ptr<Node> object);
 
-    std::map<std::string, std::shared_ptr<Node>> get_nodes()
-    {
-        return nodes;
-    }
+    std::map<std::string, std::shared_ptr<Node>> get_nodes();
 
     bool write_to_db() final;
 
     bool read_from_db(const std::string &oid_string) final;
 
-    std::shared_ptr<Port> read_port_template(json j, std::string &node_key, std::string &port_key);
+    std::shared_ptr<Port> create_port(json port_template, std::string &port_key);
 
-    std::shared_ptr<Node> read_node_template(json j, std::string &node_key);
+    std::shared_ptr<Node> create_node(json node_template, std::string &node_key);
 
     bool read_session_template(const std::string &json_string);
 
+    std::string get_session_template();
+
     bool link_nodes(
-            std::string node_name,
-            std::string port_name,
-            std::string target_node_name,
-            std::string target_port_name);
+            const std::string &node_name,
+            const std::string &port_name,
+            const std::string &target_node_name,
+            const std::string &target_port_name);
 
 };
 

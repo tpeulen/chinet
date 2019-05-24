@@ -18,3 +18,24 @@
 %ignore set_value(std::vector<double> &values); // use memory - void get_value(double **out, int *nbr_out)
 
 %include "../include/Port.h"
+
+%extend Port {
+
+        std::string __repr__(){
+            std::ostringstream os;
+            os << "Port: ";
+            os << $self->get_json();
+            os << "\n";
+
+            return os.str();
+        }
+
+        /*
+        std::shared_ptr<Port> __getitem__(std::string key)
+        {
+                return (*self)[key];
+        };
+         */
+
+}
+

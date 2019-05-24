@@ -31,60 +31,63 @@ bson_t Session::get_bson(){
     return doc;
 }
 
-std::shared_ptr<Port> Session::read_port_template(json j, std::string &node_key, std::string &port_key) {
+std::shared_ptr<Port> Session::create_port(json port_template, std::string &port_key) {
     auto port = std::make_shared<Port>();
+    port->set_name(port_key);
 
-    auto port_ = j["nodes"][node_key]["ports"][port_key];
-    for (json::iterator it_val = port_.begin(); it_val != port_.end(); ++it_val) {
+    for (json::iterator it_val = port_template.begin(); it_val != port_template.end(); ++it_val) {
         if (it_val.key() == "is_fixed") {
             port->set_fixed(
-                    j["nodes"][node_key]["ports"][port_key]["is_fixed"].get<bool>()
+                    port_template["is_fixed"].get<bool>()
                     );
         } else if (it_val.key() == "value") {
-            auto b = j["nodes"][node_key]["ports"][port_key]["value"].get<std::vector<double>>();
+            auto b = port_template["value"].get<std::vector<double>>();
             port->set_value(b.data(), b.size());
         } else if (it_val.key() == "is_output"){
             port->set_port_type(
-                    j["nodes"][node_key]["ports"][port_key]["is_output"].get<bool>()
+                    port_template["is_output"].get<bool>()
             );
         } else if (it_val.key() == "is_reactive"){
             port->set_reactive(
-                    j["nodes"][node_key]["ports"][port_key]["is_reactive"].get<bool>()
+                    port_template["is_reactive"].get<bool>()
             );
         }
     }
-    port->set_name(port_key);
     return port;
 }
 
-std::shared_ptr<Node> Session::read_node_template(json j, std::string &node_key){
+std::shared_ptr<Node> Session::create_node(json node_template, std::string &node_key){
     auto node = std::make_shared<Node>(node_key);
 
-    auto inputs_ = j["nodes"][node_key]["ports"];
-    for (json::iterator it = inputs_.begin(); it != inputs_.end(); ++it) {
+    auto ports_json = node_template["ports"];
+    for (json::iterator it = ports_json.begin(); it != ports_json.end(); ++it) {
         std::string port_key = it.key();
-        auto port = read_port_template(j, node_key, port_key);
+
+        auto port_json = node_template["ports"][port_key];
+        auto port = create_port(port_json, port_key);
+
         node->add_port(port_key, port, port->is_output());
     }
+
     node->set_callback(
-            j["nodes"][node_key]["callback"].get<std::string>(),
-            j["nodes"][node_key]["callback_type"].get<std::string>()
+            node_template["callback"].get<std::string>(),
+            node_template["callback_type"].get<std::string>()
             );
 
     return node;
 }
 
 bool Session::read_session_template(const std::string &json_string){
-    json j = json::parse(json_string);
+    json session_json = json::parse(json_string);
 
     // read nodes
-    auto n = j["nodes"];
-    for (json::iterator it = n.begin(); it != n.end(); ++it) {
+    json nodes_json = session_json["nodes"];
+    for (json::iterator it = nodes_json.begin(); it != nodes_json.end(); ++it) {
         auto node_key = it.key();
-        add_node(node_key, read_node_template(j, node_key));
+        add_node(node_key, create_node(nodes_json[node_key], node_key));
     }
 
-    auto l = j["links"];
+    auto l = session_json["links"];
     for (json::iterator it = l.begin(); it != l.end(); ++it) {
         auto v = it.value();
         link_nodes(
@@ -99,10 +102,10 @@ bool Session::read_session_template(const std::string &json_string){
 }
 
 bool Session::link_nodes(
-        const std::string node_name,
-        const std::string port_name,
-        const std::string target_node_name,
-        const std::string target_port_name){
+        const std::string &node_name,
+        const std::string &port_name,
+        const std::string &target_node_name,
+        const std::string &target_port_name){
     auto itn = nodes.find(node_name);
     auto itnt = nodes.find(target_node_name);
 
@@ -119,4 +122,21 @@ bool Session::link_nodes(
     return false;
 }
 
+void Session::add_node(std::string name, std::shared_ptr<Node> object)
+{
+    nodes[name] = object;
+    object->set_name(name);
+    if (is_connected_to_db()) {
+        connect_object_to_db(object);
+    }
+}
+
+std::map<std::string, std::shared_ptr<Node>> Session::get_nodes()
+{
+    return nodes;
+}
+
+std::string Session::get_session_template(){
+
+}
 
