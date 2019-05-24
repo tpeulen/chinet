@@ -12,7 +12,7 @@
 #include <iostream>
 
 
-class Decay : public Curve{
+class ExponentialDecay : public Curve{
 
 private:
     std::vector<double> lifetime_spectrum;
@@ -26,24 +26,24 @@ private:
 public:
 
     // Constructor
-    Decay();
+    ExponentialDecay();
 
-    Decay(double dt, unsigned int nx);
+    ExponentialDecay(double dt, unsigned int nx);
 
-    ~Decay(){
+    ~ExponentialDecay(){
         free(irf);
     }
 
     // Methods
     /*!
      * Adds a fluorescence lifetime to the list of lifetimes
-     * @param amplitude the amplitude of the added fluorescence lifetime
-     * @param fluorescence_lifetime the fluorescence lifetime
+     * @param amplitude the amplitude of the added lifetime
+     * @param lifetime
      */
-    void append(double amplitude, double fluorescence_lifetime);
+    void append(double amplitude, double lifetime);
 
     /*!
-     * Removes the fluorescence lifetime from the end of the fluorescence lifetime list.
+     * Removes the lifetime from the end of the fluorescence lifetime list.
      */
     void remove_last();
 

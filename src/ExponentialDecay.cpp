@@ -2,12 +2,12 @@
 // Created by thomas on 3/29/19.
 //
 
-#include "Decay.h"
+#include "ExponentialDecay.h"
 
 // Constructor
 
 
-Decay::Decay() :
+ExponentialDecay::ExponentialDecay() :
 irf(nullptr),
 convolution_start(0),
 convolution_stop(0),
@@ -18,7 +18,7 @@ lifetime_spectrum(0)
 }
 
 
-Decay::Decay(double dt, unsigned int nx) :
+ExponentialDecay::ExponentialDecay(double dt, unsigned int nx) :
 Curve(dt, nx),
 irf(nullptr),
 convolution_start(0),
@@ -28,27 +28,29 @@ convolution_mode(0),
 lifetime_spectrum(0)
 {
     irf = new Curve(dt, nx);
-    irf->y[0] = 1;
+    irf->set_y(
+            std::vector<double>{1}
+            );
     convolution_stop = irf->size();
-    Decay::dt = get_dx()[0];
+    ExponentialDecay::dt = get_dx()[0];
 }
 
 
 // Methods
 
-void Decay::append(double amplitude, double fluorescence_lifetime) {
+void ExponentialDecay::append(double amplitude, double lifetime) {
     lifetime_spectrum.push_back(amplitude);
-    lifetime_spectrum.push_back(fluorescence_lifetime);
+    lifetime_spectrum.push_back(lifetime);
 }
 
 
-void Decay::remove_last() {
+void ExponentialDecay::remove_last() {
     lifetime_spectrum.erase(lifetime_spectrum.end());
     lifetime_spectrum.erase(lifetime_spectrum.end());
 }
 
 
-void Decay::update() {
+void ExponentialDecay::update() {
 
     switch (convolution_mode){
         case 1:
@@ -76,7 +78,7 @@ void Decay::update() {
 }
 
 
-void Decay::to_json(std::string filename) {
+void ExponentialDecay::to_json(std::string filename) {
     /*
     json jsonfile;
 
@@ -96,12 +98,12 @@ void Decay::to_json(std::string filename) {
 
 
 // Getter
-Curve* Decay::get_irf() {
+Curve* ExponentialDecay::get_irf() {
     return irf;
 }
 
 
-std::vector<double> Decay::get_amplitudes() {
+std::vector<double> ExponentialDecay::get_amplitudes() {
     int n_lifetimes = lifetime_spectrum.size() / 2;
     std::vector<double> amplitudes;
 
@@ -113,7 +115,7 @@ std::vector<double> Decay::get_amplitudes() {
 }
 
 
-std::vector<double> Decay::get_lifetimes() {
+std::vector<double> ExponentialDecay::get_lifetimes() {
     int n_lifetimes = lifetime_spectrum.size() / 2;
     std::vector<double> lifetimes;
 
@@ -125,39 +127,39 @@ std::vector<double> Decay::get_lifetimes() {
 }
 
 
-unsigned int Decay::get_convolution_stop() {
+unsigned int ExponentialDecay::get_convolution_stop() {
     return convolution_stop;
 }
 
 
 // Setter
-void Decay::set_fluorescence_lifetimes(double *lifetime_spectrum, int n_lifetime_spectrum) {
-    Functions::copy_array_to_vector(lifetime_spectrum, n_lifetime_spectrum, Decay::lifetime_spectrum);
+void ExponentialDecay::set_fluorescence_lifetimes(double *lifetime_spectrum, int n_lifetime_spectrum) {
+    Functions::copy_array_to_vector(lifetime_spectrum, n_lifetime_spectrum, ExponentialDecay::lifetime_spectrum);
 }
 
 
-void Decay::set_instrument_response_function(Curve *v, unsigned int convolution_mode) {
+void ExponentialDecay::set_instrument_response_function(Curve *v, unsigned int convolution_mode) {
     irf = v;
-    Decay::convolution_mode = convolution_mode;
+    ExponentialDecay::convolution_mode = convolution_mode;
 }
 
 
-void Decay::set_instrument_response_function(Curve *v) {
+void ExponentialDecay::set_instrument_response_function(Curve *v) {
     set_instrument_response_function(v, convolution_mode);
 }
 
 
-void Decay::set_convolution_mode(unsigned int convolution_mode) {
-    Decay::convolution_mode = convolution_mode;
+void ExponentialDecay::set_convolution_mode(unsigned int convolution_mode) {
+    ExponentialDecay::convolution_mode = convolution_mode;
 }
 
 
-void Decay::set_convolution_stop(unsigned int v) {
+void ExponentialDecay::set_convolution_stop(unsigned int v) {
     convolution_stop = v;
 }
 
 
-void Decay::set_convolution_start(unsigned int v) {
+void ExponentialDecay::set_convolution_start(unsigned int v) {
     convolution_start = v;
 }
 

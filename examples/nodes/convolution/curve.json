@@ -4,7 +4,7 @@
   "birth": 1,
   "death": 0,
   "x": {
-    "fixed": true,
+    "is_fixed": true,
     "value": [
       0.0,
       0.06060606060606061,
@@ -113,7 +113,7 @@
     }
   },
   "y": {
-    "fixed": true,
+    "is_fixed": true,
     "value": [
       0.0,
       0.06056896545393953,

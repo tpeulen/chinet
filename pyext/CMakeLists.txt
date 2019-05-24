@@ -49,9 +49,10 @@ SET(SWIG_SRC chinet.i)
 # The output path is controlled by the setup.py
 #SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/pyext)
 
-FILE(GLOB SRC_files "../src/*.cpp")
-
 #[[
+FILE(GLOB SRC_files "../src/*.cpp")
+]]#
+
 FILE(GLOB SRC_files
         "../src/MongoObject.cpp"
         "../src/Functions.cpp"
@@ -60,7 +61,6 @@ FILE(GLOB SRC_files
         "../src/NodeCallback.cpp"
         "../src/Session.cpp"
         )
-]]#
 
 SET_PROPERTY(
         SOURCE

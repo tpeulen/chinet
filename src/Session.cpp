@@ -36,9 +36,9 @@ std::shared_ptr<Port> Session::read_port_template(json j, std::string &node_key,
 
     auto port_ = j["nodes"][node_key]["ports"][port_key];
     for (json::iterator it_val = port_.begin(); it_val != port_.end(); ++it_val) {
-        if (it_val.key() == "fixed") {
+        if (it_val.key() == "is_fixed") {
             port->set_fixed(
-                    j["nodes"][node_key]["ports"][port_key]["fixed"].get<bool>()
+                    j["nodes"][node_key]["ports"][port_key]["is_fixed"].get<bool>()
                     );
         } else if (it_val.key() == "value") {
             auto b = j["nodes"][node_key]["ports"][port_key]["value"].get<std::vector<double>>();
@@ -48,7 +48,7 @@ std::shared_ptr<Port> Session::read_port_template(json j, std::string &node_key,
                     j["nodes"][node_key]["ports"][port_key]["is_output"].get<bool>()
             );
         } else if (it_val.key() == "is_reactive"){
-            port->set_is_reactive(
+            port->set_reactive(
                     j["nodes"][node_key]["ports"][port_key]["is_reactive"].get<bool>()
             );
         }

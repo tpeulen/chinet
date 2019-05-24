@@ -43,12 +43,13 @@ public:
 
     Port() :
     node_(nullptr),
-    link_(nullptr)
+    link_(nullptr),
+    _is_reactive(false)
     {
         append_string(&document, "type", "port");
-        bson_append_double(&document, "singleton", 9, 1.0);
         bson_append_bool(&document, "is_output", 9, false);
-        bson_append_bool(&document, "fixed", 5, false);
+        bson_append_bool(&document, "is_fixed", 5, false);
+        bson_append_bool(&document, "is_reactive", 5, false);
         bson_append_oid(&document, "link", 4, &oid_document);
     }
 
@@ -85,21 +86,22 @@ public:
     // Getter & Setter
     //--------------------------------------------------------------------
 
-    void set_port_type(bool is_output);
     void set_node(Node *node_ptr);
     Node* get_node();
-
-    std::vector<double> get_value();
-    void get_value(double **out, int *nbr_out);
 
     std::vector<Port*> get_linked_ports();
     std::shared_ptr<Port> get_link();
 
+    void set_port_type(bool is_output);
+    void set_fixed(bool fixed);
+    void set_reactive(bool reactive);
+
     void set_value(double *in, int nbr_in);
     void set_value(std::vector<double> &values);
     void set_value(double value);
-    void set_fixed(bool fixed);
-    void set_is_reactive(bool reactive);
+
+    void get_value(double **out, int *nbr_out);
+    std::vector<double> get_value();
 
     bool is_fixed();
     bool is_linked();

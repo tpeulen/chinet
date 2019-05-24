@@ -1,9 +1,11 @@
 %module chinet
 %{
 #include "../include/Curve.h"
-#include "../include/Decay.h"
+#include "../include/ExponentialDecay.h"
+
+
 %}
 
 %include "../include/Curve.h"
-%include "../include/Decay.h"
+%include "../include/ExponentialDecay.h"
 

@@ -4,16 +4,16 @@
       "ports": {
         "portA": {
           "value": [1,2,3,4,5],
-          "fixed": true
+          "is_fixed": true
         },
         "portB": {
           "value": [1,2,3,4],
-          "fixed": true,
+          "is_fixed": true,
           "is_reactive": true
         },
         "outA": {
           "value": [],
-          "fixed": true,
+          "is_fixed": true,
           "is_output": true
         }
       },
@@ -24,15 +24,15 @@
       "ports": {
         "portA": {
           "value": [1,2,3,4],
-          "fixed": true
+          "is_fixed": true
         },
         "portB": {
           "value": [1,2],
-          "fixed": true
+          "is_fixed": true
         },
         "portC": {
           "value": [1,2,3,4],
-          "fixed": true
+          "is_fixed": true
         }
       },
       "callback": "nothing",

@@ -4,7 +4,7 @@
   "birth": 1,
   "death": null,
   "decay": {
-    "fixed": true,
+    "is_fixed": true,
     "value": [
       0.0,
       0.06056896545393953,

@@ -6,7 +6,7 @@
 
 
 bool Port::is_fixed(){
-    return MongoObject::get_singleton<bool>("fixed");
+    return MongoObject::get_singleton<bool>("is_fixed");
 }
 
 bool Port::is_linked(){
@@ -71,14 +71,14 @@ bool Port::write_to_db()
 // Setter
 //--------------------------------------------------------------------
 
-void Port::set_fixed(bool fixed){
-    MongoObject::set_singleton("fixed", fixed);
-}
-
 bson_t Port::get_bson() {
     bson_t dst = MongoObject::get_bson_excluding("value", NULL);
     MongoObject::append_number_array(&dst, "value", _buff_double_vector);
     return dst;
+}
+
+void Port::set_fixed(bool fixed){
+    MongoObject::set_singleton("is_fixed", fixed);
 }
 
 void Port::set_port_type(bool is_output)
@@ -86,6 +86,10 @@ void Port::set_port_type(bool is_output)
     MongoObject::set_singleton("is_output", is_output);
 }
 
+void Port::set_reactive(bool reactive){
+    MongoObject::set_singleton("is_reactive", reactive);
+    _is_reactive = reactive;
+}
 
 void Port::set_value(double *in, int nbr_in)
 {
@@ -115,9 +119,6 @@ void Port::set_value(double value)
     set_value(v.data(), v.size());
 }
 
-void Port::set_is_reactive(bool reactive){
-    _is_reactive = reactive;
-}
 
 void Port::set_node(Node *node_ptr){
     node_ = node_ptr;
@@ -129,7 +130,7 @@ void Port::set_node(Node *node_ptr){
 
 void Port::get_value(double **out, int *nbr_out)
 {
-    if (link_.get() == nullptr) {
+    if (link_ == nullptr) {
         if (_buff_double_vector.empty()) {
             _buff_double_vector = MongoObject::get_array<double>("value");
         }
