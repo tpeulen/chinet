@@ -31,7 +31,7 @@ bson_t Session::get_bson(){
     return doc;
 }
 
-std::shared_ptr<Port> Session::create_port(json port_template, std::string &port_key) {
+std::shared_ptr<Port> Session::create_port(json port_template, std::string port_key) {
     auto port = std::make_shared<Port>();
     port->set_name(port_key);
 
@@ -56,25 +56,47 @@ std::shared_ptr<Port> Session::create_port(json port_template, std::string &port
     return port;
 }
 
-std::shared_ptr<Node> Session::create_node(json node_template, std::string &node_key){
+std::shared_ptr<Port> Session::create_port(char* port_template, char* port_key){
+#if CHINET_DEBUG
+    std::clog << "Session:" << port_template << ":" << port_template << std::endl;
+#endif
+    return create_port(
+            json::parse(port_template),
+            port_key
+            );
+}
+
+std::shared_ptr<Node> Session::create_node(json node_template, std::string node_key){
     auto node = std::make_shared<Node>(node_key);
 
-    auto ports_json = node_template["ports"];
-    for (json::iterator it = ports_json.begin(); it != ports_json.end(); ++it) {
-        std::string port_key = it.key();
+    std::string callback;
+    std::string callback_type;
 
-        auto port_json = node_template["ports"][port_key];
-        auto port = create_port(port_json, port_key);
-
-        node->add_port(port_key, port, port->is_output());
+    for (json::iterator it = node_template.begin(); it != node_template.end(); ++it) {
+        if (it.key() == "ports") {
+            auto ports_json = node_template["ports"];
+            for (json::iterator it2 = ports_json.begin(); it2 != ports_json.end(); ++it2) {
+                const std::string &port_key = it2.key();
+                auto port_json = node_template["ports"][port_key];
+                auto port = create_port(port_json, port_key);
+                node->add_port(port_key, port, port->is_output());
+            }
+        } else if (it.key() == "callback") {
+            callback = node_template["callback"].get<std::string>();
+        } else if (it.key() == "callback_type") {
+            callback_type = node_template["callback_type"].get<std::string>();
+        }
     }
 
-    node->set_callback(
-            node_template["callback"].get<std::string>(),
-            node_template["callback_type"].get<std::string>()
-            );
-
+    node->set_callback(callback, callback_type);
     return node;
+}
+
+std::shared_ptr<Node> Session::create_node(char* node_template, char* port_key){
+    return create_node(
+            json::parse(node_template),
+            port_key
+    );
 }
 
 bool Session::read_session_template(const std::string &json_string){
@@ -137,6 +159,6 @@ std::map<std::string, std::shared_ptr<Node>> Session::get_nodes()
 }
 
 std::string Session::get_session_template(){
-
+    return "";
 }
 

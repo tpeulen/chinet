@@ -48,9 +48,11 @@ public:
 
     bool read_from_db(const std::string &oid_string) final;
 
-    std::shared_ptr<Port> create_port(json port_template, std::string &port_key);
+    std::shared_ptr<Port> create_port(json port_template, std::string port_key);
+    std::shared_ptr<Port> create_port(char* port_template, char* port_key);
 
-    std::shared_ptr<Node> create_node(json node_template, std::string &node_key);
+    std::shared_ptr<Node> create_node(json node_template, std::string node_key);
+    std::shared_ptr<Node> create_node(char* node_template, char* charnode_key);
 
     bool read_session_template(const std::string &json_string);
 

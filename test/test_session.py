@@ -90,6 +90,21 @@ class Tests(unittest.TestCase):
             v = list(np.hstack([d.get_value() for d in nodeA.get_output_ports().values()]))
             self.assertListEqual(v, [1., 2., 3., 4., 5.])
 
+    def test_create_node_template(self):
+        template_file = "./inputs/node_template.json"
+
+        json_string = ""
+        with open(template_file, 'r') as fp:
+            json_string = fp.read()
+
+            s = cn.Session()
+            s.read_session_template(json_string)
+
+        nodeA = s.create_node(json_string, "node_name")
+
+        v = list(nodeA.get_output_port('outA').get_values())
+        self.assertListEqual(v, [1., 2., 3., 5., 8.])
+
 
 if __name__ == '__main__':
     unittest.main()
