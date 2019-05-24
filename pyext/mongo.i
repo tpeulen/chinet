@@ -7,7 +7,6 @@
 %shared_ptr(MongoObject)
 %template(map_string_double_vector) std::map<std::string, std::vector<double>>;
 
-
 %include "../include/MongoObject.h"
 
 %extend MongoObject {
@@ -40,11 +39,3 @@
     };
 
 }
-
-/*
-%extend Node{
-        std::shared_ptr<Port> __getitem__(std::string key){
-            return (*self)[key];
-        };
-};
- */

@@ -542,24 +542,18 @@
 <codeline lineno="423"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Operators</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="424"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//--------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="425"><highlight class="normal"></highlight></codeline>
-<codeline lineno="426" refid="class_mongo_object_1a2136ceace181debba3d2c4fe07f947d8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::shared_ptr&lt;MongoObject&gt;<sp/><ref refid="class_mongo_object_1a2136ceace181debba3d2c4fe07f947d8" kindref="member">operator[]</ref>(std::string<sp/>key){</highlight></codeline>
-<codeline lineno="427"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>mo<sp/>=<sp/>std::make_shared&lt;MongoObject&gt;();</highlight></codeline>
-<codeline lineno="428"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mo-&gt;read_json(</highlight></codeline>
-<codeline lineno="429"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="class_mongo_object_1acde33629416d7f926737237264ac6ca1" kindref="member">get_json</ref>(key.c_str())</highlight></codeline>
-<codeline lineno="430"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>);</highlight></codeline>
-<codeline lineno="431"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>mo;</highlight></codeline>
-<codeline lineno="432"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
-<codeline lineno="433"><highlight class="normal"></highlight></codeline>
-<codeline lineno="434" refid="class_mongo_object_1a0050194f5bc8690e0db3b8217086e421" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_mongo_object_1a0050194f5bc8690e0db3b8217086e421" kindref="member">operator==</ref>(<ref refid="class_mongo_object" kindref="compound">MongoObject</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>b){</highlight></codeline>
-<codeline lineno="435"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(</highlight></codeline>
-<codeline lineno="436"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>bson_oid_equal(&amp;b.<ref refid="class_mongo_object_1a020a40224a752e6036d49ec22474d616" kindref="member">oid_document</ref>,<sp/>&amp;oid_document)<sp/>&amp;&amp;</highlight></codeline>
-<codeline lineno="437"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(uri_string<sp/>==<sp/>b.<ref refid="class_mongo_object_1a71e3fa5196ad3b496d0aa326d61e84e8" kindref="member">uri_string</ref>)</highlight></codeline>
-<codeline lineno="438"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>);</highlight></codeline>
-<codeline lineno="439"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
-<codeline lineno="440"><highlight class="normal"></highlight></codeline>
-<codeline lineno="441"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="442"><highlight class="normal"></highlight></codeline>
-<codeline lineno="443"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/>//CHINET_MONGOOBJECT_H</highlight></codeline>
+<codeline lineno="426"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>std::shared_ptr&lt;MongoObject&gt;<sp/><ref refid="class_mongo_object_1a89f7e282816b6dd93d4df4ee7ca9bd0a" kindref="member">operator[]</ref>(std::string<sp/>key);</highlight></codeline>
+<codeline lineno="427"><highlight class="normal"></highlight></codeline>
+<codeline lineno="428" refid="class_mongo_object_1a0050194f5bc8690e0db3b8217086e421" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_mongo_object_1a0050194f5bc8690e0db3b8217086e421" kindref="member">operator==</ref>(<ref refid="class_mongo_object" kindref="compound">MongoObject</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>b){</highlight></codeline>
+<codeline lineno="429"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(</highlight></codeline>
+<codeline lineno="430"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>bson_oid_equal(&amp;b.<ref refid="class_mongo_object_1a020a40224a752e6036d49ec22474d616" kindref="member">oid_document</ref>,<sp/>&amp;oid_document)<sp/>&amp;&amp;</highlight></codeline>
+<codeline lineno="431"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(uri_string<sp/>==<sp/>b.<ref refid="class_mongo_object_1a71e3fa5196ad3b496d0aa326d61e84e8" kindref="member">uri_string</ref>)</highlight></codeline>
+<codeline lineno="432"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="433"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="434"><highlight class="normal"></highlight></codeline>
+<codeline lineno="435"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="436"><highlight class="normal"></highlight></codeline>
+<codeline lineno="437"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/>//CHINET_MONGOOBJECT_H</highlight></codeline>
     </programlisting>
     <location file="include/MongoObject.h"/>
   </compounddef>

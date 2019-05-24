@@ -423,13 +423,7 @@ public:
     // Operators
     //--------------------------------------------------------------------
 
-    std::shared_ptr<MongoObject> operator[](std::string key){
-        auto mo = std::make_shared<MongoObject>();
-        mo->read_json(
-                get_json(key.c_str())
-                );
-        return mo;
-    };
+    virtual std::shared_ptr<MongoObject> operator[](std::string key);
 
     bool operator==(MongoObject const& b){
         return (

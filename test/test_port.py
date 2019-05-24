@@ -21,21 +21,19 @@ class Tests(unittest.TestCase):
 
         # check setting of value
         p2 = cn.Port(v1)
-        self.assertEqual(p1.get_value(), p2.get_value())
 
         # check fixing
         p3 = cn.Port(v1, True)
-        self.assertEqual(p3.is_fixed(), True)
         p4 = cn.Port(v1, False)
+
+        self.assertEqual(p1.get_value(), p2.get_value())
+        self.assertEqual(p3.is_fixed(), True)
         self.assertEqual(p4.is_fixed(), False)
 
         # check linking
         p5 = cn.Port(v2)
         p5.link(p4)
         self.assertEqual(p5.get_value(), p4.get_value())
-
-        # Linked ports are considered as equal
-        self.assertEqual(p5, p4)
 
     def test_port_init_vector(self):
         """Test chinet Port class set_value and get_value"""

@@ -990,9 +990,9 @@
         </inbodydescription>
         <location file="include/MongoObject.h" line="393" column="1" bodyfile="include/MongoObject.h" bodystart="393" bodyend="421"/>
       </memberdef>
-      <memberdef kind="function" id="class_mongo_object_1a2136ceace181debba3d2c4fe07f947d8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="class_mongo_object_1a89f7e282816b6dd93d4df4ee7ca9bd0a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>std::shared_ptr&lt; <ref refid="class_mongo_object" kindref="compound">MongoObject</ref> &gt;</type>
-        <definition>std::shared_ptr&lt;MongoObject&gt; MongoObject::operator[]</definition>
+        <definition>virtual std::shared_ptr&lt;MongoObject&gt; MongoObject::operator[]</definition>
         <argsstring>(std::string key)</argsstring>
         <name>operator[]</name>
         <param>
@@ -1005,7 +1005,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="426" column="1" bodyfile="include/MongoObject.h" bodystart="426" bodyend="432"/>
+        <location file="include/MongoObject.h" line="426" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1a0050194f5bc8690e0db3b8217086e421" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -1022,7 +1022,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="434" column="1" bodyfile="include/MongoObject.h" bodystart="434" bodyend="439"/>
+        <location file="include/MongoObject.h" line="428" column="1" bodyfile="include/MongoObject.h" bodystart="428" bodyend="433"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -1061,11 +1061,11 @@
         <label>MongoObject</label>
         <link refid="class_mongo_object"/>
         <childnode refid="18" relation="usage">
-          <edgelabel>object_name</edgelabel>
-          <edgelabel>app_string</edgelabel>
-          <edgelabel>uri_string</edgelabel>
-          <edgelabel>collection_string</edgelabel>
-          <edgelabel>db_string</edgelabel>
+          <edgelabel>#db_string</edgelabel>
+          <edgelabel>#collection_string</edgelabel>
+          <edgelabel>#app_string</edgelabel>
+          <edgelabel>#object_name</edgelabel>
+          <edgelabel>#uri_string</edgelabel>
         </childnode>
       </node>
       <node id="18">
@@ -1074,7 +1074,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/MongoObject.h" line="18" column="1" bodyfile="include/MongoObject.h" bodystart="18" bodyend="441"/>
+    <location file="include/MongoObject.h" line="18" column="1" bodyfile="include/MongoObject.h" bodystart="18" bodyend="435"/>
     <listofallmembers>
       <member refid="class_mongo_object_1ace5148b45dd674c73077a044d0233ed8" prot="protected" virt="non-virtual"><scope>MongoObject</scope><name>app_string</name></member>
       <member refid="class_mongo_object_1a56dccd703ae3e3e2193d57d31df12fd0" prot="protected" virt="non-virtual"><scope>MongoObject</scope><name>append_number_array</name></member>
@@ -1113,7 +1113,7 @@
       <member refid="class_mongo_object_1a4905c165b7b18f471ee56f8eb3f5e0f1" prot="protected" virt="non-virtual"><scope>MongoObject</scope><name>oid_precursor</name></member>
       <member refid="class_mongo_object_1a9592c8baaed700c358dc26025e3bf166" prot="protected" virt="non-virtual"><scope>MongoObject</scope><name>oid_to_string</name></member>
       <member refid="class_mongo_object_1a0050194f5bc8690e0db3b8217086e421" prot="public" virt="non-virtual"><scope>MongoObject</scope><name>operator==</name></member>
-      <member refid="class_mongo_object_1a2136ceace181debba3d2c4fe07f947d8" prot="public" virt="non-virtual"><scope>MongoObject</scope><name>operator[]</name></member>
+      <member refid="class_mongo_object_1a89f7e282816b6dd93d4df4ee7ca9bd0a" prot="public" virt="virtual"><scope>MongoObject</scope><name>operator[]</name></member>
       <member refid="class_mongo_object_1aecd244620f292e8368d1f593925eafbd" prot="protected" virt="non-virtual"><scope>MongoObject</scope><name>read_from_db</name></member>
       <member refid="class_mongo_object_1a729412e226c9964e13ba80688c3f5e00" prot="public" virt="virtual"><scope>MongoObject</scope><name>read_from_db</name></member>
       <member refid="class_mongo_object_1adce8ffc4811a9d1c94701711f574bc34" prot="public" virt="non-virtual"><scope>MongoObject</scope><name>read_json</name></member>

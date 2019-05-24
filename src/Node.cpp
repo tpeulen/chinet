@@ -205,9 +205,9 @@ void Node::evaluate(){
 bool Node::is_valid(){
     if(get_input_ports().empty()){
         return true;
-    } /*else if(!inputs_valid()){
+    }else if(!inputs_valid()){
         return false;
-    }*/ else{
+    }else{
         return node_valid_;
     }
 }
@@ -227,11 +227,24 @@ void Node::fill_input_output_port_lookups(){
 
 bool Node::inputs_valid(){
     for(const auto &i : in_){
-        auto node = i.second->get_node();
-        if(node != nullptr){
-            if(!node->is_valid())
-            return false;
+        auto input_port = i.second;
+        if(input_port->is_linked()){
+            auto output_port = input_port->get_link();
+            auto output_node = output_port->get_node();
+            if(!output_node->is_valid())
+            {
+                return false;
+            }
         }
     }
     return true;
+}
+
+void Node::set_node_to_invalid(){
+    node_valid_ = false;
+    for(auto &v : out_)
+    {
+        auto output_port = v.second;
+        //v.second->set_invalid();
+    }
 }

@@ -5,6 +5,7 @@
 #ifndef chinet_NODECALLBACK_H
 #define chinet_NODECALLBACK_H
 
+#include <functional>
 #include <rttr/registration>
 #include <Port.h>
 #include <Node.h>

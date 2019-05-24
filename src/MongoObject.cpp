@@ -452,3 +452,11 @@ bool MongoObject::read_json(std::string json_string)
         return true;
     }
 }
+
+std::shared_ptr<MongoObject> MongoObject::operator[](std::string key){
+    auto mo = std::make_shared<MongoObject>();
+    mo->read_json(
+            get_json(key.c_str())
+    );
+    return mo;
+};

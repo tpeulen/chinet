@@ -249,11 +249,11 @@
         <label>MongoObject</label>
         <link refid="class_mongo_object"/>
         <childnode refid="41" relation="usage">
-          <edgelabel>object_name</edgelabel>
-          <edgelabel>app_string</edgelabel>
-          <edgelabel>uri_string</edgelabel>
-          <edgelabel>collection_string</edgelabel>
-          <edgelabel>db_string</edgelabel>
+          <edgelabel>#db_string</edgelabel>
+          <edgelabel>#collection_string</edgelabel>
+          <edgelabel>#app_string</edgelabel>
+          <edgelabel>#object_name</edgelabel>
+          <edgelabel>#uri_string</edgelabel>
         </childnode>
       </node>
       <node id="39">
@@ -262,13 +262,13 @@
         <childnode refid="40" relation="public-inheritance">
         </childnode>
         <childnode refid="43" relation="usage">
-          <edgelabel>nodes</edgelabel>
+          <edgelabel>+nodes</edgelabel>
         </childnode>
       </node>
       <node id="43">
         <label>std::map&lt; std::string, std::shared_ptr&lt; Node &gt; &gt;</label>
         <childnode refid="41" relation="usage">
-          <edgelabel>keys</edgelabel>
+          <edgelabel>+keys</edgelabel>
         </childnode>
       </node>
       <node id="41">
@@ -316,7 +316,7 @@
       <member refid="class_mongo_object_1a4905c165b7b18f471ee56f8eb3f5e0f1" prot="protected" virt="non-virtual"><scope>Session</scope><name>oid_precursor</name></member>
       <member refid="class_mongo_object_1a9592c8baaed700c358dc26025e3bf166" prot="protected" virt="non-virtual"><scope>Session</scope><name>oid_to_string</name></member>
       <member refid="class_mongo_object_1a0050194f5bc8690e0db3b8217086e421" prot="public" virt="non-virtual"><scope>Session</scope><name>operator==</name></member>
-      <member refid="class_mongo_object_1a2136ceace181debba3d2c4fe07f947d8" prot="public" virt="non-virtual"><scope>Session</scope><name>operator[]</name></member>
+      <member refid="class_mongo_object_1a89f7e282816b6dd93d4df4ee7ca9bd0a" prot="public" virt="virtual"><scope>Session</scope><name>operator[]</name></member>
       <member refid="class_session_1a4f09644fd155a1d5640cedefe4aa42fc" prot="public" virt="virtual"><scope>Session</scope><name>read_from_db</name></member>
       <member refid="class_mongo_object_1aecd244620f292e8368d1f593925eafbd" prot="protected" virt="non-virtual" ambiguityscope="MongoObject::"><scope>Session</scope><name>read_from_db</name></member>
       <member refid="class_mongo_object_1adce8ffc4811a9d1c94701711f574bc34" prot="public" virt="non-virtual"><scope>Session</scope><name>read_json</name></member>

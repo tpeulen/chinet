@@ -37,6 +37,33 @@ void nothing(
         const std::map<std::string, std::shared_ptr<Port>> &outputs){
 }
 
+void passthrough(
+        const std::map<std::string, std::shared_ptr<Port>> &inputs,
+        const std::map<std::string, std::shared_ptr<Port>> &outputs){
+
+    for(auto it_in = inputs.cbegin(), end_in = inputs.cend(),
+            it_out = outputs.cbegin(), end_out = outputs.cend();
+            it_in != end_in || it_out != end_out;)
+    {
+        if(it_in != end_in) {
+            std::cout << "m1: " << it_in->first << " " << it_in->second << " | ";
+            ++it_in;
+        } else{
+            break;
+        }
+
+        if(it_out != end_out) {
+            std::cout << "m2: " << it_out->first << " " << it_out->second << std::endl;
+            ++it_out;
+        } else{
+            break;
+        }
+
+        auto v = it_in->second->get_value();
+        it_out->second->set_value(v);
+    }
+}
+
 
 void convolve_sum_of_exponentials_periodic(
         const std::map<std::string, std::shared_ptr<Port>> &inputs,
@@ -79,5 +106,6 @@ RTTR_REGISTRATION {
     registration::class_<NodeCallback>("NodeCallback").constructor<>().method("run", &NodeCallback::run);
     registration::method("multiply", &multiply);
     registration::method("nothing", &nothing);
+    registration::method("passthrough", &passthrough);
     registration::method("convolve", &convolve_sum_of_exponentials_periodic);
 }

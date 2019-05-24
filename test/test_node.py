@@ -131,7 +131,29 @@ class Tests(unittest.TestCase):
         node.add_output_port("portC", portOut1)
 
         cb = NodeCallbackMultiply()
+        cb.thisown = 0
         node.set_callback(cb)
+        node.evaluate()
+
+        self.assertEqual(portOut1.get_value(), portIn1.get_value() * portIn2.get_value())
+
+    def test_node_python_callback_2(self):
+        """Test chinet Node class python callbacks"""
+
+        node = cn.Node()
+
+        portIn1 = cn.Port(55)
+        node.add_input_port("portA", portIn1)
+
+        portIn2 = cn.Port(2)
+        node.add_input_port("portB", portIn2)
+
+        portOut1 = cn.Port()
+        node.add_output_port("portC", portOut1)
+
+        node.set_callback(
+            NodeCallbackMultiply().__disown__()
+        )
         node.evaluate()
 
         self.assertEqual(portOut1.get_value(), portIn1.get_value() * portIn2.get_value())
@@ -217,7 +239,7 @@ class Tests(unittest.TestCase):
         node_1.evaluate()
         self.assertEqual(node_1.is_valid(), True)
 
-    def test_node_valid_reactive(self):
+    def test_node_valid_reactive_port(self):
         """
         In this test the node node_1 has one inputs (inA) and one output:
 
@@ -249,9 +271,6 @@ class Tests(unittest.TestCase):
             [12]
         )
 
-
-    '''
-
     def test_node_valid_connected_nodes(self):
         """
         In this test the two nodes node_1 and node_2 are connected.
@@ -270,63 +289,70 @@ class Tests(unittest.TestCase):
         when it is evaluated. When a node is initialized it is invalid.
         """
 
-        import chinet as cn
-
-        class NodeCallback(cn.NodeCallback):
-
-            def __init__(self, *args, **kwargs):
-                cn.NodeCallback.__init__(self, *args, **kwargs)
-
-            def run(self, inputs, outputs):
-                outputs["outA"].set_value(inputs["inA"])
-
         out_node_1 = cn.Port(1.0, False, True)
-        in_node_1 = cn.Port(3.0, False, False, True)  # is_fixed, is_output, is_reactive
+        in_node_1 = cn.Port(3.0, False, False, False)  # is_fixed, is_output, is_reactive
         node_1 = cn.Node(
             {
                 'inA': in_node_1,
                 'outA': out_node_1
             }
         )
-        self.assertListEqual(
-            list(out_node_1.get_value()),
-            [1.0]
+        node_1.set_callback(
+            CallbackNodePassOn().__disown__()
         )
+
         self.assertListEqual(
             list(in_node_1.get_value()),
             [3.0]
         )
+        self.assertListEqual(
+            list(out_node_1.get_value()),
+            [1.0]
+        )
         self.assertEqual(node_1.is_valid(), False)
         node_1.evaluate()
         self.assertEqual(node_1.is_valid(), True)
-
+        self.assertListEqual(
+            list(in_node_1.get_value()),
+            list(out_node_1.get_value())
+        )
 
         in_node_2 = cn.Port(13.0)
+        out_node_2 = cn.Port(1.0, False, True)
         node_2 = cn.Node(
             {
                 'inA': in_node_2,
-                'outA': cn.Port(1.0, False, True)
+                'outA': out_node_2
             }
         )
-
+        node_2.set_callback(
+            CallbackNodePassOn().__disown__()
+        )
         in_node_2.link(out_node_1)
+
+        self.assertEqual(node_2.is_valid(), False)
+        node_2.evaluate()
+        self.assertEqual(node_2.is_valid(), True)
+        self.assertEqual(
+            list(out_node_2.get_value()),
+            [3.0]
+        )
+
+        in_node_1.set_value(13)
         self.assertEqual(node_1.is_valid(), False)
+        self.assertEqual(node_2.is_valid(), False)
+
         node_1.evaluate()
-        self.assertEqual(node_1.is_valid(), True)
+        self.assertEqual(
+            list(out_node_1.get_value()),
+            [13.0]
+        )
 
-        self.assertEqual(node_2.is_valid(), False)
         node_2.evaluate()
-        self.assertEqual(node_2.is_valid(), True)
-
-        in_node_2.set_value(2)
-        self.assertEqual(node_2.is_valid(), False)
-        node_2.evaluate()
-        self.assertEqual(node_2.is_valid(), True)
-
-        in_node_1.set_value(11)
-        self.assertEqual(node_1.is_valid(), False)
-        self.assertEqual(node_2.is_valid(), False)
-    '''
+        self.assertEqual(
+            list(out_node_2.get_value()),
+            [13.0]
+        )
 
 
 if __name__ == '__main__':

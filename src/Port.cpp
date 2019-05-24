@@ -7,19 +7,24 @@ bool Port::is_fixed(){
 }
 
 bool Port::is_linked(){
-    return (link_ != nullptr);
+    return (_link != nullptr);
 }
 
 void Port::link(std::shared_ptr<Port> &v){
     if(v != nullptr){
         MongoObject::set_oid("link", v->get_bson_oid());
-        link_ = v;
+        _link = v;
+        v->_linked_to.push_back(this);
     }
 }
 
-void Port::unlink(){
+bool Port::unlink(){
+    bool re = true;
     MongoObject::set_oid("link", get_bson_oid());
-    link_ = nullptr;
+    re &= remove_pointer_to_this_in_link_port();
+    // set the link to a nullptr
+    _link = nullptr;
+    return re;
 }
 
 void Port::set_fixed(bool fixed){
@@ -28,7 +33,7 @@ void Port::set_fixed(bool fixed){
 
 bson_t Port::get_bson() {
     bson_t dst = MongoObject::get_bson_excluding("value", NULL);
-    MongoObject::append_number_array(&dst, "value", buff_double_vector_);
+    MongoObject::append_number_array(&dst, "value", _buff_double_vector);
     return dst;
 }
 
@@ -40,13 +45,13 @@ void Port::set_port_type(bool is_output)
 
 void Port::set_value(double *in, int nbr_in)
 {
-    buff_double_vector_.assign(in, in + nbr_in);
-    if (link_ != nullptr) {
-        link_->set_value(in, nbr_in);
+    _buff_double_vector.assign(in, in + nbr_in);
+    if (_link != nullptr) {
+        _link->set_value(in, nbr_in);
     }
     if(node_ != nullptr){
         node_->set_node_to_invalid();
-        if(is_reactive_){
+        if(_is_reactive){
             node_->evaluate();
         }
     }
@@ -63,6 +68,9 @@ void Port::set_value(double value)
     set_value(v.data(), v.size());
 }
 
+void Port::set_is_reactive(bool reactive){
+    _is_reactive = reactive;
+}
 
 
 // Constructor
@@ -74,30 +82,6 @@ void Port::set_value(double value)
 
 // Operator
 //--------------------------------------------------------------------
-
-//std::shared_ptr<Port> Port::operator+(std::shared_ptr<Port> v){
-//    bson_oid_t new_port_oid;
-//    bson_oid_init(&new_port_oid, nullptr);
-//    auto r = std::make_shared<Port>(new_port_oid);
-//    bson_init(r->document);
-//    r->document = BCON_NEW(
-//            "_id", BCON_OID(&new_port_oid),
-//            "predecessor", BCON_OID(&new_port_oid),
-//            "birth", BCON_INT64(Functions::get_time()),
-//            "death", BCON_INT64(0)
-//    );
-//
-//    Functions::add_documents(this->document, r->document, skip);
-//    Functions::add_documents(v->document, r->document, skip);
-//
-//    return r;
-//}
-
-/*
-std::vector<double> Port::operator[](std::string key){
-    return value(key);
-}
- */
 
 // Getter
 //--------------------------------------------------------------------

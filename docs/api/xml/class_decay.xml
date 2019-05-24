@@ -458,14 +458,14 @@
         <label>Curve</label>
         <link refid="class_curve"/>
         <childnode refid="10" relation="usage">
-          <edgelabel>name_x</edgelabel>
-          <edgelabel>name_y</edgelabel>
+          <edgelabel>#name_x</edgelabel>
+          <edgelabel>#name_y</edgelabel>
         </childnode>
         <childnode refid="12" relation="usage">
-          <edgelabel>x</edgelabel>
-          <edgelabel>y</edgelabel>
-          <edgelabel>ex</edgelabel>
-          <edgelabel>ey</edgelabel>
+          <edgelabel>#x</edgelabel>
+          <edgelabel>#y</edgelabel>
+          <edgelabel>#ex</edgelabel>
+          <edgelabel>#ey</edgelabel>
         </childnode>
       </node>
       <node id="10">

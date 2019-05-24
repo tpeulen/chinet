@@ -22,7 +22,6 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">chinet
-   &#160;<span id="projectnumber">@VERSION@</span>
    </div>
   </td>
  </tr>
@@ -108,7 +107,7 @@ $(function() {
   <tr><td class="entry"><a class="el" href="class_mongo_object.html#a9592c8baaed700c358dc26025e3bf166">oid_to_string</a>(bson_oid_t oid)</td><td class="entry"><a class="el" href="class_mongo_object.html">MongoObject</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">static</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_port.html#acecdaea3f5917240a7ff36c5186b57d6">operator==</a>(Port &amp;b)</td><td class="entry"><a class="el" href="class_port.html">Port</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr><td class="entry"><a class="el" href="class_mongo_object.html#a0050194f5bc8690e0db3b8217086e421">MongoObject::operator==</a>(MongoObject const &amp;b)</td><td class="entry"><a class="el" href="class_mongo_object.html">MongoObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_mongo_object.html#a2136ceace181debba3d2c4fe07f947d8">operator[]</a>(std::string key)</td><td class="entry"><a class="el" href="class_mongo_object.html">MongoObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_mongo_object.html#a89f7e282816b6dd93d4df4ee7ca9bd0a">operator[]</a>(std::string key)</td><td class="entry"><a class="el" href="class_mongo_object.html">MongoObject</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr><td class="entry"><a class="el" href="class_port.html#a2cfb70a4b6d730e715042d646ec1d960">Port</a>()</td><td class="entry"><a class="el" href="class_port.html">Port</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_port.html#abc59e965682f281264a8488a46408a6f">Port</a>(double value, bool fixed=false, bool is_output=false, bool is_reactive=false)</td><td class="entry"><a class="el" href="class_port.html">Port</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr><td class="entry"><a class="el" href="class_port.html#a7eb1db139cc954b15e0d182ad3244067">Port</a>(std::vector&lt; double &gt; array, bool fixed=false, bool is_output=false, bool is_reactive=false)</td><td class="entry"><a class="el" href="class_port.html">Port</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
@@ -119,7 +118,7 @@ $(function() {
   <tr class="even"><td class="entry"><a class="el" href="class_mongo_object.html#adb597533d8e167c3d6bafd28baef349c">set_document</a>(bson_t b)</td><td class="entry"><a class="el" href="class_mongo_object.html">MongoObject</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">protected</span></td></tr>
   <tr><td class="entry"><a class="el" href="class_mongo_object.html#ae51714acc607a67518862306fac509ee">set_document</a>(bson_t *doc)</td><td class="entry"><a class="el" href="class_mongo_object.html">MongoObject</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">protected</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_port.html#af913356cf60ebe37fb03d213db73b1bc">set_fixed</a>(bool fixed)</td><td class="entry"><a class="el" href="class_port.html">Port</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_port.html#ae2808ef3b67c3dd01222aee10e35f6cd">set_is_reactive</a>(bool reactive)</td><td class="entry"><a class="el" href="class_port.html">Port</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_port.html#ae2808ef3b67c3dd01222aee10e35f6cd">set_is_reactive</a>(bool reactive)</td><td class="entry"><a class="el" href="class_port.html">Port</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_mongo_object.html#ac999ffe6b9b2ca261adff1eaf9da7e98">set_name</a>(std::string name)</td><td class="entry"><a class="el" href="class_mongo_object.html">MongoObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr><td class="entry"><a class="el" href="class_port.html#a5dfef60c4b30386e97d2829a23a0d3d3">set_node</a>(Node *node_ptr)</td><td class="entry"><a class="el" href="class_port.html">Port</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_mongo_object.html#a9e80e38e5a4f40754ef48f2504e1613c">set_oid</a>(const char *key, bson_oid_t value)</td><td class="entry"><a class="el" href="class_mongo_object.html">MongoObject</a></td><td class="entry"></td></tr>
@@ -139,7 +138,7 @@ $(function() {
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 22 2019 19:18:28 for chinet by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 23 2019 11:45:27 for chinet by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

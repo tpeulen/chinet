@@ -11,16 +11,16 @@
         <argsstring></argsstring>
         <name>link_</name>
         <briefdescription>
-        </briefdescription>
+<para>If this attribute points to another <ref refid="class_port" kindref="compound">Port</ref>, the value of the other port is returned by the method . </para>        </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="14" column="1" bodyfile="include/Port.h" bodystart="14" bodyend="-1"/>
+        <location file="include/Port.h" line="20" column="1" bodyfile="include/Port.h" bodystart="20" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="class_port_1a71022aa5e673f4d804359fe3e7f5bfe7" prot="private" static="no" mutable="no">
-        <type>std::vector&lt; double &gt;</type>
-        <definition>std::vector&lt;double&gt; Port::buff_double_vector_</definition>
+      <memberdef kind="variable" id="class_port_1a74424ff98ddbc87f1cc6037268cd9fff" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::shared_ptr&lt; <ref refid="class_port" kindref="compound">Port</ref> &gt; &gt; std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;std::shared_ptr&lt;Port&gt; &gt; std::vector&lt;double&gt; Port::buff_double_vector_</definition>
         <argsstring></argsstring>
         <name>buff_double_vector_</name>
         <initializer>{}</initializer>
@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="15" column="1" bodyfile="include/Port.h" bodystart="15" bodyend="-1"/>
+        <location file="include/Port.h" line="27" column="1" bodyfile="include/Port.h" bodystart="27" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_port_1a76c9c7f9e33b7aef9b84dd005fefd08e" prot="private" static="no" mutable="no">
         <type><ref refid="class_node" kindref="compound">Node</ref> *</type>
@@ -43,7 +43,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="16" column="1" bodyfile="include/Port.h" bodystart="16" bodyend="-1"/>
+        <location file="include/Port.h" line="28" column="1" bodyfile="include/Port.h" bodystart="28" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_port_1a6100cfbf3c02b36a7ae6b9113d032752" prot="private" static="no" mutable="no">
         <type>bool</type>
@@ -56,7 +56,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="17" column="1" bodyfile="include/Port.h" bodystart="17" bodyend="-1"/>
+        <location file="include/Port.h" line="29" column="1" bodyfile="include/Port.h" bodystart="29" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -71,7 +71,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="24" column="1" bodyfile="include/Port.h" bodystart="24" bodyend="32"/>
+        <location file="include/Port.h" line="36" column="1" bodyfile="include/Port.h" bodystart="36" bodyend="44"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1abc59e965682f281264a8488a46408a6f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -103,7 +103,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="34" column="1" bodyfile="include/Port.h" bodystart="34" bodyend="45"/>
+        <location file="include/Port.h" line="46" column="1" bodyfile="include/Port.h" bodystart="46" bodyend="57"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1a7eb1db139cc954b15e0d182ad3244067" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -135,7 +135,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="47" column="1" bodyfile="include/Port.h" bodystart="47" bodyend="58"/>
+        <location file="include/Port.h" line="59" column="1" bodyfile="include/Port.h" bodystart="59" bodyend="70"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1aff000f05612ddb41fec4bff9087bb643" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -148,7 +148,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="60" column="1"/>
+        <location file="include/Port.h" line="72" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1ab35e1343f0db5a0b258d9541958324bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -165,7 +165,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="65" column="1"/>
+        <location file="include/Port.h" line="77" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1a5dfef60c4b30386e97d2829a23a0d3d3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -182,7 +182,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="67" column="1" bodyfile="include/Port.h" bodystart="67" bodyend="69"/>
+        <location file="include/Port.h" line="79" column="1" bodyfile="include/Port.h" bodystart="79" bodyend="81"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1a8659a2feee31ada701589c0fb4202b5b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="class_node" kindref="compound">Node</ref> *</type>
@@ -195,7 +195,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="71" column="1" bodyfile="include/Port.h" bodystart="71" bodyend="73"/>
+        <location file="include/Port.h" line="83" column="1" bodyfile="include/Port.h" bodystart="83" bodyend="85"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1a0c7610af582f64a46f25f76f73de804c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -208,7 +208,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="75" column="1" bodyfile="include/Port.h" bodystart="75" bodyend="78"/>
+        <location file="include/Port.h" line="87" column="1" bodyfile="include/Port.h" bodystart="87" bodyend="90"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1a82509b87aa9d775d0a40e2b446f2b7ad" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>std::vector&lt; double &gt;</type>
@@ -221,7 +221,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="80" column="1" bodyfile="include/Port.h" bodystart="80" bodyend="90"/>
+        <location file="include/Port.h" line="92" column="1" bodyfile="include/Port.h" bodystart="92" bodyend="102"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1acc11e1890530dd4bc0b9e3c7778ef5ff" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -242,7 +242,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="92" column="1" bodyfile="include/Port.h" bodystart="92" bodyend="103"/>
+        <location file="include/Port.h" line="104" column="1" bodyfile="include/Port.h" bodystart="104" bodyend="115"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1a18b368a7d48acb802b6671693f54adcb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -263,7 +263,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="105" column="1"/>
+        <location file="include/Port.h" line="117" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1a664dff6ffb75509465fca1bd89f67ab2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -280,7 +280,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="106" column="1"/>
+        <location file="include/Port.h" line="118" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1a28311c7a8fe9e2838aa8ae63a37d2d9a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -297,7 +297,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="107" column="1"/>
+        <location file="include/Port.h" line="119" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1af913356cf60ebe37fb03d213db73b1bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -314,9 +314,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="108" column="1"/>
+        <location file="include/Port.h" line="120" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="class_port_1ae2808ef3b67c3dd01222aee10e35f6cd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="class_port_1ae2808ef3b67c3dd01222aee10e35f6cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
         <definition>void Port::set_is_reactive</definition>
         <argsstring>(bool reactive)</argsstring>
@@ -331,7 +331,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="109" column="1" bodyfile="include/Port.h" bodystart="109" bodyend="111"/>
+        <location file="include/Port.h" line="121" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1a7fbe40665570e0acbd7e9f6c9a8c9272" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -344,7 +344,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="113" column="1"/>
+        <location file="include/Port.h" line="123" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1a51a2db67f75c856f83d28cec818b0170" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -357,7 +357,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="114" column="1"/>
+        <location file="include/Port.h" line="124" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1a1f80bb4edc0bdc8268f4c93ef618bef4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -370,7 +370,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="115" column="1" bodyfile="include/Port.h" bodystart="115" bodyend="117"/>
+        <location file="include/Port.h" line="125" column="1" bodyfile="include/Port.h" bodystart="125" bodyend="127"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1a746914b62d482cc81a901d254a03c560" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
         <type>bson_t</type>
@@ -384,7 +384,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="119" column="1"/>
+        <location file="include/Port.h" line="129" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1aec33d8bfca05139b1e319f15d2b3a1b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -401,7 +401,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="124" column="1"/>
+        <location file="include/Port.h" line="134" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1aa6a264b13dc26edd20a2726c9466186c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -414,7 +414,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="126" column="1"/>
+        <location file="include/Port.h" line="136" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1a052c0ba97e0a53e45d973d4bc31fa615" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
         <type>bool</type>
@@ -428,7 +428,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="128" column="1" bodyfile="include/Port.h" bodystart="128" bodyend="132"/>
+        <location file="include/Port.h" line="138" column="1" bodyfile="include/Port.h" bodystart="138" bodyend="142"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1a952b0b030c884147a36be7a04eb22183" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
         <type>bool</type>
@@ -446,7 +446,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="134" column="1" bodyfile="include/Port.h" bodystart="134" bodyend="139"/>
+        <location file="include/Port.h" line="144" column="1" bodyfile="include/Port.h" bodystart="144" bodyend="149"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1acecdaea3f5917240a7ff36c5186b57d6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -463,7 +463,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="141" column="1" bodyfile="include/Port.h" bodystart="141" bodyend="146"/>
+        <location file="include/Port.h" line="151" column="1" bodyfile="include/Port.h" bodystart="151" bodyend="156"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -496,11 +496,11 @@
         <label>MongoObject</label>
         <link refid="class_mongo_object"/>
         <childnode refid="35" relation="usage">
-          <edgelabel>object_name</edgelabel>
-          <edgelabel>app_string</edgelabel>
-          <edgelabel>uri_string</edgelabel>
-          <edgelabel>collection_string</edgelabel>
-          <edgelabel>db_string</edgelabel>
+          <edgelabel>#db_string</edgelabel>
+          <edgelabel>#collection_string</edgelabel>
+          <edgelabel>#app_string</edgelabel>
+          <edgelabel>#object_name</edgelabel>
+          <edgelabel>#uri_string</edgelabel>
         </childnode>
       </node>
       <node id="35">
@@ -509,12 +509,12 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/Port.h" line="11" column="1" bodyfile="include/Port.h" bodystart="10" bodyend="148"/>
+    <location file="include/Port.h" line="11" column="1" bodyfile="include/Port.h" bodystart="10" bodyend="158"/>
     <listofallmembers>
       <member refid="class_mongo_object_1ace5148b45dd674c73077a044d0233ed8" prot="protected" virt="non-virtual"><scope>Port</scope><name>app_string</name></member>
       <member refid="class_mongo_object_1a56dccd703ae3e3e2193d57d31df12fd0" prot="protected" virt="non-virtual"><scope>Port</scope><name>append_number_array</name></member>
       <member refid="class_mongo_object_1ab659c54f28b5e13c6cb2fc0fc8ad4635" prot="protected" virt="non-virtual"><scope>Port</scope><name>append_string</name></member>
-      <member refid="class_port_1a71022aa5e673f4d804359fe3e7f5bfe7" prot="private" virt="non-virtual"><scope>Port</scope><name>buff_double_vector_</name></member>
+      <member refid="class_port_1a74424ff98ddbc87f1cc6037268cd9fff" prot="private" virt="non-virtual"><scope>Port</scope><name>buff_double_vector_</name></member>
       <member refid="class_mongo_object_1a59d2d926fd2f8048b1dab88b3e1fea5b" prot="protected" virt="non-virtual"><scope>Port</scope><name>collection_string</name></member>
       <member refid="class_mongo_object_1adbb80b6af3e780c81cc455f480507749" prot="public" virt="non-virtual"><scope>Port</scope><name>connect_object_to_db</name></member>
       <member refid="class_mongo_object_1a7ef98cecb5c625a9c3e9a57373be41b8" prot="public" virt="non-virtual"><scope>Port</scope><name>connect_to_db</name></member>
@@ -557,7 +557,7 @@
       <member refid="class_mongo_object_1a9592c8baaed700c358dc26025e3bf166" prot="protected" virt="non-virtual"><scope>Port</scope><name>oid_to_string</name></member>
       <member refid="class_port_1acecdaea3f5917240a7ff36c5186b57d6" prot="public" virt="non-virtual"><scope>Port</scope><name>operator==</name></member>
       <member refid="class_mongo_object_1a0050194f5bc8690e0db3b8217086e421" prot="public" virt="non-virtual" ambiguityscope="MongoObject::"><scope>Port</scope><name>operator==</name></member>
-      <member refid="class_mongo_object_1a2136ceace181debba3d2c4fe07f947d8" prot="public" virt="non-virtual"><scope>Port</scope><name>operator[]</name></member>
+      <member refid="class_mongo_object_1a89f7e282816b6dd93d4df4ee7ca9bd0a" prot="public" virt="virtual"><scope>Port</scope><name>operator[]</name></member>
       <member refid="class_port_1a2cfb70a4b6d730e715042d646ec1d960" prot="public" virt="non-virtual"><scope>Port</scope><name>Port</name></member>
       <member refid="class_port_1abc59e965682f281264a8488a46408a6f" prot="public" virt="non-virtual"><scope>Port</scope><name>Port</name></member>
       <member refid="class_port_1a7eb1db139cc954b15e0d182ad3244067" prot="public" virt="non-virtual"><scope>Port</scope><name>Port</name></member>

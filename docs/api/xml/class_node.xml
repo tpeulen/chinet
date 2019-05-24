@@ -216,7 +216,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="54" column="1"/>
+        <location file="include/Node.h" line="53" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1a60c605aced4420d3d6f6fe54b5a5b6bb" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
         <type>bool</type>
@@ -234,7 +234,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="58" column="1"/>
+        <location file="include/Node.h" line="57" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1a0a3c8430a9e5b6b725c87bbcf7adc54b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -247,7 +247,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="59" column="1"/>
+        <location file="include/Node.h" line="58" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1a8d821a6df3cd9504fefc551d5bd0a64f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -260,7 +260,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="60" column="1"/>
+        <location file="include/Node.h" line="59" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1adb04f5aa8b454b19db663b3f240e9061" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -273,7 +273,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="61" column="1"/>
+        <location file="include/Node.h" line="60" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1ad5cacb320e423275faef1bfc8c7a365b" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
         <type>bool</type>
@@ -287,7 +287,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="62" column="1"/>
+        <location file="include/Node.h" line="61" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1a9568e1bba3436d78e77862902e328592" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>bson_t</type>
@@ -301,7 +301,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="66" column="1"/>
+        <location file="include/Node.h" line="65" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1a0cc0386322fca056e49e49d869ade853" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>std::string</type>
@@ -315,7 +315,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="67" column="1"/>
+        <location file="include/Node.h" line="66" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1aab2f990047525bd3bfe7be041a8a201c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::map&lt; std::string, std::shared_ptr&lt; <ref refid="class_port" kindref="compound">Port</ref> &gt; &gt;</type>
@@ -328,7 +328,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="69" column="1"/>
+        <location file="include/Node.h" line="68" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1a060160b85a15190fcf98fa0a3f9ec4e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::map&lt; std::string, std::shared_ptr&lt; <ref refid="class_port" kindref="compound">Port</ref> &gt; &gt;</type>
@@ -341,7 +341,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="70" column="1"/>
+        <location file="include/Node.h" line="69" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1a90fc0096ba3a5094f0696dde1dd5b08d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::map&lt; std::string, std::shared_ptr&lt; <ref refid="class_port" kindref="compound">Port</ref> &gt; &gt;</type>
@@ -354,7 +354,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="72" column="1"/>
+        <location file="include/Node.h" line="71" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1a71b857799058e56ccb9593a69fc675bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::shared_ptr&lt; <ref refid="class_port" kindref="compound">Port</ref> &gt;</type>
@@ -371,7 +371,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="73" column="1"/>
+        <location file="include/Node.h" line="72" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1a139ab3c04753749cc35d2ff8c268c248" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -400,7 +400,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="74" column="1"/>
+        <location file="include/Node.h" line="73" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1ac0b67acb7c270cf38579356325ee6e9c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -420,7 +420,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="75" column="1"/>
+        <location file="include/Node.h" line="74" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1a9df0ba6b43f1b59fd0bce26470b906ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -440,7 +440,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="76" column="1"/>
+        <location file="include/Node.h" line="75" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1a89e7f8e74b09395e5a2362bcef664ee9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::shared_ptr&lt; <ref refid="class_port" kindref="compound">Port</ref> &gt;</type>
@@ -457,7 +457,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="78" column="1"/>
+        <location file="include/Node.h" line="77" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1a98f6937be16c29da2ea37b0ad51cb463" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::shared_ptr&lt; <ref refid="class_port" kindref="compound">Port</ref> &gt;</type>
@@ -474,7 +474,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="79" column="1"/>
+        <location file="include/Node.h" line="78" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1a924146fb76ec67a78971f91e93418527" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -491,7 +491,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="83" column="1"/>
+        <location file="include/Node.h" line="82" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_node_1afda492d07d8c3ed0e714d0249e015ffa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -512,9 +512,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="84" column="1"/>
+        <location file="include/Node.h" line="83" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="class_node_1ab9fe9ebcddc19a16dc518fd29e584da8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="class_node_1ab9fe9ebcddc19a16dc518fd29e584da8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
         <definition>void Node::set_node_to_invalid</definition>
         <argsstring>()</argsstring>
@@ -525,7 +525,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Node.h" line="85" column="1" bodyfile="include/Node.h" bodystart="85" bodyend="87"/>
+        <location file="include/Node.h" line="84" column="1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -548,7 +548,7 @@
       <node id="26">
         <label>std::map&lt; std::string, std::shared_ptr&lt; Port &gt; &gt;</label>
         <childnode refid="24" relation="usage">
-          <edgelabel>keys</edgelabel>
+          <edgelabel>+keys</edgelabel>
         </childnode>
       </node>
       <node id="22">
@@ -557,12 +557,12 @@
         <childnode refid="23" relation="public-inheritance">
         </childnode>
         <childnode refid="24" relation="usage">
-          <edgelabel>callback_type_string</edgelabel>
-          <edgelabel>callback</edgelabel>
+          <edgelabel>#callback</edgelabel>
+          <edgelabel>#callback_type_string</edgelabel>
         </childnode>
         <childnode refid="26" relation="usage">
-          <edgelabel>out_</edgelabel>
-          <edgelabel>in_</edgelabel>
+          <edgelabel>#out_</edgelabel>
+          <edgelabel>#in_</edgelabel>
         </childnode>
       </node>
       <node id="25">
@@ -572,11 +572,11 @@
         <label>MongoObject</label>
         <link refid="class_mongo_object"/>
         <childnode refid="24" relation="usage">
-          <edgelabel>object_name</edgelabel>
-          <edgelabel>app_string</edgelabel>
-          <edgelabel>uri_string</edgelabel>
-          <edgelabel>collection_string</edgelabel>
-          <edgelabel>db_string</edgelabel>
+          <edgelabel>#db_string</edgelabel>
+          <edgelabel>#collection_string</edgelabel>
+          <edgelabel>#app_string</edgelabel>
+          <edgelabel>#object_name</edgelabel>
+          <edgelabel>#uri_string</edgelabel>
         </childnode>
       </node>
       <node id="24">
@@ -585,7 +585,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/Node.h" line="21" column="1" bodyfile="include/Node.h" bodystart="21" bodyend="89"/>
+    <location file="include/Node.h" line="21" column="1" bodyfile="include/Node.h" bodystart="21" bodyend="86"/>
     <listofallmembers>
       <member refid="class_node_1ac0b67acb7c270cf38579356325ee6e9c" prot="public" virt="non-virtual"><scope>Node</scope><name>add_input_port</name></member>
       <member refid="class_node_1a9df0ba6b43f1b59fd0bce26470b906ba" prot="public" virt="non-virtual"><scope>Node</scope><name>add_output_port</name></member>
@@ -643,7 +643,7 @@
       <member refid="class_mongo_object_1a4905c165b7b18f471ee56f8eb3f5e0f1" prot="protected" virt="non-virtual"><scope>Node</scope><name>oid_precursor</name></member>
       <member refid="class_mongo_object_1a9592c8baaed700c358dc26025e3bf166" prot="protected" virt="non-virtual"><scope>Node</scope><name>oid_to_string</name></member>
       <member refid="class_mongo_object_1a0050194f5bc8690e0db3b8217086e421" prot="public" virt="non-virtual"><scope>Node</scope><name>operator==</name></member>
-      <member refid="class_mongo_object_1a2136ceace181debba3d2c4fe07f947d8" prot="public" virt="non-virtual"><scope>Node</scope><name>operator[]</name></member>
+      <member refid="class_mongo_object_1a89f7e282816b6dd93d4df4ee7ca9bd0a" prot="public" virt="virtual"><scope>Node</scope><name>operator[]</name></member>
       <member refid="class_node_1a324497db3924989e08e8ee0411d5972e" prot="protected" virt="non-virtual"><scope>Node</scope><name>out_</name></member>
       <member refid="class_node_1abb83a3d891735392a59a1270f4db38fc" prot="private" virt="non-virtual"><scope>Node</scope><name>Port</name></member>
       <member refid="class_node_1ae519513035293daedb1c84b3a150c7c3" prot="private" virt="non-virtual"><scope>Node</scope><name>ports</name></member>

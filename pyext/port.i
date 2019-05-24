@@ -10,6 +10,7 @@
 %}
 
 %shared_ptr(Port)
+%template(vector_port_ptr) std::vector<Port*>;
 
 %apply (double* IN_ARRAY1, int DIM1) {(double *in, int nbr_in)}
 %apply (double** ARGOUTVIEW_ARRAY1, int* DIM1) {(double **out, int *nbr_out)}

@@ -126,7 +126,7 @@
     <member refid="class_mongo_object_1ae1002573afb58658162fb7f53cd0bffc" kind="function"><name>get_array</name></member>
     <member refid="class_mongo_object_1ac251f38eef739fb9e1418a20e7fcc7f7" kind="function"><name>set_array</name></member>
     <member refid="class_mongo_object_1a9f71ae755dac1db3e37cdee85329d163" kind="function"><name>get_json</name></member>
-    <member refid="class_mongo_object_1a2136ceace181debba3d2c4fe07f947d8" kind="function"><name>operator[]</name></member>
+    <member refid="class_mongo_object_1a89f7e282816b6dd93d4df4ee7ca9bd0a" kind="function"><name>operator[]</name></member>
     <member refid="class_mongo_object_1a0050194f5bc8690e0db3b8217086e421" kind="function"><name>operator==</name></member>
   </compound>
   <compound refid="class_node" kind="class"><name>Node</name>
@@ -187,7 +187,7 @@
   </compound>
   <compound refid="class_port" kind="class"><name>Port</name>
     <member refid="class_port_1a3d834bffb2dcc087fcbb33318729f02c" kind="variable"><name>link_</name></member>
-    <member refid="class_port_1a71022aa5e673f4d804359fe3e7f5bfe7" kind="variable"><name>buff_double_vector_</name></member>
+    <member refid="class_port_1a74424ff98ddbc87f1cc6037268cd9fff" kind="variable"><name>buff_double_vector_</name></member>
     <member refid="class_port_1a76c9c7f9e33b7aef9b84dd005fefd08e" kind="variable"><name>node_</name></member>
     <member refid="class_port_1a6100cfbf3c02b36a7ae6b9113d032752" kind="variable"><name>is_reactive_</name></member>
     <member refid="class_port_1a2cfb70a4b6d730e715042d646ec1d960" kind="function"><name>Port</name></member>

@@ -22,7 +22,6 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">chinet
-   &#160;<span id="projectnumber">@VERSION@</span>
    </div>
   </td>
  </tr>
@@ -74,12 +73,21 @@ $(function() {
 <div class="dynheader">
 Inheritance diagram for Node:</div>
 <div class="dyncontent">
- <div class="center">
-  <img src="class_node.png" usemap="#Node_map" alt=""/>
-  <map id="Node_map" name="Node_map">
-<area href="class_mongo_object.html" title="Connects the instance of database. " alt="MongoObject" shape="rect" coords="0,0,88,24"/>
+<div class="center"><img src="class_node__inherit__graph.png" border="0" usemap="#_node_inherit__map" alt="Inheritance graph"/></div>
+<map name="_node_inherit__map" id="_node_inherit__map">
+<area shape="rect" id="node2" href="class_mongo_object.html" title="Connects the instance of database. " alt="" coords="5,5,188,625"/>
 </map>
- </div></div>
+</div>
+<div class="dynheader">
+Collaboration diagram for Node:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_node__coll__graph.png" border="0" usemap="#_node_coll__map" alt="Collaboration graph"/></div>
+<map name="_node_coll__map" id="_node_coll__map">
+<area shape="rect" id="node2" href="class_mongo_object.html" title="Connects the instance of database. " alt="" coords="223,345,406,892"/>
+<area shape="rect" id="node3" title="STL class. " alt="" coords="275,147,355,224"/>
+<area shape="rect" id="node4" title="STL class. " alt="" coords="251,5,378,97"/>
+</map>
+</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -171,8 +179,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac251f38eef739fb9e1418a20e7fcc7f7 inherit pub_methods_class_mongo_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f71ae755dac1db3e37cdee85329d163 inherit pub_methods_class_mongo_object"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mongo_object.html#a9f71ae755dac1db3e37cdee85329d163">get_json</a> (const char *key)</td></tr>
 <tr class="separator:a9f71ae755dac1db3e37cdee85329d163 inherit pub_methods_class_mongo_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2136ceace181debba3d2c4fe07f947d8 inherit pub_methods_class_mongo_object"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_mongo_object.html">MongoObject</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mongo_object.html#a2136ceace181debba3d2c4fe07f947d8">operator[]</a> (std::string key)</td></tr>
-<tr class="separator:a2136ceace181debba3d2c4fe07f947d8 inherit pub_methods_class_mongo_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89f7e282816b6dd93d4df4ee7ca9bd0a inherit pub_methods_class_mongo_object"><td class="memItemLeft" align="right" valign="top">virtual std::shared_ptr&lt; <a class="el" href="class_mongo_object.html">MongoObject</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mongo_object.html#a89f7e282816b6dd93d4df4ee7ca9bd0a">operator[]</a> (std::string key)</td></tr>
+<tr class="separator:a89f7e282816b6dd93d4df4ee7ca9bd0a inherit pub_methods_class_mongo_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0050194f5bc8690e0db3b8217086e421 inherit pub_methods_class_mongo_object"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mongo_object.html#a0050194f5bc8690e0db3b8217086e421">operator==</a> (<a class="el" href="class_mongo_object.html">MongoObject</a> const &amp;b)</td></tr>
 <tr class="separator:a0050194f5bc8690e0db3b8217086e421 inherit pub_methods_class_mongo_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -745,9 +753,6 @@ Additional Inherited Members</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void Node::set_node_to_invalid </td>
@@ -756,11 +761,6 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
@@ -946,7 +946,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 22 2019 19:18:28 for chinet by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 23 2019 11:45:27 for chinet by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

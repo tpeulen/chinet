@@ -9,10 +9,24 @@ Connects the instance of database.
 
 {\ttfamily \#include $<$Mongo\+Object.\+h$>$}
 
-Inheritance diagram for Mongo\+Object\+:\begin{figure}[H]
+
+
+Inheritance diagram for Mongo\+Object\+:
+\nopagebreak
+\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[height=2.000000cm]{class_mongo_object}
+\includegraphics[height=550pt]{class_mongo_object__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Mongo\+Object\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_mongo_object__coll__graph}
 \end{center}
 \end{figure}
 \subsection*{Public Member Functions}
@@ -60,7 +74,7 @@ void \hyperlink{class_mongo_object_a9e80e38e5a4f40754ef48f2504e1613c}{set\+\_\+o
 \item 
 std\+::string \hyperlink{class_mongo_object_a9f71ae755dac1db3e37cdee85329d163}{get\+\_\+json} (const char $\ast$key)
 \item 
-std\+::shared\+\_\+ptr$<$ \hyperlink{class_mongo_object}{Mongo\+Object} $>$ \hyperlink{class_mongo_object_a2136ceace181debba3d2c4fe07f947d8}{operator\mbox{[}$\,$\mbox{]}} (std\+::string key)
+virtual std\+::shared\+\_\+ptr$<$ \hyperlink{class_mongo_object}{Mongo\+Object} $>$ \hyperlink{class_mongo_object_a89f7e282816b6dd93d4df4ee7ca9bd0a}{operator\mbox{[}$\,$\mbox{]}} (std\+::string key)
 \item 
 bool \hyperlink{class_mongo_object_a0050194f5bc8690e0db3b8217086e421}{operator==} (\hyperlink{class_mongo_object}{Mongo\+Object} const \&b)
 \end{DoxyCompactItemize}
@@ -330,11 +344,11 @@ T Mongo\+Object\+::get\+\_\+singleton (\begin{DoxyParamCaption}\item[{const char
 \subsubsection{\texorpdfstring{operator==()}{operator==()}}
 {\footnotesize\ttfamily bool Mongo\+Object\+::operator== (\begin{DoxyParamCaption}\item[{\hyperlink{class_mongo_object}{Mongo\+Object} const \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{class_mongo_object_a2136ceace181debba3d2c4fe07f947d8}\label{class_mongo_object_a2136ceace181debba3d2c4fe07f947d8}} 
+\mbox{\Hypertarget{class_mongo_object_a89f7e282816b6dd93d4df4ee7ca9bd0a}\label{class_mongo_object_a89f7e282816b6dd93d4df4ee7ca9bd0a}} 
 \index{Mongo\+Object@{Mongo\+Object}!operator\mbox{[}\mbox{]}@{operator[]}}
 \index{operator\mbox{[}\mbox{]}@{operator[]}!Mongo\+Object@{Mongo\+Object}}
 \subsubsection{\texorpdfstring{operator[]()}{operator[]()}}
-{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\hyperlink{class_mongo_object}{Mongo\+Object}$>$ Mongo\+Object\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{std\+::string}]{key }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily virtual std\+::shared\+\_\+ptr$<$\hyperlink{class_mongo_object}{Mongo\+Object}$>$ Mongo\+Object\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{std\+::string}]{key }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 \mbox{\Hypertarget{class_mongo_object_aecd244620f292e8368d1f593925eafbd}\label{class_mongo_object_aecd244620f292e8368d1f593925eafbd}} 
 \index{Mongo\+Object@{Mongo\+Object}!read\+\_\+from\+\_\+db@{read\+\_\+from\+\_\+db}}

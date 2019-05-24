@@ -50,7 +50,6 @@ public:
     Node();
     Node(std::string name);
     Node(std::map<std::string, std::shared_ptr<Port>> ports);
-
     ~Node();
 
     // Methods
@@ -82,9 +81,7 @@ public:
     //--------------------------------------------------------------------
     void set_callback(std::shared_ptr<NodeCallback> cb);
     void set_callback(std::string callback, std::string callback_type);
-    void set_node_to_invalid(){
-        node_valid_ = false;
-    }
+    void set_node_to_invalid();
 
 };
 

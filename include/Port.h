@@ -3,18 +3,36 @@
 
 #include <cstdint>
 #include <memory>
+#include <algorithm>
 
 #include <Node.h>
 
 class Node;
+
 class Port : public MongoObject
 {
 
 private:
-    std::shared_ptr<Port> link_;
-    std::vector<double> buff_double_vector_{};
+
+    std::vector<double> _buff_double_vector{};
+
+protected:
+
+    /*!
+     * @brief This attribute can point to another Port (default value nullptr).
+     * If the attribute points to another port, the value returned by the
+     * method @class Port::get_value corresponds to the value the other Port.
+     */
+    std::shared_ptr<Port> _link;
+
+    /*!
+     *
+     */
+    std::vector<Port*> _linked_to;
+
+    bool _is_reactive;
+
     Node *node_;
-    bool is_reactive_;
 
 public:
 
@@ -41,7 +59,7 @@ public:
         set_value(value);
         set_fixed(fixed);
         set_port_type(is_output);
-        is_reactive_ = is_reactive;
+        _is_reactive = is_reactive;
     };
 
     Port(std::vector<double> array,
@@ -54,10 +72,12 @@ public:
         set_fixed(fixed);
         set_port_type(is_output);
         set_value(array.data(), array.size());
-        is_reactive_ = is_reactive;
+        _is_reactive = is_reactive;
     };
 
-    ~Port() = default;
+    ~Port(){
+        remove_pointer_to_this_in_link_port();
+    };
 
     // Getter & Setter
     //--------------------------------------------------------------------
@@ -79,41 +99,47 @@ public:
 
     std::vector<double> get_value()
     {
-        if (link_ == nullptr) {
-            if (buff_double_vector_.empty()) {
-                buff_double_vector_ = MongoObject::get_array<double>("value");
+        if (_link == nullptr) {
+            if (_buff_double_vector.empty()) {
+                _buff_double_vector = MongoObject::get_array<double>("value");
             }
-            return buff_double_vector_;
+            return _buff_double_vector;
         } else {
-            return link_->get_value();
+            return _link->get_value();
         }
     }
 
     void get_value(double **out, int *nbr_out)
     {
-        if (link_ == nullptr) {
-            if (buff_double_vector_.empty()) {
-                buff_double_vector_ = MongoObject::get_array<double>("value");
+        if (_link == nullptr) {
+            if (_buff_double_vector.empty()) {
+                _buff_double_vector = MongoObject::get_array<double>("value");
             }
-            *nbr_out = buff_double_vector_.size();
-            *out = buff_double_vector_.data();
+            *nbr_out = _buff_double_vector.size();
+            *out = _buff_double_vector.data();
         } else {
-            link_->get_value(out, nbr_out);
+            _link->get_value(out, nbr_out);
         }
+    }
+
+    std::vector<Port*> get_linked_ports(){
+        return _linked_to;
+    }
+
+    std::shared_ptr<Port> get_link(){
+        return _link;
     }
 
     void set_value(double *in, int nbr_in);
     void set_value(std::vector<double> &values);
     void set_value(double value);
     void set_fixed(bool fixed);
-    void set_is_reactive(bool reactive){
-        is_reactive_ = reactive;
-    }
+    void set_is_reactive(bool reactive);
 
     bool is_fixed();
     bool is_linked();
     bool is_reactive(){
-        return is_reactive_;
+        return _is_reactive;
     }
 
     bson_t get_bson() final;
@@ -121,9 +147,23 @@ public:
     // Methods
     //--------------------------------------------------------------------
 
+    bool remove_pointer_to_this_in_link_port(){
+        if(_link != nullptr){
+            // remove pointer to this port in the port to which this is linked
+            auto it = std::find(_link->_linked_to.begin(),
+                                _link->_linked_to.end(), this);
+
+            if(it != _link->_linked_to.end()){
+                _link->_linked_to.erase(it);
+                return true;
+            }
+        }
+        return false;
+    }
+
     void link(std::shared_ptr<Port> &v);
 
-    void unlink();
+    bool unlink();
 
     bool write_to_db()
     {
@@ -134,16 +174,9 @@ public:
     bool read_from_db(const std::string &oid_string)
     {
         bool re = MongoObject::read_from_db(oid_string);
-        buff_double_vector_ = MongoObject::get_array<double>("value");
+        _buff_double_vector = MongoObject::get_array<double>("value");
         return re;
-    };
-
-    bool operator==(Port &b){
-        return (
-                (b.get_oid() == get_oid()) ||
-                (b.link_.get() == this)
-                );
-    };
+    }
 
 };
 
