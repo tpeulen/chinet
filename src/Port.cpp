@@ -1,20 +1,32 @@
 #include "Port.h"
 
 
+// Methods
+// --------------------------------------------------------------------
+
 
 bool Port::is_fixed(){
     return MongoObject::get_singleton<bool>("fixed");
 }
 
 bool Port::is_linked(){
-    return (_link != nullptr);
+    return (link_ != nullptr);
+}
+
+bool Port::is_output()
+{
+    return MongoObject::get_singleton<bool>("is_output");
+}
+
+bool Port::is_reactive(){
+    return _is_reactive;
 }
 
 void Port::link(std::shared_ptr<Port> &v){
     if(v != nullptr){
         MongoObject::set_oid("link", v->get_bson_oid());
-        _link = v;
-        v->_linked_to.push_back(this);
+        link_ = v;
+        v->linked_to_.push_back(this);
     }
 }
 
@@ -23,9 +35,41 @@ bool Port::unlink(){
     MongoObject::set_oid("link", get_bson_oid());
     re &= remove_pointer_to_this_in_link_port();
     // set the link to a nullptr
-    _link = nullptr;
+    link_ = nullptr;
     return re;
 }
+
+
+bool Port::remove_pointer_to_this_in_link_port(){
+    if(link_ != nullptr){
+        // remove pointer to this port in the port to which this is linked
+        auto it = std::find(link_->linked_to_.begin(),
+                            link_->linked_to_.end(), this);
+
+        if(it != link_->linked_to_.end()){
+            link_->linked_to_.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Port::read_from_db(const std::string &oid_string)
+{
+    bool re = MongoObject::read_from_db(oid_string);
+    _buff_double_vector = MongoObject::get_array<double>("value");
+    return re;
+}
+
+bool Port::write_to_db()
+{
+    bson_t doc = get_bson();
+    return MongoObject::write_to_db(doc, 0);
+}
+
+
+// Setter
+//--------------------------------------------------------------------
 
 void Port::set_fixed(bool fixed){
     MongoObject::set_singleton("fixed", fixed);
@@ -46,8 +90,8 @@ void Port::set_port_type(bool is_output)
 void Port::set_value(double *in, int nbr_in)
 {
     _buff_double_vector.assign(in, in + nbr_in);
-    if (_link != nullptr) {
-        _link->set_value(in, nbr_in);
+    if (link_ != nullptr) {
+        link_->set_value(in, nbr_in);
     }
     if(node_ != nullptr){
         node_->set_node_to_invalid();
@@ -72,154 +116,49 @@ void Port::set_is_reactive(bool reactive){
     _is_reactive = reactive;
 }
 
+void Port::set_node(Node *node_ptr){
+    node_ = node_ptr;
+}
 
-// Constructor
-//--------------------------------------------------------------------
-
-// Destructor
-//--------------------------------------------------------------------
-
-
-// Operator
-//--------------------------------------------------------------------
 
 // Getter
 //--------------------------------------------------------------------
 
-/*
-std::vector<std::string> Port::keys(){
-    std::vector<std::string> names;
-    bson_iter_t i0;
-    bson_iter_t i1;
-    bson_iter_t ik;
-
-    bson_t* doc = get_value();
-    if(doc != nullptr){
-        bson_iter_init(&i0, doc);
-        bson_iter_init(&ik, doc);
-        while (bson_iter_next (&ik)) {
-            std::string search_values = std::string(bson_iter_key(&ik)) + ".value";
-            bson_iter_init(&i0, doc);
-            if (bson_iter_init (&i0, doc) &&
-                bson_iter_find_descendant (&i0, search_values.c_str(), &i1) &&
-                    (BSON_ITER_HOLDS_DOUBLE (&i1) || BSON_ITER_HOLDS_ARRAY(&i1))
-                ){
-                names.emplace_back(bson_iter_key (&ik));
-            }
+void Port::get_value(double **out, int *nbr_out)
+{
+    if (link_.get() == nullptr) {
+        if (_buff_double_vector.empty()) {
+            _buff_double_vector = MongoObject::get_array<double>("value");
         }
-    } else{
-        std::cerr << "Port document not initialized.";
+        *nbr_out = _buff_double_vector.size();
+        *out = _buff_double_vector.data();
+    } else {
+        link_->get_value(out, nbr_out);
     }
-    return names;
 }
- */
 
-
-// Setter
-//--------------------------------------------------------------------
-
-
-//bool Port::set_slot_value(std::string slot_key, std::vector<double> values){
-//    bson_iter_t iter;
-//    bson_iter_t baz;
-//
-//    bson_t *doc = document;
-//    if(doc != nullptr) {
-//        std::string search_values = slot_key + ".value";
-//        if (bson_iter_init(&iter, doc) &&
-//            bson_iter_find_descendant(&iter, search_values.c_str(), &baz)
-//            ) {
-//            if(BSON_ITER_HOLDS_DOUBLE (&baz)){
-//
-//            } else{
-//                if(BSON_ITER_HOLDS_ARRAY(&baz)){
-//                    /*
-//                    bson_count_keys(bson_iter_);
-//                    int narray;
-//                    const uint8_t **array;
-//                    bson_iter_array(&baz, &narray, array);
-//                     */
-//                }
-//            }
-//            /*
-//            if(bson_count_keys(&baz))
-//            for(auto &v : values){
-//                bson_a
-//            }
-//            bson_iter_overwrite_double(&baz, value);
-//            return true;*/
-//        }
-//    }else{
-//        std::cerr << "Error: set_slot_value, port document not initialized.";
-//    }
-//    return false;
-//}
-
-
-/*
-bool Port::set_predecessor(bson_oid_t v){
-    bson_iter_t iter;
-    bson_t *doc = document;
-    if(doc != nullptr) {
-        char oidstr[25];
-        if (bson_iter_init(&iter, doc) && bson_iter_find(&iter, "predecessor") && BSON_ITER_HOLDS_OID (&iter)) {
-            bson_oid_to_string(bson_iter_oid(&iter), oidstr);
-            std::clog << "set predecessor: " << oidstr << std::endl;
-            bson_iter_overwrite_oid(&iter, &v);
-            return true;
+std::vector<double> Port::get_value()
+{
+    if (link_ == nullptr) {
+        if (_buff_double_vector.empty()) {
+            _buff_double_vector = MongoObject::get_array<double>("value");
         }
-    } else{
-        std::cerr << "Error: set_predecessor, port document not initialized.";
+        return _buff_double_vector;
+    } else {
+        return link_->get_value();
     }
-    return false;
 }
- */
 
-
-// Methods
-// --------------------------------------------------------------------
-/*
-void Port::from_json(const std::string &json_string){
-    std::clog << "Port.from_json:";
-    bson_error_t error;
-    document = bson_new_from_json((uint8_t*)json_string.c_str(), json_string.size(), &error);
-    if (!document) {
-        std::cerr << "Error: " << error.message;
-    } else{
-        // find the oid
-        bson_iter_t iter;
-        char oidstr[25];
-        if (bson_iter_init (&iter, document) &&
-            bson_iter_find (&iter, "_id") &&
-            BSON_ITER_HOLDS_OID (&iter)) {
-            oid = *bson_iter_oid(&iter);
-            bson_oid_to_string (&oid, oidstr);
-            std::clog << "OID:" << oidstr;
-        } else {
-            std::clog << "no OID:";
-            bson_oid_init (&oid, nullptr);
-            BSON_APPEND_OID (document, "_id", &oid);
-            std::clog << "Generated OID: " << get_oid();
-        }
-    }
-    std::clog << std::endl;
+std::vector<Port*> Port::get_linked_ports(){
+    return linked_to_;
 }
-*/
 
-
-
-/*
-size_t Port::size(){
-    bson_iter_t iter;
-    size_t s = 0;
-    if (bson_iter_init (&iter, document)) {
-        while (bson_iter_next (&iter)) {
-            if(!Functions::bson_iter_skip(&iter, &skip)){
-                s++;
-            }
-        }
-    }
-    return s;
+std::shared_ptr<Port> Port::get_link(){
+    return link_;
 }
- */
+
+Node* Port::get_node(){
+    return node_;
+}
+
 

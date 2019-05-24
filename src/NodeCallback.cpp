@@ -45,22 +45,19 @@ void passthrough(
             it_out = outputs.cbegin(), end_out = outputs.cend();
             it_in != end_in || it_out != end_out;)
     {
+        auto v = it_in->second->get_value();
         if(it_in != end_in) {
-            std::cout << "m1: " << it_in->first << " " << it_in->second << " | ";
             ++it_in;
         } else{
             break;
         }
 
         if(it_out != end_out) {
-            std::cout << "m2: " << it_out->first << " " << it_out->second << std::endl;
+            it_out->second->set_value(v);
             ++it_out;
         } else{
             break;
         }
-
-        auto v = it_in->second->get_value();
-        it_out->second->set_value(v);
     }
 }
 

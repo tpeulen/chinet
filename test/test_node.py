@@ -288,18 +288,15 @@ class Tests(unittest.TestCase):
         of a node changes, the node is set to invalid. A node is set to valid
         when it is evaluated. When a node is initialized it is invalid.
         """
-
-        out_node_1 = cn.Port(1.0, False, True)
         in_node_1 = cn.Port(3.0, False, False, False)  # is_fixed, is_output, is_reactive
+        out_node_1 = cn.Port(1.0, False, True)
         node_1 = cn.Node(
             {
                 'inA': in_node_1,
                 'outA': out_node_1
             }
         )
-        node_1.set_callback(
-            CallbackNodePassOn().__disown__()
-        )
+        node_1.set_callback("passthrough", "C")
 
         self.assertListEqual(
             list(in_node_1.get_value()),
@@ -309,6 +306,7 @@ class Tests(unittest.TestCase):
             list(out_node_1.get_value()),
             [1.0]
         )
+
         self.assertEqual(node_1.is_valid(), False)
         node_1.evaluate()
         self.assertEqual(node_1.is_valid(), True)
@@ -317,7 +315,7 @@ class Tests(unittest.TestCase):
             list(out_node_1.get_value())
         )
 
-        in_node_2 = cn.Port(13.0)
+        in_node_2 = cn.Port(13.0, False, False, False)
         out_node_2 = cn.Port(1.0, False, True)
         node_2 = cn.Node(
             {
@@ -325,9 +323,7 @@ class Tests(unittest.TestCase):
                 'outA': out_node_2
             }
         )
-        node_2.set_callback(
-            CallbackNodePassOn().__disown__()
-        )
+        node_2.set_callback("passthrough", "C")
         in_node_2.link(out_node_1)
 
         self.assertEqual(node_2.is_valid(), False)
@@ -349,6 +345,52 @@ class Tests(unittest.TestCase):
         )
 
         node_2.evaluate()
+        self.assertEqual(
+            list(out_node_2.get_value()),
+            [13.0]
+        )
+
+    def test_node_valid_connected_nodes(self):
+        """
+        In this test the two nodes node_1 and node_2 are connected.
+
+        node_1 has one inputs (inA) and one output:
+
+                 (inA)-(node_1)-(outA)
+
+        node_2 has one input (inA) and one output. The input of node_2 is
+        connected to the output of node_1:
+
+                (inA->(Node1, outA))-(node_2)-(outA)
+
+        In this example all ports are "non-reactive" meaning, when the input
+        of a node changes, the node is set to invalid. A node is set to valid
+        when it is evaluated. When a node is initialized it is invalid.
+        """
+        in_node_1 = cn.Port(3.0, False, False, True)
+        out_node_1 = cn.Port(1.0, False, True)
+        node_1 = cn.Node(
+            {
+                'inA': in_node_1,
+                'outA': out_node_1
+            }
+        )
+        node_1.set_callback("passthrough", "C")
+
+        in_node_2 = cn.Port(1.0, False, False, True)
+        out_node_2 = cn.Port(1.0, False, True)
+        node_2 = cn.Node(
+            {
+                'inA': in_node_2,
+                'outA': out_node_2
+            }
+        )
+        node_2.set_callback("passthrough", "C")
+        in_node_2.link(out_node_1)
+        in_node_1.set_value(13)
+
+        self.assertEqual(node_1.is_valid(), True)
+        self.assertEqual(node_2.is_valid(), True)
         self.assertEqual(
             list(out_node_2.get_value()),
             [13.0]
