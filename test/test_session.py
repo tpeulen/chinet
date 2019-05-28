@@ -102,8 +102,8 @@ class Tests(unittest.TestCase):
 
         nodeA = s.create_node(json_string, "node_name")
 
-        v = list(nodeA.get_output_port('outA').get_values())
-        self.assertListEqual(v, [1., 2., 3., 5., 8.])
+        v = list(nodeA.get_output_port('outA').get_value())
+        self.assertListEqual(v, [1., 2., 4., 8., 16.])
 
 
 if __name__ == '__main__':

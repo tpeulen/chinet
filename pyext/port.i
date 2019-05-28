@@ -9,6 +9,7 @@
     import_array();
 %}
 
+%shared_ptr(BasePort)
 %shared_ptr(Port)
 %template(vector_port_ptr) std::vector<Port*>;
 

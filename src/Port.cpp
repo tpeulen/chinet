@@ -5,21 +5,8 @@
 // --------------------------------------------------------------------
 
 
-bool Port::is_fixed(){
-    return MongoObject::get_singleton<bool>("is_fixed");
-}
-
 bool Port::is_linked(){
     return (link_ != nullptr);
-}
-
-bool Port::is_output()
-{
-    return MongoObject::get_singleton<bool>("is_output");
-}
-
-bool Port::is_reactive(){
-    return MongoObject::get_singleton<bool>("is_reactive");
 }
 
 void Port::link(std::shared_ptr<Port> &v){
@@ -77,19 +64,6 @@ bson_t Port::get_bson() {
     return dst;
 }
 
-void Port::set_fixed(bool fixed){
-    MongoObject::set_singleton("is_fixed", fixed);
-}
-
-void Port::set_port_type(bool is_output)
-{
-    MongoObject::set_singleton("is_output", is_output);
-}
-
-void Port::set_reactive(bool reactive){
-    MongoObject::set_singleton("is_reactive", reactive);
-}
-
 void Port::set_value(double *in, int nbr_in)
 {
 #if CHINET_DEBUG
@@ -107,20 +81,10 @@ void Port::set_value(double *in, int nbr_in)
     }
 }
 
-void Port::set_value(std::vector<double> &values)
-{
-    set_value(values.data(), values.size());
-}
-
 void Port::set_value(double value)
 {
     auto v = std::vector<double>{value};
     set_value(v.data(), v.size());
-}
-
-
-void Port::set_node(Node *node_ptr){
-    node_ = node_ptr;
 }
 
 
@@ -142,14 +106,13 @@ void Port::get_value(double **out, int *nbr_out)
 
 std::vector<double> Port::get_value()
 {
-    if (link_ == nullptr) {
-        if (_buff_double_vector.empty()) {
-            _buff_double_vector = MongoObject::get_array<double>("value");
-        }
-        return _buff_double_vector;
-    } else {
-        return link_->get_value();
-    }
+    double *out; int n_out;
+    get_value(&out, &n_out);
+
+    std::vector<double> v{};
+    v.assign(out, out+n_out);
+
+    return v;
 }
 
 std::vector<Port*> Port::get_linked_ports(){
@@ -160,8 +123,37 @@ std::shared_ptr<Port> Port::get_link(){
     return link_;
 }
 
-Node* Port::get_node(){
+
+bool BasePort::is_fixed(){
+    return get_singleton<bool>("is_fixed");
+}
+
+bool BasePort::is_output()
+{
+    return get_singleton<bool>("is_output");
+}
+
+bool BasePort::is_reactive(){
+    return get_singleton<bool>("is_reactive");
+}
+
+void BasePort::set_fixed(bool fixed){
+    set_singleton("is_fixed", fixed);
+}
+
+void BasePort::set_port_type(bool is_output)
+{
+    set_singleton("is_output", is_output);
+}
+
+void BasePort::set_reactive(bool reactive){
+    set_singleton("is_reactive", reactive);
+}
+
+Node* BasePort::get_node(){
     return node_;
 }
 
-
+void BasePort::set_node(Node *node_ptr){
+    node_ = node_ptr;
+}

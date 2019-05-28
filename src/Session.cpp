@@ -3,6 +3,8 @@
 //
 
 #include "Session.h"
+#include "Port.h"
+
 
 bool Session::read_from_db(const std::string &oid_string){
     bool return_value = true;

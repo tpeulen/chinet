@@ -27,7 +27,7 @@ void multiply(
     if (outputs.find("outA") == outputs.end() ) {
         std::cerr << "Error: Node does not define output port with the name 'outA' " << std::endl;
     } else {
-        outputs["outA"]->set_value(mul);
+        outputs["outA"]->set_value(mul.data(), mul.size());
     }
 }
 
@@ -53,7 +53,7 @@ void passthrough(
         }
 
         if(it_out != end_out) {
-            it_out->second->set_value(v);
+            it_out->second->set_value(v.data(), v.size());
             ++it_out;
         } else{
             break;
