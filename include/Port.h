@@ -6,8 +6,10 @@
 #include <algorithm>
 
 #include <Node.h>
+#include <PortLinks.h>
 
 class Node;
+
 
 class BasePort : public MongoObject
 {
@@ -16,6 +18,7 @@ protected:
     Node *node_;
 
 public:
+    
     bool is_fixed();
 
     bool is_output();
@@ -51,7 +54,6 @@ public:
 };
 
 
-
 class Port : public BasePort
 {
 
@@ -59,30 +61,16 @@ private:
 
     std::vector<double> _buff_double_vector{};
 
-protected:
-
-    /*!
-     * @brief This attribute can point to another Port (default value nullptr).
-     * If the attribute points to another port, the value returned by the
-     * method @class Port::get_value corresponds to the value the other Port.
-     */
-    std::shared_ptr<Port> link_;
-
-    /*!
-     * @brief This attribute stores the Ports that are dependent on the value
-     * of this Port object. If this Port object is reactive a change of the
-     * value of this Port object is propagated to the dependent Ports.
-     */
-    std::vector<Port*> linked_to_;
-
 public:
+
+    PortLinks<double> port_links;
 
     // Constructor & Destructor
     //--------------------------------------------------------------------
 
     Port() :
     BasePort(),
-    link_(nullptr)
+    port_links(this)
     {
         bson_append_oid(&document, "link", 4, &oid_document);
     }
@@ -93,7 +81,7 @@ public:
          bool is_reactive = false
     ) :
     BasePort(fixed, is_output, is_reactive),
-    link_(nullptr)
+    port_links(this)
     {
         set_value(value);
     };
@@ -103,22 +91,18 @@ public:
          bool is_output = false,
          bool is_reactive = false
     ) :
-    BasePort(fixed, is_output, is_reactive)
+    BasePort(fixed, is_output, is_reactive),
+    port_links(this)
     {
         set_value(array.data(), array.size());
     };
 
     ~Port(){
-        remove_pointer_to_this_in_link_port();
     };
 
     // Getter & Setter
     //--------------------------------------------------------------------
-
-    std::vector<Port*> get_linked_ports();
-    std::shared_ptr<Port> get_link();
-    bool is_linked();
-
+    
     void set_value(double *in, int nbr_in);
     void set_value(double value);
     void get_value(double **out, int *nbr_out);
@@ -129,11 +113,17 @@ public:
     // Methods
     //--------------------------------------------------------------------
 
-    bool remove_pointer_to_this_in_link_port();
+    void link(std::shared_ptr<Port> &v)
+    {
+        set_oid("link", v->get_bson_oid());
+        port_links.link(v);
+    }
 
-    void link(std::shared_ptr<Port> &v);
-
-    bool unlink();
+    bool unlink()
+    {
+        set_oid("link", get_bson_oid());
+        return port_links.unlink();
+    }
 
     bool write_to_db();
 

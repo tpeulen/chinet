@@ -217,7 +217,7 @@ void Node::fill_input_output_port_lookups(){
     out_.clear();
     in_.clear();
 
-    for(auto o: ports){
+    for(auto &o: ports){
         if(o.second->is_output()){
             out_[o.first] = o.second;
         } else{
@@ -229,8 +229,8 @@ void Node::fill_input_output_port_lookups(){
 bool Node::inputs_valid(){
     for(const auto &i : in_){
         auto input_port = i.second;
-        if(input_port->is_linked()){
-            auto output_port = input_port->get_link();
+        if(input_port->port_links.is_linked()){
+            auto output_port = input_port->port_links.get_link();
             auto output_node = output_port->get_node();
             if(!output_node->is_valid())
             {

@@ -2,6 +2,7 @@
 
 %{
 #include "../include/Port.h"
+#include "../include/PortLinks.h"
 %}
 
 %include "numpy.i"
@@ -19,6 +20,7 @@
 %ignore set_value(std::vector<double> &values); // use memory - void get_value(double **out, int *nbr_out)
 
 %include "../include/Port.h"
+%include "../include/PortLinks.h"
 
 %extend Port {
 
