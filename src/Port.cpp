@@ -5,14 +5,14 @@
 // --------------------------------------------------------------------
 
 
-bool Port::read_from_db(const std::string &oid_string)
+bool ValuePort::read_from_db(const std::string &oid_string)
 {
     bool re = MongoObject::read_from_db(oid_string);
     _buff_double_vector = MongoObject::get_array<double>("value");
     return re;
 }
 
-bool Port::write_to_db()
+bool ValuePort::write_to_db()
 {
     bson_t doc = get_bson();
     return MongoObject::write_to_db(doc, 0);
@@ -22,20 +22,19 @@ bool Port::write_to_db()
 // Setter
 //--------------------------------------------------------------------
 
-bson_t Port::get_bson()
+bson_t ValuePort::get_bson()
 {
     bson_t dst = MongoObject::get_bson_excluding("value", NULL);
     MongoObject::append_number_array(&dst, "value", _buff_double_vector);
     return dst;
 }
 
-void Port::set_value(double *in, int nbr_in)
+void ValuePort::set_value(double *in, int nbr_in)
 {
 #if CHINET_DEBUG
     std::clog << "Node:" << get_name() << ".set_value" << std::endl;
 #endif
     _buff_double_vector.assign(in, in + nbr_in);
-    port_links.set_value_of_dependents(in, nbr_in);
     if(node_ != nullptr){
         node_->set_node_to_invalid();
         if(is_reactive() && !is_output()){
@@ -44,38 +43,64 @@ void Port::set_value(double *in, int nbr_in)
     }
 }
 
+void ValuePort::set_value(double value)
+{
+    auto v = std::vector<double>{value};
+    set_value(v.data(), v.size());
+}
+
+void Port::set_value(double *in, int nbr_in)
+{
+#if CHINET_DEBUG
+    std::clog << "Node:" << get_name() << ".set_value" << std::endl;
+#endif
+    ValuePort::set_value(in, nbr_in);
+    port_links.set_value_of_dependents(in, nbr_in);
+}
+
 void Port::set_value(double value)
 {
     auto v = std::vector<double>{value};
     set_value(v.data(), v.size());
 }
 
+
 // Getter
 //--------------------------------------------------------------------
+
+void ValuePort::get_value(double **out, int *nbr_out)
+{
+    if (_buff_double_vector.empty()) {
+        _buff_double_vector = MongoObject::get_array<double>("value");
+    }
+    *nbr_out = _buff_double_vector.size();
+    *out = _buff_double_vector.data();
+}
 
 void Port::get_value(double **out, int *nbr_out)
 {
     if (!port_links.is_linked()) {
-        if (_buff_double_vector.empty()) {
-            _buff_double_vector = MongoObject::get_array<double>("value");
-        }
-        *nbr_out = _buff_double_vector.size();
-        *out = _buff_double_vector.data();
+        ValuePort::get_value(out, nbr_out);
     } else {
         port_links.get_link()->get_value(out, nbr_out);
     }
 }
 
-std::vector<double> Port::get_value()
+std::vector<double> ValuePort::get_value()
 {
     double *out; int n_out;
     get_value(&out, &n_out);
 
     std::vector<double> v{};
     v.assign(out, out+n_out);
-
     return v;
 }
+
+std::vector<double> Port::get_value()
+{
+    return ValuePort::get_value();
+}
+
 
 bool BasePort::is_fixed()
 {

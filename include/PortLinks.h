@@ -1,3 +1,4 @@
+
 //
 // Created by thomas on 5/27/19.
 //
@@ -42,33 +43,14 @@ public:
         remove_links_to_port();
     };
 
-    bool remove_links_to_port()
-    {
-        if(link_ != nullptr){
-            // remove pointer to this port in the port to which this is linked
-            auto it = std::find(link_->port_links.linked_to_.begin(),
-                                link_->port_links.linked_to_.end(), port_);
-
-            if(it != link_->port_links.linked_to_.end()){
-                link_->port_links.linked_to_.erase(it);
-                return true;
-            }
-        }
-        return false;
-    }
+    bool remove_links_to_port();
 
     bool is_linked()
     {
         return (link_ != nullptr);
     }
 
-    void link(std::shared_ptr<Port> &v)
-    {
-        if(v != nullptr){
-            link_ = v;
-            v->port_links.linked_to_.push_back(port_);
-        }
-    }
+    void link(std::shared_ptr<Port> &v);
 
     bool unlink()
     {
@@ -97,5 +79,32 @@ public:
     }
 
 };
+
+template <class T>
+bool PortLinks<T>::remove_links_to_port()
+{
+    if (link_ != nullptr) {
+// remove pointer to this port in the port to which this is linked
+        PortLinks<T> *l = &link_->port_links;
+        auto it = std::find(l->linked_to_.begin(),
+                            l->linked_to_.end(), port_);
+
+        if (it != l->linked_to_.end()) {
+            l->linked_to_.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+template <class T>
+void PortLinks<T>::link(std::shared_ptr<Port> &v)
+{
+    if(v != nullptr){
+        link_ = v;
+        v->port_links.linked_to_.push_back(port_);
+    }
+}
+
 
 #endif //CHINET_PORTLINKS_H

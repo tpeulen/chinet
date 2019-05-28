@@ -11,6 +11,7 @@
 %}
 
 %shared_ptr(BasePort)
+%shared_ptr(ValuePort)
 %shared_ptr(Port)
 %template(vector_port_ptr) std::vector<Port*>;
 

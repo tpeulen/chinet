@@ -53,13 +53,62 @@ public:
     void set_node(Node *node_ptr);
 };
 
-
-class Port : public BasePort
+class ValuePort : public BasePort
 {
-
 private:
 
     std::vector<double> _buff_double_vector{};
+
+public:
+
+    // Constructor & Destructor
+    //--------------------------------------------------------------------
+
+    ValuePort() : BasePort()
+    {
+        bson_append_oid(&document, "link", 4, &oid_document);
+    }
+
+    ValuePort(double value,
+         bool fixed = false,
+         bool is_output = false,
+         bool is_reactive = false
+    ) : BasePort(fixed, is_output, is_reactive)
+    {
+        set_value(value);
+    };
+
+    ValuePort(std::vector<double> array,
+         bool fixed = false,
+         bool is_output = false,
+         bool is_reactive = false
+    ) : BasePort(fixed, is_output, is_reactive)
+    {
+        set_value(array.data(), array.size());
+    };
+
+    ~ValuePort(){
+    };
+
+    // Getter & Setter
+    //--------------------------------------------------------------------
+
+    virtual void set_value(double *in, int nbr_in);
+    virtual void set_value(double value);
+    virtual void get_value(double **out, int *nbr_out);
+    virtual std::vector<double> get_value();
+    bson_t get_bson() final;
+
+    // Methods
+    //--------------------------------------------------------------------
+
+    bool write_to_db();
+    bool read_from_db(const std::string &oid_string);
+
+};
+
+class Port : public ValuePort
+{
 
 public:
 
@@ -68,9 +117,7 @@ public:
     // Constructor & Destructor
     //--------------------------------------------------------------------
 
-    Port() :
-    BasePort(),
-    port_links(this)
+    Port() : ValuePort(), port_links(this)
     {
         bson_append_oid(&document, "link", 4, &oid_document);
     }
@@ -79,9 +126,7 @@ public:
          bool fixed = false,
          bool is_output = false,
          bool is_reactive = false
-    ) :
-    BasePort(fixed, is_output, is_reactive),
-    port_links(this)
+    ) : ValuePort(value, fixed, is_output, is_reactive), port_links(this)
     {
         set_value(value);
     };
@@ -90,9 +135,7 @@ public:
          bool fixed = false,
          bool is_output = false,
          bool is_reactive = false
-    ) :
-    BasePort(fixed, is_output, is_reactive),
-    port_links(this)
+    ) : ValuePort(array, fixed, is_output, is_reactive), port_links(this)
     {
         set_value(array.data(), array.size());
     };
@@ -100,18 +143,13 @@ public:
     ~Port(){
     };
 
-    // Getter & Setter
+    // Methods
     //--------------------------------------------------------------------
-    
+
     void set_value(double *in, int nbr_in);
     void set_value(double value);
     void get_value(double **out, int *nbr_out);
     std::vector<double> get_value();
-
-    bson_t get_bson() final;
-
-    // Methods
-    //--------------------------------------------------------------------
 
     void link(std::shared_ptr<Port> &v)
     {
@@ -125,11 +163,6 @@ public:
         return port_links.unlink();
     }
 
-    bool write_to_db();
-
-    bool read_from_db(const std::string &oid_string);
-
 };
-
 
 #endif //chinet_PORT_H
