@@ -9,6 +9,8 @@
 
 class Node;
 
+
+
 class Port : public MongoObject
 {
 
@@ -32,8 +34,6 @@ protected:
      */
     std::vector<Port*> linked_to_;
 
-    bool _is_reactive;
-
     Node *node_;
 
 public:
@@ -43,8 +43,7 @@ public:
 
     Port() :
     node_(nullptr),
-    link_(nullptr),
-    _is_reactive(false)
+    link_(nullptr)
     {
         append_string(&document, "type", "port");
         bson_append_bool(&document, "is_output", 9, false);
@@ -63,7 +62,7 @@ public:
         set_value(value);
         set_fixed(fixed);
         set_port_type(is_output);
-        _is_reactive = is_reactive;
+        set_reactive(is_reactive);
     };
 
     Port(std::vector<double> array,
@@ -76,7 +75,7 @@ public:
         set_fixed(fixed);
         set_port_type(is_output);
         set_value(array.data(), array.size());
-        _is_reactive = is_reactive;
+        set_reactive(is_reactive);
     };
 
     ~Port(){

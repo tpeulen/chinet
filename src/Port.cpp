@@ -19,7 +19,7 @@ bool Port::is_output()
 }
 
 bool Port::is_reactive(){
-    return _is_reactive;
+    return MongoObject::get_singleton<bool>("is_reactive");
 }
 
 void Port::link(std::shared_ptr<Port> &v){
@@ -88,7 +88,6 @@ void Port::set_port_type(bool is_output)
 
 void Port::set_reactive(bool reactive){
     MongoObject::set_singleton("is_reactive", reactive);
-    _is_reactive = reactive;
 }
 
 void Port::set_value(double *in, int nbr_in)
@@ -102,7 +101,7 @@ void Port::set_value(double *in, int nbr_in)
     }
     if(node_ != nullptr){
         node_->set_node_to_invalid();
-        if(_is_reactive && !is_output()){
+        if(is_reactive() && !is_output()){
             node_->evaluate();
         }
     }
