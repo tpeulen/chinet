@@ -2,61 +2,22 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
   <compounddef id="class_port" kind="class" language="C++" prot="public">
     <compoundname>Port</compoundname>
-    <basecompoundref refid="class_mongo_object" prot="public" virt="non-virtual">MongoObject</basecompoundref>
+    <basecompoundref refid="class_value_port" prot="public" virt="non-virtual">ValuePort</basecompoundref>
     <includes refid="_port_8h" local="no">Port.h</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="class_port_1a3d834bffb2dcc087fcbb33318729f02c" prot="private" static="no" mutable="no">
-        <type>std::shared_ptr&lt; <ref refid="class_port" kindref="compound">Port</ref> &gt;</type>
-        <definition>std::shared_ptr&lt;Port&gt; Port::link_</definition>
+    <innerclass refid="class_port_1_1get__value" prot="protected">Port::get_value</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="class_port_1a7e6cb81c715e20f7432d6c78a9e3c269" prot="public" static="no" mutable="no">
+        <type><ref refid="class_port_links" kindref="compound">PortLinks</ref>&lt; double &gt;</type>
+        <definition>PortLinks&lt;double&gt; Port::port_links</definition>
         <argsstring></argsstring>
-        <name>link_</name>
-        <briefdescription>
-<para>If this attribute points to another <ref refid="class_port" kindref="compound">Port</ref>, the value of the other port is returned by the method . </para>        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="20" column="1" bodyfile="include/Port.h" bodystart="20" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="class_port_1a74424ff98ddbc87f1cc6037268cd9fff" prot="private" static="no" mutable="no">
-        <type>std::vector&lt; std::shared_ptr&lt; <ref refid="class_port" kindref="compound">Port</ref> &gt; &gt; std::vector&lt; double &gt;</type>
-        <definition>std::vector&lt;std::shared_ptr&lt;Port&gt; &gt; std::vector&lt;double&gt; Port::buff_double_vector_</definition>
-        <argsstring></argsstring>
-        <name>buff_double_vector_</name>
-        <initializer>{}</initializer>
+        <name>port_links</name>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="27" column="1" bodyfile="include/Port.h" bodystart="27" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="class_port_1a76c9c7f9e33b7aef9b84dd005fefd08e" prot="private" static="no" mutable="no">
-        <type><ref refid="class_node" kindref="compound">Node</ref> *</type>
-        <definition>Node* Port::node_</definition>
-        <argsstring></argsstring>
-        <name>node_</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="28" column="1" bodyfile="include/Port.h" bodystart="28" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="class_port_1a6100cfbf3c02b36a7ae6b9113d032752" prot="private" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool Port::is_reactive_</definition>
-        <argsstring></argsstring>
-        <name>is_reactive_</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="29" column="1" bodyfile="include/Port.h" bodystart="29" bodyend="-1"/>
+        <location file="include/Port.h" line="115" column="1" bodyfile="include/Port.h" bodystart="115" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -71,7 +32,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="36" column="1" bodyfile="include/Port.h" bodystart="36" bodyend="44"/>
+        <location file="include/Port.h" line="120" column="1" bodyfile="include/Port.h" bodystart="120" bodyend="123"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1abc59e965682f281264a8488a46408a6f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -103,7 +64,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="46" column="1" bodyfile="include/Port.h" bodystart="46" bodyend="57"/>
+        <location file="include/Port.h" line="125" column="1" bodyfile="include/Port.h" bodystart="125" bodyend="132"/>
       </memberdef>
       <memberdef kind="function" id="class_port_1a7eb1db139cc954b15e0d182ad3244067" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -135,12 +96,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="59" column="1" bodyfile="include/Port.h" bodystart="59" bodyend="70"/>
+        <location file="include/Port.h" line="134" column="1" bodyfile="include/Port.h" bodystart="134" bodyend="141"/>
       </memberdef>
-      <memberdef kind="function" id="class_port_1aff000f05612ddb41fec4bff9087bb643" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="class_port_1afe166c2a6b10ad34d47472a150366bc1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
         <definition>Port::~Port</definition>
-        <argsstring>()=default</argsstring>
+        <argsstring>()</argsstring>
         <name>~Port</name>
         <briefdescription>
         </briefdescription>
@@ -148,107 +109,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="72" column="1"/>
+        <location file="include/Port.h" line="143" column="1" bodyfile="include/Port.h" bodystart="143" bodyend="144"/>
       </memberdef>
-      <memberdef kind="function" id="class_port_1ab35e1343f0db5a0b258d9541958324bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void Port::set_port_type</definition>
-        <argsstring>(bool is_output)</argsstring>
-        <name>set_port_type</name>
-        <param>
-          <type>bool</type>
-          <declname>is_output</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="77" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="class_port_1a5dfef60c4b30386e97d2829a23a0d3d3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void Port::set_node</definition>
-        <argsstring>(Node *node_ptr)</argsstring>
-        <name>set_node</name>
-        <param>
-          <type><ref refid="class_node" kindref="compound">Node</ref> *</type>
-          <declname>node_ptr</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="79" column="1" bodyfile="include/Port.h" bodystart="79" bodyend="81"/>
-      </memberdef>
-      <memberdef kind="function" id="class_port_1a8659a2feee31ada701589c0fb4202b5b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="class_node" kindref="compound">Node</ref> *</type>
-        <definition>Node* Port::get_node</definition>
-        <argsstring>()</argsstring>
-        <name>get_node</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="83" column="1" bodyfile="include/Port.h" bodystart="83" bodyend="85"/>
-      </memberdef>
-      <memberdef kind="function" id="class_port_1a0c7610af582f64a46f25f76f73de804c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool Port::is_output</definition>
-        <argsstring>()</argsstring>
-        <name>is_output</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="87" column="1" bodyfile="include/Port.h" bodystart="87" bodyend="90"/>
-      </memberdef>
-      <memberdef kind="function" id="class_port_1a82509b87aa9d775d0a40e2b446f2b7ad" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>std::vector&lt; double &gt;</type>
-        <definition>std::vector&lt;double&gt; Port::get_value</definition>
-        <argsstring>()</argsstring>
-        <name>get_value</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="92" column="1" bodyfile="include/Port.h" bodystart="92" bodyend="102"/>
-      </memberdef>
-      <memberdef kind="function" id="class_port_1acc11e1890530dd4bc0b9e3c7778ef5ff" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void Port::get_value</definition>
-        <argsstring>(double **out, int *nbr_out)</argsstring>
-        <name>get_value</name>
-        <param>
-          <type>double **</type>
-          <declname>out</declname>
-        </param>
-        <param>
-          <type>int *</type>
-          <declname>nbr_out</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="104" column="1" bodyfile="include/Port.h" bodystart="104" bodyend="115"/>
-      </memberdef>
-      <memberdef kind="function" id="class_port_1a18b368a7d48acb802b6671693f54adcb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="class_port_1a18b368a7d48acb802b6671693f54adcb" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
         <definition>void Port::set_value</definition>
         <argsstring>(double *in, int nbr_in)</argsstring>
         <name>set_value</name>
+        <reimplements refid="class_value_port_1a9eaeb8abfb060cc2dd2c2b087ecb3bb9">set_value</reimplements>
         <param>
           <type>double *</type>
           <declname>in</declname>
@@ -263,30 +131,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="117" column="1"/>
+        <location file="include/Port.h" line="149" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="class_port_1a664dff6ffb75509465fca1bd89f67ab2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void Port::set_value</definition>
-        <argsstring>(std::vector&lt; double &gt; &amp;values)</argsstring>
-        <name>set_value</name>
-        <param>
-          <type>std::vector&lt; double &gt; &amp;</type>
-          <declname>values</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="118" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="class_port_1a28311c7a8fe9e2838aa8ae63a37d2d9a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="class_port_1a28311c7a8fe9e2838aa8ae63a37d2d9a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
         <definition>void Port::set_value</definition>
         <argsstring>(double value)</argsstring>
         <name>set_value</name>
+        <reimplements refid="class_value_port_1a0647059eb7965920af4e622625b5e67e">set_value</reimplements>
         <param>
           <type>double</type>
           <declname>value</declname>
@@ -297,16 +149,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="119" column="1"/>
+        <location file="include/Port.h" line="150" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="class_port_1af913356cf60ebe37fb03d213db73b1bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="class_port_1acc11e1890530dd4bc0b9e3c7778ef5ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
-        <definition>void Port::set_fixed</definition>
-        <argsstring>(bool fixed)</argsstring>
-        <name>set_fixed</name>
+        <definition>void Port::get_value</definition>
+        <argsstring>(double **out, int *nbr_out)</argsstring>
+        <name>get_value</name>
+        <reimplements refid="class_value_port_1aea5af6fc415d13f868e5d676d1d9402e">get_value</reimplements>
         <param>
-          <type>bool</type>
-          <declname>fixed</declname>
+          <type>double **</type>
+          <declname>out</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>nbr_out</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -314,79 +171,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="120" column="1"/>
+        <location file="include/Port.h" line="151" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="class_port_1ae2808ef3b67c3dd01222aee10e35f6cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void Port::set_is_reactive</definition>
-        <argsstring>(bool reactive)</argsstring>
-        <name>set_is_reactive</name>
-        <param>
-          <type>bool</type>
-          <declname>reactive</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="121" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="class_port_1a7fbe40665570e0acbd7e9f6c9a8c9272" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool Port::is_fixed</definition>
+      <memberdef kind="function" id="class_port_1a82509b87aa9d775d0a40e2b446f2b7ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; Port::get_value</definition>
         <argsstring>()</argsstring>
-        <name>is_fixed</name>
+        <name>get_value</name>
+        <reimplements refid="class_value_port_1a12f11f190a32156f9afbcf38d9da0d2d">get_value</reimplements>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="123" column="1"/>
+        <location file="include/Port.h" line="152" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="class_port_1a51a2db67f75c856f83d28cec818b0170" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool Port::is_linked</definition>
-        <argsstring>()</argsstring>
-        <name>is_linked</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="124" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="class_port_1a1f80bb4edc0bdc8268f4c93ef618bef4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool Port::is_reactive</definition>
-        <argsstring>()</argsstring>
-        <name>is_reactive</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="125" column="1" bodyfile="include/Port.h" bodystart="125" bodyend="127"/>
-      </memberdef>
-      <memberdef kind="function" id="class_port_1a746914b62d482cc81a901d254a03c560" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
-        <type>bson_t</type>
-        <definition>bson_t Port::get_bson</definition>
-        <argsstring>() final</argsstring>
-        <name>get_bson</name>
-        <reimplements refid="class_mongo_object_1ac21cbe104a818f7e6ee7dcfbb521e9e1">get_bson</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="129" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="class_port_1aec33d8bfca05139b1e319f15d2b3a1b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="class_port_1aec33d8bfca05139b1e319f15d2b3a1b8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
         <definition>void Port::link</definition>
         <argsstring>(std::shared_ptr&lt; Port &gt; &amp;v)</argsstring>
@@ -401,11 +202,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="134" column="1"/>
+        <location file="include/Port.h" line="154" column="1" bodyfile="include/Port.h" bodystart="154" bodyend="158"/>
       </memberdef>
-      <memberdef kind="function" id="class_port_1aa6a264b13dc26edd20a2726c9466186c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void Port::unlink</definition>
+      <memberdef kind="function" id="class_port_1a9a9f8bbbde14187dfb55ef6fbc27492b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Port::unlink</definition>
         <argsstring>()</argsstring>
         <name>unlink</name>
         <briefdescription>
@@ -414,56 +215,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Port.h" line="136" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="class_port_1a052c0ba97e0a53e45d973d4bc31fa615" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
-        <type>bool</type>
-        <definition>bool Port::write_to_db</definition>
-        <argsstring>()</argsstring>
-        <name>write_to_db</name>
-        <reimplements refid="class_mongo_object_1a65971bad07dce8b649820f9dee5d0ae8">write_to_db</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="138" column="1" bodyfile="include/Port.h" bodystart="138" bodyend="142"/>
-      </memberdef>
-      <memberdef kind="function" id="class_port_1a952b0b030c884147a36be7a04eb22183" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
-        <type>bool</type>
-        <definition>bool Port::read_from_db</definition>
-        <argsstring>(const std::string &amp;oid_string)</argsstring>
-        <name>read_from_db</name>
-        <reimplements refid="class_mongo_object_1a729412e226c9964e13ba80688c3f5e00">read_from_db</reimplements>
-        <param>
-          <type>const std::string &amp;</type>
-          <declname>oid_string</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="144" column="1" bodyfile="include/Port.h" bodystart="144" bodyend="149"/>
-      </memberdef>
-      <memberdef kind="function" id="class_port_1acecdaea3f5917240a7ff36c5186b57d6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool Port::operator==</definition>
-        <argsstring>(Port &amp;b)</argsstring>
-        <name>operator==</name>
-        <param>
-          <type><ref refid="class_port" kindref="compound">Port</ref> &amp;</type>
-          <declname>b</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="include/Port.h" line="151" column="1" bodyfile="include/Port.h" bodystart="151" bodyend="156"/>
+        <location file="include/Port.h" line="160" column="1" bodyfile="include/Port.h" bodystart="160" bodyend="164"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -471,31 +223,97 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="31">
-        <label>Port</label>
-        <link refid="class_port"/>
-        <childnode refid="32" relation="public-inheritance">
+      <node id="47">
+        <label>BasePort</label>
+        <link refid="class_base_port"/>
+        <childnode refid="48" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="32">
+      <node id="46">
+        <label>ValuePort</label>
+        <link refid="class_value_port"/>
+        <childnode refid="47" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>Port</label>
+        <link refid="class_port"/>
+        <childnode refid="46" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="48">
         <label>MongoObject</label>
         <link refid="class_mongo_object"/>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="36">
-        <label>std::basic_string&lt; char &gt;</label>
-      </node>
-      <node id="33">
-        <label>Port</label>
-        <link refid="class_port"/>
-        <childnode refid="34" relation="public-inheritance">
+      <node id="51">
+        <label>BasePort</label>
+        <link refid="class_base_port"/>
+        <childnode refid="52" relation="public-inheritance">
+        </childnode>
+        <childnode refid="55" relation="usage">
+          <edgelabel>#node_</edgelabel>
         </childnode>
       </node>
-      <node id="34">
+      <node id="57">
+        <label>PortLinks&lt; double &gt;</label>
+        <link refid="class_port_links"/>
+        <childnode refid="58" relation="usage">
+          <edgelabel>#linked_to_</edgelabel>
+        </childnode>
+        <childnode refid="49" relation="usage">
+          <edgelabel>#port_</edgelabel>
+        </childnode>
+      </node>
+      <node id="56">
+        <label>std::map&lt; std::string, std::shared_ptr&lt; Port &gt; &gt;</label>
+        <childnode refid="53" relation="usage">
+          <edgelabel>+keys</edgelabel>
+        </childnode>
+      </node>
+      <node id="50">
+        <label>ValuePort</label>
+        <link refid="class_value_port"/>
+        <childnode refid="51" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="55">
+        <label>Node</label>
+        <link refid="class_node"/>
+        <childnode refid="52" relation="public-inheritance">
+        </childnode>
+        <childnode refid="53" relation="usage">
+          <edgelabel>#callback</edgelabel>
+          <edgelabel>#callback_type_string</edgelabel>
+        </childnode>
+        <childnode refid="56" relation="usage">
+          <edgelabel>#out_</edgelabel>
+          <edgelabel>#in_</edgelabel>
+        </childnode>
+      </node>
+      <node id="54">
+        <label>std::basic_string&lt; char &gt;</label>
+      </node>
+      <node id="58">
+        <label>std::vector&lt; Port *&gt;</label>
+        <childnode refid="49" relation="usage">
+          <edgelabel>+elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="49">
+        <label>Port</label>
+        <link refid="class_port"/>
+        <childnode refid="50" relation="public-inheritance">
+        </childnode>
+        <childnode refid="57" relation="usage">
+          <edgelabel>+port_links</edgelabel>
+        </childnode>
+      </node>
+      <node id="52">
         <label>MongoObject</label>
         <link refid="class_mongo_object"/>
-        <childnode refid="35" relation="usage">
+        <childnode refid="53" relation="usage">
           <edgelabel>#db_string</edgelabel>
           <edgelabel>#collection_string</edgelabel>
           <edgelabel>#app_string</edgelabel>
@@ -503,18 +321,18 @@
           <edgelabel>#uri_string</edgelabel>
         </childnode>
       </node>
-      <node id="35">
+      <node id="53">
         <label>std::string</label>
-        <childnode refid="36" relation="public-inheritance">
+        <childnode refid="54" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/Port.h" line="11" column="1" bodyfile="include/Port.h" bodystart="10" bodyend="158"/>
+    <location file="include/Port.h" line="111" column="1" bodyfile="include/Port.h" bodystart="110" bodyend="166"/>
     <listofallmembers>
       <member refid="class_mongo_object_1ace5148b45dd674c73077a044d0233ed8" prot="protected" virt="non-virtual"><scope>Port</scope><name>app_string</name></member>
       <member refid="class_mongo_object_1a56dccd703ae3e3e2193d57d31df12fd0" prot="protected" virt="non-virtual"><scope>Port</scope><name>append_number_array</name></member>
       <member refid="class_mongo_object_1ab659c54f28b5e13c6cb2fc0fc8ad4635" prot="protected" virt="non-virtual"><scope>Port</scope><name>append_string</name></member>
-      <member refid="class_port_1a74424ff98ddbc87f1cc6037268cd9fff" prot="private" virt="non-virtual"><scope>Port</scope><name>buff_double_vector_</name></member>
+      <member refid="class_base_port_1a3c74a1795503e96b36842bf4fb27a484" prot="public" virt="non-virtual"><scope>Port</scope><name>BasePort</name></member>
       <member refid="class_mongo_object_1a59d2d926fd2f8048b1dab88b3e1fea5b" prot="protected" virt="non-virtual"><scope>Port</scope><name>collection_string</name></member>
       <member refid="class_mongo_object_1adbb80b6af3e780c81cc455f480507749" prot="public" virt="non-virtual"><scope>Port</scope><name>connect_object_to_db</name></member>
       <member refid="class_mongo_object_1a7ef98cecb5c625a9c3e9a57373be41b8" prot="public" virt="non-virtual"><scope>Port</scope><name>connect_to_db</name></member>
@@ -527,64 +345,64 @@
       <member refid="class_mongo_object_1ae541414f753a8fd792cf0be163117b99" prot="public" virt="non-virtual"><scope>Port</scope><name>disconnect_from_db</name></member>
       <member refid="class_mongo_object_1aa143fbe117d6c12baf222be25555947b" prot="protected" virt="non-virtual"><scope>Port</scope><name>document</name></member>
       <member refid="class_mongo_object_1ae1002573afb58658162fb7f53cd0bffc" prot="public" virt="non-virtual"><scope>Port</scope><name>get_array</name></member>
-      <member refid="class_port_1a746914b62d482cc81a901d254a03c560" prot="public" virt="virtual"><scope>Port</scope><name>get_bson</name></member>
+      <member refid="class_value_port_1a9b241081b386fe6de942ffce150b7eda" prot="public" virt="virtual"><scope>Port</scope><name>get_bson</name></member>
       <member refid="class_mongo_object_1ac35c66d91e7297eb46313b98d01751cb" prot="protected" virt="non-virtual"><scope>Port</scope><name>get_bson_excluding</name></member>
       <member refid="class_mongo_object_1aaca278b427d042a63caf2962b5e76043" prot="protected" virt="non-virtual"><scope>Port</scope><name>get_bson_oid</name></member>
       <member refid="class_mongo_object_1a196ea1b747a08f7ab525b8851ebc0b51" prot="protected" virt="non-virtual"><scope>Port</scope><name>get_document</name></member>
       <member refid="class_mongo_object_1acde33629416d7f926737237264ac6ca1" prot="public" virt="non-virtual"><scope>Port</scope><name>get_json</name></member>
       <member refid="class_mongo_object_1a9f71ae755dac1db3e37cdee85329d163" prot="public" virt="non-virtual"><scope>Port</scope><name>get_json</name></member>
       <member refid="class_mongo_object_1abd49d2dcea0ce5f49ebe9a8a9df97164" prot="public" virt="virtual"><scope>Port</scope><name>get_name</name></member>
-      <member refid="class_port_1a8659a2feee31ada701589c0fb4202b5b" prot="public" virt="non-virtual"><scope>Port</scope><name>get_node</name></member>
+      <member refid="class_base_port_1aaca52e08c6fc1eec32211c1cad71213c" prot="public" virt="non-virtual"><scope>Port</scope><name>get_node</name></member>
       <member refid="class_mongo_object_1ad155a8808f999f8e3dd0cfc055b33e2a" prot="public" virt="non-virtual"><scope>Port</scope><name>get_oid</name></member>
       <member refid="class_mongo_object_1af0cf1568e5b1b87a971e93bba4ec0a40" prot="public" virt="non-virtual"><scope>Port</scope><name>get_singleton</name></member>
       <member refid="class_mongo_object_1a33799f83d7343fc5385869f5a907aeea" prot="protected" virt="non-virtual"><scope>Port</scope><name>get_string_by_key</name></member>
-      <member refid="class_port_1a82509b87aa9d775d0a40e2b446f2b7ad" prot="public" virt="non-virtual"><scope>Port</scope><name>get_value</name></member>
-      <member refid="class_port_1acc11e1890530dd4bc0b9e3c7778ef5ff" prot="public" virt="non-virtual"><scope>Port</scope><name>get_value</name></member>
+      <member refid="class_port_1acc11e1890530dd4bc0b9e3c7778ef5ff" prot="public" virt="virtual"><scope>Port</scope><name>get_value</name></member>
+      <member refid="class_port_1a82509b87aa9d775d0a40e2b446f2b7ad" prot="public" virt="virtual"><scope>Port</scope><name>get_value</name></member>
       <member refid="class_mongo_object_1ae67113e87e4dadcd51c23aa373eba61d" prot="public" virt="non-virtual"><scope>Port</scope><name>is_connected_to_db</name></member>
-      <member refid="class_port_1a7fbe40665570e0acbd7e9f6c9a8c9272" prot="public" virt="non-virtual"><scope>Port</scope><name>is_fixed</name></member>
-      <member refid="class_port_1a51a2db67f75c856f83d28cec818b0170" prot="public" virt="non-virtual"><scope>Port</scope><name>is_linked</name></member>
-      <member refid="class_port_1a0c7610af582f64a46f25f76f73de804c" prot="public" virt="non-virtual"><scope>Port</scope><name>is_output</name></member>
-      <member refid="class_port_1a1f80bb4edc0bdc8268f4c93ef618bef4" prot="public" virt="non-virtual"><scope>Port</scope><name>is_reactive</name></member>
-      <member refid="class_port_1a6100cfbf3c02b36a7ae6b9113d032752" prot="private" virt="non-virtual"><scope>Port</scope><name>is_reactive_</name></member>
+      <member refid="class_base_port_1a70e1e794dd608fbe7865a05d5133aa87" prot="public" virt="non-virtual"><scope>Port</scope><name>is_fixed</name></member>
+      <member refid="class_base_port_1a79cc42bec526d771d7439a5b3651a5c5" prot="public" virt="non-virtual"><scope>Port</scope><name>is_output</name></member>
+      <member refid="class_base_port_1a186b22bd5b356d06fbf3e6878085c173" prot="public" virt="non-virtual"><scope>Port</scope><name>is_reactive</name></member>
       <member refid="class_port_1aec33d8bfca05139b1e319f15d2b3a1b8" prot="public" virt="non-virtual"><scope>Port</scope><name>link</name></member>
-      <member refid="class_port_1a3d834bffb2dcc087fcbb33318729f02c" prot="private" virt="non-virtual"><scope>Port</scope><name>link_</name></member>
       <member refid="class_mongo_object_1ae0438efeae33db2bfeb3972e1196a8a9" prot="public" virt="non-virtual"><scope>Port</scope><name>MongoObject</name></member>
       <member refid="class_mongo_object_1a9e876f9d6e7cfcb7d4ce9046014e2b5f" prot="public" virt="non-virtual"><scope>Port</scope><name>MongoObject</name></member>
-      <member refid="class_port_1a76c9c7f9e33b7aef9b84dd005fefd08e" prot="private" virt="non-virtual"><scope>Port</scope><name>node_</name></member>
+      <member refid="class_base_port_1ac15d968db255b4b0b5b352f4488c0853" prot="protected" virt="non-virtual"><scope>Port</scope><name>node_</name></member>
       <member refid="class_mongo_object_1a451655d98b9b515d856f7178b46e4b01" prot="protected" virt="non-virtual"><scope>Port</scope><name>object_name</name></member>
       <member refid="class_mongo_object_1a020a40224a752e6036d49ec22474d616" prot="protected" virt="non-virtual"><scope>Port</scope><name>oid_document</name></member>
       <member refid="class_mongo_object_1a4905c165b7b18f471ee56f8eb3f5e0f1" prot="protected" virt="non-virtual"><scope>Port</scope><name>oid_precursor</name></member>
       <member refid="class_mongo_object_1a9592c8baaed700c358dc26025e3bf166" prot="protected" virt="non-virtual"><scope>Port</scope><name>oid_to_string</name></member>
-      <member refid="class_port_1acecdaea3f5917240a7ff36c5186b57d6" prot="public" virt="non-virtual"><scope>Port</scope><name>operator==</name></member>
-      <member refid="class_mongo_object_1a0050194f5bc8690e0db3b8217086e421" prot="public" virt="non-virtual" ambiguityscope="MongoObject::"><scope>Port</scope><name>operator==</name></member>
+      <member refid="class_mongo_object_1a0050194f5bc8690e0db3b8217086e421" prot="public" virt="non-virtual"><scope>Port</scope><name>operator==</name></member>
       <member refid="class_mongo_object_1a89f7e282816b6dd93d4df4ee7ca9bd0a" prot="public" virt="virtual"><scope>Port</scope><name>operator[]</name></member>
       <member refid="class_port_1a2cfb70a4b6d730e715042d646ec1d960" prot="public" virt="non-virtual"><scope>Port</scope><name>Port</name></member>
       <member refid="class_port_1abc59e965682f281264a8488a46408a6f" prot="public" virt="non-virtual"><scope>Port</scope><name>Port</name></member>
       <member refid="class_port_1a7eb1db139cc954b15e0d182ad3244067" prot="public" virt="non-virtual"><scope>Port</scope><name>Port</name></member>
-      <member refid="class_port_1a952b0b030c884147a36be7a04eb22183" prot="public" virt="virtual"><scope>Port</scope><name>read_from_db</name></member>
-      <member refid="class_mongo_object_1aecd244620f292e8368d1f593925eafbd" prot="protected" virt="non-virtual" ambiguityscope="MongoObject::"><scope>Port</scope><name>read_from_db</name></member>
+      <member refid="class_port_1a7e6cb81c715e20f7432d6c78a9e3c269" prot="public" virt="non-virtual"><scope>Port</scope><name>port_links</name></member>
+      <member refid="class_value_port_1aacece741e134ac67f447e7e1d0822bca" prot="public" virt="virtual"><scope>Port</scope><name>read_from_db</name></member>
+      <member refid="class_mongo_object_1aecd244620f292e8368d1f593925eafbd" prot="protected" virt="non-virtual" ambiguityscope="BasePort::"><scope>Port</scope><name>read_from_db</name></member>
       <member refid="class_mongo_object_1adce8ffc4811a9d1c94701711f574bc34" prot="public" virt="non-virtual"><scope>Port</scope><name>read_json</name></member>
       <member refid="class_mongo_object_1ac251f38eef739fb9e1418a20e7fcc7f7" prot="public" virt="non-virtual"><scope>Port</scope><name>set_array</name></member>
       <member refid="class_mongo_object_1adb597533d8e167c3d6bafd28baef349c" prot="protected" virt="non-virtual"><scope>Port</scope><name>set_document</name></member>
       <member refid="class_mongo_object_1ae51714acc607a67518862306fac509ee" prot="protected" virt="non-virtual"><scope>Port</scope><name>set_document</name></member>
-      <member refid="class_port_1af913356cf60ebe37fb03d213db73b1bc" prot="public" virt="non-virtual"><scope>Port</scope><name>set_fixed</name></member>
-      <member refid="class_port_1ae2808ef3b67c3dd01222aee10e35f6cd" prot="public" virt="non-virtual"><scope>Port</scope><name>set_is_reactive</name></member>
+      <member refid="class_base_port_1a88f22c72f159dbb81735baec6d058e74" prot="public" virt="non-virtual"><scope>Port</scope><name>set_fixed</name></member>
       <member refid="class_mongo_object_1ac999ffe6b9b2ca261adff1eaf9da7e98" prot="public" virt="non-virtual"><scope>Port</scope><name>set_name</name></member>
-      <member refid="class_port_1a5dfef60c4b30386e97d2829a23a0d3d3" prot="public" virt="non-virtual"><scope>Port</scope><name>set_node</name></member>
+      <member refid="class_base_port_1a94e87d11496d6986f7ecbd11cd0be142" prot="public" virt="non-virtual"><scope>Port</scope><name>set_node</name></member>
       <member refid="class_mongo_object_1a9e80e38e5a4f40754ef48f2504e1613c" prot="public" virt="non-virtual"><scope>Port</scope><name>set_oid</name></member>
-      <member refid="class_port_1ab35e1343f0db5a0b258d9541958324bc" prot="public" virt="non-virtual"><scope>Port</scope><name>set_port_type</name></member>
+      <member refid="class_base_port_1a7e01f7583ecc0ca88854e9f4c91b05a3" prot="public" virt="non-virtual"><scope>Port</scope><name>set_port_type</name></member>
+      <member refid="class_base_port_1abb5bc5d7ee3473348b12a1cfb5ee0534" prot="public" virt="non-virtual"><scope>Port</scope><name>set_reactive</name></member>
       <member refid="class_mongo_object_1a03a0d78b1f206aca81ff746edcd57c81" prot="public" virt="non-virtual"><scope>Port</scope><name>set_singleton</name></member>
-      <member refid="class_port_1a18b368a7d48acb802b6671693f54adcb" prot="public" virt="non-virtual"><scope>Port</scope><name>set_value</name></member>
-      <member refid="class_port_1a664dff6ffb75509465fca1bd89f67ab2" prot="public" virt="non-virtual"><scope>Port</scope><name>set_value</name></member>
-      <member refid="class_port_1a28311c7a8fe9e2838aa8ae63a37d2d9a" prot="public" virt="non-virtual"><scope>Port</scope><name>set_value</name></member>
+      <member refid="class_port_1a18b368a7d48acb802b6671693f54adcb" prot="public" virt="virtual"><scope>Port</scope><name>set_value</name></member>
+      <member refid="class_port_1a28311c7a8fe9e2838aa8ae63a37d2d9a" prot="public" virt="virtual"><scope>Port</scope><name>set_value</name></member>
       <member refid="class_mongo_object_1ae9bff3fe8b82864f36e6cb7aa8f159b0" prot="protected" virt="non-virtual"><scope>Port</scope><name>string_to_oid</name></member>
       <member refid="class_mongo_object_1a0ced4ff82fbee4e7213715994d690380" prot="protected" virt="non-virtual"><scope>Port</scope><name>time_of_death</name></member>
-      <member refid="class_port_1aa6a264b13dc26edd20a2726c9466186c" prot="public" virt="non-virtual"><scope>Port</scope><name>unlink</name></member>
+      <member refid="class_port_1a9a9f8bbbde14187dfb55ef6fbc27492b" prot="public" virt="non-virtual"><scope>Port</scope><name>unlink</name></member>
       <member refid="class_mongo_object_1a71e3fa5196ad3b496d0aa326d61e84e8" prot="protected" virt="non-virtual"><scope>Port</scope><name>uri_string</name></member>
-      <member refid="class_port_1a052c0ba97e0a53e45d973d4bc31fa615" prot="public" virt="virtual"><scope>Port</scope><name>write_to_db</name></member>
-      <member refid="class_mongo_object_1ab43c880a2ae99890946e7edf3d232e5a" prot="protected" virt="non-virtual" ambiguityscope="MongoObject::"><scope>Port</scope><name>write_to_db</name></member>
+      <member refid="class_value_port_1a2b8ea29b3a76a40ebc9118991d638b20" prot="public" virt="non-virtual"><scope>Port</scope><name>ValuePort</name></member>
+      <member refid="class_value_port_1aa554ab6d4538a347bfdf78b83cd786ee" prot="public" virt="non-virtual"><scope>Port</scope><name>ValuePort</name></member>
+      <member refid="class_value_port_1aca41070715bc1b9e0efa56741bb25fef" prot="public" virt="non-virtual"><scope>Port</scope><name>ValuePort</name></member>
+      <member refid="class_value_port_1a85845e2f4ee6cd21ffcd3942e60886ea" prot="public" virt="virtual"><scope>Port</scope><name>write_to_db</name></member>
+      <member refid="class_mongo_object_1ab43c880a2ae99890946e7edf3d232e5a" prot="protected" virt="non-virtual" ambiguityscope="BasePort::"><scope>Port</scope><name>write_to_db</name></member>
       <member refid="class_mongo_object_1ac1aba6b5189bca3feb08a698a01c1c30" prot="public" virt="non-virtual"><scope>Port</scope><name>~MongoObject</name></member>
-      <member refid="class_port_1aff000f05612ddb41fec4bff9087bb643" prot="public" virt="non-virtual"><scope>Port</scope><name>~Port</name></member>
+      <member refid="class_port_1afe166c2a6b10ad34d47472a150366bc1" prot="public" virt="non-virtual"><scope>Port</scope><name>~Port</name></member>
+      <member refid="class_value_port_1a12c448537833e3a7fca772c4a076131b" prot="public" virt="non-virtual"><scope>Port</scope><name>~ValuePort</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['decay',['Decay',['../class_decay.html',1,'']]]
+  ['curve',['Curve',['../class_curve.html',1,'']]]
 ];

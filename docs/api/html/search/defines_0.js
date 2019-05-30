@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['max',['MAX',['../_functions_8h.html#afa99ec4acc4ecb2dc3c2d05da15d0e3f',1,'Functions.h']]],
-  ['min',['MIN',['../_functions_8h.html#a3acffbd305ee72dcd4593c0d8af64a4f',1,'Functions.h']]]
+  ['chinet_5fdebug',['CHINET_DEBUG',['../_mongo_object_8h.html#af3a3aaab9e3e74f475e23a717d896e9e',1,'MongoObject.h']]]
 ];

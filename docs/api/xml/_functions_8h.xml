@@ -9,10 +9,26 @@
     <includes local="no">chrono</includes>
     <includes local="no">bson.h</includes>
     <includedby refid="_curve_8h" local="no">include/Curve.h</includedby>
-    <includedby refid="_decay_8h" local="no">include/Decay.h</includedby>
+    <includedby refid="_exponential_decay_8h" local="no">include/ExponentialDecay.h</includedby>
     <includedby refid="_mongo_object_8h" local="yes">include/MongoObject.h</includedby>
     <includedby refid="_node_callback_8h" local="no">include/NodeCallback.h</includedby>
     <incdepgraph>
+      <node id="24">
+        <label>include/Functions.h</label>
+        <link refid="_functions_8h"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+      </node>
       <node id="25">
         <label>vector</label>
       </node>
@@ -31,31 +47,13 @@
       <node id="26">
         <label>algorithm</label>
       </node>
-      <node id="24">
-        <label>include/Functions.h</label>
-        <link refid="_functions_8h"/>
-        <childnode refid="25" relation="include">
-        </childnode>
-        <childnode refid="26" relation="include">
-        </childnode>
-        <childnode refid="27" relation="include">
-        </childnode>
-        <childnode refid="28" relation="include">
-        </childnode>
-        <childnode refid="29" relation="include">
-        </childnode>
-        <childnode refid="30" relation="include">
-        </childnode>
-      </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="38">
-        <label>include/Session.h</label>
-        <link refid="_session_8h"/>
-      </node>
-      <node id="33">
-        <label>include/Decay.h</label>
-        <link refid="_decay_8h"/>
+      <node id="32">
+        <label>include/Curve.h</label>
+        <link refid="_curve_8h"/>
+        <childnode refid="33" relation="include">
+        </childnode>
       </node>
       <node id="36">
         <label>include/Port.h</label>
@@ -66,36 +64,12 @@
         </childnode>
         <childnode refid="38" relation="include">
         </childnode>
-      </node>
-      <node id="35">
-        <label>include/Node.h</label>
-        <link refid="_node_8h"/>
-        <childnode refid="36" relation="include">
-        </childnode>
-        <childnode refid="37" relation="include">
-        </childnode>
-        <childnode refid="38" relation="include">
+        <childnode refid="39" relation="include">
         </childnode>
       </node>
-      <node id="37">
-        <label>include/NodeCallback.h</label>
-        <link refid="_node_callback_8h"/>
-        <childnode refid="35" relation="include">
-        </childnode>
-      </node>
-      <node id="34">
-        <label>include/MongoObject.h</label>
-        <link refid="_mongo_object_8h"/>
-        <childnode refid="35" relation="include">
-        </childnode>
-        <childnode refid="38" relation="include">
-        </childnode>
-      </node>
-      <node id="32">
-        <label>include/Curve.h</label>
-        <link refid="_curve_8h"/>
-        <childnode refid="33" relation="include">
-        </childnode>
+      <node id="33">
+        <label>include/ExponentialDecay.h</label>
+        <link refid="_exponential_decay_8h"/>
       </node>
       <node id="31">
         <label>include/Functions.h</label>
@@ -107,6 +81,40 @@
         <childnode refid="34" relation="include">
         </childnode>
         <childnode refid="37" relation="include">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>include/MongoObject.h</label>
+        <link refid="_mongo_object_8h"/>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>include/PortLinks.h</label>
+        <link refid="_port_links_8h"/>
+        <childnode refid="36" relation="include">
+        </childnode>
+      </node>
+      <node id="35">
+        <label>include/Node.h</label>
+        <link refid="_node_8h"/>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>include/Session.h</label>
+        <link refid="_session_8h"/>
+      </node>
+      <node id="37">
+        <label>include/NodeCallback.h</label>
+        <link refid="_node_callback_8h"/>
+        <childnode refid="35" relation="include">
         </childnode>
       </node>
     </invincdepgraph>

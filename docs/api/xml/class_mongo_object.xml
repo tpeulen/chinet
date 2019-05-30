@@ -2,8 +2,8 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
   <compounddef id="class_mongo_object" kind="class" language="C++" prot="public">
     <compoundname>MongoObject</compoundname>
+    <derivedcompoundref refid="class_base_port" prot="public" virt="non-virtual">BasePort</derivedcompoundref>
     <derivedcompoundref refid="class_node" prot="public" virt="non-virtual">Node</derivedcompoundref>
-    <derivedcompoundref refid="class_port" prot="public" virt="non-virtual">Port</derivedcompoundref>
     <derivedcompoundref refid="class_session" prot="public" virt="non-virtual">Session</derivedcompoundref>
     <includes refid="_mongo_object_8h" local="no">MongoObject.h</includes>
       <sectiondef kind="private-attrib">
@@ -18,7 +18,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="22" column="1" bodyfile="include/MongoObject.h" bodystart="22" bodyend="-1"/>
+        <location file="include/MongoObject.h" line="23" column="1" bodyfile="include/MongoObject.h" bodystart="23" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_mongo_object_1a7d9903e2a40fce71e60c52264f6ce2e1" prot="private" static="no" mutable="no">
         <type>mongoc_uri_t *</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="24" column="1" bodyfile="include/MongoObject.h" bodystart="24" bodyend="-1"/>
+        <location file="include/MongoObject.h" line="25" column="1" bodyfile="include/MongoObject.h" bodystart="25" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_mongo_object_1a42cf937e680e83b359e1d2f5aa4ab2e4" prot="private" static="no" mutable="no">
         <type>mongoc_client_t *</type>
@@ -44,7 +44,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="25" column="1" bodyfile="include/MongoObject.h" bodystart="25" bodyend="-1"/>
+        <location file="include/MongoObject.h" line="26" column="1" bodyfile="include/MongoObject.h" bodystart="26" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_mongo_object_1a211f47c905388267631655e17bac6232" prot="private" static="no" mutable="no">
         <type>bson_error_t</type>
@@ -57,7 +57,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="26" column="1" bodyfile="include/MongoObject.h" bodystart="26" bodyend="-1"/>
+        <location file="include/MongoObject.h" line="27" column="1" bodyfile="include/MongoObject.h" bodystart="27" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_mongo_object_1a27cc8f4cb4aa6f6bdc5fd64e78d03dd7" prot="private" static="no" mutable="no">
         <type>mongoc_collection_t *</type>
@@ -70,7 +70,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="27" column="1" bodyfile="include/MongoObject.h" bodystart="27" bodyend="-1"/>
+        <location file="include/MongoObject.h" line="28" column="1" bodyfile="include/MongoObject.h" bodystart="28" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="protected-attrib">
@@ -85,7 +85,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="32" column="1" bodyfile="include/MongoObject.h" bodystart="32" bodyend="-1"/>
+        <location file="include/MongoObject.h" line="33" column="1" bodyfile="include/MongoObject.h" bodystart="33" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_mongo_object_1aa143fbe117d6c12baf222be25555947b" prot="protected" static="no" mutable="no">
         <type>bson_t</type>
@@ -98,7 +98,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="34" column="1" bodyfile="include/MongoObject.h" bodystart="34" bodyend="-1"/>
+        <location file="include/MongoObject.h" line="35" column="1" bodyfile="include/MongoObject.h" bodystart="35" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_mongo_object_1a71e3fa5196ad3b496d0aa326d61e84e8" prot="protected" static="no" mutable="no">
         <type>std::string</type>
@@ -111,7 +111,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="36" column="1" bodyfile="include/MongoObject.h" bodystart="36" bodyend="-1"/>
+        <location file="include/MongoObject.h" line="37" column="1" bodyfile="include/MongoObject.h" bodystart="37" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_mongo_object_1a215dc4379af5ac81e19d245f5d5d37e0" prot="protected" static="no" mutable="no">
         <type>std::string</type>
@@ -124,7 +124,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="37" column="1" bodyfile="include/MongoObject.h" bodystart="37" bodyend="-1"/>
+        <location file="include/MongoObject.h" line="38" column="1" bodyfile="include/MongoObject.h" bodystart="38" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_mongo_object_1ace5148b45dd674c73077a044d0233ed8" prot="protected" static="no" mutable="no">
         <type>std::string</type>
@@ -137,7 +137,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="38" column="1" bodyfile="include/MongoObject.h" bodystart="38" bodyend="-1"/>
+        <location file="include/MongoObject.h" line="39" column="1" bodyfile="include/MongoObject.h" bodystart="39" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_mongo_object_1a59d2d926fd2f8048b1dab88b3e1fea5b" prot="protected" static="no" mutable="no">
         <type>std::string</type>
@@ -150,7 +150,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="39" column="1" bodyfile="include/MongoObject.h" bodystart="39" bodyend="-1"/>
+        <location file="include/MongoObject.h" line="40" column="1" bodyfile="include/MongoObject.h" bodystart="40" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_mongo_object_1a020a40224a752e6036d49ec22474d616" prot="protected" static="no" mutable="no">
         <type>bson_oid_t</type>
@@ -163,7 +163,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="41" column="1" bodyfile="include/MongoObject.h" bodystart="41" bodyend="-1"/>
+        <location file="include/MongoObject.h" line="42" column="1" bodyfile="include/MongoObject.h" bodystart="42" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_mongo_object_1a4905c165b7b18f471ee56f8eb3f5e0f1" prot="protected" static="no" mutable="no">
         <type>bson_oid_t</type>
@@ -176,7 +176,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="42" column="1" bodyfile="include/MongoObject.h" bodystart="42" bodyend="-1"/>
+        <location file="include/MongoObject.h" line="43" column="1" bodyfile="include/MongoObject.h" bodystart="43" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_mongo_object_1a0ced4ff82fbee4e7213715994d690380" prot="protected" static="no" mutable="no">
         <type>uint64_t</type>
@@ -189,7 +189,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="43" column="1" bodyfile="include/MongoObject.h" bodystart="43" bodyend="-1"/>
+        <location file="include/MongoObject.h" line="44" column="1" bodyfile="include/MongoObject.h" bodystart="44" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="protected-func">
@@ -204,7 +204,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="48" column="1"/>
+        <location file="include/MongoObject.h" line="49" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1ac21cbe104a818f7e6ee7dcfbb521e9e1" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>bson_t</type>
@@ -213,14 +213,14 @@
         <name>get_bson</name>
         <reimplementedby refid="class_session_1aa517fe6138a0cc32e27ddf1eb7331520">get_bson</reimplementedby>
         <reimplementedby refid="class_node_1a9568e1bba3436d78e77862902e328592">get_bson</reimplementedby>
-        <reimplementedby refid="class_port_1a746914b62d482cc81a901d254a03c560">get_bson</reimplementedby>
+        <reimplementedby refid="class_value_port_1a9b241081b386fe6de942ffce150b7eda">get_bson</reimplementedby>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="50" column="1"/>
+        <location file="include/MongoObject.h" line="51" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1ac35c66d91e7297eb46313b98d01751cb" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bson_t</type>
@@ -240,7 +240,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="52" column="1"/>
+        <location file="include/MongoObject.h" line="53" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1a196ea1b747a08f7ab525b8851ebc0b51" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>const bson_t *</type>
@@ -253,7 +253,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="54" column="1"/>
+        <location file="include/MongoObject.h" line="55" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1adb597533d8e167c3d6bafd28baef349c" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>const void</type>
@@ -270,7 +270,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="56" column="1" bodyfile="include/MongoObject.h" bodystart="56" bodyend="58"/>
+        <location file="include/MongoObject.h" line="57" column="1" bodyfile="include/MongoObject.h" bodystart="57" bodyend="59"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1ae51714acc607a67518862306fac509ee" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>const void</type>
@@ -287,7 +287,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="60" column="1" bodyfile="include/MongoObject.h" bodystart="60" bodyend="63"/>
+        <location file="include/MongoObject.h" line="61" column="1" bodyfile="include/MongoObject.h" bodystart="61" bodyend="64"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1ab43c880a2ae99890946e7edf3d232e5a" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -325,7 +325,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="77" column="1"/>
+        <location file="include/MongoObject.h" line="78" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1aecd244620f292e8368d1f593925eafbd" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -338,7 +338,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="79" column="1"/>
+        <location file="include/MongoObject.h" line="80" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1ae8d85ac8089beca73773bd6189a2530c" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -368,7 +368,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="82" column="1" bodyfile="include/MongoObject.h" bodystart="82" bodyend="94"/>
+        <location file="include/MongoObject.h" line="83" column="1" bodyfile="include/MongoObject.h" bodystart="83" bodyend="95"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1a56dccd703ae3e3e2193d57d31df12fd0" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -398,7 +398,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="97" column="1" bodyfile="include/MongoObject.h" bodystart="97" bodyend="118"/>
+        <location file="include/MongoObject.h" line="98" column="1" bodyfile="include/MongoObject.h" bodystart="98" bodyend="119"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1a0b94ea01312b792e42b944399a4eb45c" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -428,7 +428,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="121" column="1" bodyfile="include/MongoObject.h" bodystart="121" bodyend="133"/>
+        <location file="include/MongoObject.h" line="122" column="1" bodyfile="include/MongoObject.h" bodystart="122" bodyend="134"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1ab879c65bc54d59dc56cc0ca652756e10" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -458,7 +458,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="136" column="1" bodyfile="include/MongoObject.h" bodystart="136" bodyend="173"/>
+        <location file="include/MongoObject.h" line="137" column="1" bodyfile="include/MongoObject.h" bodystart="137" bodyend="174"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1a830f8d398209664c866f2c437667cc5a" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -488,7 +488,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="176" column="1" bodyfile="include/MongoObject.h" bodystart="176" bodyend="209"/>
+        <location file="include/MongoObject.h" line="177" column="1" bodyfile="include/MongoObject.h" bodystart="177" bodyend="210"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="protected-static-func">
@@ -520,7 +520,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="211" column="1"/>
+        <location file="include/MongoObject.h" line="212" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1a33799f83d7343fc5385869f5a907aeea" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>const std::string</type>
@@ -541,7 +541,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="213" column="1"/>
+        <location file="include/MongoObject.h" line="214" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1a9592c8baaed700c358dc26025e3bf166" prot="protected" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>std::string</type>
@@ -558,7 +558,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="215" column="1" bodyfile="include/MongoObject.h" bodystart="215" bodyend="219"/>
+        <location file="include/MongoObject.h" line="216" column="1" bodyfile="include/MongoObject.h" bodystart="216" bodyend="220"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1ae9bff3fe8b82864f36e6cb7aa8f159b0" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -579,7 +579,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="221" column="1"/>
+        <location file="include/MongoObject.h" line="222" column="1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -594,7 +594,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="225" column="1"/>
+        <location file="include/MongoObject.h" line="226" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1a9e876f9d6e7cfcb7d4ce9046014e2b5f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -611,7 +611,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="226" column="1"/>
+        <location file="include/MongoObject.h" line="227" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1ac1aba6b5189bca3feb08a698a01c1c30" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -624,7 +624,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="227" column="1"/>
+        <location file="include/MongoObject.h" line="228" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1a7ef98cecb5c625a9c3e9a57373be41b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -683,7 +683,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="238" column="1"/>
+        <location file="include/MongoObject.h" line="239" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1adbb80b6af3e780c81cc455f480507749" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -705,7 +705,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="246" column="1" bodyfile="include/MongoObject.h" bodystart="246" bodyend="253"/>
+        <location file="include/MongoObject.h" line="247" column="1" bodyfile="include/MongoObject.h" bodystart="247" bodyend="254"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1ae541414f753a8fd792cf0be163117b99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -718,7 +718,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="256" column="1"/>
+        <location file="include/MongoObject.h" line="257" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1ae67113e87e4dadcd51c23aa373eba61d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -731,7 +731,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="259" column="1"/>
+        <location file="include/MongoObject.h" line="260" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1a65971bad07dce8b649820f9dee5d0ae8" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>bool</type>
@@ -740,14 +740,14 @@
         <name>write_to_db</name>
         <reimplementedby refid="class_session_1a513e5436b4c990985300246bb39d9f5c">write_to_db</reimplementedby>
         <reimplementedby refid="class_node_1ad5cacb320e423275faef1bfc8c7a365b">write_to_db</reimplementedby>
-        <reimplementedby refid="class_port_1a052c0ba97e0a53e45d973d4bc31fa615">write_to_db</reimplementedby>
+        <reimplementedby refid="class_value_port_1a85845e2f4ee6cd21ffcd3942e60886ea">write_to_db</reimplementedby>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="261" column="1"/>
+        <location file="include/MongoObject.h" line="262" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1ad5165ed92020fba7d502a3556794ab4f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::string</type>
@@ -760,16 +760,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="263" column="1"/>
+        <location file="include/MongoObject.h" line="264" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1a729412e226c9964e13ba80688c3f5e00" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>bool</type>
         <definition>virtual bool MongoObject::read_from_db</definition>
         <argsstring>(const std::string &amp;oid_string)</argsstring>
         <name>read_from_db</name>
-        <reimplementedby refid="class_node_1a60c605aced4420d3d6f6fe54b5a5b6bb">read_from_db</reimplementedby>
         <reimplementedby refid="class_session_1a4f09644fd155a1d5640cedefe4aa42fc">read_from_db</reimplementedby>
-        <reimplementedby refid="class_port_1a952b0b030c884147a36be7a04eb22183">read_from_db</reimplementedby>
+        <reimplementedby refid="class_node_1a60c605aced4420d3d6f6fe54b5a5b6bb">read_from_db</reimplementedby>
+        <reimplementedby refid="class_value_port_1aacece741e134ac67f447e7e1d0822bca">read_from_db</reimplementedby>
         <param>
           <type>const std::string &amp;</type>
           <declname>oid_string</declname>
@@ -780,7 +780,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="265" column="1"/>
+        <location file="include/MongoObject.h" line="266" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1acde33629416d7f926737237264ac6ca1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::string</type>
@@ -793,7 +793,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="267" column="1"/>
+        <location file="include/MongoObject.h" line="268" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1adce8ffc4811a9d1c94701711f574bc34" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -810,7 +810,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="269" column="1"/>
+        <location file="include/MongoObject.h" line="270" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1ad155a8808f999f8e3dd0cfc055b33e2a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::string</type>
@@ -823,7 +823,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="271" column="1"/>
+        <location file="include/MongoObject.h" line="272" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1ac999ffe6b9b2ca261adff1eaf9da7e98" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -840,7 +840,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="273" column="1" bodyfile="include/MongoObject.h" bodystart="273" bodyend="275"/>
+        <location file="include/MongoObject.h" line="274" column="1" bodyfile="include/MongoObject.h" bodystart="274" bodyend="276"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1abd49d2dcea0ce5f49ebe9a8a9df97164" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
         <type>std::string</type>
@@ -854,7 +854,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="277" column="1" bodyfile="include/MongoObject.h" bodystart="277" bodyend="279"/>
+        <location file="include/MongoObject.h" line="278" column="1" bodyfile="include/MongoObject.h" bodystart="278" bodyend="280"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1af0cf1568e5b1b87a971e93bba4ec0a40" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -876,7 +876,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="282" column="1" bodyfile="include/MongoObject.h" bodystart="282" bodyend="304"/>
+        <location file="include/MongoObject.h" line="283" column="1" bodyfile="include/MongoObject.h" bodystart="283" bodyend="305"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1a03a0d78b1f206aca81ff746edcd57c81" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -902,7 +902,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="307" column="1" bodyfile="include/MongoObject.h" bodystart="307" bodyend="333"/>
+        <location file="include/MongoObject.h" line="308" column="1" bodyfile="include/MongoObject.h" bodystart="308" bodyend="334"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1a9e80e38e5a4f40754ef48f2504e1613c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -923,7 +923,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="335" column="1"/>
+        <location file="include/MongoObject.h" line="336" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1ae1002573afb58658162fb7f53cd0bffc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -945,7 +945,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="338" column="1" bodyfile="include/MongoObject.h" bodystart="338" bodyend="379"/>
+        <location file="include/MongoObject.h" line="339" column="1" bodyfile="include/MongoObject.h" bodystart="339" bodyend="380"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1ac251f38eef739fb9e1418a20e7fcc7f7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -971,7 +971,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="382" column="1" bodyfile="include/MongoObject.h" bodystart="382" bodyend="391"/>
+        <location file="include/MongoObject.h" line="383" column="1" bodyfile="include/MongoObject.h" bodystart="383" bodyend="392"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1a9f71ae755dac1db3e37cdee85329d163" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>std::string</type>
@@ -988,7 +988,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="393" column="1" bodyfile="include/MongoObject.h" bodystart="393" bodyend="421"/>
+        <location file="include/MongoObject.h" line="394" column="1" bodyfile="include/MongoObject.h" bodystart="394" bodyend="422"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1a89f7e282816b6dd93d4df4ee7ca9bd0a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>std::shared_ptr&lt; <ref refid="class_mongo_object" kindref="compound">MongoObject</ref> &gt;</type>
@@ -1005,7 +1005,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="426" column="1"/>
+        <location file="include/MongoObject.h" line="427" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_mongo_object_1a0050194f5bc8690e0db3b8217086e421" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -1022,7 +1022,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/MongoObject.h" line="428" column="1" bodyfile="include/MongoObject.h" bodystart="428" bodyend="433"/>
+        <location file="include/MongoObject.h" line="429" column="1" bodyfile="include/MongoObject.h" bodystart="429" bodyend="434"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -1030,37 +1030,49 @@
     <detaileddescription>
 <para>Returns true if the instance of the to the DB.</para><para>Disconnects the the DB. </para>    </detaileddescription>
     <inheritancegraph>
-      <node id="14">
+      <node id="26">
+        <label>BasePort</label>
+        <link refid="class_base_port"/>
+        <childnode refid="25" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>ValuePort</label>
+        <link refid="class_value_port"/>
+        <childnode refid="26" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="29">
         <label>Node</label>
         <link refid="class_node"/>
-        <childnode refid="13" relation="public-inheritance">
+        <childnode refid="25" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="15">
+      <node id="28">
         <label>Port</label>
         <link refid="class_port"/>
-        <childnode refid="13" relation="public-inheritance">
+        <childnode refid="27" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="13">
+      <node id="25">
         <label>MongoObject</label>
         <link refid="class_mongo_object"/>
       </node>
-      <node id="16">
+      <node id="30">
         <label>Session</label>
         <link refid="class_session"/>
-        <childnode refid="13" relation="public-inheritance">
+        <childnode refid="25" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="19">
+      <node id="33">
         <label>std::basic_string&lt; char &gt;</label>
       </node>
-      <node id="17">
+      <node id="31">
         <label>MongoObject</label>
         <link refid="class_mongo_object"/>
-        <childnode refid="18" relation="usage">
+        <childnode refid="32" relation="usage">
           <edgelabel>#db_string</edgelabel>
           <edgelabel>#collection_string</edgelabel>
           <edgelabel>#app_string</edgelabel>
@@ -1068,13 +1080,13 @@
           <edgelabel>#uri_string</edgelabel>
         </childnode>
       </node>
-      <node id="18">
+      <node id="32">
         <label>std::string</label>
-        <childnode refid="19" relation="public-inheritance">
+        <childnode refid="33" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/MongoObject.h" line="18" column="1" bodyfile="include/MongoObject.h" bodystart="18" bodyend="435"/>
+    <location file="include/MongoObject.h" line="19" column="1" bodyfile="include/MongoObject.h" bodystart="19" bodyend="436"/>
     <listofallmembers>
       <member refid="class_mongo_object_1ace5148b45dd674c73077a044d0233ed8" prot="protected" virt="non-virtual"><scope>MongoObject</scope><name>app_string</name></member>
       <member refid="class_mongo_object_1a56dccd703ae3e3e2193d57d31df12fd0" prot="protected" virt="non-virtual"><scope>MongoObject</scope><name>append_number_array</name></member>

@@ -4,6 +4,7 @@ var searchData=
   ['callback_5fclass',['callback_class',['../class_node.html#a9bc5e92a6565a4addbbcadea93889e85',1,'Node']]],
   ['callback_5ftype',['callback_type',['../class_node.html#a290c95a63ae639d150355764ea1f4b54',1,'Node']]],
   ['callback_5ftype_5fstring',['callback_type_string',['../class_node.html#aa6465260fcaaecbb7bc8847dbbeb3ba6',1,'Node']]],
+  ['chinet_5fdebug',['CHINET_DEBUG',['../_mongo_object_8h.html#af3a3aaab9e3e74f475e23a717d896e9e',1,'MongoObject.h']]],
   ['collection_5fstring',['collection_string',['../class_mongo_object.html#a59d2d926fd2f8048b1dab88b3e1fea5b',1,'MongoObject']]],
   ['connect_5fobject_5fto_5fdb',['connect_object_to_db',['../class_mongo_object.html#adbb80b6af3e780c81cc455f480507749',1,'MongoObject']]],
   ['connect_5fto_5fdb',['connect_to_db',['../class_mongo_object.html#a7ef98cecb5c625a9c3e9a57373be41b8',1,'MongoObject']]],
@@ -17,8 +18,10 @@ var searchData=
   ['create_5fand_5fconnect_5fobjects_5ffrom_5foid_5farray',['create_and_connect_objects_from_oid_array',['../class_mongo_object.html#a830f8d398209664c866f2c437667cc5a',1,'MongoObject']]],
   ['create_5fand_5fconnect_5fobjects_5ffrom_5foid_5fdoc',['create_and_connect_objects_from_oid_doc',['../class_mongo_object.html#ab879c65bc54d59dc56cc0ca652756e10',1,'MongoObject']]],
   ['create_5fcopy',['create_copy',['../class_mongo_object.html#ad5165ed92020fba7d502a3556794ab4f',1,'MongoObject']]],
+  ['create_5fnode',['create_node',['../class_session.html#aa546642e267c2117abaee79025d6e1a8',1,'Session::create_node(json node_template, std::string node_key)'],['../class_session.html#a4829a2015ef1ceaf78c49c953b54258e',1,'Session::create_node(char *node_template, char *charnode_key)']]],
   ['create_5foid_5farray_5fin_5fdoc',['create_oid_array_in_doc',['../class_mongo_object.html#a0b94ea01312b792e42b944399a4eb45c',1,'MongoObject']]],
   ['create_5foid_5fdict_5fin_5fdoc',['create_oid_dict_in_doc',['../class_mongo_object.html#ae8d85ac8089beca73773bd6189a2530c',1,'MongoObject']]],
+  ['create_5fport',['create_port',['../class_session.html#abba77e16f30f13cb1b907066c672dd72',1,'Session::create_port(json port_template, std::string port_key)'],['../class_session.html#ab9bee143899cc1eb3d3cf9dcb3652f99',1,'Session::create_port(char *port_template, char *port_key)']]],
   ['curve',['Curve',['../class_curve.html',1,'Curve'],['../class_curve.html#a627534496c4472dedcb5c8bd67f579d0',1,'Curve::Curve(double *x, unsigned int nx, double *y, unsigned int ny, double *ey, unsigned int ney, std::string name_x, std::string name_y)'],['../class_curve.html#a25dc8db43ed446103e71652dd37f4822',1,'Curve::Curve(double *x, unsigned int nx, double *y, unsigned int ny, std::string name_x, std::string name_y)'],['../class_curve.html#aff266ab3a4e4d4b40555692e67c3a914',1,'Curve::Curve(double *x, unsigned int nx, double *y, unsigned int ny, double *ey, unsigned int ney)'],['../class_curve.html#a56ee024f888ced5ca73b38bde3fbc7aa',1,'Curve::Curve(double *x, unsigned int nx, double *y, unsigned int ny)'],['../class_curve.html#a5447f926f128f5eca036a89d1b1d4e3f',1,'Curve::Curve(double dt, unsigned int nx)'],['../class_curve.html#a09c87588b0ceab57603fb6e193875b20',1,'Curve::Curve()=default']]],
   ['curve_2eh',['Curve.h',['../_curve_8h.html',1,'']]],
   ['chinet',['chinet',['../index.html',1,'']]]

@@ -9,154 +9,169 @@
     <includes refid="_node_8h" local="yes">Node.h</includes>
     <includes refid="_port_8h" local="yes">Port.h</includes>
     <incdepgraph>
-      <node id="146">
+      <node id="199">
+        <label>functional</label>
+      </node>
+      <node id="185">
         <label>iterator</label>
       </node>
-      <node id="157">
-        <label>cstdint</label>
-      </node>
-      <node id="145">
-        <label>cmath</label>
-      </node>
-      <node id="137">
-        <label>include/Session.h</label>
-        <link refid="_session_8h"/>
-        <childnode refid="138" relation="include">
-        </childnode>
-        <childnode refid="139" relation="include">
-        </childnode>
-        <childnode refid="140" relation="include">
-        </childnode>
-        <childnode refid="141" relation="include">
-        </childnode>
-        <childnode refid="153" relation="include">
-        </childnode>
-        <childnode refid="156" relation="include">
-        </childnode>
-      </node>
-      <node id="154">
-        <label>string</label>
-      </node>
-      <node id="138">
-        <label>map</label>
-      </node>
-      <node id="156">
+      <node id="195">
         <label>Port.h</label>
         <link refid="_port_8h"/>
-        <childnode refid="157" relation="include">
+        <childnode refid="196" relation="include">
         </childnode>
-        <childnode refid="139" relation="include">
+        <childnode refid="178" relation="include">
         </childnode>
-        <childnode refid="153" relation="include">
+        <childnode refid="188" relation="include">
         </childnode>
-      </node>
-      <node id="153">
-        <label>Node.h</label>
-        <link refid="_node_8h"/>
-        <childnode refid="154" relation="include">
+        <childnode refid="192" relation="include">
         </childnode>
-        <childnode refid="144" relation="include">
-        </childnode>
-        <childnode refid="139" relation="include">
-        </childnode>
-        <childnode refid="138" relation="include">
-        </childnode>
-        <childnode refid="155" relation="include">
-        </childnode>
-        <childnode refid="141" relation="include">
-        </childnode>
-        <childnode refid="156" relation="include">
-        </childnode>
-        <childnode refid="158" relation="include">
+        <childnode refid="197" relation="include">
         </childnode>
       </node>
-      <node id="158">
-        <label>NodeCallback.h</label>
-        <link refid="_node_callback_8h"/>
-        <childnode refid="155" relation="include">
-        </childnode>
-        <childnode refid="156" relation="include">
-        </childnode>
-        <childnode refid="153" relation="include">
-        </childnode>
-        <childnode refid="148" relation="include">
-        </childnode>
-        <childnode refid="159" relation="include">
-        </childnode>
+      <node id="196">
+        <label>cstdint</label>
       </node>
-      <node id="144">
-        <label>vector</label>
+      <node id="184">
+        <label>cmath</label>
       </node>
-      <node id="152">
-        <label>bson.h</label>
+      <node id="193">
+        <label>string</label>
       </node>
-      <node id="155">
-        <label>rttr/registration</label>
+      <node id="177">
+        <label>map</label>
       </node>
-      <node id="147">
-        <label>mongoc.h</label>
-      </node>
-      <node id="150">
-        <label>math.h</label>
-      </node>
-      <node id="142">
-        <label>iostream</label>
-      </node>
-      <node id="141">
-        <label>MongoObject.h</label>
-        <link refid="_mongo_object_8h"/>
-        <childnode refid="142" relation="include">
-        </childnode>
-        <childnode refid="138" relation="include">
-        </childnode>
-        <childnode refid="143" relation="include">
-        </childnode>
-        <childnode refid="144" relation="include">
-        </childnode>
-        <childnode refid="139" relation="include">
-        </childnode>
-        <childnode refid="145" relation="include">
-        </childnode>
-        <childnode refid="146" relation="include">
-        </childnode>
-        <childnode refid="147" relation="include">
-        </childnode>
-        <childnode refid="148" relation="include">
-        </childnode>
-      </node>
-      <node id="151">
-        <label>chrono</label>
-      </node>
-      <node id="143">
-        <label>set</label>
-      </node>
-      <node id="159">
-        <label>FlexLabel/FlexLabel.h</label>
-      </node>
-      <node id="140">
-        <label>nlohmann/json.hpp</label>
-      </node>
-      <node id="149">
-        <label>algorithm</label>
-      </node>
-      <node id="148">
+      <node id="187">
         <label>Functions.h</label>
         <link refid="_functions_8h"/>
-        <childnode refid="144" relation="include">
+        <childnode refid="183" relation="include">
         </childnode>
-        <childnode refid="149" relation="include">
+        <childnode refid="188" relation="include">
         </childnode>
-        <childnode refid="150" relation="include">
+        <childnode refid="189" relation="include">
         </childnode>
-        <childnode refid="142" relation="include">
+        <childnode refid="181" relation="include">
         </childnode>
-        <childnode refid="151" relation="include">
+        <childnode refid="190" relation="include">
         </childnode>
-        <childnode refid="152" relation="include">
+        <childnode refid="191" relation="include">
         </childnode>
       </node>
-      <node id="139">
+      <node id="180">
+        <label>MongoObject.h</label>
+        <link refid="_mongo_object_8h"/>
+        <childnode refid="181" relation="include">
+        </childnode>
+        <childnode refid="177" relation="include">
+        </childnode>
+        <childnode refid="182" relation="include">
+        </childnode>
+        <childnode refid="183" relation="include">
+        </childnode>
+        <childnode refid="178" relation="include">
+        </childnode>
+        <childnode refid="184" relation="include">
+        </childnode>
+        <childnode refid="185" relation="include">
+        </childnode>
+        <childnode refid="186" relation="include">
+        </childnode>
+        <childnode refid="187" relation="include">
+        </childnode>
+      </node>
+      <node id="183">
+        <label>vector</label>
+      </node>
+      <node id="191">
+        <label>bson.h</label>
+      </node>
+      <node id="194">
+        <label>rttr/registration</label>
+      </node>
+      <node id="186">
+        <label>mongoc.h</label>
+      </node>
+      <node id="197">
+        <label>PortLinks.h</label>
+        <link refid="_port_links_8h"/>
+        <childnode refid="195" relation="include">
+        </childnode>
+      </node>
+      <node id="192">
+        <label>Node.h</label>
+        <link refid="_node_8h"/>
+        <childnode refid="193" relation="include">
+        </childnode>
+        <childnode refid="183" relation="include">
+        </childnode>
+        <childnode refid="178" relation="include">
+        </childnode>
+        <childnode refid="177" relation="include">
+        </childnode>
+        <childnode refid="194" relation="include">
+        </childnode>
+        <childnode refid="180" relation="include">
+        </childnode>
+        <childnode refid="195" relation="include">
+        </childnode>
+        <childnode refid="198" relation="include">
+        </childnode>
+      </node>
+      <node id="189">
+        <label>math.h</label>
+      </node>
+      <node id="181">
+        <label>iostream</label>
+      </node>
+      <node id="176">
+        <label>include/Session.h</label>
+        <link refid="_session_8h"/>
+        <childnode refid="177" relation="include">
+        </childnode>
+        <childnode refid="178" relation="include">
+        </childnode>
+        <childnode refid="179" relation="include">
+        </childnode>
+        <childnode refid="180" relation="include">
+        </childnode>
+        <childnode refid="192" relation="include">
+        </childnode>
+        <childnode refid="195" relation="include">
+        </childnode>
+      </node>
+      <node id="190">
+        <label>chrono</label>
+      </node>
+      <node id="182">
+        <label>set</label>
+      </node>
+      <node id="200">
+        <label>FlexLabel/FlexLabel.h</label>
+      </node>
+      <node id="179">
+        <label>nlohmann/json.hpp</label>
+      </node>
+      <node id="188">
+        <label>algorithm</label>
+      </node>
+      <node id="178">
         <label>memory</label>
+      </node>
+      <node id="198">
+        <label>NodeCallback.h</label>
+        <link refid="_node_callback_8h"/>
+        <childnode refid="199" relation="include">
+        </childnode>
+        <childnode refid="194" relation="include">
+        </childnode>
+        <childnode refid="195" relation="include">
+        </childnode>
+        <childnode refid="192" relation="include">
+        </childnode>
+        <childnode refid="187" relation="include">
+        </childnode>
+        <childnode refid="200" relation="include">
+        </childnode>
       </node>
     </incdepgraph>
     <innerclass refid="class_session" prot="public">Session</innerclass>
@@ -207,40 +222,34 @@
 <codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
 <codeline lineno="42"><highlight class="normal"></highlight></codeline>
-<codeline lineno="43" refid="class_session_1a7b5d3b9db809cc54e515639b78b0e811" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_session_1a7b5d3b9db809cc54e515639b78b0e811" kindref="member">add_node</ref>(std::string<sp/>name,<sp/>std::shared_ptr&lt;Node&gt;<sp/></highlight><highlight class="keywordtype">object</highlight><highlight class="normal">)</highlight></codeline>
-<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
-<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nodes[name]<sp/>=<sp/>object;</highlight></codeline>
-<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">object</highlight><highlight class="normal">-&gt;set_name(name);</highlight></codeline>
-<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="class_mongo_object_1ae67113e87e4dadcd51c23aa373eba61d" kindref="member">is_connected_to_db</ref>())<sp/>{</highlight></codeline>
-<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="class_mongo_object_1adbb80b6af3e780c81cc455f480507749" kindref="member">connect_object_to_db</ref>(</highlight><highlight class="keywordtype">object</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="51"><highlight class="normal"></highlight></codeline>
-<codeline lineno="52" refid="class_session_1af091cae3db4abcc5afe4a8abaef222f2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::map&lt;std::string,<sp/>std::shared_ptr&lt;Node&gt;&gt;<sp/><ref refid="class_session_1af091cae3db4abcc5afe4a8abaef222f2" kindref="member">get_nodes</ref>()</highlight></codeline>
-<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
-<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="class_session_1a0b50e79f5e66081dd5112571107bc652" kindref="member">nodes</ref>;</highlight></codeline>
-<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_session_1a7b5d3b9db809cc54e515639b78b0e811" kindref="member">add_node</ref>(std::string<sp/>name,<sp/>std::shared_ptr&lt;Node&gt;<sp/></highlight><highlight class="keywordtype">object</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>std::map&lt;std::string,<sp/>std::shared_ptr&lt;Node&gt;&gt;<sp/><ref refid="class_session_1af091cae3db4abcc5afe4a8abaef222f2" kindref="member">get_nodes</ref>();</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_session_1a513e5436b4c990985300246bb39d9f5c" kindref="member">write_to_db</ref>()<sp/></highlight><highlight class="keyword">final</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_mongo_object_1aecd244620f292e8368d1f593925eafbd" kindref="member">read_from_db</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;oid_string)<sp/></highlight><highlight class="keyword">final</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>std::shared_ptr&lt;Port&gt;<sp/><ref refid="class_session_1abba77e16f30f13cb1b907066c672dd72" kindref="member">create_port</ref>(json<sp/>port_template,<sp/>std::string<sp/>port_key);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>std::shared_ptr&lt;Port&gt;<sp/><ref refid="class_session_1abba77e16f30f13cb1b907066c672dd72" kindref="member">create_port</ref>(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>port_template,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>port_key);</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>std::shared_ptr&lt;Node&gt;<sp/><ref refid="class_session_1aa546642e267c2117abaee79025d6e1a8" kindref="member">create_node</ref>(json<sp/>node_template,<sp/>std::string<sp/>node_key);</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>std::shared_ptr&lt;Node&gt;<sp/><ref refid="class_session_1aa546642e267c2117abaee79025d6e1a8" kindref="member">create_node</ref>(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>node_template,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>charnode_key);</highlight></codeline>
 <codeline lineno="56"><highlight class="normal"></highlight></codeline>
-<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_session_1a513e5436b4c990985300246bb39d9f5c" kindref="member">write_to_db</ref>()<sp/></highlight><highlight class="keyword">final</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_session_1adb03e68fc271cf09c0175cb908b4afff" kindref="member">read_session_template</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;json_string);</highlight></codeline>
 <codeline lineno="58"><highlight class="normal"></highlight></codeline>
-<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_mongo_object_1aecd244620f292e8368d1f593925eafbd" kindref="member">read_from_db</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;oid_string)<sp/></highlight><highlight class="keyword">final</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>std::string<sp/><ref refid="class_session_1a7083c5cb94be76912b0fe02d003766be" kindref="member">get_session_template</ref>();</highlight></codeline>
 <codeline lineno="60"><highlight class="normal"></highlight></codeline>
-<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/>std::shared_ptr&lt;Port&gt;<sp/><ref refid="class_session_1a092e487a152de25de0a37ef16356da7c" kindref="member">read_port_template</ref>(json<sp/>j,<sp/>std::string<sp/>&amp;node_key,<sp/>std::string<sp/>&amp;port_key);</highlight></codeline>
-<codeline lineno="62"><highlight class="normal"></highlight></codeline>
-<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>std::shared_ptr&lt;Node&gt;<sp/><ref refid="class_session_1a8d085cbe91c4ab1632e4eed199120123" kindref="member">read_node_template</ref>(json<sp/>j,<sp/>std::string<sp/>&amp;node_key);</highlight></codeline>
-<codeline lineno="64"><highlight class="normal"></highlight></codeline>
-<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_session_1adb03e68fc271cf09c0175cb908b4afff" kindref="member">read_session_template</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;json_string);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_session_1aa9b0d73252fbb01cab292ef6b425da12" kindref="member">link_nodes</ref>(</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;node_name,</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;port_name,</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;target_node_name,</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;target_port_name);</highlight></codeline>
 <codeline lineno="66"><highlight class="normal"></highlight></codeline>
-<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_session_1a5eec7c1012a9a058f06347dd3cb18de3" kindref="member">link_nodes</ref>(</highlight></codeline>
-<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::string<sp/>node_name,</highlight></codeline>
-<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::string<sp/>port_name,</highlight></codeline>
-<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::string<sp/>target_node_name,</highlight></codeline>
-<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::string<sp/>target_port_name);</highlight></codeline>
-<codeline lineno="72"><highlight class="normal"></highlight></codeline>
-<codeline lineno="73"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="74"><highlight class="normal"></highlight></codeline>
-<codeline lineno="75"><highlight class="normal"></highlight></codeline>
-<codeline lineno="76"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/>//CHINET_SESSION_H</highlight></codeline>
+<codeline lineno="67"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/>//CHINET_SESSION_H</highlight></codeline>
     </programlisting>
     <location file="include/Session.h"/>
   </compounddef>

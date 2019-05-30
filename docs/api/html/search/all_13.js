@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['y',['y',['../class_curve.html#a81ad07dc5dccb7a05870b6341ae78364',1,'Curve']]]
+  ['x',['x',['../class_curve.html#ae97afae63534c34353e3fc6f5e9d7a8d',1,'Curve']]]
 ];

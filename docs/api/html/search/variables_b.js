@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['y',['y',['../class_curve.html#a81ad07dc5dccb7a05870b6341ae78364',1,'Curve']]]
+  ['uri_5fstring',['uri_string',['../class_mongo_object.html#a71e3fa5196ad3b496d0aa326d61e84e8',1,'MongoObject']]]
 ];

@@ -78,9 +78,11 @@ Inheritance diagram for MongoObject:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_mongo_object__inherit__graph.png" border="0" usemap="#_mongo_object_inherit__map" alt="Inheritance graph"/></div>
 <map name="_mongo_object_inherit__map" id="_mongo_object_inherit__map">
-<area shape="rect" id="node2" href="class_node.html" title="{Node\n|+ callback_class\l# meth_\l# in_\l# out_\l# callback\l# callback_type_string\l# callback_type\l|+ Node()\l+ Node()\l+ Node()\l+ ~Node()\l+ read_from_db()\l+ evaluate()\l+ is_valid()\l+ inputs_valid()\l+ write_to_db()\l+ get_bson()\land 13 more...\l# fill_input_output_port\l_lookups()\l}" alt="" coords="5,673,159,1015"/>
-<area shape="rect" id="node3" href="class_port.html" title="{Port\n||+ Port()\l+ Port()\l+ Port()\l+ ~Port()\l+ set_port_type()\l+ set_node()\l+ get_node()\l+ is_output()\l+ get_value()\l+ get_value()\land 14 more...\l}" alt="" coords="183,732,304,956"/>
-<area shape="rect" id="node4" href="class_session.html" title="{Session\n|+ nodes\l|+ Session()\l+ Session()\l+ add_node()\l+ get_nodes()\l+ write_to_db()\l+ read_from_db()\l+ read_port_template()\l+ read_node_template()\l+ read_session_template()\l+ link_nodes()\l# get_bson()\l}" alt="" coords="329,732,505,956"/>
+<area shape="rect" id="node2" href="class_base_port.html" title="{BasePort\n|# node_\l|+ is_fixed()\l+ is_output()\l+ is_reactive()\l+ BasePort()\l+ set_fixed()\l+ set_port_type()\l+ set_reactive()\l+ get_node()\l+ set_node()\l}" alt="" coords="5,747,127,941"/>
+<area shape="rect" id="node5" href="class_node.html" title="{Node\n|+ callback_class\l# meth_\l# in_\l# out_\l# callback\l# callback_type_string\l# callback_type\l|+ Node()\l+ Node()\l+ Node()\l+ ~Node()\l+ read_from_db()\l+ evaluate()\l+ is_valid()\l+ inputs_valid()\l+ write_to_db()\l+ get_bson()\land 13 more...\l# fill_input_output_port\l_lookups()\l}" alt="" coords="151,673,304,1015"/>
+<area shape="rect" id="node6" href="class_session.html" title="{Session\n|+ nodes\l|+ Session()\l+ Session()\l+ add_node()\l+ get_nodes()\l+ write_to_db()\l+ read_from_db()\l+ create_port()\l+ create_port()\l+ create_node()\l+ create_node()\l+ read_session_template()\l+ get_session_template()\l+ link_nodes()\l# get_bson()\l}" alt="" coords="329,710,505,978"/>
+<area shape="rect" id="node3" href="class_value_port.html" title="{ValuePort\n||+ ValuePort()\l+ ValuePort()\l+ ValuePort()\l+ ~ValuePort()\l+ set_value()\l+ set_value()\l+ get_value()\l+ get_value()\l+ get_bson()\l+ write_to_db()\l+ read_from_db()\l}" alt="" coords="5,1063,127,1287"/>
+<area shape="rect" id="node4" href="class_port.html" title="{Port\n|+ port_links\l|+ Port()\l+ Port()\l+ Port()\l+ ~Port()\l+ set_value()\l+ set_value()\l+ get_value()\l+ get_value()\l+ link()\l+ unlink()\l}" alt="" coords="17,1335,115,1544"/>
 </map>
 </div>
 <div class="dynheader">
@@ -703,7 +705,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_port.html#a746914b62d482cc81a901d254a03c560">Port</a>, <a class="el" href="class_node.html#a9568e1bba3436d78e77862902e328592">Node</a>, and <a class="el" href="class_session.html#aa517fe6138a0cc32e27ddf1eb7331520">Session</a>.</p>
+<p>Reimplemented in <a class="el" href="class_value_port.html#a9b241081b386fe6de942ffce150b7eda">ValuePort</a>, <a class="el" href="class_node.html#a9568e1bba3436d78e77862902e328592">Node</a>, and <a class="el" href="class_session.html#aa517fe6138a0cc32e27ddf1eb7331520">Session</a>.</p>
 
 </div>
 </div>
@@ -1088,7 +1090,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_port.html#a952b0b030c884147a36be7a04eb22183">Port</a>, <a class="el" href="class_session.html#a4f09644fd155a1d5640cedefe4aa42fc">Session</a>, and <a class="el" href="class_node.html#a60c605aced4420d3d6f6fe54b5a5b6bb">Node</a>.</p>
+<p>Reimplemented in <a class="el" href="class_value_port.html#aacece741e134ac67f447e7e1d0822bca">ValuePort</a>, <a class="el" href="class_node.html#a60c605aced4420d3d6f6fe54b5a5b6bb">Node</a>, and <a class="el" href="class_session.html#a4f09644fd155a1d5640cedefe4aa42fc">Session</a>.</p>
 
 </div>
 </div>
@@ -1397,7 +1399,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_port.html#a052c0ba97e0a53e45d973d4bc31fa615">Port</a>, <a class="el" href="class_node.html#ad5cacb320e423275faef1bfc8c7a365b">Node</a>, and <a class="el" href="class_session.html#a513e5436b4c990985300246bb39d9f5c">Session</a>.</p>
+<p>Reimplemented in <a class="el" href="class_value_port.html#a85845e2f4ee6cd21ffcd3942e60886ea">ValuePort</a>, <a class="el" href="class_node.html#ad5cacb320e423275faef1bfc8c7a365b">Node</a>, and <a class="el" href="class_session.html#a513e5436b4c990985300246bb39d9f5c">Session</a>.</p>
 
 </div>
 </div>
@@ -1606,7 +1608,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu May 23 2019 11:45:27 for chinet by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 30 2019 11:50:21 for chinet by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

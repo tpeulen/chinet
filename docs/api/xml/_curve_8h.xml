@@ -8,26 +8,8 @@
     <includes refid="_functions_8h" local="no">Functions.h</includes>
     <includes local="no">fstream</includes>
     <includes local="no">bson.h</includes>
-    <includedby refid="_decay_8h" local="no">include/Decay.h</includedby>
+    <includedby refid="_exponential_decay_8h" local="no">include/ExponentialDecay.h</includedby>
     <incdepgraph>
-      <node id="3">
-        <label>string</label>
-      </node>
-      <node id="9">
-        <label>fstream</label>
-      </node>
-      <node id="1">
-        <label>vector</label>
-      </node>
-      <node id="8">
-        <label>bson.h</label>
-      </node>
-      <node id="5">
-        <label>math.h</label>
-      </node>
-      <node id="6">
-        <label>iostream</label>
-      </node>
       <node id="0">
         <label>include/Curve.h</label>
         <link refid="_curve_8h"/>
@@ -44,11 +26,11 @@
         <childnode refid="8" relation="include">
         </childnode>
       </node>
-      <node id="7">
-        <label>chrono</label>
+      <node id="3">
+        <label>string</label>
       </node>
-      <node id="2">
-        <label>algorithm</label>
+      <node id="9">
+        <label>fstream</label>
       </node>
       <node id="4">
         <label>Functions.h</label>
@@ -66,17 +48,35 @@
         <childnode refid="8" relation="include">
         </childnode>
       </node>
+      <node id="1">
+        <label>vector</label>
+      </node>
+      <node id="8">
+        <label>bson.h</label>
+      </node>
+      <node id="5">
+        <label>math.h</label>
+      </node>
+      <node id="6">
+        <label>iostream</label>
+      </node>
+      <node id="7">
+        <label>chrono</label>
+      </node>
+      <node id="2">
+        <label>algorithm</label>
+      </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="11">
-        <label>include/Decay.h</label>
-        <link refid="_decay_8h"/>
-      </node>
       <node id="10">
         <label>include/Curve.h</label>
         <link refid="_curve_8h"/>
         <childnode refid="11" relation="include">
         </childnode>
+      </node>
+      <node id="11">
+        <label>include/ExponentialDecay.h</label>
+        <link refid="_exponential_decay_8h"/>
       </node>
     </invincdepgraph>
     <innerclass refid="class_curve" prot="public">Curve</innerclass>
@@ -103,7 +103,7 @@
 <codeline lineno="16"><highlight class="normal"></highlight></codeline>
 <codeline lineno="17" refid="class_curve" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_curve" kindref="compound">Curve</ref>{</highlight></codeline>
 <codeline lineno="18"><highlight class="normal"></highlight></codeline>
-<codeline lineno="19" refid="class_curve_1ad9501b10345049f5bd24a413df3fc11d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_decay" kindref="compound">Decay</ref>;</highlight></codeline>
+<codeline lineno="19" refid="class_curve_1ad9501b10345049f5bd24a413df3fc11d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_curve_1ad9501b10345049f5bd24a413df3fc11d" kindref="member">Decay</ref>;</highlight></codeline>
 <codeline lineno="20"><highlight class="normal"></highlight></codeline>
 <codeline lineno="21"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
 <codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>if<sp/>this<sp/>is<sp/>true<sp/>only<sp/>overlapping<sp/>regions<sp/>of</highlight><highlight class="normal"></highlight></codeline>

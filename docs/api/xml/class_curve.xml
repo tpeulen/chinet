@@ -2,7 +2,7 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
   <compounddef id="class_curve" kind="class" language="C++" prot="public">
     <compoundname>Curve</compoundname>
-    <derivedcompoundref refid="class_decay" prot="public" virt="non-virtual">Decay</derivedcompoundref>
+    <derivedcompoundref refid="class_exponential_decay" prot="public" virt="non-virtual">ExponentialDecay</derivedcompoundref>
     <includes refid="_curve_8h" local="no">Curve.h</includes>
       <sectiondef kind="friend">
       <memberdef kind="friend" id="class_curve_1ad9501b10345049f5bd24a413df3fc11d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
@@ -795,7 +795,7 @@
         <definition>virtual void Curve::to_json</definition>
         <argsstring>(std::string filename)</argsstring>
         <name>to_json</name>
-        <reimplementedby refid="class_decay_1afb84196cbc6cc532bf0ce5db85f39616">to_json</reimplementedby>
+        <reimplementedby refid="class_exponential_decay_1ab26d8a17274fe3723bc3c19a485c45db">to_json</reimplementedby>
         <param>
           <type>std::string</type>
           <declname>filename</declname>
@@ -846,41 +846,41 @@
 </parameterlist>
 </para>    </detaileddescription>
     <inheritancegraph>
-      <node id="1">
-        <label>Decay</label>
-        <link refid="class_decay"/>
-        <childnode refid="0" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="0">
+      <node id="10">
         <label>Curve</label>
         <link refid="class_curve"/>
+      </node>
+      <node id="11">
+        <label>ExponentialDecay</label>
+        <link refid="class_exponential_decay"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="5">
+      <node id="15">
         <label>std::vector&lt; double &gt;</label>
       </node>
-      <node id="4">
+      <node id="14">
         <label>std::basic_string&lt; char &gt;</label>
       </node>
-      <node id="2">
+      <node id="12">
         <label>Curve</label>
         <link refid="class_curve"/>
-        <childnode refid="3" relation="usage">
+        <childnode refid="13" relation="usage">
           <edgelabel>#name_x</edgelabel>
           <edgelabel>#name_y</edgelabel>
         </childnode>
-        <childnode refid="5" relation="usage">
+        <childnode refid="15" relation="usage">
           <edgelabel>#x</edgelabel>
           <edgelabel>#y</edgelabel>
           <edgelabel>#ex</edgelabel>
           <edgelabel>#ey</edgelabel>
         </childnode>
       </node>
-      <node id="3">
+      <node id="13">
         <label>std::string</label>
-        <childnode refid="4" relation="public-inheritance">
+        <childnode refid="14" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>

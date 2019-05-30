@@ -74,13 +74,21 @@ $(function() {
 : <a class="el" href="class_node.html#a139ab3c04753749cc35d2ff8c268c248">Node</a>
 </li>
 <li>append()
-: <a class="el" href="class_decay.html#a5880e6660875552ae7590227637eca9e">Decay</a>
+: <a class="el" href="class_exponential_decay.html#a50ec2a380507a9306344008604e4b686">ExponentialDecay</a>
+, <a class="el" href="class_pda.html#a4b71f2d58129c8db45c6779b0c1734d1">Pda</a>
 </li>
 <li>append_number_array()
 : <a class="el" href="class_mongo_object.html#a56dccd703ae3e3e2193d57d31df12fd0">MongoObject</a>
 </li>
 <li>append_string()
 : <a class="el" href="class_mongo_object.html#ab659c54f28b5e13c6cb2fc0fc8ad4635">MongoObject</a>
+</li>
+</ul>
+
+
+<h3><a id="index_b"></a>- b -</h3><ul>
+<li>BasePort()
+: <a class="el" href="class_base_port.html#a3c74a1795503e96b36842bf4fb27a484">BasePort</a>
 </li>
 </ul>
 
@@ -101,22 +109,25 @@ $(function() {
 <li>create_copy()
 : <a class="el" href="class_mongo_object.html#ad5165ed92020fba7d502a3556794ab4f">MongoObject</a>
 </li>
+<li>create_node()
+: <a class="el" href="class_session.html#aa546642e267c2117abaee79025d6e1a8">Session</a>
+</li>
 <li>create_oid_array_in_doc()
 : <a class="el" href="class_mongo_object.html#a0b94ea01312b792e42b944399a4eb45c">MongoObject</a>
 </li>
 <li>create_oid_dict_in_doc()
 : <a class="el" href="class_mongo_object.html#ae8d85ac8089beca73773bd6189a2530c">MongoObject</a>
 </li>
+<li>create_port()
+: <a class="el" href="class_session.html#abba77e16f30f13cb1b907066c672dd72">Session</a>
+</li>
 <li>Curve()
-: <a class="el" href="class_curve.html#a627534496c4472dedcb5c8bd67f579d0">Curve</a>
+: <a class="el" href="class_curve.html#a5447f926f128f5eca036a89d1b1d4e3f">Curve</a>
 </li>
 </ul>
 
 
 <h3><a id="index_d"></a>- d -</h3><ul>
-<li>Decay()
-: <a class="el" href="class_decay.html#a603fb8ea4172c2c80c8779ad301b6a4f">Decay</a>
-</li>
 <li>disconnect_from_db()
 : <a class="el" href="class_mongo_object.html#ae541414f753a8fd792cf0be163117b99">MongoObject</a>
 </li>
@@ -126,6 +137,10 @@ $(function() {
 <h3><a id="index_e"></a>- e -</h3><ul>
 <li>evaluate()
 : <a class="el" href="class_node.html#a0a3c8430a9e5b6b725c87bbcf7adc54b">Node</a>
+, <a class="el" href="class_pda.html#a754b1fe7d049bab1ee039471b3e461a9">Pda</a>
+</li>
+<li>ExponentialDecay()
+: <a class="el" href="class_exponential_decay.html#af197b190e4e1c1b00e7adfdd78821b98">ExponentialDecay</a>
 </li>
 </ul>
 
@@ -142,7 +157,7 @@ $(function() {
 
 <h3><a id="index_g"></a>- g -</h3><ul>
 <li>get_amplitudes()
-: <a class="el" href="class_decay.html#a4e82ac52493fe7b56f023013c249de93">Decay</a>
+: <a class="el" href="class_exponential_decay.html#ad4eb0c52d3285efbc277cc577fd35a43">ExponentialDecay</a>
 </li>
 <li>get_array()
 : <a class="el" href="class_mongo_object.html#ae1002573afb58658162fb7f53cd0bffc">MongoObject</a>
@@ -150,8 +165,8 @@ $(function() {
 <li>get_bson()
 : <a class="el" href="class_mongo_object.html#ac21cbe104a818f7e6ee7dcfbb521e9e1">MongoObject</a>
 , <a class="el" href="class_node.html#a9568e1bba3436d78e77862902e328592">Node</a>
-, <a class="el" href="class_port.html#a746914b62d482cc81a901d254a03c560">Port</a>
 , <a class="el" href="class_session.html#aa517fe6138a0cc32e27ddf1eb7331520">Session</a>
+, <a class="el" href="class_value_port.html#a9b241081b386fe6de942ffce150b7eda">ValuePort</a>
 </li>
 <li>get_bson_excluding()
 : <a class="el" href="class_mongo_object.html#ac35c66d91e7297eb46313b98d01751cb">MongoObject</a>
@@ -160,7 +175,7 @@ $(function() {
 : <a class="el" href="class_mongo_object.html#aaca278b427d042a63caf2962b5e76043">MongoObject</a>
 </li>
 <li>get_convolution_stop()
-: <a class="el" href="class_decay.html#ab0aa645c91bde2887b132af2f3ea97ed">Decay</a>
+: <a class="el" href="class_exponential_decay.html#ab8ba1e36e2320d21637b53028c58928e">ExponentialDecay</a>
 </li>
 <li>get_document()
 : <a class="el" href="class_mongo_object.html#a196ea1b747a08f7ab525b8851ebc0b51">MongoObject</a>
@@ -178,20 +193,26 @@ $(function() {
 : <a class="el" href="class_node.html#aab2f990047525bd3bfe7be041a8a201c">Node</a>
 </li>
 <li>get_irf()
-: <a class="el" href="class_decay.html#a538397addc1291d487ea446428dc989e">Decay</a>
+: <a class="el" href="class_exponential_decay.html#a83b74de17ebb2144fc50aaedd282dcc3">ExponentialDecay</a>
 </li>
 <li>get_json()
 : <a class="el" href="class_mongo_object.html#acde33629416d7f926737237264ac6ca1">MongoObject</a>
 </li>
 <li>get_lifetimes()
-: <a class="el" href="class_decay.html#aaeb275e54ffc2de5bbe1df6e99221e7e">Decay</a>
+: <a class="el" href="class_exponential_decay.html#a11760b880f6ebc330a5b652746ccbbfe">ExponentialDecay</a>
+</li>
+<li>get_link()
+: <a class="el" href="class_port_links.html#aab5c99a67079c1f87596dd1e389c836b">PortLinks&lt; T &gt;</a>
+</li>
+<li>get_linked_ports()
+: <a class="el" href="class_port_links.html#a52d43387bd7da128bada510447cf823e">PortLinks&lt; T &gt;</a>
 </li>
 <li>get_name()
 : <a class="el" href="class_mongo_object.html#abd49d2dcea0ce5f49ebe9a8a9df97164">MongoObject</a>
 , <a class="el" href="class_node.html#a0cc0386322fca056e49e49d869ade853">Node</a>
 </li>
 <li>get_node()
-: <a class="el" href="class_port.html#a8659a2feee31ada701589c0fb4202b5b">Port</a>
+: <a class="el" href="class_base_port.html#aaca52e08c6fc1eec32211c1cad71213c">BasePort</a>
 </li>
 <li>get_nodes()
 : <a class="el" href="class_session.html#af091cae3db4abcc5afe4a8abaef222f2">Session</a>
@@ -211,6 +232,9 @@ $(function() {
 <li>get_ports()
 : <a class="el" href="class_node.html#a90fc0096ba3a5094f0696dde1dd5b08d">Node</a>
 </li>
+<li>get_session_template()
+: <a class="el" href="class_session.html#a7083c5cb94be76912b0fe02d003766be">Session</a>
+</li>
 <li>get_singleton()
 : <a class="el" href="class_mongo_object.html#af0cf1568e5b1b87a971e93bba4ec0a40">MongoObject</a>
 </li>
@@ -218,7 +242,8 @@ $(function() {
 : <a class="el" href="class_mongo_object.html#a33799f83d7343fc5385869f5a907aeea">MongoObject</a>
 </li>
 <li>get_value()
-: <a class="el" href="class_port.html#a82509b87aa9d775d0a40e2b446f2b7ad">Port</a>
+: <a class="el" href="class_port.html#acc11e1890530dd4bc0b9e3c7778ef5ff">Port</a>
+, <a class="el" href="class_value_port.html#a12f11f190a32156f9afbcf38d9da0d2d">ValuePort</a>
 </li>
 <li>get_x()
 : <a class="el" href="class_curve.html#aa4c5bd9700d1db6073179b2d1b61775b">Curve</a>
@@ -235,6 +260,9 @@ $(function() {
 <li>getNmax()
 : <a class="el" href="class_pda.html#aca50144f22170263ef05997e5eefeff6">Pda</a>
 </li>
+<li>getSgSr()
+: <a class="el" href="class_pda.html#a15729ff6d80f086e7f6ae4232444dc05">Pda</a>
+</li>
 </ul>
 
 
@@ -246,16 +274,16 @@ $(function() {
 : <a class="el" href="class_mongo_object.html#ae67113e87e4dadcd51c23aa373eba61d">MongoObject</a>
 </li>
 <li>is_fixed()
-: <a class="el" href="class_port.html#a7fbe40665570e0acbd7e9f6c9a8c9272">Port</a>
+: <a class="el" href="class_base_port.html#a70e1e794dd608fbe7865a05d5133aa87">BasePort</a>
 </li>
 <li>is_linked()
-: <a class="el" href="class_port.html#a51a2db67f75c856f83d28cec818b0170">Port</a>
+: <a class="el" href="class_port_links.html#afbd91833da70a7450ece73a8d152c87f">PortLinks&lt; T &gt;</a>
 </li>
 <li>is_output()
-: <a class="el" href="class_port.html#a0c7610af582f64a46f25f76f73de804c">Port</a>
+: <a class="el" href="class_base_port.html#a79cc42bec526d771d7439a5b3651a5c5">BasePort</a>
 </li>
 <li>is_reactive()
-: <a class="el" href="class_port.html#a1f80bb4edc0bdc8268f4c93ef618bef4">Port</a>
+: <a class="el" href="class_base_port.html#a186b22bd5b356d06fbf3e6878085c173">BasePort</a>
 </li>
 <li>is_valid()
 : <a class="el" href="class_node.html#a8d821a6df3cd9504fefc551d5bd0a64f">Node</a>
@@ -266,9 +294,10 @@ $(function() {
 <h3><a id="index_l"></a>- l -</h3><ul>
 <li>link()
 : <a class="el" href="class_port.html#aec33d8bfca05139b1e319f15d2b3a1b8">Port</a>
+, <a class="el" href="class_port_links.html#aafa864d30ecbdd2a0c5ea34d438c9bd7">PortLinks&lt; T &gt;</a>
 </li>
 <li>link_nodes()
-: <a class="el" href="class_session.html#a5eec7c1012a9a058f06347dd3cb18de3">Session</a>
+: <a class="el" href="class_session.html#aa9b0d73252fbb01cab292ef6b425da12">Session</a>
 </li>
 </ul>
 
@@ -308,7 +337,6 @@ $(function() {
 </li>
 <li>operator==()
 : <a class="el" href="class_mongo_object.html#a0050194f5bc8690e0db3b8217086e421">MongoObject</a>
-, <a class="el" href="class_port.html#acecdaea3f5917240a7ff36c5186b57d6">Port</a>
 </li>
 <li>operator[]()
 : <a class="el" href="class_mongo_object.html#a89f7e282816b6dd93d4df4ee7ca9bd0a">MongoObject</a>
@@ -320,6 +348,9 @@ $(function() {
 <li>Port()
 : <a class="el" href="class_port.html#a2cfb70a4b6d730e715042d646ec1d960">Port</a>
 </li>
+<li>PortLinks()
+: <a class="el" href="class_port_links.html#a0efb39bfcdf33ebd989288df334431d5">PortLinks&lt; T &gt;</a>
+</li>
 </ul>
 
 
@@ -327,23 +358,20 @@ $(function() {
 <li>read_from_db()
 : <a class="el" href="class_mongo_object.html#aecd244620f292e8368d1f593925eafbd">MongoObject</a>
 , <a class="el" href="class_node.html#a60c605aced4420d3d6f6fe54b5a5b6bb">Node</a>
-, <a class="el" href="class_port.html#a952b0b030c884147a36be7a04eb22183">Port</a>
 , <a class="el" href="class_session.html#a4f09644fd155a1d5640cedefe4aa42fc">Session</a>
+, <a class="el" href="class_value_port.html#aacece741e134ac67f447e7e1d0822bca">ValuePort</a>
 </li>
 <li>read_json()
 : <a class="el" href="class_mongo_object.html#adce8ffc4811a9d1c94701711f574bc34">MongoObject</a>
-</li>
-<li>read_node_template()
-: <a class="el" href="class_session.html#a8d085cbe91c4ab1632e4eed199120123">Session</a>
-</li>
-<li>read_port_template()
-: <a class="el" href="class_session.html#a092e487a152de25de0a37ef16356da7c">Session</a>
 </li>
 <li>read_session_template()
 : <a class="el" href="class_session.html#adb03e68fc271cf09c0175cb908b4afff">Session</a>
 </li>
 <li>remove_last()
-: <a class="el" href="class_decay.html#a46e478fb53a701f9a33f33c8abe5caf9">Decay</a>
+: <a class="el" href="class_exponential_decay.html#a7cdeb3666639cfb20a6460c4cc5dfcdd">ExponentialDecay</a>
+</li>
+<li>remove_links_to_port()
+: <a class="el" href="class_port_links.html#a924f6d6ec647985f87c5969c6ceeb997">PortLinks&lt; T &gt;</a>
 </li>
 <li>resize()
 : <a class="el" href="class_curve.html#a69f0cd9336dba793efe1398a6997c5a0">Curve</a>
@@ -365,13 +393,13 @@ $(function() {
 : <a class="el" href="class_node.html#a924146fb76ec67a78971f91e93418527">Node</a>
 </li>
 <li>set_convolution_mode()
-: <a class="el" href="class_decay.html#a2a097da42db1a9e6cff3d82a03c04953">Decay</a>
+: <a class="el" href="class_exponential_decay.html#a9146c03894e4cb44c027873c6568d622">ExponentialDecay</a>
 </li>
 <li>set_convolution_start()
-: <a class="el" href="class_decay.html#a9d989db5da823f4eb62b2bed6f20cd3d">Decay</a>
+: <a class="el" href="class_exponential_decay.html#a44ab9a484380f112486d14250a3a492f">ExponentialDecay</a>
 </li>
 <li>set_convolution_stop()
-: <a class="el" href="class_decay.html#a1ea9444adcde465036893d3ffd192e0c">Decay</a>
+: <a class="el" href="class_exponential_decay.html#a41505e6664c6a65fc4355e39eec8095a">ExponentialDecay</a>
 </li>
 <li>set_document()
 : <a class="el" href="class_mongo_object.html#adb597533d8e167c3d6bafd28baef349c">MongoObject</a>
@@ -383,22 +411,19 @@ $(function() {
 : <a class="el" href="class_curve.html#a11bda872bbbac4856b941eb645ecdd22">Curve</a>
 </li>
 <li>set_fixed()
-: <a class="el" href="class_port.html#af913356cf60ebe37fb03d213db73b1bc">Port</a>
+: <a class="el" href="class_base_port.html#a88f22c72f159dbb81735baec6d058e74">BasePort</a>
 </li>
 <li>set_fluorescence_lifetimes()
-: <a class="el" href="class_decay.html#aaf3a26b7bce1d44a5330a636a0d87654">Decay</a>
+: <a class="el" href="class_exponential_decay.html#aa97cd46757c9e2cb0b08a68d91f53a04">ExponentialDecay</a>
 </li>
 <li>set_instrument_response_function()
-: <a class="el" href="class_decay.html#a3765ed562358dcd7fac5ff5fcb13e477">Decay</a>
-</li>
-<li>set_is_reactive()
-: <a class="el" href="class_port.html#ae2808ef3b67c3dd01222aee10e35f6cd">Port</a>
+: <a class="el" href="class_exponential_decay.html#af528f6a8fe8c1f36bb65c971cf311335">ExponentialDecay</a>
 </li>
 <li>set_name()
 : <a class="el" href="class_mongo_object.html#ac999ffe6b9b2ca261adff1eaf9da7e98">MongoObject</a>
 </li>
 <li>set_node()
-: <a class="el" href="class_port.html#a5dfef60c4b30386e97d2829a23a0d3d3">Port</a>
+: <a class="el" href="class_base_port.html#a94e87d11496d6986f7ecbd11cd0be142">BasePort</a>
 </li>
 <li>set_node_to_invalid()
 : <a class="el" href="class_node.html#ab9fe9ebcddc19a16dc518fd29e584da8">Node</a>
@@ -407,13 +432,20 @@ $(function() {
 : <a class="el" href="class_mongo_object.html#a9e80e38e5a4f40754ef48f2504e1613c">MongoObject</a>
 </li>
 <li>set_port_type()
-: <a class="el" href="class_port.html#ab35e1343f0db5a0b258d9541958324bc">Port</a>
+: <a class="el" href="class_base_port.html#a7e01f7583ecc0ca88854e9f4c91b05a3">BasePort</a>
+</li>
+<li>set_reactive()
+: <a class="el" href="class_base_port.html#abb5bc5d7ee3473348b12a1cfb5ee0534">BasePort</a>
 </li>
 <li>set_singleton()
 : <a class="el" href="class_mongo_object.html#a03a0d78b1f206aca81ff746edcd57c81">MongoObject</a>
 </li>
 <li>set_value()
 : <a class="el" href="class_port.html#a18b368a7d48acb802b6671693f54adcb">Port</a>
+, <a class="el" href="class_value_port.html#a9eaeb8abfb060cc2dd2c2b087ecb3bb9">ValuePort</a>
+</li>
+<li>set_value_of_dependents()
+: <a class="el" href="class_port_links.html#a4af9fc5c1a2f042c7f1c93cd44236463">PortLinks&lt; T &gt;</a>
 </li>
 <li>set_x()
 : <a class="el" href="class_curve.html#a5a43592686a79c9d4e794eec1cb693ac">Curve</a>
@@ -436,6 +468,9 @@ $(function() {
 <li>setNmax()
 : <a class="el" href="class_pda.html#a76f55e8d719aaace0f26ed1b47ed0bb4">Pda</a>
 </li>
+<li>setPF()
+: <a class="el" href="class_pda.html#adf5dfce658c8816392b933c3571520ea">Pda</a>
+</li>
 <li>shift()
 : <a class="el" href="class_curve.html#aaefb5086df5ad824628b9aaef7f27714">Curve</a>
 </li>
@@ -454,17 +489,25 @@ $(function() {
 <h3><a id="index_t"></a>- t -</h3><ul>
 <li>to_json()
 : <a class="el" href="class_curve.html#a6c16b3a6a4f4bd9540780d4e68d90545">Curve</a>
-, <a class="el" href="class_decay.html#afb84196cbc6cc532bf0ce5db85f39616">Decay</a>
+, <a class="el" href="class_exponential_decay.html#ab26d8a17274fe3723bc3c19a485c45db">ExponentialDecay</a>
 </li>
 </ul>
 
 
 <h3><a id="index_u"></a>- u -</h3><ul>
 <li>unlink()
-: <a class="el" href="class_port.html#aa6a264b13dc26edd20a2726c9466186c">Port</a>
+: <a class="el" href="class_port.html#a9a9f8bbbde14187dfb55ef6fbc27492b">Port</a>
+, <a class="el" href="class_port_links.html#a9bfd34ea82dada9c465acb8a4feeab4e">PortLinks&lt; T &gt;</a>
 </li>
 <li>update()
-: <a class="el" href="class_decay.html#a9893be298ea279231a0476810d52f2d0">Decay</a>
+: <a class="el" href="class_exponential_decay.html#acf7b55b98774e1d4e927630c15ae1702">ExponentialDecay</a>
+</li>
+</ul>
+
+
+<h3><a id="index_v"></a>- v -</h3><ul>
+<li>ValuePort()
+: <a class="el" href="class_value_port.html#a2b8ea29b3a76a40ebc9118991d638b20">ValuePort</a>
 </li>
 </ul>
 
@@ -473,8 +516,8 @@ $(function() {
 <li>write_to_db()
 : <a class="el" href="class_mongo_object.html#ab43c880a2ae99890946e7edf3d232e5a">MongoObject</a>
 , <a class="el" href="class_node.html#ad5cacb320e423275faef1bfc8c7a365b">Node</a>
-, <a class="el" href="class_port.html#a052c0ba97e0a53e45d973d4bc31fa615">Port</a>
 , <a class="el" href="class_session.html#a513e5436b4c990985300246bb39d9f5c">Session</a>
+, <a class="el" href="class_value_port.html#a85845e2f4ee6cd21ffcd3942e60886ea">ValuePort</a>
 </li>
 </ul>
 
@@ -483,8 +526,8 @@ $(function() {
 <li>~Curve()
 : <a class="el" href="class_curve.html#a7ce6ff79064e9795241423ed47166539">Curve</a>
 </li>
-<li>~Decay()
-: <a class="el" href="class_decay.html#a25561e44ddc6acc39078d1a3864d2289">Decay</a>
+<li>~ExponentialDecay()
+: <a class="el" href="class_exponential_decay.html#a13c99421a8ab9ce7f75941f57e2d05fb">ExponentialDecay</a>
 </li>
 <li>~MongoObject()
 : <a class="el" href="class_mongo_object.html#ac1aba6b5189bca3feb08a698a01c1c30">MongoObject</a>
@@ -499,13 +542,19 @@ $(function() {
 : <a class="el" href="class_pda.html#a9c72f6be70a8718284328f735b79374c">Pda</a>
 </li>
 <li>~Port()
-: <a class="el" href="class_port.html#aff000f05612ddb41fec4bff9087bb643">Port</a>
+: <a class="el" href="class_port.html#afe166c2a6b10ad34d47472a150366bc1">Port</a>
+</li>
+<li>~PortLinks()
+: <a class="el" href="class_port_links.html#ade6915a7ded23ca735d75817ee534144">PortLinks&lt; T &gt;</a>
+</li>
+<li>~ValuePort()
+: <a class="el" href="class_value_port.html#a12c448537833e3a7fca772c4a076131b">ValuePort</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu May 23 2019 11:45:27 for chinet by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 30 2019 11:50:21 for chinet by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

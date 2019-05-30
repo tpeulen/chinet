@@ -533,45 +533,45 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="20">
+      <node id="34">
         <label>Node</label>
         <link refid="class_node"/>
-        <childnode refid="21" relation="public-inheritance">
+        <childnode refid="35" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="21">
+      <node id="35">
         <label>MongoObject</label>
         <link refid="class_mongo_object"/>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="26">
+      <node id="40">
         <label>std::map&lt; std::string, std::shared_ptr&lt; Port &gt; &gt;</label>
-        <childnode refid="24" relation="usage">
+        <childnode refid="38" relation="usage">
           <edgelabel>+keys</edgelabel>
         </childnode>
       </node>
-      <node id="22">
+      <node id="36">
         <label>Node</label>
         <link refid="class_node"/>
-        <childnode refid="23" relation="public-inheritance">
+        <childnode refid="37" relation="public-inheritance">
         </childnode>
-        <childnode refid="24" relation="usage">
+        <childnode refid="38" relation="usage">
           <edgelabel>#callback</edgelabel>
           <edgelabel>#callback_type_string</edgelabel>
         </childnode>
-        <childnode refid="26" relation="usage">
+        <childnode refid="40" relation="usage">
           <edgelabel>#out_</edgelabel>
           <edgelabel>#in_</edgelabel>
         </childnode>
       </node>
-      <node id="25">
+      <node id="39">
         <label>std::basic_string&lt; char &gt;</label>
       </node>
-      <node id="23">
+      <node id="37">
         <label>MongoObject</label>
         <link refid="class_mongo_object"/>
-        <childnode refid="24" relation="usage">
+        <childnode refid="38" relation="usage">
           <edgelabel>#db_string</edgelabel>
           <edgelabel>#collection_string</edgelabel>
           <edgelabel>#app_string</edgelabel>
@@ -579,9 +579,9 @@
           <edgelabel>#uri_string</edgelabel>
         </childnode>
       </node>
-      <node id="24">
+      <node id="38">
         <label>std::string</label>
-        <childnode refid="25" relation="public-inheritance">
+        <childnode refid="39" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>

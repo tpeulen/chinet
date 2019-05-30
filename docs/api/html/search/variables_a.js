@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['x',['x',['../class_curve.html#ae97afae63534c34353e3fc6f5e9d7a8d',1,'Curve']]]
+  ['time_5fof_5fdeath',['time_of_death',['../class_mongo_object.html#a0ced4ff82fbee4e7213715994d690380',1,'MongoObject']]]
 ];

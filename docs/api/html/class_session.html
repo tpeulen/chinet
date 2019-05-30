@@ -102,14 +102,20 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a513e5436b4c990985300246bb39d9f5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f09644fd155a1d5640cedefe4aa42fc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_session.html#a4f09644fd155a1d5640cedefe4aa42fc">read_from_db</a> (const std::string &amp;oid_string) final</td></tr>
 <tr class="separator:a4f09644fd155a1d5640cedefe4aa42fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a092e487a152de25de0a37ef16356da7c"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_port.html">Port</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_session.html#a092e487a152de25de0a37ef16356da7c">read_port_template</a> (json j, std::string &amp;node_key, std::string &amp;port_key)</td></tr>
-<tr class="separator:a092e487a152de25de0a37ef16356da7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d085cbe91c4ab1632e4eed199120123"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_node.html">Node</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_session.html#a8d085cbe91c4ab1632e4eed199120123">read_node_template</a> (json j, std::string &amp;node_key)</td></tr>
-<tr class="separator:a8d085cbe91c4ab1632e4eed199120123"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abba77e16f30f13cb1b907066c672dd72"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_port.html">Port</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_session.html#abba77e16f30f13cb1b907066c672dd72">create_port</a> (json port_template, std::string port_key)</td></tr>
+<tr class="separator:abba77e16f30f13cb1b907066c672dd72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9bee143899cc1eb3d3cf9dcb3652f99"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_port.html">Port</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_session.html#ab9bee143899cc1eb3d3cf9dcb3652f99">create_port</a> (char *port_template, char *port_key)</td></tr>
+<tr class="separator:ab9bee143899cc1eb3d3cf9dcb3652f99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa546642e267c2117abaee79025d6e1a8"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_node.html">Node</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_session.html#aa546642e267c2117abaee79025d6e1a8">create_node</a> (json node_template, std::string node_key)</td></tr>
+<tr class="separator:aa546642e267c2117abaee79025d6e1a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4829a2015ef1ceaf78c49c953b54258e"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_node.html">Node</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_session.html#a4829a2015ef1ceaf78c49c953b54258e">create_node</a> (char *node_template, char *charnode_key)</td></tr>
+<tr class="separator:a4829a2015ef1ceaf78c49c953b54258e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb03e68fc271cf09c0175cb908b4afff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_session.html#adb03e68fc271cf09c0175cb908b4afff">read_session_template</a> (const std::string &amp;json_string)</td></tr>
 <tr class="separator:adb03e68fc271cf09c0175cb908b4afff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5eec7c1012a9a058f06347dd3cb18de3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_session.html#a5eec7c1012a9a058f06347dd3cb18de3">link_nodes</a> (std::string node_name, std::string port_name, std::string target_node_name, std::string target_port_name)</td></tr>
-<tr class="separator:a5eec7c1012a9a058f06347dd3cb18de3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7083c5cb94be76912b0fe02d003766be"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_session.html#a7083c5cb94be76912b0fe02d003766be">get_session_template</a> ()</td></tr>
+<tr class="separator:a7083c5cb94be76912b0fe02d003766be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9b0d73252fbb01cab292ef6b425da12"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_session.html#aa9b0d73252fbb01cab292ef6b425da12">link_nodes</a> (const std::string &amp;node_name, const std::string &amp;port_name, const std::string &amp;target_node_name, const std::string &amp;target_port_name)</td></tr>
+<tr class="separator:aa9b0d73252fbb01cab292ef6b425da12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_mongo_object"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_mongo_object')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_mongo_object.html">MongoObject</a></td></tr>
 <tr class="memitem:ae0438efeae33db2bfeb3972e1196a8a9 inherit pub_methods_class_mongo_object"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mongo_object.html#ae0438efeae33db2bfeb3972e1196a8a9">MongoObject</a> ()</td></tr>
 <tr class="separator:ae0438efeae33db2bfeb3972e1196a8a9 inherit pub_methods_class_mongo_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -289,9 +295,6 @@ Additional Inherited Members</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void Session::add_node </td>
@@ -311,11 +314,118 @@ Additional Inherited Members</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa546642e267c2117abaee79025d6e1a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa546642e267c2117abaee79025d6e1a8">&#9670;&nbsp;</a></span>create_node() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="class_node.html">Node</a>&gt; Session::create_node </td>
+          <td>(</td>
+          <td class="paramtype">json&#160;</td>
+          <td class="paramname"><em>node_template</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>node_key</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4829a2015ef1ceaf78c49c953b54258e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4829a2015ef1ceaf78c49c953b54258e">&#9670;&nbsp;</a></span>create_node() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="class_node.html">Node</a>&gt; Session::create_node </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>node_template</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>charnode_key</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abba77e16f30f13cb1b907066c672dd72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abba77e16f30f13cb1b907066c672dd72">&#9670;&nbsp;</a></span>create_port() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="class_port.html">Port</a>&gt; Session::create_port </td>
+          <td>(</td>
+          <td class="paramtype">json&#160;</td>
+          <td class="paramname"><em>port_template</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>port_key</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab9bee143899cc1eb3d3cf9dcb3652f99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9bee143899cc1eb3d3cf9dcb3652f99">&#9670;&nbsp;</a></span>create_port() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="class_port.html">Port</a>&gt; Session::create_port </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>port_template</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>port_key</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>
@@ -352,9 +462,6 @@ Additional Inherited Members</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::map&lt;std::string, std::shared_ptr&lt;<a class="el" href="class_node.html">Node</a>&gt; &gt; Session::get_nodes </td>
@@ -363,17 +470,29 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a5eec7c1012a9a058f06347dd3cb18de3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5eec7c1012a9a058f06347dd3cb18de3">&#9670;&nbsp;</a></span>link_nodes()</h2>
+<a id="a7083c5cb94be76912b0fe02d003766be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7083c5cb94be76912b0fe02d003766be">&#9670;&nbsp;</a></span>get_session_template()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Session::get_session_template </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa9b0d73252fbb01cab292ef6b425da12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9b0d73252fbb01cab292ef6b425da12">&#9670;&nbsp;</a></span>link_nodes()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -381,25 +500,25 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">bool Session::link_nodes </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>node_name</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>port_name</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>target_node_name</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>target_port_name</em>&#160;</td>
         </tr>
         <tr>
@@ -437,68 +556,6 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Reimplemented from <a class="el" href="class_mongo_object.html#a729412e226c9964e13ba80688c3f5e00">MongoObject</a>.</p>
-
-</div>
-</div>
-<a id="a8d085cbe91c4ab1632e4eed199120123"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d085cbe91c4ab1632e4eed199120123">&#9670;&nbsp;</a></span>read_node_template()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="class_node.html">Node</a>&gt; Session::read_node_template </td>
-          <td>(</td>
-          <td class="paramtype">json&#160;</td>
-          <td class="paramname"><em>j</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>node_key</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a092e487a152de25de0a37ef16356da7c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a092e487a152de25de0a37ef16356da7c">&#9670;&nbsp;</a></span>read_port_template()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="class_port.html">Port</a>&gt; Session::read_port_template </td>
-          <td>(</td>
-          <td class="paramtype">json&#160;</td>
-          <td class="paramname"><em>j</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>node_key</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>port_key</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -568,7 +625,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu May 23 2019 11:45:27 for chinet by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 30 2019 11:50:21 for chinet by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

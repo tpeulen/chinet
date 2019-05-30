@@ -21,7 +21,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/NodeCallback.h" line="22" column="1" bodyfile="include/NodeCallback.h" bodystart="22" bodyend="27"/>
+        <location file="include/NodeCallback.h" line="24" column="1" bodyfile="include/NodeCallback.h" bodystart="24" bodyend="29"/>
       </memberdef>
       <memberdef kind="function" id="class_node_callback_1a91f8bc71a7bc6164d831ab4fb8144810" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -34,7 +34,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/NodeCallback.h" line="29" column="1" bodyfile="include/NodeCallback.h" bodystart="29" bodyend="29"/>
+        <location file="include/NodeCallback.h" line="31" column="1" bodyfile="include/NodeCallback.h" bodystart="31" bodyend="31"/>
       </memberdef>
       <memberdef kind="function" id="class_node_callback_1ac9474867612b9fa6327dfe5cc5d29bec" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
         <type></type>
@@ -47,7 +47,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/NodeCallback.h" line="30" column="1" bodyfile="include/NodeCallback.h" bodystart="30" bodyend="30"/>
+        <location file="include/NodeCallback.h" line="32" column="1" bodyfile="include/NodeCallback.h" bodystart="32" bodyend="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -55,12 +55,12 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="28">
+      <node id="42">
         <label>NodeCallback</label>
         <link refid="class_node_callback"/>
       </node>
     </collaborationgraph>
-    <location file="include/NodeCallback.h" line="19" column="1" bodyfile="include/NodeCallback.h" bodystart="19" bodyend="31"/>
+    <location file="include/NodeCallback.h" line="20" column="1" bodyfile="include/NodeCallback.h" bodystart="20" bodyend="33"/>
     <listofallmembers>
       <member refid="class_node_callback_1a91f8bc71a7bc6164d831ab4fb8144810" prot="public" virt="non-virtual"><scope>NodeCallback</scope><name>NodeCallback</name></member>
       <member refid="class_node_callback_1a94eb8c2fd7162ffcc4abff8bd2e852b3" prot="public" virt="virtual"><scope>NodeCallback</scope><name>run</name></member>

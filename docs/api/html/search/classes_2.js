@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mongoobject',['MongoObject',['../class_mongo_object.html',1,'']]]
+  ['exponentialdecay',['ExponentialDecay',['../class_exponential_decay.html',1,'']]]
 ];

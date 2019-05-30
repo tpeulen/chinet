@@ -39,13 +39,19 @@ bool \hyperlink{class_session_a513e5436b4c990985300246bb39d9f5c}{write\+\_\+to\+
 \item 
 bool \hyperlink{class_session_a4f09644fd155a1d5640cedefe4aa42fc}{read\+\_\+from\+\_\+db} (const std\+::string \&oid\+\_\+string) final
 \item 
-std\+::shared\+\_\+ptr$<$ \hyperlink{class_port}{Port} $>$ \hyperlink{class_session_a092e487a152de25de0a37ef16356da7c}{read\+\_\+port\+\_\+template} (json j, std\+::string \&node\+\_\+key, std\+::string \&port\+\_\+key)
+std\+::shared\+\_\+ptr$<$ \hyperlink{class_port}{Port} $>$ \hyperlink{class_session_abba77e16f30f13cb1b907066c672dd72}{create\+\_\+port} (json port\+\_\+template, std\+::string port\+\_\+key)
 \item 
-std\+::shared\+\_\+ptr$<$ \hyperlink{class_node}{Node} $>$ \hyperlink{class_session_a8d085cbe91c4ab1632e4eed199120123}{read\+\_\+node\+\_\+template} (json j, std\+::string \&node\+\_\+key)
+std\+::shared\+\_\+ptr$<$ \hyperlink{class_port}{Port} $>$ \hyperlink{class_session_ab9bee143899cc1eb3d3cf9dcb3652f99}{create\+\_\+port} (char $\ast$port\+\_\+template, char $\ast$port\+\_\+key)
+\item 
+std\+::shared\+\_\+ptr$<$ \hyperlink{class_node}{Node} $>$ \hyperlink{class_session_aa546642e267c2117abaee79025d6e1a8}{create\+\_\+node} (json node\+\_\+template, std\+::string node\+\_\+key)
+\item 
+std\+::shared\+\_\+ptr$<$ \hyperlink{class_node}{Node} $>$ \hyperlink{class_session_a4829a2015ef1ceaf78c49c953b54258e}{create\+\_\+node} (char $\ast$node\+\_\+template, char $\ast$charnode\+\_\+key)
 \item 
 bool \hyperlink{class_session_adb03e68fc271cf09c0175cb908b4afff}{read\+\_\+session\+\_\+template} (const std\+::string \&json\+\_\+string)
 \item 
-bool \hyperlink{class_session_a5eec7c1012a9a058f06347dd3cb18de3}{link\+\_\+nodes} (std\+::string node\+\_\+name, std\+::string port\+\_\+name, std\+::string target\+\_\+node\+\_\+name, std\+::string target\+\_\+port\+\_\+name)
+std\+::string \hyperlink{class_session_a7083c5cb94be76912b0fe02d003766be}{get\+\_\+session\+\_\+template} ()
+\item 
+bool \hyperlink{class_session_aa9b0d73252fbb01cab292ef6b425da12}{link\+\_\+nodes} (const std\+::string \&node\+\_\+name, const std\+::string \&port\+\_\+name, const std\+::string \&target\+\_\+node\+\_\+name, const std\+::string \&target\+\_\+port\+\_\+name)
 \end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -80,7 +86,31 @@ bson\+\_\+t \hyperlink{class_session_aa517fe6138a0cc32e27ddf1eb7331520}{get\+\_\
 \index{Session@{Session}!add\+\_\+node@{add\+\_\+node}}
 \index{add\+\_\+node@{add\+\_\+node}!Session@{Session}}
 \subsubsection{\texorpdfstring{add\+\_\+node()}{add\_node()}}
-{\footnotesize\ttfamily void Session\+::add\+\_\+node (\begin{DoxyParamCaption}\item[{std\+::string}]{name,  }\item[{std\+::shared\+\_\+ptr$<$ \hyperlink{class_node}{Node} $>$}]{object }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily void Session\+::add\+\_\+node (\begin{DoxyParamCaption}\item[{std\+::string}]{name,  }\item[{std\+::shared\+\_\+ptr$<$ \hyperlink{class_node}{Node} $>$}]{object }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_session_aa546642e267c2117abaee79025d6e1a8}\label{class_session_aa546642e267c2117abaee79025d6e1a8}} 
+\index{Session@{Session}!create\+\_\+node@{create\+\_\+node}}
+\index{create\+\_\+node@{create\+\_\+node}!Session@{Session}}
+\subsubsection{\texorpdfstring{create\+\_\+node()}{create\_node()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\hyperlink{class_node}{Node}$>$ Session\+::create\+\_\+node (\begin{DoxyParamCaption}\item[{json}]{node\+\_\+template,  }\item[{std\+::string}]{node\+\_\+key }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_session_a4829a2015ef1ceaf78c49c953b54258e}\label{class_session_a4829a2015ef1ceaf78c49c953b54258e}} 
+\index{Session@{Session}!create\+\_\+node@{create\+\_\+node}}
+\index{create\+\_\+node@{create\+\_\+node}!Session@{Session}}
+\subsubsection{\texorpdfstring{create\+\_\+node()}{create\_node()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\hyperlink{class_node}{Node}$>$ Session\+::create\+\_\+node (\begin{DoxyParamCaption}\item[{char $\ast$}]{node\+\_\+template,  }\item[{char $\ast$}]{charnode\+\_\+key }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_session_abba77e16f30f13cb1b907066c672dd72}\label{class_session_abba77e16f30f13cb1b907066c672dd72}} 
+\index{Session@{Session}!create\+\_\+port@{create\+\_\+port}}
+\index{create\+\_\+port@{create\+\_\+port}!Session@{Session}}
+\subsubsection{\texorpdfstring{create\+\_\+port()}{create\_port()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\hyperlink{class_port}{Port}$>$ Session\+::create\+\_\+port (\begin{DoxyParamCaption}\item[{json}]{port\+\_\+template,  }\item[{std\+::string}]{port\+\_\+key }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_session_ab9bee143899cc1eb3d3cf9dcb3652f99}\label{class_session_ab9bee143899cc1eb3d3cf9dcb3652f99}} 
+\index{Session@{Session}!create\+\_\+port@{create\+\_\+port}}
+\index{create\+\_\+port@{create\+\_\+port}!Session@{Session}}
+\subsubsection{\texorpdfstring{create\+\_\+port()}{create\_port()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\hyperlink{class_port}{Port}$>$ Session\+::create\+\_\+port (\begin{DoxyParamCaption}\item[{char $\ast$}]{port\+\_\+template,  }\item[{char $\ast$}]{port\+\_\+key }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_session_aa517fe6138a0cc32e27ddf1eb7331520}\label{class_session_aa517fe6138a0cc32e27ddf1eb7331520}} 
 \index{Session@{Session}!get\+\_\+bson@{get\+\_\+bson}}
@@ -96,13 +126,19 @@ Reimplemented from \hyperlink{class_mongo_object_ac21cbe104a818f7e6ee7dcfbb521e9
 \index{Session@{Session}!get\+\_\+nodes@{get\+\_\+nodes}}
 \index{get\+\_\+nodes@{get\+\_\+nodes}!Session@{Session}}
 \subsubsection{\texorpdfstring{get\+\_\+nodes()}{get\_nodes()}}
-{\footnotesize\ttfamily std\+::map$<$std\+::string, std\+::shared\+\_\+ptr$<$\hyperlink{class_node}{Node}$>$ $>$ Session\+::get\+\_\+nodes (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily std\+::map$<$std\+::string, std\+::shared\+\_\+ptr$<$\hyperlink{class_node}{Node}$>$ $>$ Session\+::get\+\_\+nodes (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{class_session_a5eec7c1012a9a058f06347dd3cb18de3}\label{class_session_a5eec7c1012a9a058f06347dd3cb18de3}} 
+\mbox{\Hypertarget{class_session_a7083c5cb94be76912b0fe02d003766be}\label{class_session_a7083c5cb94be76912b0fe02d003766be}} 
+\index{Session@{Session}!get\+\_\+session\+\_\+template@{get\+\_\+session\+\_\+template}}
+\index{get\+\_\+session\+\_\+template@{get\+\_\+session\+\_\+template}!Session@{Session}}
+\subsubsection{\texorpdfstring{get\+\_\+session\+\_\+template()}{get\_session\_template()}}
+{\footnotesize\ttfamily std\+::string Session\+::get\+\_\+session\+\_\+template (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_session_aa9b0d73252fbb01cab292ef6b425da12}\label{class_session_aa9b0d73252fbb01cab292ef6b425da12}} 
 \index{Session@{Session}!link\+\_\+nodes@{link\+\_\+nodes}}
 \index{link\+\_\+nodes@{link\+\_\+nodes}!Session@{Session}}
 \subsubsection{\texorpdfstring{link\+\_\+nodes()}{link\_nodes()}}
-{\footnotesize\ttfamily bool Session\+::link\+\_\+nodes (\begin{DoxyParamCaption}\item[{std\+::string}]{node\+\_\+name,  }\item[{std\+::string}]{port\+\_\+name,  }\item[{std\+::string}]{target\+\_\+node\+\_\+name,  }\item[{std\+::string}]{target\+\_\+port\+\_\+name }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily bool Session\+::link\+\_\+nodes (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{node\+\_\+name,  }\item[{const std\+::string \&}]{port\+\_\+name,  }\item[{const std\+::string \&}]{target\+\_\+node\+\_\+name,  }\item[{const std\+::string \&}]{target\+\_\+port\+\_\+name }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_session_a4f09644fd155a1d5640cedefe4aa42fc}\label{class_session_a4f09644fd155a1d5640cedefe4aa42fc}} 
 \index{Session@{Session}!read\+\_\+from\+\_\+db@{read\+\_\+from\+\_\+db}}
@@ -113,18 +149,6 @@ Reimplemented from \hyperlink{class_mongo_object_ac21cbe104a818f7e6ee7dcfbb521e9
 
 
 Reimplemented from \hyperlink{class_mongo_object_a729412e226c9964e13ba80688c3f5e00}{Mongo\+Object}.
-
-\mbox{\Hypertarget{class_session_a8d085cbe91c4ab1632e4eed199120123}\label{class_session_a8d085cbe91c4ab1632e4eed199120123}} 
-\index{Session@{Session}!read\+\_\+node\+\_\+template@{read\+\_\+node\+\_\+template}}
-\index{read\+\_\+node\+\_\+template@{read\+\_\+node\+\_\+template}!Session@{Session}}
-\subsubsection{\texorpdfstring{read\+\_\+node\+\_\+template()}{read\_node\_template()}}
-{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\hyperlink{class_node}{Node}$>$ Session\+::read\+\_\+node\+\_\+template (\begin{DoxyParamCaption}\item[{json}]{j,  }\item[{std\+::string \&}]{node\+\_\+key }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{class_session_a092e487a152de25de0a37ef16356da7c}\label{class_session_a092e487a152de25de0a37ef16356da7c}} 
-\index{Session@{Session}!read\+\_\+port\+\_\+template@{read\+\_\+port\+\_\+template}}
-\index{read\+\_\+port\+\_\+template@{read\+\_\+port\+\_\+template}!Session@{Session}}
-\subsubsection{\texorpdfstring{read\+\_\+port\+\_\+template()}{read\_port\_template()}}
-{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\hyperlink{class_port}{Port}$>$ Session\+::read\+\_\+port\+\_\+template (\begin{DoxyParamCaption}\item[{json}]{j,  }\item[{std\+::string \&}]{node\+\_\+key,  }\item[{std\+::string \&}]{port\+\_\+key }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_session_adb03e68fc271cf09c0175cb908b4afff}\label{class_session_adb03e68fc271cf09c0175cb908b4afff}} 
 \index{Session@{Session}!read\+\_\+session\+\_\+template@{read\+\_\+session\+\_\+template}}

@@ -66,7 +66,7 @@
         </inbodydescription>
         <location file="include/Session.h" line="35" column="1" bodyfile="include/Session.h" bodystart="35" bodyend="41"/>
       </memberdef>
-      <memberdef kind="function" id="class_session_1a7b5d3b9db809cc54e515639b78b0e811" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="class_session_1a7b5d3b9db809cc54e515639b78b0e811" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
         <definition>void Session::add_node</definition>
         <argsstring>(std::string name, std::shared_ptr&lt; Node &gt; object)</argsstring>
@@ -85,9 +85,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Session.h" line="43" column="1" bodyfile="include/Session.h" bodystart="43" bodyend="50"/>
+        <location file="include/Session.h" line="43" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="class_session_1af091cae3db4abcc5afe4a8abaef222f2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="class_session_1af091cae3db4abcc5afe4a8abaef222f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::map&lt; std::string, std::shared_ptr&lt; <ref refid="class_node" kindref="compound">Node</ref> &gt; &gt;</type>
         <definition>std::map&lt;std::string, std::shared_ptr&lt;Node&gt; &gt; Session::get_nodes</definition>
         <argsstring>()</argsstring>
@@ -98,7 +98,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Session.h" line="52" column="1" bodyfile="include/Session.h" bodystart="52" bodyend="55"/>
+        <location file="include/Session.h" line="45" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_session_1a513e5436b4c990985300246bb39d9f5c" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
         <type>bool</type>
@@ -112,7 +112,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Session.h" line="57" column="1"/>
+        <location file="include/Session.h" line="47" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_session_1a4f09644fd155a1d5640cedefe4aa42fc" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
         <type>bool</type>
@@ -130,23 +130,19 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Session.h" line="59" column="1"/>
+        <location file="include/Session.h" line="49" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="class_session_1a092e487a152de25de0a37ef16356da7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="class_session_1abba77e16f30f13cb1b907066c672dd72" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::shared_ptr&lt; <ref refid="class_port" kindref="compound">Port</ref> &gt;</type>
-        <definition>std::shared_ptr&lt;Port&gt; Session::read_port_template</definition>
-        <argsstring>(json j, std::string &amp;node_key, std::string &amp;port_key)</argsstring>
-        <name>read_port_template</name>
+        <definition>std::shared_ptr&lt;Port&gt; Session::create_port</definition>
+        <argsstring>(json port_template, std::string port_key)</argsstring>
+        <name>create_port</name>
         <param>
           <type>json</type>
-          <declname>j</declname>
+          <declname>port_template</declname>
         </param>
         <param>
-          <type>std::string &amp;</type>
-          <declname>node_key</declname>
-        </param>
-        <param>
-          <type>std::string &amp;</type>
+          <type>std::string</type>
           <declname>port_key</declname>
         </param>
         <briefdescription>
@@ -155,19 +151,40 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Session.h" line="61" column="1"/>
+        <location file="include/Session.h" line="51" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="class_session_1a8d085cbe91c4ab1632e4eed199120123" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>std::shared_ptr&lt; <ref refid="class_node" kindref="compound">Node</ref> &gt;</type>
-        <definition>std::shared_ptr&lt;Node&gt; Session::read_node_template</definition>
-        <argsstring>(json j, std::string &amp;node_key)</argsstring>
-        <name>read_node_template</name>
+      <memberdef kind="function" id="class_session_1ab9bee143899cc1eb3d3cf9dcb3652f99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::shared_ptr&lt; <ref refid="class_port" kindref="compound">Port</ref> &gt;</type>
+        <definition>std::shared_ptr&lt;Port&gt; Session::create_port</definition>
+        <argsstring>(char *port_template, char *port_key)</argsstring>
+        <name>create_port</name>
         <param>
-          <type>json</type>
-          <declname>j</declname>
+          <type>char *</type>
+          <declname>port_template</declname>
         </param>
         <param>
-          <type>std::string &amp;</type>
+          <type>char *</type>
+          <declname>port_key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Session.h" line="52" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_session_1aa546642e267c2117abaee79025d6e1a8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::shared_ptr&lt; <ref refid="class_node" kindref="compound">Node</ref> &gt;</type>
+        <definition>std::shared_ptr&lt;Node&gt; Session::create_node</definition>
+        <argsstring>(json node_template, std::string node_key)</argsstring>
+        <name>create_node</name>
+        <param>
+          <type>json</type>
+          <declname>node_template</declname>
+        </param>
+        <param>
+          <type>std::string</type>
           <declname>node_key</declname>
         </param>
         <briefdescription>
@@ -176,7 +193,28 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Session.h" line="63" column="1"/>
+        <location file="include/Session.h" line="54" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_session_1a4829a2015ef1ceaf78c49c953b54258e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::shared_ptr&lt; <ref refid="class_node" kindref="compound">Node</ref> &gt;</type>
+        <definition>std::shared_ptr&lt;Node&gt; Session::create_node</definition>
+        <argsstring>(char *node_template, char *charnode_key)</argsstring>
+        <name>create_node</name>
+        <param>
+          <type>char *</type>
+          <declname>node_template</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>charnode_key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Session.h" line="55" column="1"/>
       </memberdef>
       <memberdef kind="function" id="class_session_1adb03e68fc271cf09c0175cb908b4afff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -193,27 +231,40 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Session.h" line="65" column="1"/>
+        <location file="include/Session.h" line="57" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="class_session_1a5eec7c1012a9a058f06347dd3cb18de3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="class_session_1a7083c5cb94be76912b0fe02d003766be" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string Session::get_session_template</definition>
+        <argsstring>()</argsstring>
+        <name>get_session_template</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/Session.h" line="59" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_session_1aa9b0d73252fbb01cab292ef6b425da12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
         <definition>bool Session::link_nodes</definition>
-        <argsstring>(std::string node_name, std::string port_name, std::string target_node_name, std::string target_port_name)</argsstring>
+        <argsstring>(const std::string &amp;node_name, const std::string &amp;port_name, const std::string &amp;target_node_name, const std::string &amp;target_port_name)</argsstring>
         <name>link_nodes</name>
         <param>
-          <type>std::string</type>
+          <type>const std::string &amp;</type>
           <declname>node_name</declname>
         </param>
         <param>
-          <type>std::string</type>
+          <type>const std::string &amp;</type>
           <declname>port_name</declname>
         </param>
         <param>
-          <type>std::string</type>
+          <type>const std::string &amp;</type>
           <declname>target_node_name</declname>
         </param>
         <param>
-          <type>std::string</type>
+          <type>const std::string &amp;</type>
           <declname>target_port_name</declname>
         </param>
         <briefdescription>
@@ -222,7 +273,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/Session.h" line="67" column="1"/>
+        <location file="include/Session.h" line="61" column="1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -230,25 +281,25 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="38">
+      <node id="72">
         <label>MongoObject</label>
         <link refid="class_mongo_object"/>
       </node>
-      <node id="37">
+      <node id="71">
         <label>Session</label>
         <link refid="class_session"/>
-        <childnode refid="38" relation="public-inheritance">
+        <childnode refid="72" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="42">
+      <node id="76">
         <label>std::basic_string&lt; char &gt;</label>
       </node>
-      <node id="40">
+      <node id="74">
         <label>MongoObject</label>
         <link refid="class_mongo_object"/>
-        <childnode refid="41" relation="usage">
+        <childnode refid="75" relation="usage">
           <edgelabel>#db_string</edgelabel>
           <edgelabel>#collection_string</edgelabel>
           <edgelabel>#app_string</edgelabel>
@@ -256,28 +307,28 @@
           <edgelabel>#uri_string</edgelabel>
         </childnode>
       </node>
-      <node id="39">
+      <node id="73">
         <label>Session</label>
         <link refid="class_session"/>
-        <childnode refid="40" relation="public-inheritance">
+        <childnode refid="74" relation="public-inheritance">
         </childnode>
-        <childnode refid="43" relation="usage">
+        <childnode refid="77" relation="usage">
           <edgelabel>+nodes</edgelabel>
         </childnode>
       </node>
-      <node id="43">
+      <node id="77">
         <label>std::map&lt; std::string, std::shared_ptr&lt; Node &gt; &gt;</label>
-        <childnode refid="41" relation="usage">
+        <childnode refid="75" relation="usage">
           <edgelabel>+keys</edgelabel>
         </childnode>
       </node>
-      <node id="41">
+      <node id="75">
         <label>std::string</label>
-        <childnode refid="42" relation="public-inheritance">
+        <childnode refid="76" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/Session.h" line="20" column="1" bodyfile="include/Session.h" bodystart="19" bodyend="73"/>
+    <location file="include/Session.h" line="20" column="1" bodyfile="include/Session.h" bodystart="19" bodyend="67"/>
     <listofallmembers>
       <member refid="class_session_1a7b5d3b9db809cc54e515639b78b0e811" prot="public" virt="non-virtual"><scope>Session</scope><name>add_node</name></member>
       <member refid="class_mongo_object_1ace5148b45dd674c73077a044d0233ed8" prot="protected" virt="non-virtual"><scope>Session</scope><name>app_string</name></member>
@@ -289,8 +340,12 @@
       <member refid="class_mongo_object_1a830f8d398209664c866f2c437667cc5a" prot="protected" virt="non-virtual"><scope>Session</scope><name>create_and_connect_objects_from_oid_array</name></member>
       <member refid="class_mongo_object_1ab879c65bc54d59dc56cc0ca652756e10" prot="protected" virt="non-virtual"><scope>Session</scope><name>create_and_connect_objects_from_oid_doc</name></member>
       <member refid="class_mongo_object_1ad5165ed92020fba7d502a3556794ab4f" prot="public" virt="non-virtual"><scope>Session</scope><name>create_copy</name></member>
+      <member refid="class_session_1aa546642e267c2117abaee79025d6e1a8" prot="public" virt="non-virtual"><scope>Session</scope><name>create_node</name></member>
+      <member refid="class_session_1a4829a2015ef1ceaf78c49c953b54258e" prot="public" virt="non-virtual"><scope>Session</scope><name>create_node</name></member>
       <member refid="class_mongo_object_1a0b94ea01312b792e42b944399a4eb45c" prot="protected" virt="non-virtual"><scope>Session</scope><name>create_oid_array_in_doc</name></member>
       <member refid="class_mongo_object_1ae8d85ac8089beca73773bd6189a2530c" prot="protected" virt="non-virtual"><scope>Session</scope><name>create_oid_dict_in_doc</name></member>
+      <member refid="class_session_1abba77e16f30f13cb1b907066c672dd72" prot="public" virt="non-virtual"><scope>Session</scope><name>create_port</name></member>
+      <member refid="class_session_1ab9bee143899cc1eb3d3cf9dcb3652f99" prot="public" virt="non-virtual"><scope>Session</scope><name>create_port</name></member>
       <member refid="class_mongo_object_1a215dc4379af5ac81e19d245f5d5d37e0" prot="protected" virt="non-virtual"><scope>Session</scope><name>db_string</name></member>
       <member refid="class_mongo_object_1ae541414f753a8fd792cf0be163117b99" prot="public" virt="non-virtual"><scope>Session</scope><name>disconnect_from_db</name></member>
       <member refid="class_mongo_object_1aa143fbe117d6c12baf222be25555947b" prot="protected" virt="non-virtual"><scope>Session</scope><name>document</name></member>
@@ -304,10 +359,11 @@
       <member refid="class_mongo_object_1abd49d2dcea0ce5f49ebe9a8a9df97164" prot="public" virt="virtual"><scope>Session</scope><name>get_name</name></member>
       <member refid="class_session_1af091cae3db4abcc5afe4a8abaef222f2" prot="public" virt="non-virtual"><scope>Session</scope><name>get_nodes</name></member>
       <member refid="class_mongo_object_1ad155a8808f999f8e3dd0cfc055b33e2a" prot="public" virt="non-virtual"><scope>Session</scope><name>get_oid</name></member>
+      <member refid="class_session_1a7083c5cb94be76912b0fe02d003766be" prot="public" virt="non-virtual"><scope>Session</scope><name>get_session_template</name></member>
       <member refid="class_mongo_object_1af0cf1568e5b1b87a971e93bba4ec0a40" prot="public" virt="non-virtual"><scope>Session</scope><name>get_singleton</name></member>
       <member refid="class_mongo_object_1a33799f83d7343fc5385869f5a907aeea" prot="protected" virt="non-virtual"><scope>Session</scope><name>get_string_by_key</name></member>
       <member refid="class_mongo_object_1ae67113e87e4dadcd51c23aa373eba61d" prot="public" virt="non-virtual"><scope>Session</scope><name>is_connected_to_db</name></member>
-      <member refid="class_session_1a5eec7c1012a9a058f06347dd3cb18de3" prot="public" virt="non-virtual"><scope>Session</scope><name>link_nodes</name></member>
+      <member refid="class_session_1aa9b0d73252fbb01cab292ef6b425da12" prot="public" virt="non-virtual"><scope>Session</scope><name>link_nodes</name></member>
       <member refid="class_mongo_object_1ae0438efeae33db2bfeb3972e1196a8a9" prot="public" virt="non-virtual"><scope>Session</scope><name>MongoObject</name></member>
       <member refid="class_mongo_object_1a9e876f9d6e7cfcb7d4ce9046014e2b5f" prot="public" virt="non-virtual"><scope>Session</scope><name>MongoObject</name></member>
       <member refid="class_session_1a0b50e79f5e66081dd5112571107bc652" prot="public" virt="non-virtual"><scope>Session</scope><name>nodes</name></member>
@@ -320,8 +376,6 @@
       <member refid="class_session_1a4f09644fd155a1d5640cedefe4aa42fc" prot="public" virt="virtual"><scope>Session</scope><name>read_from_db</name></member>
       <member refid="class_mongo_object_1aecd244620f292e8368d1f593925eafbd" prot="protected" virt="non-virtual" ambiguityscope="MongoObject::"><scope>Session</scope><name>read_from_db</name></member>
       <member refid="class_mongo_object_1adce8ffc4811a9d1c94701711f574bc34" prot="public" virt="non-virtual"><scope>Session</scope><name>read_json</name></member>
-      <member refid="class_session_1a8d085cbe91c4ab1632e4eed199120123" prot="public" virt="non-virtual"><scope>Session</scope><name>read_node_template</name></member>
-      <member refid="class_session_1a092e487a152de25de0a37ef16356da7c" prot="public" virt="non-virtual"><scope>Session</scope><name>read_port_template</name></member>
       <member refid="class_session_1adb03e68fc271cf09c0175cb908b4afff" prot="public" virt="non-virtual"><scope>Session</scope><name>read_session_template</name></member>
       <member refid="class_session_1ad92ef09b872c9227e38a6efdd4d8a837" prot="public" virt="non-virtual"><scope>Session</scope><name>Session</name></member>
       <member refid="class_session_1a556c8971b03563ae3c94dc1d19cbed27" prot="public" virt="non-virtual"><scope>Session</scope><name>Session</name></member>
