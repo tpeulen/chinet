@@ -33,7 +33,17 @@ class Tests(unittest.TestCase):
         # check linking
         p5 = cn.Port(v2)
         p5.link(p4)
-        self.assertEqual(p5.get_value(), p4.get_value())
+        self.assertEqual((p5.get_value() == p4.get_value()).all(), True)
+
+    def test_port_get_set_value(self):
+        """Test chinet Port class set_value and get_value"""
+        v1 = [1, 2, 3]
+        p1 = cn.Port()
+        p1.set_value(v1)
+
+        p2 = cn.Port()
+        p2.value = v1
+        self.assertEqual((p1.get_value() == p2.get_value()).all(), True)
 
     def test_port_init_vector(self):
         """Test chinet Port class set_value and get_value"""
@@ -97,10 +107,18 @@ class Tests(unittest.TestCase):
     def test_port_fixed(self):
         p1 = cn.Port(12)
         p1.set_fixed(True)
-        self.assertEqual(p1.is_fixed(), True)
+        self.assertEqual(p1.fixed, True)
 
-        p1.set_fixed(False)
+        p1.fixed = False
         self.assertEqual(p1.is_fixed(), False)
+
+    def test_port_reactive(self):
+        p1 = cn.Port(12)
+        p1.set_reactive(True)
+        self.assertEqual(p1.reactive, True)
+
+        p1.reactive = False
+        self.assertEqual(p1.is_reactive(), False)
 
     def test_db_write(self):
         db_dict = {
