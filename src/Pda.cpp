@@ -282,30 +282,56 @@ unsigned int Pda::getNmax() const {
     return Nmax;
 }
 
+void Pda::append(double amplitude, double probability_green)
+{
+    amplitudes.push_back(amplitude);
+    probability_green_theor.push_back(probability_green);
+}
 
 void Pda::setNmax(unsigned int nmax) {
     Nmax = nmax;
-    free(SgSr);
-    SgSr = new double[(Nmax + 1) * (Nmax + 1)];
+    SgSr.resize((Nmax + 1) * (Nmax + 1));
+    for(int i =0; i< (Nmax + 1) * (Nmax + 1); ++i){
+        SgSr[i] = 0.0;
+    }
 }
 
+void Pda::evaluate()
+{
+    PdaFunctions::sgsr_pF_manypg(
+            SgSr.data(),
+            pF.data(),
+            getNmax(),
+            getBg(), getBr(),
+            probability_green_theor.size(),
+            probability_green_theor.data(),
+            amplitudes.data()
+            );
+}
 
 double Pda::getBg() const {
     return Bg;
 }
 
-
 void Pda::setBg(double bg) {
     Bg = bg;
 }
-
 
 double Pda::getBr() const {
     return Br;
 }
 
-
 void Pda::setBr(double br) {
     Br = br;
 }
 
+void Pda::setPF(double *in1D, int in_nbr)
+{
+    pF.assign(in1D, in1D+in_nbr);
+}
+
+void Pda::getSgSr(double **out, int *out_nbr)
+{
+    *out = SgSr.data();
+    *out_nbr = Nmax * Nmax;
+}

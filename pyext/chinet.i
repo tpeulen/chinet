@@ -1,4 +1,4 @@
-%module(directors="1") chinet
+%module(directors="1", package="chinet") chinet
 
 %include "documentation.i"
 
@@ -65,17 +65,17 @@
 
 }
 
+%include "cpointer.i"
 %include "mongo.i"
 %include "port.i"
 %include "node.i"
 %include "nodecallback.i"
 %include "session.i"
-%include "cpointer.i"
+%include "pda.i"
 
 /*
 %include "curve.i"
 %include "decay.i"
-%include "pda.i"
 */
 
 

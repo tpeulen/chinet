@@ -16,7 +16,8 @@ private:
     double Bg;
     double Br;
     unsigned int Nmax;
-    double* SgSr;
+    std::vector<double> SgSr;
+    std::vector<double> pF;
     std::vector<double> amplitudes;
     std::vector<double> probability_green_theor;
 
@@ -24,11 +25,10 @@ public:
 
     // Constructor and Destructor
     ~Pda(){
-        delete[] SgSr;
     }
 
     // Methods
-    //void append(double amplitude, double probability_green);
+    void append(double amplitude, double probability_green);
 
     // Getter and Setter
 
@@ -43,6 +43,12 @@ public:
     double getBr() const;
 
     void setBr(double br);
+
+    void setPF(double *in, int n_in);
+
+    void getSgSr(double **out, int *n_out);
+
+    void evaluate();
 
 };
 

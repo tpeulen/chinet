@@ -60,6 +60,7 @@ FILE(GLOB SRC_files
         "../src/Node.cpp"
         "../src/NodeCallback.cpp"
         "../src/Session.cpp"
+        "../src/Pda.cpp"
         )
 
 SET_PROPERTY(
