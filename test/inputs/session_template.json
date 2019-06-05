@@ -4,7 +4,9 @@
       "ports": {
         "inA": {
           "value": [1,2,3,4,5],
-          "is_fixed": true
+          "bounds": [1, 4],
+          "is_fixed": true,
+          "is_bounded": true
         },
         "outA": {
           "value": [],

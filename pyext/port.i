@@ -15,10 +15,16 @@
 %shared_ptr(Port)
 %template(vector_port_ptr) std::vector<Port*>;
 
-%apply (double* IN_ARRAY1, int DIM1) {(double *in, int nbr_in)}
-%apply (double** ARGOUTVIEW_ARRAY1, int* DIM1) {(double **out, int *nbr_out)}
+%apply (double* IN_ARRAY1, int DIM1) {(double *in, int n_in)}
+%apply (double** ARGOUTVIEW_ARRAY1, int* DIM1) {(double **out, int *n_out)}
+
 %ignore get_value(); // use memory - void get_value(double **out, int *nbr_out)
 %ignore set_value(std::vector<double> &values); // use memory - void get_value(double **out, int *nbr_out)
+
+%include attribute.i
+%attribute(Port, bool, fixed, is_fixed, set_fixed);
+%attribute(Port, bool, is_output, is_output, set_port_type);
+%attribute(Port, bool, reactive, is_reactive, set_reactive);
 
 %include "../include/Port.h"
 %include "../include/PortLinks.h"
@@ -33,28 +39,13 @@
             return os.str();
         }
 
-        //https://stackoverflow.com/questions/1183716/python-properties-swig
         %pythoncode
         %{
             __swig_getmethods__["value"] = get_value
             __swig_setmethods__["value"] = set_value
-            if _newclass: x = property(get_value, set_value)
-
-            __swig_getmethods__["fixed"] = is_fixed
-            __swig_setmethods__["fixed"] = set_fixed
-            if _newclass: x = property(is_fixed, set_fixed)
-
-            __swig_getmethods__["reactive"] = is_reactive
-            __swig_setmethods__["reactive"] = set_reactive
-            if _newclass: x = property(is_reactive, set_reactive)
-
+            if _newclass: value = property(get_value, set_value)
         %}
-        /*
-        std::shared_ptr<Port> __getitem__(std::string key)
-        {
-                return (*self)[key];
-        };
-         */
 
 }
+
 

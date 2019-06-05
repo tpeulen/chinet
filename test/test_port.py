@@ -35,6 +35,33 @@ class Tests(unittest.TestCase):
         p5.link(p4)
         self.assertEqual((p5.get_value() == p4.get_value()).all(), True)
 
+        #check bounds
+        fixed = False
+        is_output = False
+        is_reactive = False
+        is_bounded = True
+        lower_bound = 2
+        upper_bound = 3
+        value = 10
+        p6 = cn.Port(value, fixed, is_output, is_reactive, is_bounded, lower_bound, upper_bound)
+        self.assertEqual(p6.get_value()[0] <= upper_bound, True)
+        self.assertEqual(p6.get_value()[0] >= lower_bound, True)
+        self.assertAlmostEqual(p6.get_value()[0], 3)
+
+    def test_port_bounds(self):
+        """Test chinet Port class set_value and get_value"""
+        v1 = np.array([1, 2, 3, 6, 5.5, -3, -2, -6.1, -10000, 10000])
+        p1 = cn.Port()
+        p1.set_value(v1)
+
+        self.assertEqual((p1.get_value() == v1).all(), True)
+
+        p1.set_bounded(True)
+        p1.set_bounds(0, 1)
+
+        self.assertEqual((p1.get_value() <= 1).all(), True)
+        self.assertEqual((p1.get_value() >= 0).all(), True)
+
     def test_port_get_set_value(self):
         """Test chinet Port class set_value and get_value"""
         v1 = [1, 2, 3]

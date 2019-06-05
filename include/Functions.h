@@ -14,6 +14,9 @@
 #include <chrono>
 #include <bson.h>
 
+namespace FluorescenceDecay{
+
+}
 
 namespace Functions {
 
@@ -94,6 +97,30 @@ namespace Functions {
             double **out, int *nout
     );
 
+    /*!
+     * Maps the array of values @param in place to values to the interval (min, max) determined by
+     * the parameters @param bound_1 and @param bound_2. The values are mapped to the
+     * interval by:
+     *
+     * \f$
+     * max(bound_1, bound_2) - abs(bound_1-bound_2)/(exp(value / abs(bound_1-bound_2))+1)
+     * \f$
+     *
+     * @tparam T The type of the values
+     * @param values (InOut)
+     * @param n_values (In)
+     * @param lower_bound (In)
+     * @param upper_bound (In)
+     */
+    template <typename T>
+    void map_to_bounds(T *values, int n_values, T lower_bound, T upper_bound)
+    {
+        T delta = upper_bound - lower_bound;
+        for(int i = 0; i<n_values; i++)
+        {
+            values[i] = upper_bound - delta / (exp(values[i]/delta) + 1.0);
+        }
+    }
 
     /*!
      * This function convolves a sum of exponential decays with an instrument response function (IRF)

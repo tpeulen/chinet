@@ -267,6 +267,8 @@ public:
 
     std::string get_json();
 
+    std::string get_json_template();
+
     bool read_json(std::string json_string);
 
     std::string get_oid();

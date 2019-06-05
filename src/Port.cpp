@@ -1,14 +1,11 @@
 #include "Port.h"
 
-
 // Methods
 // --------------------------------------------------------------------
-
-
 bool ValuePort::read_from_db(const std::string &oid_string)
 {
     bool re = MongoObject::read_from_db(oid_string);
-    _buff_double_vector = MongoObject::get_array<double>("value");
+    value_buffer_ = MongoObject::get_array<double>("value");
     return re;
 }
 
@@ -18,24 +15,66 @@ bool ValuePort::write_to_db()
     return MongoObject::write_to_db(doc, 0);
 }
 
-
 // Setter
 //--------------------------------------------------------------------
-
 bson_t ValuePort::get_bson()
 {
-    bson_t dst = MongoObject::get_bson_excluding("value", NULL);
-    MongoObject::append_number_array(&dst, "value", _buff_double_vector);
+    bson_t dst = get_bson_excluding("value", "bounds", NULL);
+    append_number_array(&dst, "value", value_buffer_);
+    append_number_array(&dst, "bounds", bounds_);
     return dst;
 }
 
-void ValuePort::set_value(double *in, int nbr_in)
+bool ValuePort::bound_is_valid()
+{
+    if(bounds_.size() == 2){
+        if(bounds_[0] != bounds_[1]){
+            return true;
+        }
+    }
+    return false;
+}
+
+void ValuePort::set_bounds(double lower, double upper)
+{
+    bounds_.resize(2);
+    bounds_[0] = MIN(lower, upper);
+    bounds_[1] = MAX(lower, upper);
+
+    // adjust values to be within bounds
+    /*
+    Functions::map_to_bounds<double>(
+            value_buffer_.data(), value_buffer_.size(),
+            bounds_[0], bounds_[1]
+    );
+     */
+
+    for(auto &v : value_buffer_){
+        v = MAX(v, lower);
+        v = MIN(v, upper);
+    }
+}
+
+void ValuePort::set_value(double *in, int n_int)
 {
 #if CHINET_DEBUG
-    std::clog << "Node:" << get_name() << ".set_value" << std::endl;
+    std::clog << "ValuePort:" << get_name() << ".set_value" << std::endl;
 #endif
-    _buff_double_vector.assign(in, in + nbr_in);
+
+    if(is_bounded() && bound_is_valid()){
+#if CHINET_DEBUG
+        std::clog << "bound values to: (" << bounds_[0] << ", " << bounds_[1] << ")" << std::endl;
+#endif
+        Functions::map_to_bounds<double>(
+                in, n_int,
+                bounds_[0], bounds_[1]
+        );
+    }
+    value_buffer_.assign(in, in + n_int);
     if(node_ != nullptr){
+#if CHINET_DEBUG
+        std::clog << "Port is attached to node:" << node_->get_name() << std::endl;
+#endif
         node_->set_node_to_invalid();
         if(is_reactive() && !is_output()){
             node_->evaluate();
@@ -49,13 +88,19 @@ void ValuePort::set_value(double value)
     set_value(v.data(), v.size());
 }
 
-void Port::set_value(double *in, int nbr_in)
+void ValuePort::get_bounds(double **out, int *n_out)
+{
+    *out = bounds_.data();
+    *n_out = bounds_.size();
+}
+
+void Port::set_value(double *in, int n_int)
 {
 #if CHINET_DEBUG
-    std::clog << "Node:" << get_name() << ".set_value" << std::endl;
+    std::clog << "Port:" << get_name() << ".set_value" << std::endl;
 #endif
-    ValuePort::set_value(in, nbr_in);
-    port_links.set_value_of_dependents(in, nbr_in);
+    ValuePort::set_value(in, n_int);
+    port_links.set_value_of_dependents(in, n_int);
 }
 
 void Port::set_value(double value)
@@ -68,21 +113,21 @@ void Port::set_value(double value)
 // Getter
 //--------------------------------------------------------------------
 
-void ValuePort::get_value(double **out, int *nbr_out)
+void ValuePort::get_value(double **out, int *n_out)
 {
-    if (_buff_double_vector.empty()) {
-        _buff_double_vector = MongoObject::get_array<double>("value");
+    if (value_buffer_.empty()) {
+        value_buffer_ = MongoObject::get_array<double>("value");
     }
-    *nbr_out = _buff_double_vector.size();
-    *out = _buff_double_vector.data();
+    *n_out = value_buffer_.size();
+    *out = value_buffer_.data();
 }
 
-void Port::get_value(double **out, int *nbr_out)
+void Port::get_value(double **out, int *n_out)
 {
     if (!port_links.is_linked()) {
-        ValuePort::get_value(out, nbr_out);
+        ValuePort::get_value(out, n_out);
     } else {
-        port_links.get_link()->get_value(out, nbr_out);
+        port_links.get_link()->get_value(out, n_out);
     }
 }
 
@@ -101,20 +146,9 @@ std::vector<double> Port::get_value()
     return ValuePort::get_value();
 }
 
-
 bool BasePort::is_fixed()
 {
     return get_singleton<bool>("is_fixed");
-}
-
-bool BasePort::is_output()
-{
-    return get_singleton<bool>("is_output");
-}
-
-bool BasePort::is_reactive()
-{
-    return get_singleton<bool>("is_reactive");
 }
 
 void BasePort::set_fixed(bool fixed)
@@ -122,14 +156,34 @@ void BasePort::set_fixed(bool fixed)
     set_singleton("is_fixed", fixed);
 }
 
+bool BasePort::is_output()
+{
+    return get_singleton<bool>("is_output");
+}
+
 void BasePort::set_port_type(bool is_output)
 {
     set_singleton("is_output", is_output);
 }
 
+bool BasePort::is_reactive()
+{
+    return get_singleton<bool>("is_reactive");
+}
+
 void BasePort::set_reactive(bool reactive)
 {
     set_singleton("is_reactive", reactive);
+}
+
+bool ValuePort::is_bounded()
+{
+    return get_singleton<bool>("is_bounded");
+}
+
+void ValuePort::set_bounded(bool bounded)
+{
+    set_singleton("is_bounded", bounded);
 }
 
 Node* BasePort::get_node()

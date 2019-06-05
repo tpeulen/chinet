@@ -281,6 +281,14 @@ std::string MongoObject::get_json()
     return std::string(str, len);
 }
 
+std::string MongoObject::get_json_template()
+{
+    size_t len;
+    bson_t doc = get_bson();//get_bson_excluding("death", "birth", "precursor", NULL);
+    char *str = bson_as_json(&doc, &len);
+    return std::string(str, len);
+}
+
 bson_t MongoObject::get_bson()
 {
 
