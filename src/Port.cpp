@@ -50,9 +50,30 @@ void ValuePort::set_bounds(double lower, double upper)
      */
 
     for(auto &v : value_buffer_){
-        v = MAX(v, lower);
-        v = MIN(v, upper);
+        v = MAX(v, bounds_[0]);
+        v = MIN(v, bounds_[1]);
     }
+}
+
+void ValuePort::set_bounds(std::vector<double> bounds)
+{
+    if(bounds.size() >= 2){
+        set_bounds(
+                MIN(bounds[0], bounds[1]),
+                MAX(bounds[0], bounds[1])
+                );
+    }
+}
+
+void ValuePort::get_bounds(double **out, int *n_out)
+{
+    *out = bounds_.data();
+    *n_out = bounds_.size();
+}
+
+std::vector<double> ValuePort::get_bounds()
+{
+    return bounds_;
 }
 
 void ValuePort::set_value(double *in, int n_int)
@@ -86,12 +107,6 @@ void ValuePort::set_value(double value)
 {
     auto v = std::vector<double>{value};
     set_value(v.data(), v.size());
-}
-
-void ValuePort::get_bounds(double **out, int *n_out)
-{
-    *out = bounds_.data();
-    *n_out = bounds_.size();
 }
 
 void Port::set_value(double *in, int n_int)

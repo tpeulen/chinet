@@ -25,6 +25,8 @@
 %attribute(Port, bool, fixed, is_fixed, set_fixed);
 %attribute(Port, bool, is_output, is_output, set_port_type);
 %attribute(Port, bool, reactive, is_reactive, set_reactive);
+%attribute(Port, bool, bounded, is_bounded, set_bounded);
+//%attribute(Port, std::vector<double>, bounds, get_bounds, set_bounds);
 
 %include "../include/Port.h"
 %include "../include/PortLinks.h"
@@ -44,6 +46,7 @@
             __swig_getmethods__["value"] = get_value
             __swig_setmethods__["value"] = set_value
             if _newclass: value = property(get_value, set_value)
+
         %}
 
 }

@@ -116,7 +116,9 @@ public:
     bool bound_is_valid();
     bool is_bounded();
     void set_bounds(double lower, double upper);
+    void set_bounds(std::vector<double> bound);
     void get_bounds(double **out, int *n_out);
+    std::vector<double> get_bounds();
 
     bool write_to_db();
     bool read_from_db(const std::string &oid_string);
