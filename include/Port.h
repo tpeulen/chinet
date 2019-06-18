@@ -11,7 +11,6 @@
 
 class Node;
 
-
 class BasePort : public MongoObject
 {
 
@@ -19,7 +18,7 @@ protected:
     Node *node_;
 
 public:
-    
+
     bool is_fixed();
     void set_fixed(bool fixed);
 
@@ -103,7 +102,6 @@ public:
 
     // Getter & Setter
     //--------------------------------------------------------------------
-
     virtual void set_value(double *in, int n_in);
     virtual void set_value(double value);
     virtual void get_value(double **out, int *n_out);
@@ -123,6 +121,12 @@ public:
     bool write_to_db();
     bool read_from_db(const std::string &oid_string);
 
+    // Operators
+    //--------------------------------------------------------------------
+    ValuePort operator+(ValuePort &v);
+    ValuePort operator-(ValuePort &v);
+    ValuePort operator*(ValuePort &v);
+    ValuePort operator/(ValuePort &v);
 };
 
 

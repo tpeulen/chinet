@@ -13,6 +13,7 @@
 %shared_ptr(BasePort)
 %shared_ptr(ValuePort)
 %shared_ptr(Port)
+
 %template(vector_port_ptr) std::vector<Port*>;
 
 %apply (double* IN_ARRAY1, int DIM1) {(double *in, int n_in)}
@@ -26,6 +27,7 @@
 %attribute(Port, bool, is_output, is_output, set_port_type);
 %attribute(Port, bool, reactive, is_reactive, set_reactive);
 %attribute(Port, bool, bounded, is_bounded, set_bounded);
+%attributestring(Port, std::string, name, get_name, set_name);
 //%attribute(Port, std::vector<double>, bounds, get_bounds, set_bounds);
 
 %include "../include/Port.h"
@@ -46,7 +48,6 @@
             __swig_getmethods__["value"] = get_value
             __swig_setmethods__["value"] = set_value
             if _newclass: value = property(get_value, set_value)
-
         %}
 
 }

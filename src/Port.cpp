@@ -1,5 +1,77 @@
 #include "Port.h"
 
+// Operator
+// --------------------------------------------------------------------
+ValuePort ValuePort::operator+(ValuePort &v)
+{
+    std::vector<double> a = this->get_value();
+    std::vector<double> b = v.get_value();
+    auto result = Functions::get_vector_of_min_size(a, b);
+
+    for(int i = 0; i < result.size(); ++i){
+        result[i] = a[i] + b[i];
+    }
+
+    ValuePort re;
+    re.set_name(this->get_name()  + "+" + v.get_name());
+    re.set_value(result.data(), result.size());
+
+    return re;
+}
+
+ValuePort ValuePort::operator-(ValuePort &v)
+{
+    std::vector<double> a = this->get_value();
+    std::vector<double> b = v.get_value();
+    auto result = Functions::get_vector_of_min_size(a, b);
+
+    for(int i = 0; i < result.size(); ++i){
+        result[i] = a[i] - b[i];
+    }
+
+    ValuePort re;
+    re.set_name(this->get_name()  + "-" + v.get_name());
+    re.set_value(result.data(), result.size());
+
+    return re;
+}
+
+ValuePort ValuePort::operator*(ValuePort &v)
+{
+    std::vector<double> a = this->get_value();
+    std::vector<double> b = v.get_value();
+    auto result = Functions::get_vector_of_min_size(a, b);
+
+    for(int i = 0; i < result.size(); ++i){
+        result[i] = a[i] * b[i];
+    }
+
+    ValuePort re;
+    re.set_name(this->get_name()  + "*" + v.get_name());
+    re.set_value(result.data(), result.size());
+
+    return re;
+}
+
+
+ValuePort ValuePort::operator/(ValuePort &v)
+{
+    std::vector<double> a = this->get_value();
+    std::vector<double> b = v.get_value();
+    auto result = Functions::get_vector_of_min_size(a, b);
+
+    for(int i = 0; i < result.size(); ++i){
+        result[i] = a[i] / b[i];
+    }
+
+    ValuePort re;
+    re.set_name(this->get_name()  + "/" + v.get_name());
+    re.set_value(result.data(), result.size());
+
+    return re;
+}
+
+
 // Methods
 // --------------------------------------------------------------------
 bool ValuePort::read_from_db(const std::string &oid_string)
@@ -27,8 +99,8 @@ bson_t ValuePort::get_bson()
 
 bool ValuePort::bound_is_valid()
 {
-    if(bounds_.size() == 2){
-        if(bounds_[0] != bounds_[1]){
+    if (bounds_.size() == 2) {
+        if (bounds_[0] != bounds_[1]) {
             return true;
         }
     }
@@ -49,7 +121,7 @@ void ValuePort::set_bounds(double lower, double upper)
     );
      */
 
-    for(auto &v : value_buffer_){
+    for (auto &v : value_buffer_) {
         v = MAX(v, bounds_[0]);
         v = MIN(v, bounds_[1]);
     }
@@ -57,11 +129,11 @@ void ValuePort::set_bounds(double lower, double upper)
 
 void ValuePort::set_bounds(std::vector<double> bounds)
 {
-    if(bounds.size() >= 2){
+    if (bounds.size() >= 2) {
         set_bounds(
                 MIN(bounds[0], bounds[1]),
                 MAX(bounds[0], bounds[1])
-                );
+        );
     }
 }
 
@@ -82,7 +154,7 @@ void ValuePort::set_value(double *in, int n_int)
     std::clog << "ValuePort:" << get_name() << ".set_value" << std::endl;
 #endif
 
-    if(is_bounded() && bound_is_valid()){
+    if (is_bounded() && bound_is_valid()) {
 #if CHINET_DEBUG
         std::clog << "bound values to: (" << bounds_[0] << ", " << bounds_[1] << ")" << std::endl;
 #endif
@@ -92,12 +164,12 @@ void ValuePort::set_value(double *in, int n_int)
         );
     }
     value_buffer_.assign(in, in + n_int);
-    if(node_ != nullptr){
+    if (node_ != nullptr) {
 #if CHINET_DEBUG
         std::clog << "Port is attached to node:" << node_->get_name() << std::endl;
 #endif
         node_->set_node_to_invalid();
-        if(is_reactive() && !is_output()){
+        if (is_reactive() && !is_output()) {
             node_->evaluate();
         }
     }
@@ -127,7 +199,6 @@ void Port::set_value(double value)
 
 // Getter
 //--------------------------------------------------------------------
-
 void ValuePort::get_value(double **out, int *n_out)
 {
     if (value_buffer_.empty()) {
@@ -148,11 +219,12 @@ void Port::get_value(double **out, int *n_out)
 
 std::vector<double> ValuePort::get_value()
 {
-    double *out; int n_out;
+    double *out;
+    int n_out;
     get_value(&out, &n_out);
 
     std::vector<double> v{};
-    v.assign(out, out+n_out);
+    v.assign(out, out + n_out);
     return v;
 }
 
@@ -201,7 +273,7 @@ void ValuePort::set_bounded(bool bounded)
     set_singleton("is_bounded", bounded);
 }
 
-Node* BasePort::get_node()
+Node *BasePort::get_node()
 {
     return node_;
 }

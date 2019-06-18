@@ -435,6 +435,12 @@ public:
         );
     };
 
+    /**
+     * Shows information about the class
+     * @param out Stream used to show the information
+     */
+    void show(std::ostream &out = std::cout) const;
+
 };
 
 #endif //CHINET_MONGOOBJECT_H

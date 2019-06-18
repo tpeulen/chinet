@@ -6,25 +6,6 @@ FIND_PACKAGE(Python COMPONENTS Interpreter Development)
 FIND_PACKAGE(PythonLibs)
 INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR})
 LINK_LIBRARIES(${Python_LIBRARIES})
-#[[
-if(NOT DEFINED PYTHON_INCLUDE_DIRS AND NOT IMP_STATIC)
-    execute_process(COMMAND ${IMP_PYTHON} -c "import sys; print(sys.executable)"
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-            OUTPUT_VARIABLE python_full_path
-            OUTPUT_STRIP_TRAILING_WHITESPACE)
-    execute_process(COMMAND ${IMP_PYTHON} -c "import sys; print('%d.%d.%d' % sys.version_info[:3])"
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-            OUTPUT_VARIABLE python_full_version
-            OUTPUT_STRIP_TRAILING_WHITESPACE)
-    string(REGEX REPLACE "^([0-9]+\\.[0-9]+).*" "\\1" python_version
-            ${python_full_version})
-    message(STATUS "Python binary is " ${python_full_path} " (version " ${python_full_version} ")")
-
-    FIND_PACKAGE(PythonInterp)
-    FIND_PACKAGE(PythonLibs ${python_full_version} EXACT REQUIRED)
-endif()
-]]#
-
 
 execute_process(
         COMMAND python -c

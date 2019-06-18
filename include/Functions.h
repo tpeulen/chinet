@@ -82,7 +82,6 @@ namespace Functions {
      */
     void copy_array_to_vector(double *in, int nin, std::vector<double> &v);
 
-
     /*!
      * This function copies two vectors of equal size to an interleaved array
      *
@@ -206,6 +205,25 @@ namespace Functions {
      * @param skip vector of strings containing keys that are skipped by iter
      */
     bool bson_iter_skip(bson_iter_t *iter, std::vector<std::string> *skip);
+
+    /*!
+     * Returns a vector with a size that is is min(a.size(), b.size())
+     * @tparam T The type of the vectors
+     * @param a
+     * @param b
+     * @return a vector of size min(a.size(), b.size())
+     */
+    template <typename T>
+    std::vector<T> get_vector_of_min_size(std::vector<T> a, std::vector<T>b){
+        size_t size_min = MIN(a.size(), b.size());
+        size_t size_max = MAX(a.size(), b.size());
+        if(size_max != size_min){
+            std::cerr << "The vectors have differ in length: " << size_min << "<" << size_max << std::endl;
+        }
+        std::vector<T> result_vector;
+        result_vector.resize(size_min);
+        return  result_vector;
+    }
 }
 
 #endif //chinet_FUNCTIONS_H
