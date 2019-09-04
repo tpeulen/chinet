@@ -84,7 +84,8 @@ template <class T>
 bool PortLinks<T>::remove_links_to_port()
 {
     if (link_ != nullptr) {
-// remove pointer to this port in the port to which this is linked
+        // remove pointer to this port in the port to which this is linked
+        /*
         PortLinks<T> *l = &link_->port_links;
         auto it = std::find(l->linked_to_.begin(),
                             l->linked_to_.end(), port_);
@@ -93,6 +94,7 @@ bool PortLinks<T>::remove_links_to_port()
             l->linked_to_.erase(it);
             return true;
         }
+         */
     }
     return false;
 }
@@ -102,7 +104,7 @@ void PortLinks<T>::link(std::shared_ptr<Port> &v)
 {
     if(v != nullptr){
         link_ = v;
-        v->port_links.linked_to_.push_back(port_);
+        //v->port_links.linked_to_.push_back(port_);
     }
 }
 
