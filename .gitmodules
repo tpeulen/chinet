@@ -7,3 +7,6 @@
 [submodule "thirdparty/json"]
 	path = thirdparty/json
 	url = https://github.com/nlohmann/json
+[submodule "thirdparty/labellib"]
+	path = thirdparty/labellib
+	url = https://github.com/Fluorescence-Tools/LabelLib

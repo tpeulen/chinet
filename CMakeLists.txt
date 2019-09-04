@@ -12,7 +12,6 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest")
 endif(MSVC)
 
-
 # OpenMP
 ###############################
 OPTION (USE_OpenMP "Use OpenMP" ON)
@@ -27,7 +26,6 @@ ENDIF()
 # Cpp-taskflow
 ###############################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/cpp-taskflow/)
-
 
 # Boost
 ###############################
@@ -67,7 +65,6 @@ include_directories (${MONGOC_INCLUDE_DIRS})
 link_libraries (${MONGOC_LIBRARIES})
 add_compile_definitions(${MONGOC_DEFINITIONS})
 
-
 #[[
 # libbson
 ###############################
@@ -89,13 +86,12 @@ message("-- libmongocxx include \"${LIBMONGOCXX_INCLUDE_DIRS}\"")
 
 # LabelLib
 ###############################
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/labellib/FlexLabel/include/)
 find_package (FlexLabel REQUIRED)
-
 
 # JSON
 ###############################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/json/single_include/)
-
 
 # Project
 ###############################
