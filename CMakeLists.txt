@@ -2,11 +2,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.13)
 SET(PROJECT_NAME chinet)
 PROJECT(${PROJECT_NAME})
 
-# Set minimum C++ to 2014 standards
 ###############################
 ENABLE_LANGUAGE(CXX)
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest")
 endif(MSVC)
