@@ -10,6 +10,7 @@
 #include <PortLinks.h>
 
 class Node;
+template <class T> class PortLinks;
 
 class BasePort : public MongoObject
 {
