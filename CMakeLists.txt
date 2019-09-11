@@ -47,7 +47,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/histogram/include/)
 # RTTR
 ###############################
 find_package(RTTR CONFIG REQUIRED Core)
-link_libraries(RTTR::Core)
+#link_libraries(RTTR::Core)
 message ("-- Found librttr version \"${PACKAGE_VERSION}\"")
 
 
