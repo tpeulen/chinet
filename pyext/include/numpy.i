@@ -70,7 +70,7 @@
 /* Macros to extract array attributes.
  */
 %#if NPY_API_VERSION < 0x00000007
-%#define is_python_array(a)            ((a) && PyArray_Check((PyArrayObject*)a))
+%#define is_numpy_array(a)      ((a) && PyArray_Check((PyArrayObject*)a))
 %#define array_type(a)          (int)(PyArray_TYPE((PyArrayObject*)a))
 %#define array_numdims(a)       (((PyArrayObject*)a)->nd)
 %#define array_dimensions(a)    (((PyArrayObject*)a)->dimensions)
@@ -84,7 +84,7 @@
 %#define array_enableflags(a,f) (((PyArrayObject*)a)->flags) = f
 %#define array_is_fortran(a)    (PyArray_ISFORTRAN((PyArrayObject*)a))
 %#else
-%#define is_python_array(a)            ((a) && PyArray_Check(a))
+%#define is_numpy_array(a)      ((a) && PyArray_Check(a))
 %#define array_type(a)          PyArray_TYPE((PyArrayObject*)a)
 %#define array_numdims(a)       PyArray_NDIM((PyArrayObject*)a)
 %#define array_dimensions(a)    PyArray_DIMS((PyArrayObject*)a)
@@ -197,12 +197,12 @@
                                             int        typecode)
   {
     PyArrayObject* ary = NULL;
-    if (is_python_array(input) && (typecode == NPY_NOTYPE ||
+    if (is_numpy_array(input) && (typecode == NPY_NOTYPE ||
                             PyArray_EquivTypenums(array_type(input), typecode)))
     {
       ary = (PyArrayObject*) input;
     }
-    else if is_python_array(input)
+    else if is_numpy_array(input)
     {
       const char* desired_type = typecode_string(typecode);
       const char* actual_type  = typecode_string(array_type(input));
@@ -235,7 +235,7 @@
   {
     PyArrayObject* ary = NULL;
     PyObject*      py_obj;
-    if (is_python_array(input) && (typecode == NPY_NOTYPE ||
+    if (is_numpy_array(input) && (typecode == NPY_NOTYPE ||
                             PyArray_EquivTypenums(array_type(input),typecode)))
     {
       ary = (PyArrayObject*) input;
@@ -726,7 +726,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE IN_ARRAY1[ANY])
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -754,7 +754,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE* IN_ARRAY1, DIM_TYPE DIM1)
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -783,7 +783,7 @@
            fragment="NumPy_Macros")
   (DIM_TYPE DIM1, DATA_TYPE* IN_ARRAY1)
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -812,7 +812,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE IN_ARRAY2[ANY][ANY])
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -840,7 +840,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE* IN_ARRAY2, DIM_TYPE DIM1, DIM_TYPE DIM2)
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -869,7 +869,7 @@
            fragment="NumPy_Macros")
   (DIM_TYPE DIM1, DIM_TYPE DIM2, DATA_TYPE* IN_ARRAY2)
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -899,7 +899,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE* IN_FARRAY2, DIM_TYPE DIM1, DIM_TYPE DIM2)
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -929,7 +929,7 @@
            fragment="NumPy_Macros")
   (DIM_TYPE DIM1, DIM_TYPE DIM2, DATA_TYPE* IN_FARRAY2)
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -959,7 +959,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE IN_ARRAY3[ANY][ANY][ANY])
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -988,7 +988,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE* IN_ARRAY3, DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3)
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -1101,7 +1101,7 @@
            fragment="NumPy_Macros")
   (DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DATA_TYPE* IN_ARRAY3)
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -1132,7 +1132,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE* IN_FARRAY3, DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3)
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -1163,7 +1163,7 @@
            fragment="NumPy_Macros")
   (DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DATA_TYPE* IN_FARRAY3)
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -1194,7 +1194,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE IN_ARRAY4[ANY][ANY][ANY][ANY])
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -1222,7 +1222,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE* IN_ARRAY4, DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DIM_TYPE DIM4)
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -1338,7 +1338,7 @@
            fragment="NumPy_Macros")
   (DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DIM_TYPE DIM4, DATA_TYPE* IN_ARRAY4)
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -1370,7 +1370,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE* IN_FARRAY4, DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DIM_TYPE DIM4)
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -1402,7 +1402,7 @@
            fragment="NumPy_Macros")
   (DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DIM_TYPE DIM4, DATA_TYPE* IN_FARRAY4)
 {
-  $1 = is_python_array($input) || PySequence_Check($input);
+  $1 = is_numpy_array($input) || PySequence_Check($input);
 }
 %typemap(in,
          fragment="NumPy_Fragments")
@@ -1437,7 +1437,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE INPLACE_ARRAY1[ANY])
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1458,7 +1458,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE* INPLACE_ARRAY1, DIM_TYPE DIM1)
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1480,7 +1480,7 @@
            fragment="NumPy_Macros")
   (DIM_TYPE DIM1, DATA_TYPE* INPLACE_ARRAY1)
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1502,7 +1502,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE INPLACE_ARRAY2[ANY][ANY])
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1523,7 +1523,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE* INPLACE_ARRAY2, DIM_TYPE DIM1, DIM_TYPE DIM2)
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1545,7 +1545,7 @@
            fragment="NumPy_Macros")
   (DIM_TYPE DIM1, DIM_TYPE DIM2, DATA_TYPE* INPLACE_ARRAY2)
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1567,7 +1567,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE* INPLACE_FARRAY2, DIM_TYPE DIM1, DIM_TYPE DIM2)
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1589,7 +1589,7 @@
            fragment="NumPy_Macros")
   (DIM_TYPE DIM1, DIM_TYPE DIM2, DATA_TYPE* INPLACE_FARRAY2)
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1611,7 +1611,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE INPLACE_ARRAY3[ANY][ANY][ANY])
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1633,7 +1633,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE* INPLACE_ARRAY3, DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3)
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1723,7 +1723,7 @@
            fragment="NumPy_Macros")
   (DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DATA_TYPE* INPLACE_ARRAY3)
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1747,7 +1747,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE* INPLACE_FARRAY3, DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3)
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1771,7 +1771,7 @@
            fragment="NumPy_Macros")
   (DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DATA_TYPE* INPLACE_FARRAY3)
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1794,7 +1794,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE INPLACE_ARRAY4[ANY][ANY][ANY][ANY])
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1816,7 +1816,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE* INPLACE_ARRAY4, DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DIM_TYPE DIM4)
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1909,7 +1909,7 @@
            fragment="NumPy_Macros")
   (DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DIM_TYPE DIM4, DATA_TYPE* INPLACE_ARRAY4)
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1934,7 +1934,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE* INPLACE_FARRAY4, DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DIM_TYPE DIM4)
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -1959,7 +1959,7 @@
            fragment="NumPy_Macros")
   (DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DIM_TYPE DIM4, DATA_TYPE* INPLACE_FARRAY4)
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
@@ -3113,7 +3113,7 @@
            fragment="NumPy_Macros")
   (DATA_TYPE* INPLACE_ARRAY_FLAT, DIM_TYPE DIM_FLAT)
 {
-  $1 = is_python_array($input) && PyArray_EquivTypenums(array_type($input),
+  $1 = is_numpy_array($input) && PyArray_EquivTypenums(array_type($input),
                                                  DATA_TYPECODE);
 }
 %typemap(in,
