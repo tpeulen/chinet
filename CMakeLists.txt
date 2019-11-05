@@ -65,7 +65,7 @@ LINK_LIBRARIES(${Boost_LIBRARIES})
 
 # Eigen3
 ###############################
-FIND_PACKAGE(Eigen3 3.2 QUIET NO_MODULE)
+FIND_PACKAGE(Eigen3 3.2 QUIET NO_MODULE REQUIRED)
 if (NOT TARGET Eigen3::Eigen)
     MESSAGE(STATUS "Using thirdparty/Eigen")
     SET(EIGEN3_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/thirdparty/eigen)
