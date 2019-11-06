@@ -117,7 +117,7 @@ message("-- libmongocxx include \"${LIBMONGOCXX_INCLUDE_DIRS}\"")
 # LabelLib
 ###############################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/labellib/FlexLabel/include/)
-find_package (FlexLabel REQUIRED)
+#find_package (FlexLabel REQUIRED)
 
 # JSON
 ###############################
