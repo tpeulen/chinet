@@ -1,0 +1,58 @@
+{% set name = "chinet" %}
+{% set version = "0.0.2" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version|lower }}"
+
+source:
+  path: ..
+
+build:
+    number: 0
+    #string: np{{ CONDA_NPY }}py{{ CONDA_PY }}_{{ GIT_BUILD_STR }}
+
+requirements:
+  build:
+    - git
+    - {{ compiler('cxx') }}
+    - python {{ python }}
+    - setuptools
+    - cmake
+    - numpy >=1.10
+    - swig
+    - librttr
+    - libmongoc >=1.15.1
+    - openmp
+    - eigen
+    - boost
+  host:
+    - python {{ python }}
+    - setuptools
+    - {{ pin_compatible('numpy') }}
+    - hdf5 >=1.8.*
+    - librttr
+    - libmongoc >=1.15.1
+  run:
+    - python {{ python }}
+    - {{ pin_compatible('numpy') }}
+    - labellib
+    - hdf5 >=1.8.*
+    - librttr
+    - libmongoc >=1.15.1
+
+test:
+  imports:
+    - chinet
+
+about:
+  home: https://github.com/tpeulen/chinet
+  license: MPL 2.0
+  summary: Python bindings for chinet
+  description: |
+    chinet is a C++ library with Python wrapper.
+  doc_url: https://github.com/tpeulen.github.io/chinet/
+
+extra:
+  recipe-maintainers:
+    - tpeulen
