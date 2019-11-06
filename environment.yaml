@@ -1,0 +1,28 @@
+name: chinet
+
+channels:
+  - fluorescence-tools
+  - tpeulen
+  - conda-forge
+  - salilab
+  - defaults
+
+dependencies:
+  - python=3.7
+  - setuptools
+  - numpy
+  - swig
+  - boost
+  - cmake
+  - sphinx
+  - openmp
+  - librttr
+  - libmongoc >=1.15.1
+  - labellib
+  - ipython
+  - matplotlib
+  - yaml
+  - sphinx
+  - sphinxcontrib-bibtex
+  - recommonmark
+  - eigen

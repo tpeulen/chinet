@@ -4,14 +4,12 @@
 
 %{
 #define SWIG_FILE_WITH_INIT
-    /*
 #include "../include/Curve.h"
 #include "../include/Functions.h"
-#include "../include/Decay.h"
+//#include "../include/Decay.h"
 #include "../include/Node.h"
 #include "../include/Pda.h"
 #include "../include/MongoObject.h"
-     */
 %}
 
 %include <typemaps.i>
@@ -72,10 +70,7 @@
 %include "nodecallback.i"
 %include "session.i"
 %include "pda.i"
-
-/*
 %include "curve.i"
-%include "decay.i"
-*/
+//%include "decay.i"
 
 

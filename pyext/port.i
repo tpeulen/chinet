@@ -5,7 +5,7 @@
 #include "../include/PortLinks.h"
 %}
 
-%include "numpy.i"
+%include "./include/numpy.i"
 %init %{
     import_array();
 %}
@@ -43,12 +43,12 @@
             return os.str();
         }
 
-        %pythoncode
-        %{
-            __swig_getmethods__["value"] = get_value
-            __swig_setmethods__["value"] = set_value
-            if _newclass: value = property(get_value, set_value)
-        %}
+//        %pythoncode
+//        %{
+//            __swig_getmethods__["value"] = get_value
+//            __swig_setmethods__["value"] = set_value
+//            if _newclass: value = property(get_value, set_value)
+//        %}
 
 }
 

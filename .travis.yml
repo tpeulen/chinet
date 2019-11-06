@@ -1,0 +1,33 @@
+dist: xenial
+language: python
+sudo: required
+python:
+  - "3.7"
+
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then MINICONDA_OS=Linux; else MINICONDA_OS=MacOSX; fi
+  - wget https://repo.anaconda.com/miniconda/Miniconda3-latest-$MINICONDA_OS-x86_64.sh -O miniconda.sh
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda config --set channel_priority strict
+  - conda config --add channels conda-forge
+  - conda config --add channels tpeulen
+  - conda config --add channels fluorescence-tools
+  - conda info -a
+  - conda install git conda-build anaconda-client
+  - conda build conda-recipe --output-folder bld-dir
+  - conda config --add channels "file://`pwd`/bld-dir"
+
+install:
+  - conda install tttrlib
+
+script:
+  - conda install nose coverage
+  - ln -sf $(which nosetests) $(pwd)/test/
+  - cd $(pwd)/test/
+  - echo $PWD
+  - nosetests --with-coverage test_*.py
+  - cd ..
