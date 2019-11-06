@@ -22,7 +22,7 @@ before_install:
   - conda config --add channels "file://`pwd`/bld-dir"
 
 install:
-  - conda install tttrlib
+  - conda install chinet
 
 script:
   - conda install nose coverage
