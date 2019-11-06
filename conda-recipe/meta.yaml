@@ -20,7 +20,7 @@ requirements:
     - setuptools
     - cmake
     - numpy >=1.10
-    - swig
+    - swig <4.0.0
     - librttr
     - libmongoc >=1.15.1
     - openmp
