@@ -1,5 +1,5 @@
 //#include <Port.h>
-#include "Node.h"
+#include "CNode.h"
 #include "Port.h"
 
 // Constructor

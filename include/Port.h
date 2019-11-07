@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <math.h>
 
-#include <Node.h>
+#include <CNode.h>
 #include <PortLinks.h>
 
 class Node;

@@ -8,7 +8,7 @@
 #include <functional>
 #include <rttr/registration>
 #include <Port.h>
-#include <Node.h>
+#include <CNode.h>
 #include <Functions.h>
 #include <FlexLabel/FlexLabel.h>
 

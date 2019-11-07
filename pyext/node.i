@@ -6,7 +6,7 @@
 
 
 %{
-#include "../include/Node.h"
+#include "../include/CNode.h"
 #include "../include/MongoObject.h"
 #include "../include/Port.h"
 %}
@@ -17,7 +17,7 @@
 %template(MapStringPort) std::map<std::string, std::shared_ptr<Port>>;
 %template(MapStringDouble) std::map<std::string, double>;
 
-%include "../include/Node.h"
+%include "../include/CNode.h"
 
 
 %extend Node {

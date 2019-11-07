@@ -10,7 +10,7 @@
 #include <nlohmann/json.hpp>
 
 #include "MongoObject.h"
-#include "Node.h"
+#include "CNode.h"
 #include "Port.h"
 
 
