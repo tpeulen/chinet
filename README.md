@@ -18,7 +18,7 @@ correlation curves in a titration and the joint description of multiple
 fluorescence decay curves reporting on FRET in a biomolecular structure
 by a single structural model.
 
-Computing a gobal model with a large diverse set of different data 
+Computing a global model with a large diverse set of different data 
 can be computationally expensive. To reduce the computational costs
 and to decrease the evaluation time of a global model defined by chinet,
 the mutual dependencies of the model parameters are modeled by a graph
@@ -38,28 +38,7 @@ purposes.
 *  reactive dataflow model framework  
 *  fast inter computation node communication
 *  define and store models jointly with associated data identifies in data base.
-*  Low memory footprint (keep objective large datasets, e.g.  FLIM in memory). 
-  Particulary useful for FLIM.
 *  Platform independent C/C++ library with interfaces for scripting libraries 
-
-## Capabilities
-
-*  Fast (IO limited) Reading TTTR files
-*  Generation / analysis of fluorescence decays
-*  Time window analysis
-*  Correlation of time event traces
-*  Filtering of time event traces to generate instrument response 
-   functions for fluorescence decays analysis without the need of independent measurements.. 
-*  Fast photon distribution analysis
-*  Fast selection of photons from a photon stream
-
-Generation of fluorescence decay histograms chinet outperforms pure numpy and Python based
-libraries by a factor of ~40  
-
-## Implementation
-
-Pure pure C/C++ and CUDA based high performance algorithms for real-time and interactive 
-analysis of TTTR data.
 
 # Building and Installation
 
