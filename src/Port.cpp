@@ -150,12 +150,12 @@ std::vector<double> ValuePort::get_bounds()
 
 void ValuePort::set_value(double *in, int n_int)
 {
-#if CHINET_DEBUG
+#if DEBUG
     std::clog << "ValuePort:" << get_name() << ".set_value" << std::endl;
 #endif
 
     if (is_bounded() && bound_is_valid()) {
-#if CHINET_DEBUG
+#if DEBUG
         std::clog << "bound values to: (" << bounds_[0] << ", " << bounds_[1] << ")" << std::endl;
 #endif
         Functions::map_to_bounds<double>(
@@ -165,7 +165,7 @@ void ValuePort::set_value(double *in, int n_int)
     }
     value_buffer_.assign(in, in + n_int);
     if (node_ != nullptr) {
-#if CHINET_DEBUG
+#if DEBUG
         std::clog << "Port is attached to node:" << node_->get_name() << std::endl;
 #endif
         node_->set_node_to_invalid();
@@ -183,7 +183,7 @@ void ValuePort::set_value(double value)
 
 void Port::set_value(double *in, int n_int)
 {
-#if CHINET_DEBUG
+#if DEBUG
     std::clog << "Port:" << get_name() << ".set_value" << std::endl;
 #endif
     ValuePort::set_value(in, n_int);

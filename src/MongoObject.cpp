@@ -35,7 +35,7 @@ MongoObject::~MongoObject()
 {
     time_of_death = Functions::get_time();
     if (is_connected_to_db()) {
-#if CHINET_DEBUG
+#if DEBUG
         std::clog << "Time of death: " << time_of_death << std::endl;
 #endif
         write_to_db();
@@ -59,13 +59,13 @@ bool MongoObject::connect_to_db(
 
     // Database
     //----------------------------------------------------------------
-#if CHINET_DEBUG
+#if DEBUG
     std::clog << "connecting to:" << uri_string.c_str() << std::endl;
 #endif
 
     uri = mongoc_uri_new_with_error(uri_string.c_str(), &error);
     if (!uri) {
-#if CHINET_DEBUG
+#if DEBUG
         std::cerr << "failed to parse URI:" << uri_string.c_str() << std::endl;
         std::cerr << "error message:       " << error.message << std::endl;
 #endif
@@ -129,7 +129,7 @@ bool MongoObject::write_to_db(const bson_t &doc, int write_option)
             case 1:
                 // option 1 - write as a replacement
                 if (!mongoc_collection_replace_one(collection, query, &doc, nullptr, &reply, &error)) {
-#if CHINET_DEBUG
+#if DEBUG
                     std::cerr << error.message;
 #endif
                     return_value &= false;
@@ -139,7 +139,7 @@ bool MongoObject::write_to_db(const bson_t &doc, int write_option)
             case 2:
                 // option 2 - insert as a new document
                 if (!mongoc_collection_insert_one(collection, &doc, nullptr, &reply, &error)) {
-#if CHINET_DEBUG
+#if DEBUG
                     std::cerr << error.message;
 #endif
                     return_value &= false;
@@ -160,7 +160,7 @@ bool MongoObject::write_to_db(const bson_t &doc, int write_option)
                         false,
                         &reply, &error)
                         ) {
-#if CHINET_DEBUG
+#if DEBUG
                     std::cerr << error.message;
 #endif
                     return_value &= false;
@@ -193,7 +193,7 @@ bool MongoObject::read_from_db(const std::string &oid_string)
     if (string_to_oid(oid_string, &oid)) {
 
         if (!is_connected_to_db()) {
-#if CHINET_DEBUG
+#if DEBUG
             std::cerr << "Not connected to a DB." << std::endl;
 #endif
             return false;
@@ -203,7 +203,7 @@ bool MongoObject::read_from_db(const std::string &oid_string)
             query = BCON_NEW ("_id", BCON_OID(&oid));
 
             size_t len;
-#if CHINET_DEBUG
+#if DEBUG
             std::clog << "reading: " << bson_as_json(query, &len) << std::endl;
 #endif
 
@@ -217,7 +217,7 @@ bool MongoObject::read_from_db(const std::string &oid_string)
 
             const bson_t *doc;
             while (mongoc_cursor_next(cursor, &doc)) {
-#if CHINET_DEBUG
+#if DEBUG
                 std::clog << "read content: " << bson_as_json(doc, &len) << std::endl;
 #endif
 
@@ -248,7 +248,7 @@ bool MongoObject::read_from_db(const std::string &oid_string)
             }
 
             if (mongoc_cursor_error(cursor, &error)) {
-#if CHINET_DEBUG
+#if DEBUG
                 std::cerr << "An error occurred: " << error.message << std::endl;
 #endif
                 return false;
@@ -260,7 +260,7 @@ bool MongoObject::read_from_db(const std::string &oid_string)
         }
 
     } else {
-#if CHINET_DEBUG
+#if DEBUG
         std::cerr << "OID string not valid." << std::endl;
 #endif
         return false;
@@ -379,7 +379,7 @@ std::string MongoObject::create_copy()
     }
 
     size_t len;
-#if CHINET_DEBUG
+#if DEBUG
     std::clog << "created copy: " << bson_as_json(&document_copy, &len) << std::endl;
 #endif
 
@@ -410,7 +410,7 @@ bool MongoObject::string_to_oid(const std::string &oid_string, bson_oid_t *oid)
         return true;
     } else {
         bson_oid_init(oid, nullptr);
-#if CHINET_DEBUG
+#if DEBUG
         std::cerr << "OID string not valid." << std::endl;
 #endif
         return false;
@@ -438,7 +438,7 @@ const std::string MongoObject::get_string_by_key(bson_t *doc, const std::string 
         str = bson_iter_utf8(&iter, &len);
         return std::string(str, len);
     }
-#if CHINET_DEBUG
+#if DEBUG
     std::cerr << "Error: the key does not contain an string" << std::endl;
 #endif
 
@@ -450,7 +450,7 @@ bool MongoObject::read_json(std::string json_string)
     bson_t b;
     bson_error_t error;
     if (!bson_init_from_json(&b, json_string.c_str(), json_string.size(), &error)) {
-#if CHINET_DEBUG
+#if DEBUG
         std::cerr << "Error reading JSON: " << error.message << std::endl;
 #endif
         return false;

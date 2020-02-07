@@ -59,7 +59,7 @@ std::shared_ptr<Port> Session::create_port(json port_template, std::string port_
 }
 
 std::shared_ptr<Port> Session::create_port(char* port_template, char* port_key){
-#if CHINET_DEBUG
+#if DEBUG
     std::clog << "Session:" << port_template << ":" << port_template << std::endl;
 #endif
     return create_port(

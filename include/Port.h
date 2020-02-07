@@ -236,7 +236,6 @@ public:
 
         bool re = true;
         re &= remove_links_to_port();
-        // set the link to a nullptr
         link_ = nullptr;
         return re;
     }

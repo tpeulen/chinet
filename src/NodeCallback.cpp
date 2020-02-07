@@ -11,12 +11,12 @@ void multiply(
 
     int i = 0;
     for(auto &o : inputs){
-        #if CHINET_DEBUG
+        #if DEBUG
         std::cout << o.first << std::endl;
         #endif
         double m = 1.0;
         for(auto &v : o.second->get_value()){
-            #if CHINET_DEBUG
+            #if DEBUG
             std::cout << v << ":" << std::endl;
             #endif
             m *= v;

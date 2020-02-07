@@ -39,7 +39,7 @@ bool Node::read_from_db(const std::string &oid_string){
 
     return_value &= MongoObject::read_from_db(oid_string);
     return_value &= create_and_connect_objects_from_oid_doc(&document, "ports", &ports);
-#if CHINET_DEBUG
+#if DEBUG
     std::cout << "callback-restore: " << get_string_by_key(&document, "callback") << std::endl;
     std::cout << "callback_type-restore: " << get_string_by_key(&document, "callback_type") << std::endl;
 #endif
@@ -126,7 +126,7 @@ void Node::set_callback(std::string s_callback, std::string s_callback_type){
         callback_type = 0;
         meth_ = rttr::type::get_global_method(callback);
         if(!meth_){
-#if CHINET_DEBUG
+#if DEBUG
             std::cerr << "The class type " << callback << " does not exist." <<
                       " No callback set. " << std::endl;
 #endif
@@ -182,12 +182,12 @@ bson_t Node::get_bson(){
 }
 
 void Node::evaluate(){
-#if CHINET_DEBUG
+#if DEBUG
     std::clog << "update:callback_type:" << callback_type;
 #endif
     if(callback_type == 0)
     {
-#if CHINET_DEBUG
+#if DEBUG
         std::clog << ":registered C function"  << std::endl;
 #endif
         rttr::variant return_value = meth_.invoke({}, in_, out_);
