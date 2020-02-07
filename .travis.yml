@@ -2,8 +2,8 @@ language: generic
 sudo: required
 
 os:
+  - osx
   - linux
-  #- osx
 
 env:
   # Build and test package on all supported python versions

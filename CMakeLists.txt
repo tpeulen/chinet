@@ -84,7 +84,6 @@ find_package(RTTR CONFIG REQUIRED Core)
 link_libraries(RTTR::Core)
 message ("-- Found librttr version \"${PACKAGE_VERSION}\"")
 
-
 # libmongoc
 ###############################
 find_package (libmongoc-1.0)
