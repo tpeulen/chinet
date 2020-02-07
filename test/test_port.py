@@ -43,7 +43,11 @@ class Tests(unittest.TestCase):
         lower_bound = 2
         upper_bound = 3
         value = 10
-        p6 = cn.Port(value, fixed, is_output, is_reactive, is_bounded, lower_bound, upper_bound)
+        p6 = cn.Port(
+            value, fixed,
+            is_output, is_reactive,
+            is_bounded, lower_bound, upper_bound
+        )
         self.assertEqual(p6.get_value()[0] <= upper_bound, True)
         self.assertEqual(p6.get_value()[0] >= lower_bound, True)
         self.assertAlmostEqual(p6.get_value()[0], 3)

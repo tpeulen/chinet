@@ -60,13 +60,13 @@ bool MongoObject::connect_to_db(
     // Database
     //----------------------------------------------------------------
 #if CHINET_DEBUG
-    std::clog << "connecting to:" << uri_string << std::endl;
+    std::clog << "connecting to:" << uri_string.c_str() << std::endl;
 #endif
 
     uri = mongoc_uri_new_with_error(uri_string.c_str(), &error);
     if (!uri) {
 #if CHINET_DEBUG
-        std::cerr << "failed to parse URI:" << uri_string << std::endl;
+        std::cerr << "failed to parse URI:" << uri_string.c_str() << std::endl;
         std::cerr << "error message:       " << error.message << std::endl;
 #endif
         return false;

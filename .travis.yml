@@ -11,8 +11,6 @@ env:
   # To make sure it's still working with conda 4.6
   # - BUILD_TARGET=3.7 MINICONDA_VERSION=4.6.14
 
-services:
-  - mongodb
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then MINICONDA_OS=Linux; else MINICONDA_OS=MacOSX; fi
@@ -34,7 +32,7 @@ before_install:
   - conda config --add channels "file://`pwd`/bld-dir"
 
 install:
-  - conda install chinet
+  - conda install chinet mongodb
 
 script:
   - sudo mkdir -p /data/db
@@ -45,6 +43,7 @@ script:
   - echo $PWD
   - nosetests --with-coverage test_*.py
   - cd ..
+  - pkill mongod
 
 after_success:
   - OS=$TRAVIS_OS_NAME-64

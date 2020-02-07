@@ -2,8 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.13)
 SET(PROJECT_NAME chinet)
 PROJECT(${PROJECT_NAME})
 
-include(${CMAKE_SOURCE_DIR}/cmake/TTTRLibFindPython.cmake)
-tttrlib_find_python()
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 
 ##############################################################
 # 32/64 bit detection
@@ -24,7 +23,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 # Windows
 if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++11")
     if(BIT MATCHES "64")
         add_definitions(-DMS_WIN64)
     endif(BIT MATCHES "64")

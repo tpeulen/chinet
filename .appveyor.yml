@@ -21,8 +21,8 @@ install:
   - conda config --add channels conda-forge
   - conda config --add channels tpeulen
   - conda config --add channels fluorescence-tools
-  - conda info -a
-  - conda install git conda-build anaconda-client
+  - conda create -n build python=3.7 git conda-build anaconda-client numpy
+  - activate build
   - conda build conda-recipe
 
 # to run your custom scripts instead of automatic tests

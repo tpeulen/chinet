@@ -17,6 +17,11 @@ SET_PROPERTY(
         CPLUSPLUS ON
 )
 
+FIND_PACKAGE(Python)
+MESSAGE("Building Python interface")
+INCLUDE_DIRECTORIES(${Python_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${Python_NumPy_PATH})
+
 SWIG_ADD_LIBRARY(
         ${MODULE_NAME}
         LANGUAGE python

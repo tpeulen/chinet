@@ -41,7 +41,10 @@ class Tests(unittest.TestCase):
         }
         node_with_ports = cn.Node(ports)
 
-        self.assertEqual(node_with_ports.get_input_ports().keys(), ['inA', 'inB'])
+        self.assertEqual(
+            node_with_ports.get_input_ports().keys(),
+            ['inA', 'inB']
+        )
 
         values = [v.get_value() for v in node_with_ports.get_ports().values()]
         self.assertEqual(values, [7.0, 13.0, 0.0])
@@ -114,7 +117,10 @@ class Tests(unittest.TestCase):
         outA = node.get_ports()["outA"]
         inA = node.get_ports()["inA"]
 
-        self.assertEqual((inA.get_value().prod() == outA.get_value()).all(), True)
+        self.assertEqual(
+            (inA.get_value().prod() == outA.get_value()).all(),
+            True
+        )
 
     def test_node_python_callback_1(self):
         """Test chinet Node class python callbacks"""
