@@ -34,7 +34,7 @@ before_install:
   - conda config --add channels "file://`pwd`/bld-dir"
 
 install:
-  - conda install chinet mongodb
+  - conda install chinet
 
 script:
   - sudo mkdir -p /data/db
