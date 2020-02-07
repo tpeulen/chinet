@@ -74,7 +74,10 @@ class Tests(unittest.TestCase):
 
         p2 = cn.Port()
         p2.value = v1
-        self.assertEqual((p1.get_value() == p2.get_value()).all(), True)
+        self.assertEqual(
+            (p1.get_value() == p2.get_value()).all(),
+            True
+        )
 
     def test_port_init_vector(self):
         """Test chinet Port class set_value and get_value"""
@@ -85,7 +88,10 @@ class Tests(unittest.TestCase):
 
         # check setting of value
         p2 = cn.Port(v1)
-        self.assertListEqual(list(p2.get_value()), list(p1.get_value()))
+        self.assertListEqual(
+            list(p2.get_value()),
+            list(p1.get_value())
+        )
 
         # check fixing
         p3 = cn.Port(v1, True)
