@@ -43,7 +43,6 @@ script:
   - echo $PWD
   - nosetests --with-coverage test_*.py
   - cd ..
-  - pkill mongod
 
 after_success:
   - OS=$TRAVIS_OS_NAME-64
