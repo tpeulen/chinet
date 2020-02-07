@@ -187,7 +187,7 @@ void Port::set_value(double *in, int n_int)
     std::clog << "Port:" << get_name() << ".set_value" << std::endl;
 #endif
     ValuePort::set_value(in, n_int);
-    port_links.set_value_of_dependents(in, n_int);
+    set_value_of_dependents(in, n_int);
 }
 
 void Port::set_value(double value)
@@ -210,10 +210,10 @@ void ValuePort::get_value(double **out, int *n_out)
 
 void Port::get_value(double **out, int *n_out)
 {
-    if (!port_links.is_linked()) {
+    if (!is_linked()) {
         ValuePort::get_value(out, n_out);
     } else {
-        port_links.get_link()->get_value(out, n_out);
+        get_link()->get_value(out, n_out);
     }
 }
 

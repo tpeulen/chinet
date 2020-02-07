@@ -68,7 +68,7 @@
 %include "node.i"
 %include "nodecallback.i"
 %include "session.i"
-%include "pda.i"
+//%include "pda.i"
 %include "curve.i"
 //%include "decay.i"
 

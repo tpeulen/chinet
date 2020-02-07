@@ -23,8 +23,6 @@ before_install:
   - conda config --set always_yes yes --set changeps1 no
   - conda config --set channel_priority strict
   - conda config --add channels conda-forge
-  - conda config --add channels tpeulen
-  - conda config --add channels fluorescence-tools
   - conda update -q conda
   - conda info -a
   - conda create -q -n build-environment python=$BUILD_TARGET conda-build anaconda-client jinja2 git
@@ -37,6 +35,8 @@ install:
   - conda install chinet
 
 script:
+  - sudo mkdir -p /data/db
+  - sudo mongod &
   - conda install nose coverage
   - ln -sf $(which nosetests) $(pwd)/test/
   - cd $(pwd)/test/
@@ -49,8 +49,8 @@ after_success:
   - pip install codacy-coverage
   - coverage xml
   - python-codacy-coverage -r coverage.xml
-  - |
-    if [[ "$TRAVIS_BRANCH" == "master" ]];
-    then
-      anaconda upload bld-dir/**/chinet*.tar.bz2
-    fi
+#  - |
+#    if [[ "$TRAVIS_BRANCH" == "master" ]];
+#    then
+#      anaconda upload bld-dir/**/chinet*.tar.bz2
+#    fi

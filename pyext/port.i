@@ -2,7 +2,7 @@
 
 %{
 #include "../include/Port.h"
-#include "../include/PortLinks.h"
+//#include "../include/PortLinks.h"
 %}
 
 %include "./include/numpy.i"
@@ -31,7 +31,7 @@
 //%attribute(Port, std::vector<double>, bounds, get_bounds, set_bounds);
 
 %include "../include/Port.h"
-%include "../include/PortLinks.h"
+//%include "../include/PortLinks.h"
 
 %extend Port {
 

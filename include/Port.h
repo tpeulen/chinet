@@ -7,10 +7,8 @@
 #include <math.h>
 
 #include <CNode.h>
-#include <PortLinks.h>
 
 class Node;
-template <class T> class PortLinks;
 
 class BasePort : public MongoObject
 {
@@ -49,6 +47,7 @@ public:
     void set_node(Node *node_ptr);
     Node* get_node();
 };
+
 
 class ValuePort : public BasePort
 {
@@ -134,14 +133,49 @@ public:
 class Port : public ValuePort
 {
 
-public:
+protected:
 
-    PortLinks<double> port_links;
+
+    /*!
+     * @brief This attribute can point to another Port (default value nullptr).
+     * If the attribute points to another port, the value returned by the
+     * method @class Port::get_value corresponds to the value the other Port.
+     */
+    std::shared_ptr<Port> link_;
+
+    /*!
+     * @brief This attribute stores the Ports that are dependent on the value
+     * of this Port object. If this Port object is reactive a change of the
+     * value of this Port object is propagated to the dependent Ports.
+     */
+    std::vector<Port*> linked_to_;
+
+    bool remove_links_to_port()
+    {
+        if (link_ != nullptr) {
+            // remove pointer to this port in the port to which this is linked
+            auto it = std::find(linked_to_.begin(), linked_to_.end(), this);
+            if (it != linked_to_.end()) {
+                linked_to_.erase(it);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void set_value_of_dependents(double *in, int nbr_in)
+    {
+        for(auto &v : linked_to_){
+            v->set_value(in, nbr_in);
+        }
+    }
+
+public:
 
     // Constructor & Destructor
     //--------------------------------------------------------------------
 
-    Port() : ValuePort(), port_links(this)
+    Port() : ValuePort()
     {
         bson_append_oid(&document, "link", 4, &oid_document);
     }
@@ -157,7 +191,7 @@ public:
             value,
             fixed,
             is_output, is_reactive,
-            is_bounded, lower_bound, upper_bound), port_links(this)
+            is_bounded, lower_bound, upper_bound)
     {
     };
 
@@ -172,11 +206,12 @@ public:
             fixed,
             is_output,
             is_reactive,
-            is_bounded, lower_bound, upper_bound), port_links(this)
+            is_bounded, lower_bound, upper_bound)
     {
     };
 
     ~Port(){
+        remove_links_to_port();
     };
 
     // Methods
@@ -189,13 +224,36 @@ public:
     void link(std::shared_ptr<Port> &v)
     {
         set_oid("link", v->get_bson_oid());
-        port_links.link(v);
+        if(v != nullptr){
+            link_ = v;
+            v->linked_to_.push_back(this);
+        }
     }
 
     bool unlink()
     {
         set_oid("link", get_bson_oid());
-        return port_links.unlink();
+
+        bool re = true;
+        re &= remove_links_to_port();
+        // set the link to a nullptr
+        link_ = nullptr;
+        return re;
+    }
+
+    bool is_linked()
+    {
+        return (link_ != nullptr);
+    }
+
+    std::vector<Port*> get_linked_ports()
+    {
+        return linked_to_;
+    }
+
+    std::shared_ptr<Port> get_link()
+    {
+        return link_;
     }
 
 };

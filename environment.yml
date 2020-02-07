@@ -26,3 +26,4 @@ dependencies:
   - sphinxcontrib-bibtex
   - recommonmark
   - eigen
+  - mongodb
