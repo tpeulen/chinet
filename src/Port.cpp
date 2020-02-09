@@ -2,71 +2,67 @@
 
 // Operator
 // --------------------------------------------------------------------
-ValuePort ValuePort::operator+(ValuePort &v)
+Port Port::operator+(Port &v)
 {
-    std::vector<double> a = this->get_value();
-    std::vector<double> b = v.get_value();
+    auto a = get_value_vector<double>();
+    auto b = v.get_value_vector<double>();
     auto result = Functions::get_vector_of_min_size(a, b);
 
     for(int i = 0; i < result.size(); ++i){
         result[i] = a[i] + b[i];
     }
 
-    ValuePort re;
+    Port re(result);
     re.set_name(this->get_name()  + "+" + v.get_name());
-    re.set_value(result.data(), result.size());
 
     return re;
 }
 
-ValuePort ValuePort::operator-(ValuePort &v)
+Port Port::operator-(Port &v)
 {
-    std::vector<double> a = this->get_value();
-    std::vector<double> b = v.get_value();
+    auto a = get_value_vector<double>();
+    auto b = v.get_value_vector<double>();
     auto result = Functions::get_vector_of_min_size(a, b);
 
     for(int i = 0; i < result.size(); ++i){
         result[i] = a[i] - b[i];
     }
 
-    ValuePort re;
+    Port re(result);
     re.set_name(this->get_name()  + "-" + v.get_name());
-    re.set_value(result.data(), result.size());
 
     return re;
 }
 
-ValuePort ValuePort::operator*(ValuePort &v)
+Port Port::operator*(Port &v)
 {
-    std::vector<double> a = this->get_value();
-    std::vector<double> b = v.get_value();
+    auto a = get_value_vector<double>();
+    auto b = v.get_value_vector<double>();
     auto result = Functions::get_vector_of_min_size(a, b);
 
     for(int i = 0; i < result.size(); ++i){
         result[i] = a[i] * b[i];
     }
 
-    ValuePort re;
+    Port re(result);
     re.set_name(this->get_name()  + "*" + v.get_name());
-    re.set_value(result.data(), result.size());
 
     return re;
 }
 
 
-ValuePort ValuePort::operator/(ValuePort &v)
+Port Port::operator/(Port &v)
 {
-    std::vector<double> a = this->get_value();
-    std::vector<double> b = v.get_value();
+    auto a = get_value_vector<double>();
+    auto b = v.get_value_vector<double>();
     auto result = Functions::get_vector_of_min_size(a, b);
 
     for(int i = 0; i < result.size(); ++i){
         result[i] = a[i] / b[i];
     }
 
-    ValuePort re;
+    Port re(result);
     re.set_name(this->get_name()  + "/" + v.get_name());
-    re.set_value(result.data(), result.size());
 
     return re;
 }
@@ -74,14 +70,24 @@ ValuePort ValuePort::operator/(ValuePort &v)
 
 // Methods
 // --------------------------------------------------------------------
-bool ValuePort::read_from_db(const std::string &oid_string)
+bool Port::read_from_db(const std::string &oid_string)
 {
     bool re = MongoObject::read_from_db(oid_string);
-    value_buffer_ = MongoObject::get_array<double>("value");
+    auto v = MongoObject::get_array<double>("value");
+    n_buffer = v.size();
+    buffer_ = std::realloc(buffer_, sizeof(double) * n_buffer);
+    if(buffer_ != nullptr)
+    {
+        n_buffer = v.size();
+        auto t = reinterpret_cast<double*>(buffer_);
+        for(int i=0; i<n_buffer; i++){
+            t[i] = v[i];
+        }
+    }
     return re;
 }
 
-bool ValuePort::write_to_db()
+bool Port::write_to_db()
 {
     bson_t doc = get_bson();
     return MongoObject::write_to_db(doc, 0);
@@ -89,15 +95,16 @@ bool ValuePort::write_to_db()
 
 // Setter
 //--------------------------------------------------------------------
-bson_t ValuePort::get_bson()
+bson_t Port::get_bson()
 {
     bson_t dst = get_bson_excluding("value", "bounds", NULL);
-    append_number_array(&dst, "value", value_buffer_);
+    auto v = get_value_vector<double>();
+    append_number_array(&dst, "value", v);
     append_number_array(&dst, "bounds", bounds_);
     return dst;
 }
 
-bool ValuePort::bound_is_valid()
+bool Port::bound_is_valid()
 {
     if (bounds_.size() == 2) {
         if (bounds_[0] != bounds_[1]) {
@@ -107,27 +114,14 @@ bool ValuePort::bound_is_valid()
     return false;
 }
 
-void ValuePort::set_bounds(double lower, double upper)
+void Port::set_bounds(double lower, double upper)
 {
     bounds_.resize(2);
     bounds_[0] = MIN(lower, upper);
     bounds_[1] = MAX(lower, upper);
-
-    // adjust values to be within bounds
-    /*
-    Functions::map_to_bounds<double>(
-            value_buffer_.data(), value_buffer_.size(),
-            bounds_[0], bounds_[1]
-    );
-     */
-
-    for (auto &v : value_buffer_) {
-        v = MAX(v, bounds_[0]);
-        v = MIN(v, bounds_[1]);
-    }
 }
 
-void ValuePort::set_bounds(std::vector<double> bounds)
+void Port::set_bounds(std::vector<double> bounds)
 {
     if (bounds.size() >= 2) {
         set_bounds(
@@ -137,148 +131,118 @@ void ValuePort::set_bounds(std::vector<double> bounds)
     }
 }
 
-void ValuePort::get_bounds(double **out, int *n_out)
-{
-    *out = bounds_.data();
-    *n_out = bounds_.size();
-}
-
-std::vector<double> ValuePort::get_bounds()
+std::vector<double> Port::get_bounds()
 {
     return bounds_;
 }
 
-void ValuePort::set_value(double *in, int n_int)
+template <typename T>
+void Port::set_value(T *in, int n_int)
 {
 #if DEBUG
-    std::clog << "ValuePort:" << get_name() << ".set_value" << std::endl;
+    std::clog << "Number of elements: " << n_int << std::endl;
+    std::clog << "Port:" << get_name() << ".set_value" << std::endl;
 #endif
+    buffer_ = std::realloc(buffer_, n_int * sizeof(T));
+    if(buffer_ != nullptr)
+    {
+        auto t = reinterpret_cast<T*>(buffer_);
+        for(int i=0; i<n_int; i++){
+            t[i] = in[i];
+        }
+        n_buffer = n_int;
 
-    if (is_bounded() && bound_is_valid()) {
+        if (is_bounded() && bound_is_valid()) {
 #if DEBUG
         std::clog << "bound values to: (" << bounds_[0] << ", " << bounds_[1] << ")" << std::endl;
 #endif
-        Functions::map_to_bounds<double>(
-                in, n_int,
-                bounds_[0], bounds_[1]
-        );
-    }
-    value_buffer_.assign(in, in + n_int);
-    if (node_ != nullptr) {
+            Functions::map_to_bounds<T>(
+                    t, n_buffer,
+                    bounds_[0], bounds_[1]
+            );
+        }
+        if (node_ != nullptr) {
 #if DEBUG
         std::clog << "Port is attached to node:" << node_->get_name() << std::endl;
 #endif
-        node_->set_node_to_invalid();
-        if (is_reactive() && !is_output()) {
-            node_->evaluate();
+            node_->set_node_to_invalid();
+            if (is_reactive() && !is_output()) {
+                node_->evaluate();
+            }
         }
+        set_value_of_dependents(in, n_int);
     }
-}
-
-void ValuePort::set_value(double value)
-{
-    auto v = std::vector<double>{value};
-    set_value(v.data(), v.size());
-}
-
-void Port::set_value(double *in, int n_int)
-{
-#if DEBUG
-    std::clog << "Port:" << get_name() << ".set_value" << std::endl;
-#endif
-    ValuePort::set_value(in, n_int);
-    set_value_of_dependents(in, n_int);
-}
-
-void Port::set_value(double value)
-{
-    auto v = std::vector<double>{value};
-    set_value(v.data(), v.size());
 }
 
 
 // Getter
 //--------------------------------------------------------------------
-void ValuePort::get_value(double **out, int *n_out)
-{
-    if (value_buffer_.empty()) {
-        value_buffer_ = MongoObject::get_array<double>("value");
-    }
-    *n_out = value_buffer_.size();
-    *out = value_buffer_.data();
-}
-
-void Port::get_value(double **out, int *n_out)
+template <typename T>
+void Port::get_value(T **out, int *n_out)
 {
     if (!is_linked()) {
-        ValuePort::get_value(out, n_out);
+        if (n_buffer == 0) {
+            auto v = MongoObject::get_array<T>("value");
+            n_buffer = v.size();
+            auto t = reinterpret_cast<T*>(buffer_);
+            if(malloc(sizeof(T) * n_buffer))
+                for(int i=0; i<n_buffer; i++){
+                    t[i] = v[i];
+                }
+        }
+        *out = reinterpret_cast<T*>(buffer_);
+        *n_out = n_buffer;
     } else {
         get_link()->get_value(out, n_out);
     }
 }
 
-std::vector<double> ValuePort::get_value()
-{
-    double *out;
-    int n_out;
-    get_value(&out, &n_out);
-
-    std::vector<double> v{};
-    v.assign(out, out + n_out);
-    return v;
-}
-
-std::vector<double> Port::get_value()
-{
-    return ValuePort::get_value();
-}
-
-bool BasePort::is_fixed()
+bool Port::is_fixed()
 {
     return get_singleton<bool>("is_fixed");
 }
 
-void BasePort::set_fixed(bool fixed)
+void Port::set_fixed(bool fixed)
 {
     set_singleton("is_fixed", fixed);
 }
 
-bool BasePort::is_output()
+bool Port::is_output()
 {
     return get_singleton<bool>("is_output");
 }
 
-void BasePort::set_port_type(bool is_output)
+void Port::set_port_type(bool is_output)
 {
     set_singleton("is_output", is_output);
 }
 
-bool BasePort::is_reactive()
+bool Port::is_reactive()
 {
     return get_singleton<bool>("is_reactive");
 }
 
-void BasePort::set_reactive(bool reactive)
+void Port::set_reactive(bool reactive)
 {
     set_singleton("is_reactive", reactive);
 }
 
-bool ValuePort::is_bounded()
+bool Port::is_bounded()
 {
     return get_singleton<bool>("is_bounded");
 }
 
-void ValuePort::set_bounded(bool bounded)
+void Port::set_bounded(bool bounded)
 {
     set_singleton("is_bounded", bounded);
 }
 
-Node *BasePort::get_node()
+Node *Port::get_node()
 {
     return node_;
 }
 
-void BasePort::set_node(Node *node_ptr)
+void Port::set_node(Node *node_ptr)
 {
     node_ = node_ptr;
 }

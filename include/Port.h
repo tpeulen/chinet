@@ -5,141 +5,28 @@
 #include <memory>
 #include <algorithm>
 #include <math.h>
+#include <cstdlib>
 
 #include <CNode.h>
 
 class Node;
 
-class BasePort : public MongoObject
-{
 
-protected:
-    Node *node_;
-
-public:
-
-    bool is_fixed();
-    void set_fixed(bool fixed);
-
-    bool is_output();
-    void set_port_type(bool is_output);
-
-    bool is_reactive();
-    void set_reactive(bool reactive);
-
-    BasePort(
-        bool fixed = false,
-        bool is_output = false,
-        bool is_reactive = false
-    ) :
-    node_(nullptr)
-    {
-        append_string(&document, "type", "port");
-        bson_append_bool(&document, "is_output", 9, false);
-        bson_append_bool(&document, "is_fixed", 8, false);
-        bson_append_bool(&document, "is_reactive", 11, false);
-
-        set_fixed(fixed);
-        set_port_type(is_output);
-        set_reactive(is_reactive);
-    }
-
-    void set_node(Node *node_ptr);
-    Node* get_node();
-};
-
-
-class ValuePort : public BasePort
+class Port : public MongoObject
 {
 
 private:
-    std::vector<double> value_buffer_{};
+
+    void* buffer_;
     std::vector<double> bounds_{};
+    size_t n_buffer = 0;
 
-public:
-    // Constructor & Destructor
-    //--------------------------------------------------------------------
-    ValuePort() : BasePort()
-    {
-        bson_append_oid(&document, "link", 4, &oid_document);
-        bson_append_bool(&document, "is_bounded", 10, false);
-    }
-
-    ValuePort(double value,
-         bool fixed = false,
-         bool is_output = false,
-         bool is_reactive = false,
-         bool is_bounded = false,
-         double lower_bound = 0,
-         double upper_bound = 0
-    ) : BasePort(fixed, is_output, is_reactive)
-    {
-        set_value(value);
-        set_bounded(is_bounded);
-        if(is_bounded){
-            set_bounds(lower_bound, upper_bound);
-        }
-    };
-
-    ValuePort(std::vector<double> array,
-         bool fixed = false,
-         bool is_output = false,
-         bool is_reactive = false,
-         bool is_bounded = false,
-         double lower_bound = 0,
-         double upper_bound = 0
-    ) : BasePort(fixed, is_output, is_reactive)
-    {
-        set_value(array.data(), array.size());
-        set_bounded(is_bounded);
-        if(is_bounded){
-            set_bounds(lower_bound, upper_bound);
-        }
-    };
-
-    ~ValuePort(){
-    };
-
-    // Getter & Setter
-    //--------------------------------------------------------------------
-    virtual void set_value(double *in, int n_in);
-    virtual void set_value(double value);
-    virtual void get_value(double **out, int *n_out);
-    virtual std::vector<double> get_value();
-    virtual bson_t get_bson() final;
-
-    // Methods
-    //--------------------------------------------------------------------
-    void set_bounded(bool bounded);
-    bool bound_is_valid();
-    bool is_bounded();
-    void set_bounds(double lower, double upper);
-    void set_bounds(std::vector<double> bound);
-    void get_bounds(double **out, int *n_out);
-    std::vector<double> get_bounds();
-
-    bool write_to_db();
-    bool read_from_db(const std::string &oid_string);
-
-    // Operators
-    //--------------------------------------------------------------------
-    ValuePort operator+(ValuePort &v);
-    ValuePort operator-(ValuePort &v);
-    ValuePort operator*(ValuePort &v);
-    ValuePort operator/(ValuePort &v);
-};
-
-
-class Port : public ValuePort
-{
-
-protected:
-
+    Node* node_ = nullptr;
 
     /*!
      * @brief This attribute can point to another Port (default value nullptr).
      * If the attribute points to another port, the value returned by the
-     * method @class Port::get_value corresponds to the value the other Port.
+     * method @class Port::get_value_vector corresponds to the value the other Port.
      */
     std::shared_ptr<Port> link_;
 
@@ -174,52 +61,92 @@ public:
 
     // Constructor & Destructor
     //--------------------------------------------------------------------
-
-    Port() : ValuePort()
-    {
-        bson_append_oid(&document, "link", 4, &oid_document);
-    }
-
-    Port(double value,
-         bool fixed = false,
-         bool is_output = false,
-         bool is_reactive = false,
-         bool is_bounded = false,
-         double lower_bound = 0,
-         double upper_bound = 0
-    ) : ValuePort(
-            value,
-            fixed,
-            is_output, is_reactive,
-            is_bounded, lower_bound, upper_bound)
-    {
-    };
-
-    Port(std::vector<double> array,
-         bool fixed = false,
-         bool is_output = false,
-         bool is_reactive = false,
-         bool is_bounded = false,
-         double lower_bound = 0,
-         double upper_bound = 0
-    ) : ValuePort(array,
-            fixed,
-            is_output,
-            is_reactive,
-            is_bounded, lower_bound, upper_bound)
-    {
-    };
-
     ~Port(){
         remove_links_to_port();
+        free(buffer_);
     };
+
+    Port()
+    {
+        append_string(&document, "type", "port");
+        bson_append_bool(&document, "is_output", 9, false);
+        bson_append_bool(&document, "is_fixed", 8, false);
+        bson_append_bool(&document, "is_reactive", 11, false);
+        bson_append_oid(&document, "link", 4, &oid_document);
+        bson_append_bool(&document, "is_bounded", 10, false);
+        buffer_ = malloc(1);
+    }
+
+    Port(
+            std::vector<double> array,
+            bool fixed = false,
+            bool is_output = false,
+            bool is_reactive = false,
+            bool is_bounded = false,
+            double lower_bound = 0,
+            double upper_bound = 0
+    ) : Port()
+    {
+        set_fixed(fixed);
+        set_port_type(is_output);
+        set_reactive(is_reactive);
+        set_bounded(is_bounded);
+        if(is_bounded){
+            set_bounds(lower_bound, upper_bound);
+        }
+        set_value(array.data(), array.size());
+    };
+
+    void set_node(Node *node_ptr);
+    Node* get_node();
+
+    // Getter & Setter
+    //--------------------------------------------------------------------
+    template <typename T> void set_value(T *in, int n_in);
+    template <typename T> void get_value(T **out, int *n_out);
+
+    template <typename T> void
+    set_value_vector(std::vector<T> value)
+    {
+        auto v = std::vector<T>{value};
+        set_value(v.data(), v.size());
+    }
+
+    template <typename T>
+    std::vector<T> get_value_vector()
+    {
+        T *out;
+        int n_out;
+        get_value(&out, &n_out);
+
+        std::vector<T> v{};
+        v.assign(out, out + n_out);
+        return v;
+    }
+
+    virtual bson_t get_bson() final;
 
     // Methods
     //--------------------------------------------------------------------
-    void set_value(double *in, int n_in);
-    void set_value(double value);
-    void get_value(double **out, int *n_out);
-    std::vector<double> get_value();
+    void set_bounded(bool bounded);
+    bool bound_is_valid();
+    bool is_bounded();
+    void set_bounds(double lower, double upper);
+    void set_bounds(std::vector<double> bound);
+    std::vector<double> get_bounds();
+
+    bool is_fixed();
+    void set_fixed(bool fixed);
+
+    bool is_output();
+    void set_port_type(bool is_output);
+
+    bool is_reactive();
+    void set_reactive(bool reactive);
+
+    bool write_to_db();
+
+    bool read_from_db(const std::string &oid_string);
 
     void link(std::shared_ptr<Port> &v)
     {
@@ -254,6 +181,13 @@ public:
     {
         return link_;
     }
+
+    // Operators
+    //--------------------------------------------------------------------
+    Port operator+(Port &v);
+    Port operator-(Port &v);
+    Port operator*(Port &v);
+    Port operator/(Port &v);
 
 };
 

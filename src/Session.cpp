@@ -44,7 +44,7 @@ std::shared_ptr<Port> Session::create_port(json port_template, std::string port_
                     );
         } else if (it_val.key() == "value") {
             auto b = port_template["value"].get<std::vector<double>>();
-            port->set_value(b.data(), b.size());
+            port->set_value_vector(b);
         } else if (it_val.key() == "is_output"){
             port->set_port_type(
                     port_template["is_output"].get<bool>()

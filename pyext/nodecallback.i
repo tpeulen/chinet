@@ -4,8 +4,8 @@
 %include "std_string.i";
 
 %{
-#include "../include/Port.h"
-#include "../include/NodeCallback.h"
+    #include "../include/Port.h"
+    #include "../include/NodeCallback.h"
 %}
 
 

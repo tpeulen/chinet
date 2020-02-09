@@ -27,8 +27,8 @@ class Tests(unittest.TestCase):
         p4 = cn.Port(v1, False)
 
         self.assertEqual(p1.get_value(), p2.get_value())
-        self.assertEqual(p3.is_fixed(), True)
-        self.assertEqual(p4.is_fixed(), False)
+        self.assertEqual(p3.fixed, True)
+        self.assertEqual(p4.fixed, False)
 
         # check linking
         p5 = cn.Port(v2)
@@ -60,7 +60,7 @@ class Tests(unittest.TestCase):
 
         self.assertEqual((p1.get_value() == v1).all(), True)
 
-        p1.set_bounded(True)
+        p1.bounded = True
         p1.set_bounds(0, 1)
 
         self.assertEqual((p1.get_value() <= 1).all(), True)
@@ -95,9 +95,9 @@ class Tests(unittest.TestCase):
 
         # check fixing
         p3 = cn.Port(v1, True)
-        self.assertEqual(p3.is_fixed(), True)
+        self.assertEqual(p3.fixed, True)
         p4 = cn.Port(v1, False)
-        self.assertEqual(p4.is_fixed(), False)
+        self.assertEqual(p4.fixed, False)
 
         # check linking
         p5 = cn.Port(v2, False)
@@ -143,19 +143,19 @@ class Tests(unittest.TestCase):
 
     def test_port_fixed(self):
         p1 = cn.Port(12)
-        p1.set_fixed(True)
+        p1.fixed = True
         self.assertEqual(p1.fixed, True)
 
         p1.fixed = False
-        self.assertEqual(p1.is_fixed(), False)
+        self.assertEqual(p1.fixed, False)
 
     def test_port_reactive(self):
         p1 = cn.Port(12)
-        p1.set_reactive(True)
+        p1.reactive = True
         self.assertEqual(p1.reactive, True)
 
         p1.reactive = False
-        self.assertEqual(p1.is_reactive(), False)
+        self.assertEqual(p1.reactive, False)
 
     def test_db_write(self):
         db_dict = {
@@ -169,8 +169,8 @@ class Tests(unittest.TestCase):
         value = 17
 
         port = cn.Port(value)
-        port.set_value(value_array)
-        port.set_fixed(True)
+        port.value = value_array
+        port.fixed = True
 
         port.connect_to_db(**db_dict)
         print(port.get_json())

@@ -112,7 +112,7 @@ namespace Functions {
      * @param upper_bound (In)
      */
     template <typename T>
-    void map_to_bounds(T *values, int n_values, T lower_bound, T upper_bound)
+    void map_to_bounds(T *values, int n_values, double lower_bound, double upper_bound)
     {
         T delta = upper_bound - lower_bound;
         for(int i = 0; i<n_values; i++)
