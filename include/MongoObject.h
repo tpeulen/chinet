@@ -99,7 +99,10 @@ protected:
         bson_t child;
         bson_append_array_begin(doc, key.c_str(), key.size(), &child);
 
-        if(std::is_same<T, std::vector<int>>::value){
+        if(
+                (std::is_same<T, std::vector<long>>::value) ||
+                (std::is_same<T, std::vector<int>>::value)
+                ){
             for(auto &v : values){
                 bson_append_int64(&child, "", 0, v);
             }
@@ -406,17 +409,11 @@ public:
                 bson_t *arr;
                 const uint8_t *data = NULL;
                 uint32_t len = 0;
-
                 bson_iter_document (&desc, &len, &data);
-
                 arr = bson_new_from_data (data, len);
-
                 str = bson_as_json (arr, NULL);
-
                 re.assign(str);
-
                 bson_free (str);
-
                 bson_destroy (arr);
             }
         }

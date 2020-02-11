@@ -44,7 +44,7 @@ std::shared_ptr<Port> Session::create_port(json port_template, std::string port_
                     );
         } else if (it_val.key() == "value") {
             auto b = port_template["value"].get<std::vector<double>>();
-            port->set_value_vector(b);
+            port->set_value(b.data(), b.size());
         } else if (it_val.key() == "is_output"){
             port->set_port_type(
                     port_template["is_output"].get<bool>()
@@ -81,7 +81,7 @@ std::shared_ptr<Node> Session::create_node(json node_template, std::string node_
                 const std::string &port_key = it2.key();
                 auto port_json = node_template["ports"][port_key];
                 auto port = create_port(port_json, port_key);
-                node->add_port(port_key, port, port->is_output());
+                node->add_port(port_key, port.get(), port->is_output());
             }
         } else if (it.key() == "callback") {
             callback = node_template["callback"].get<std::string>();

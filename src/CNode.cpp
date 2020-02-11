@@ -16,7 +16,7 @@ MongoObject(name)
     append_string(&document, "type", "node");
 }
 
-Node::Node(std::map<std::string, std::shared_ptr<Port>> ports) :
+Node::Node(std::map<std::string, Port*> ports) :
            Node(){
     for(auto &o: ports){
         o.second->set_name(o.first);
@@ -122,7 +122,13 @@ std::map<std::string, std::shared_ptr<Port>> Node::get_output_ports(){
 void Node::set_callback(std::string s_callback, std::string s_callback_type){
     this->callback = s_callback;
     this->callback_type_string = s_callback_type;
+#if DEBUG
+    std::clog << " " << callback << " " << callback_type_string << std::endl;
+#endif
     if(s_callback_type == "C"){
+#if DEBUG
+        std::clog << "C call back" << std::endl;
+#endif
         callback_type = 0;
         meth_ = rttr::type::get_global_method(callback);
         if(!meth_){
@@ -144,23 +150,28 @@ void Node::set_callback(std::shared_ptr<NodeCallback> cb){
 
 // Methods
 //--------------------------------------------------------------------
-void Node::add_port(std::string key,
-        std::shared_ptr<Port> port,
+void Node::add_port(
+        std::string key,
+        Port* port,
         bool is_output,
-        bool fill_in_out) {
+        bool fill_in_out
+        ) {
     port->set_port_type(is_output);
     port->set_node(this);
-    ports[key] = port;
+    ports[key] = std::shared_ptr<Port>(port);
     if(fill_in_out){
         fill_input_output_port_lookups();
     }
 }
 
-void Node::add_input_port(std::string key, std::shared_ptr<Port> port) {
+void Node::add_input_port(
+        std::string key,
+        Port* port
+        ) {
     add_port(key, port, false);
 }
 
-void Node::add_output_port(std::string key, std::shared_ptr<Port> port) {
+void Node::add_output_port(std::string key, Port* port) {
     add_port(key, port, true);
 }
 

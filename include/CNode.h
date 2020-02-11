@@ -18,11 +18,11 @@
 
 class Port;
 class NodeCallback;
-class Node : public MongoObject{
+class Node : public MongoObject
+{
 
 private:
     friend Port;
-
     bool node_valid_ = false;
     std::map<std::string, std::shared_ptr<Port>> ports;
 
@@ -49,7 +49,7 @@ public:
     //--------------------------------------------------------------------
     Node();
     Node(std::string name);
-    Node(std::map<std::string, std::shared_ptr<Port>> ports);
+    Node(std::map<std::string, Port*> ports);
     ~Node();
 
     // Methods
@@ -70,9 +70,9 @@ public:
 
     std::map<std::string, std::shared_ptr<Port>> get_ports();
     std::shared_ptr<Port> get_port(const std::string &port_name);
-    void add_port(std::string key, std::shared_ptr<Port>, bool is_source, bool fill_in_out=true);
-    void add_input_port(std::string key, std::shared_ptr<Port>);
-    void add_output_port(std::string key, std::shared_ptr<Port>);
+    void add_port(std::string key, Port*, bool is_source, bool fill_in_out=true);
+    void add_input_port(std::string key, Port*);
+    void add_output_port(std::string key, Port*);
 
     std::shared_ptr<Port> get_input_port(const std::string &port_name);
     std::shared_ptr<Port> get_output_port(const std::string &port_name);

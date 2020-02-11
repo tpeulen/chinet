@@ -15,15 +15,15 @@
 
         %template(get_array_double) get_array<double>;
         %template(set_array_double) set_array<double>;
-        %template(get_array_int) get_array<int>;
-        %template(set_array_int) set_array<int>;
+        %template(get_array_int) get_array<long>;
+        %template(set_array_int) set_array<long>;
         //%template(get_array_bool) get_array<bool>;
         //%template(set_array_bool) set_array<bool>;
 
         %template(get_singleton_double) get_singleton<double>;
         %template(set_singleton_double) set_singleton<double>;
-        %template(get_singleton_int) get_singleton<int>;
-        %template(set_singleton_int) set_singleton<int>;
+        %template(get_singleton_int) get_singleton<long>;
+        %template(set_singleton_int) set_singleton<long>;
         %template(get_singleton_bool) get_singleton<bool>;
         %template(set_singleton_bool) set_singleton<bool>;
 

@@ -2,70 +2,99 @@
 
 // Operator
 // --------------------------------------------------------------------
-Port Port::operator+(Port &v)
+Port* Port::operator+(Port* v)
 {
-    auto a = get_value_vector<double>();
-    auto b = v.get_value_vector<double>();
-    auto result = Functions::get_vector_of_min_size(a, b);
-
-    for(int i = 0; i < result.size(); ++i){
-        result[i] = a[i] + b[i];
+    auto re = new Port();
+    re->set_value_type(this->get_value_type());
+    auto node = new Node();
+    std::string name = this->get_name()  + "+" + v->get_name();
+    node->set_name(name);
+    node->add_input_port(this->get_name(), this);
+    node->add_input_port(v->get_name(), v);
+    node->add_output_port(name, re);
+    if(this->get_value_type() == 0){
+        node->set_callback("addition_double", "C");
+    } else if(this->get_value_type() == 1){
+        node->set_callback("addition_int", "C");
     }
-
-    Port re(result);
-    re.set_name(this->get_name()  + "+" + v.get_name());
-
+    re->set_node(node);
+    re->set_name(name);
+    re->set_port_type(true);
+    node->evaluate();
     return re;
 }
 
-Port Port::operator-(Port &v)
+Port* Port::operator*(Port* v)
 {
-    auto a = get_value_vector<double>();
-    auto b = v.get_value_vector<double>();
-    auto result = Functions::get_vector_of_min_size(a, b);
-
-    for(int i = 0; i < result.size(); ++i){
-        result[i] = a[i] - b[i];
+    auto re = new Port();
+    re->set_value_type(this->get_value_type());
+    auto node = new Node();
+    std::string name = this->get_name()  + "+" + v->get_name();
+    node->set_name(name);
+    node->add_input_port(this->get_name(), this);
+    node->add_input_port(v->get_name(), v);
+    node->add_output_port(name, re);
+    if(this->get_value_type() == 0){
+        node->set_callback("multiply_double", "C");
+    } else if(this->get_value_type() == 1){
+        node->set_callback("multiply_int", "C");
     }
-
-    Port re(result);
-    re.set_name(this->get_name()  + "-" + v.get_name());
-
+    re->set_node(node);
+    re->set_name(name);
+    re->set_port_type(true);
+    node->evaluate();
     return re;
 }
 
-Port Port::operator*(Port &v)
-{
-    auto a = get_value_vector<double>();
-    auto b = v.get_value_vector<double>();
-    auto result = Functions::get_vector_of_min_size(a, b);
-
-    for(int i = 0; i < result.size(); ++i){
-        result[i] = a[i] * b[i];
-    }
-
-    Port re(result);
-    re.set_name(this->get_name()  + "*" + v.get_name());
-
-    return re;
-}
-
-
-Port Port::operator/(Port &v)
-{
-    auto a = get_value_vector<double>();
-    auto b = v.get_value_vector<double>();
-    auto result = Functions::get_vector_of_min_size(a, b);
-
-    for(int i = 0; i < result.size(); ++i){
-        result[i] = a[i] / b[i];
-    }
-
-    Port re(result);
-    re.set_name(this->get_name()  + "/" + v.get_name());
-
-    return re;
-}
+//
+//Port Port::operator-(Port &v)
+//{
+//    auto a = get_value_vector<double>();
+//    auto b = v.get_value_vector<double>();
+//    auto result = Functions::get_vector_of_min_size(a, b);
+//
+//    for(int i = 0; i < result.size(); ++i){
+//        result[i] = a[i] - b[i];
+//    }
+//
+//    Port re(result);
+//    re.set_name(this->get_name()  + "-" + v.get_name());
+//
+//    return re;
+//}
+//
+//Port Port::operator*(Port &v)
+//{
+//    auto a = get_value_vector<double>();
+//    auto b = v.get_value_vector<double>();
+//    auto result = Functions::get_vector_of_min_size(a, b);
+//
+//    for(int i = 0; i < result.size(); ++i){
+//        result[i] = a[i] * b[i];
+//    }
+//
+//    Port re(result);
+//    re.set_name(this->get_name()  + "*" + v.get_name());
+//
+//    return re;
+//}
+//
+//
+//Port Port::operator/(Port &v)
+//{
+//    auto a = get_value_vector<double>();
+//    auto b = v.get_value_vector<double>();
+//    auto result = Functions::get_vector_of_min_size(a, b);
+//
+//    for(int i = 0; i < result.size(); ++i){
+//        result[i] = a[i] / b[i];
+//    }
+//
+//    Port re(result);
+//    re.set_name(this->get_name()  + "/" + v.get_name());
+//
+//    return re;
+//}
 
 
 // Methods
@@ -74,14 +103,21 @@ bool Port::read_from_db(const std::string &oid_string)
 {
     bool re = MongoObject::read_from_db(oid_string);
     auto v = MongoObject::get_array<double>("value");
-    n_buffer = v.size();
-    buffer_ = std::realloc(buffer_, sizeof(double) * n_buffer);
+    n_buffer_ = v.size();
+    buffer_ = std::realloc(buffer_, sizeof(double) * n_buffer_);
     if(buffer_ != nullptr)
     {
-        n_buffer = v.size();
-        auto t = reinterpret_cast<double*>(buffer_);
-        for(int i=0; i<n_buffer; i++){
-            t[i] = v[i];
+        n_buffer_ = v.size();
+        if(value_type == 0){
+            auto t = reinterpret_cast<double*>(buffer_);
+            for(int i=0; i < n_buffer_; i++){
+                t[i] = v[i];
+            }
+        } else{
+            auto t = reinterpret_cast<int*>(buffer_);
+            for(int i=0; i < n_buffer_; i++){
+                t[i] = (int) v[i];
+            }
         }
     }
     return re;
@@ -95,11 +131,23 @@ bool Port::write_to_db()
 
 // Setter
 //--------------------------------------------------------------------
+
 bson_t Port::get_bson()
 {
     bson_t dst = get_bson_excluding("value", "bounds", NULL);
-    auto v = get_value_vector<double>();
-    append_number_array(&dst, "value", v);
+    if(value_type == 0){
+        double* va; int nv;
+        get_own_value(&va, &nv);
+        auto v = std::vector<double>();
+        v.assign(va, va + nv);
+        append_number_array(&dst, "value", v);
+    } else{
+        long* va; int nv;
+        get_own_value(&va, &nv);
+        auto v = std::vector<long>();
+        v.assign(va, va + nv);
+        append_number_array(&dst, "value", v);
+    }
     append_number_array(&dst, "bounds", bounds_);
     return dst;
 }
@@ -136,66 +184,12 @@ std::vector<double> Port::get_bounds()
     return bounds_;
 }
 
-template <typename T>
-void Port::set_value(T *in, int n_int)
-{
-#if DEBUG
-    std::clog << "Number of elements: " << n_int << std::endl;
-    std::clog << "Port:" << get_name() << ".set_value" << std::endl;
-#endif
-    buffer_ = std::realloc(buffer_, n_int * sizeof(T));
-    if(buffer_ != nullptr)
-    {
-        auto t = reinterpret_cast<T*>(buffer_);
-        for(int i=0; i<n_int; i++){
-            t[i] = in[i];
-        }
-        n_buffer = n_int;
 
-        if (is_bounded() && bound_is_valid()) {
-#if DEBUG
-        std::clog << "bound values to: (" << bounds_[0] << ", " << bounds_[1] << ")" << std::endl;
-#endif
-            Functions::map_to_bounds<T>(
-                    t, n_buffer,
-                    bounds_[0], bounds_[1]
-            );
-        }
-        if (node_ != nullptr) {
-#if DEBUG
-        std::clog << "Port is attached to node:" << node_->get_name() << std::endl;
-#endif
-            node_->set_node_to_invalid();
-            if (is_reactive() && !is_output()) {
-                node_->evaluate();
-            }
-        }
-        set_value_of_dependents(in, n_int);
-    }
-}
 
 
 // Getter
 //--------------------------------------------------------------------
-template <typename T>
-void Port::get_value(T **out, int *n_out)
-{
-    if (!is_linked()) {
-        if (n_buffer == 0) {
-            auto v = MongoObject::get_array<T>("value");
-            n_buffer = v.size();
-            auto t = reinterpret_cast<T*>(buffer_);
-            if(malloc(sizeof(T) * n_buffer))
-                for(int i=0; i<n_buffer; i++){
-                    t[i] = v[i];
-                }
-        }
-        *out = reinterpret_cast<T*>(buffer_);
-        *n_out = n_buffer;
-    } else {
-        get_link()->get_value(out, n_out);
-    }
-}
+
 
 bool Port::is_fixed()
 {
@@ -237,12 +231,22 @@ void Port::set_bounded(bool bounded)
     set_singleton("is_bounded", bounded);
 }
 
-Node *Port::get_node()
+Node* Port::get_node()
 {
     return node_;
 }
 
-void Port::set_node(Node *node_ptr)
+void Port::set_node(Node* node_ptr)
 {
     node_ = node_ptr;
+}
+
+void Port::update_attached_node() {
+#if DEBUG
+    std::clog << "Port caused update of node with name: " << node_->get_name() << std::endl;
+#endif
+    node_->set_node_to_invalid();
+    if (is_reactive() && !is_output()) {
+        node_->evaluate();
+    }
 }

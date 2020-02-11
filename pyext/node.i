@@ -12,8 +12,6 @@
 %}
 
 %shared_ptr(Node)
-%shared_ptr(Port)
-
 %template(MapStringPort) std::map<std::string, std::shared_ptr<Port>>;
 %template(MapStringDouble) std::map<std::string, double>;
 
