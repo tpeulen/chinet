@@ -1,4 +1,5 @@
 %module(directors="1") chinet
+%feature("kwargs", 1);
 
 %{
 #include "../include/Port.h"
@@ -6,6 +7,8 @@
 %}
 
 %include "./include/numpy.i"
+%include "std_vector.i";
+
 %include <std_shared_ptr.i>
 %shared_ptr(Port)
 %shared_ptr(Node)
@@ -25,7 +28,7 @@
 %attribute(Port, bool, reactive, is_reactive, set_reactive);
 %attribute(Port, bool, bounded, is_bounded, set_bounded);
 %attributestring(Port, std::string, name, get_name, set_name);
-%attributestring(Port, Port*, link, get_link, set_link);
+%attribute(Port, Port*, link, get_link, set_link);
 
 %include "../include/Port.h"
 %extend Port{
@@ -46,7 +49,12 @@
     %{
         __swig_getmethods__["node"] = get_node
         __swig_setmethods__["node"] = set_node
-        if _newclass: value = property(get_node, set_node)
+        __swig_getmethods__["bounds"] = get_bounds
+        __swig_setmethods__["bounds"] = set_bounds
+
+        if _newclass:
+            value = property(get_node, set_node)
+            bounds = property(get_bounds, set_bounds)
     %}
 
 }
@@ -60,12 +68,10 @@ def get_value_p(self):
     else:
         return Port.get_value_i(self)
 def set_value_p(self, v):
-    if not isinstance(v, np.ndarray):
-        v = np.atleast_1d(np.array(v))
-    if v.dtype.kind == 'i':
-        return Port.set_value_i(self, v)
-    else:
+    if self.is_float():
         return Port.set_value_d(self, v)
+    else:
+        return Port.set_value_i(self, v)
 setattr(Port, 'value', property(get_value_p, set_value_p))
 
 old_init = Port.__init__
@@ -76,6 +82,10 @@ def init(
         **kwargs
         ):
     old_init(self, *args, **kwargs)
+    if v.dtype.kind == 'i':
+        Port.value_type = 1
+    else:
+        Port.value_type = 0
     self.value = np.atleast_1d(np.array(value))
 Port.__init__ = init
 %}

@@ -109,15 +109,9 @@ bool Port::read_from_db(const std::string &oid_string)
     {
         n_buffer_ = v.size();
         if(value_type == 0){
-            auto t = reinterpret_cast<double*>(buffer_);
-            for(int i=0; i < n_buffer_; i++){
-                t[i] = v[i];
-            }
+            memcpy(buffer_, v.data(), n_buffer_ * sizeof(double));
         } else{
-            auto t = reinterpret_cast<int*>(buffer_);
-            for(int i=0; i < n_buffer_; i++){
-                t[i] = (int) v[i];
-            }
+            memcpy(buffer_, v.data(), n_buffer_ * sizeof(int));
         }
     }
     return re;
@@ -162,26 +156,22 @@ bool Port::bound_is_valid()
     return false;
 }
 
-void Port::set_bounds(double lower, double upper)
-{
-    bounds_.resize(2);
-    bounds_[0] = MIN(lower, upper);
-    bounds_[1] = MAX(lower, upper);
-}
 
-void Port::set_bounds(std::vector<double> bounds)
+void Port::set_bounds(double *input, int n_input)
 {
-    if (bounds.size() >= 2) {
-        set_bounds(
-                MIN(bounds[0], bounds[1]),
-                MAX(bounds[0], bounds[1])
-        );
+    if (n_input >= 2) {
+        bounds_.clear();
+        double lower = MIN(input[0], input[1]);
+        double upper = MAX(input[0], input[1]);
+        bounds_.push_back(lower);
+        bounds_.push_back(upper);
     }
 }
 
-std::vector<double> Port::get_bounds()
+void Port::get_bounds(double **output, int *n_output)
 {
-    return bounds_;
+    *output = bounds_.data();
+    *n_output = bounds_.size();
 }
 
 

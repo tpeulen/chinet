@@ -75,8 +75,8 @@ public:
             bool is_output = false,
             bool is_reactive = false,
             bool is_bounded = false,
-            double lower_bound = 0,
-            double upper_bound = 0,
+            double lb = 0,
+            double ub = 0,
             std::string name = ""
     )
     {
@@ -93,7 +93,8 @@ public:
         set_reactive(is_reactive);
         set_bounded(is_bounded);
         if(is_bounded){
-            set_bounds(lower_bound, upper_bound);
+            bounds_.push_back(lb);
+            bounds_.push_back(ub);
         }
         value_type = 0;
         set_name(name);
@@ -128,55 +129,58 @@ public:
 #endif
             return;
         }
-        if(std::is_same<T, double>::value){
-            value_type = 0;
-        } else{
-            value_type = 1;
-        }
 #if DEBUG
-        std::clog << "Number of elements: " << n_int << std::endl;
+        std::clog << "Number of elements: " << n_input << std::endl;
         std::clog << "Port:" << get_name() << ".set_value" << std::endl;
 #endif
-        buffer_ = std::realloc(buffer_, n_input * sizeof(T));
+        if(n_input  > n_buffer_)
+            buffer_ = std::realloc(buffer_, n_input * sizeof(T));
         if(buffer_ != nullptr)
         {
-            auto t = reinterpret_cast<T*>(buffer_);
-            for(int i=0; i<n_input; i++){
-                t[i] = input[i];
-            }
+            memcpy(buffer_, input, n_input * sizeof(T));
             n_buffer_ = n_input;
-            if (is_bounded() && bound_is_valid()) {
-#if DEBUG
-                std::clog << "bound values to: (" << bounds_[0] << ", " << bounds_[1] << ")" << std::endl;
-#endif
-                Functions::map_to_bounds<T>(
-                        t, n_buffer_,
-                        bounds_[0], bounds_[1]
-                );
-            }
             if (node_ != nullptr) {
 #if DEBUG
                 std::clog << "Port is attached to node:" << node_->get_name() << std::endl;
 #endif
                 update_attached_node();
             }
-            set_value_of_dependents(input, n_input);
         }
     }
 
     template <typename T>
-    void get_own_value(T **out, int *n_out){
+    void update_buffer(){
+        auto v = get_array<T>("value");
+        n_buffer_ = v.size();
+        buffer_ = realloc(buffer_, sizeof(T) * n_buffer_);
+        memcpy(buffer_, v.data(), n_buffer_ * sizeof(T));
+    }
+
+    template <typename T>
+    void get_own_value(T **output, int *n_output){
         if (n_buffer_ == 0) {
-            auto v = MongoObject::get_array<T>("value");
-            n_buffer_ = v.size();
-            auto t = reinterpret_cast<T*>(buffer_);
-            if(malloc(sizeof(double) * n_buffer_))
-                for(int i=0; i < n_buffer_; i++){
-                    t[i] = v[i];
-                }
+#if DEBUG
+            std::clog << "Updating buffer from bson" << std::endl;
+#endif
+            std::clog << "Updating buffer from bson" << std::endl;
+            update_buffer<T>();
         }
-        *out = reinterpret_cast<T*>(buffer_);
-        *n_out = n_buffer_;
+        if (is_bounded() && bound_is_valid()) {
+#if DEBUG
+            std::clog << "bound values to: (" << bounds_[0] << ", " << bounds_[1] << ")" << std::endl;
+#endif
+            auto bounded_array = (T*) malloc(n_buffer_ * sizeof(T));
+            memcpy(bounded_array, buffer_, (size_t) n_buffer_ * sizeof(T));
+            Functions::map_to_bounds<T>(
+                    bounded_array, n_buffer_,
+                    bounds_[0], bounds_[1]
+                    );
+            *n_output = n_buffer_;
+            *output = reinterpret_cast<T*>(bounded_array);
+        } else {
+            *n_output = n_buffer_;
+            *output = reinterpret_cast<T*>(buffer_);
+        }
     }
 
     template <typename T>
@@ -197,9 +201,8 @@ public:
     void set_bounded(bool bounded);
     bool bound_is_valid();
     bool is_bounded();
-    void set_bounds(double lower, double upper);
-    void set_bounds(std::vector<double> bound);
-    std::vector<double> get_bounds();
+    void set_bounds(double *input, int n_input);
+    void get_bounds(double **output, int *n_output);
     bool is_fixed();
     void set_fixed(bool fixed);
     bool is_output();
