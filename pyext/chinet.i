@@ -73,5 +73,3 @@
 //%include "pda.i"
 %include "curve.i"
 //%include "decay.i"
-
-

@@ -6,7 +6,7 @@ template <typename T>
 inline void mul(
         T* tmp,
         size_t &n_elements,
-        const std::map<std::string, std::shared_ptr<Port>> inputs
+        const std::map<std::string, std::shared_ptr<Port>> &inputs
         )
 {
     for(int i=0; i<n_elements; i++) tmp[i] = 1.0;
@@ -23,7 +23,7 @@ template <typename T>
 inline void add(
         T* tmp,
         size_t &n_elements,
-        const std::map<std::string, std::shared_ptr<Port>> inputs
+        const std::map<std::string, std::shared_ptr<Port>> &inputs
 )
 {
     for(int i=0; i<n_elements; i++) tmp[i] = 0.0;
@@ -38,7 +38,7 @@ inline void add(
 
 template <typename T>
 void combine(
-        const std::map<std::string, std::shared_ptr<Port>> &inputs,
+        std::map<std::string, std::shared_ptr<Port>> &inputs,
         std::map<std::string, std::shared_ptr<Port>> &outputs,
         int operation
         ){
@@ -63,6 +63,8 @@ void combine(
         case 1:
             mul(tmp, n_elements, inputs);
             break;
+        default:
+            break;
     }
     if(!outputs.empty()){
         if (outputs.find("outA") == outputs.end() ) {
@@ -82,7 +84,7 @@ void combine(
 
 template <typename T>
 void addition(
-        const std::map<std::string, std::shared_ptr<Port>> &inputs,
+        std::map<std::string, std::shared_ptr<Port>> &inputs,
         std::map<std::string, std::shared_ptr<Port>> &outputs
 )
 {
@@ -91,7 +93,7 @@ void addition(
 
 template <typename T>
 void multiply(
-        const std::map<std::string, std::shared_ptr<Port>> &inputs,
+        std::map<std::string, std::shared_ptr<Port>> &inputs,
         std::map<std::string, std::shared_ptr<Port>> &outputs
 )
 {
@@ -99,13 +101,14 @@ void multiply(
 }
 
 void nothing(
-        const std::map<std::string, std::shared_ptr<Port>> &inputs,
-        const std::map<std::string, std::shared_ptr<Port>> &outputs){
+        std::map<std::string, std::shared_ptr<Port>> &inputs,
+        std::map<std::string, std::shared_ptr<Port>> &outputs){
 }
 
 void passthrough(
-        const std::map<std::string, std::shared_ptr<Port>> &inputs,
-        const std::map<std::string, std::shared_ptr<Port>> &outputs){
+        std::map<std::string, std::shared_ptr<Port>> &inputs,
+        std::map<std::string, std::shared_ptr<Port>> &outputs
+        ){
     for(auto it_in = inputs.cbegin(), end_in = inputs.cend(),
             it_out = outputs.cbegin(), end_out = outputs.cend();
             it_in != end_in || it_out != end_out;)
@@ -128,35 +131,37 @@ void passthrough(
     }
 }
 
-
 void convolve_sum_of_exponentials_periodic(
-        const std::map<std::string, std::shared_ptr<Port>> &inputs,
-        std::map<std::string, std::shared_ptr<Port>> &output){
-    /*
-    std::vector<double> irf = input_map["irf"]->value();
-    std::vector<double> decay = input_map["decay"]->value();
-    std::vector<double> lifetimes = input_map["lifetimes"]->value();
-    */
+        std::map<std::string, std::shared_ptr<Port>> &inputs,
+        std::map<std::string, std::shared_ptr<Port>> &outputs
+        ){
+    // Make sure that all inputs are set
 
-    /*
-    int start = input->value("start")[0];
-    int stop = input->value("stop")[0];
-    double dt = input->value("dt")[0];
-    double period = input->value("period")[0];
+    int n_irf; double* irf;
+    inputs["irf"]->get_value(&irf, &n_irf);
+    int n_decay; double* decay;
+    inputs["decay"]->get_value(&decay, &n_decay);
+    int n_lifetimes; double* lifetimes;
+    inputs["lifetimes"]->get_value(&lifetimes, &n_lifetimes);
 
-    Functions::convolve_sum_of_exponentials_periodic(
-            decay.data(), decay.size(),
-            lifetimes.data(), lifetimes.size(),
-            irf.data(), irf.size(),
-            start, stop, dt, period
-            );
-
-    output->set_slot_value("decay", decay);
-     */
+//    long start = inputs["start"]->get_value<long>();
+//    long stop = inputs["stop"]->get_value<long>();
+//    double dt = inputs["dt"]->get_value<double>();
+//    long period = inputs["period"]->get_value<long>();
+//
+//
+//    Functions::convolve_sum_of_exponentials_periodic(
+//            decay.data(), decay.size(),
+//            lifetimes.data(), lifetimes.size(),
+//            irf.data(), irf.size(),
+//            start, stop, dt, period
+//            );
+//
+//    output->set_slot_value("decay", decay);
 }
 
 void AV(
-        const std::map<std::string, std::shared_ptr<Port>> &inputs,
+        std::map<std::string, std::shared_ptr<Port>> &inputs,
         std::map<std::string, std::shared_ptr<Port>> &output){
     /*
     auto g = dyeDensity(

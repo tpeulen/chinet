@@ -25,6 +25,7 @@
 %attribute(Port, bool, reactive, is_reactive, set_reactive);
 %attribute(Port, bool, bounded, is_bounded, set_bounded);
 %attributestring(Port, std::string, name, get_name, set_name);
+%attributestring(Port, Port*, link, get_link, set_link);
 
 %include "../include/Port.h"
 %extend Port{
@@ -60,7 +61,7 @@ def get_value_p(self):
         return Port.get_value_i(self)
 def set_value_p(self, v):
     if not isinstance(v, np.ndarray):
-        v = np.array(v)
+        v = np.atleast_1d(np.array(v))
     if v.dtype.kind == 'i':
         return Port.set_value_i(self, v)
     else:
@@ -75,7 +76,7 @@ def init(
         **kwargs
         ):
     old_init(self, *args, **kwargs)
-    self.value = np.array(value)
+    self.value = np.atleast_1d(np.array(value))
 Port.__init__ = init
 %}
 

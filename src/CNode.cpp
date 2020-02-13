@@ -151,27 +151,48 @@ void Node::set_callback(std::shared_ptr<NodeCallback> cb){
 // Methods
 //--------------------------------------------------------------------
 void Node::add_port(
-        std::string key,
+        const std::string &key,
         Port* port,
         bool is_output,
         bool fill_in_out
         ) {
     port->set_port_type(is_output);
     port->set_node(this);
-    ports[key] = std::shared_ptr<Port>(port);
+    if ( ports.find(key) == ports.end() ) {
+        // not found
+#ifdef DEBUG
+        std::clog << "Port " << key << " was created in node "<< get_name() << std::endl;
+#endif
+        ports[key] = std::shared_ptr<Port>(port);
+    } else {
+        // found
+        auto p = ports[key];
+        if(port != p.get()){
+#ifdef DEBUG
+            std::clog << "WARNING: Port " << key << " overrides existing port." << std::endl;
+#endif
+            ports[key] = std::shared_ptr<Port>(port);
+        } else{
+            std::cerr << "WARNING: Port " << key << " already exists." << std::endl;
+            std::cerr << "-- Assigning Port " << key << " to " << std::endl;
+        }
+    }
     if(fill_in_out){
         fill_input_output_port_lookups();
     }
 }
 
 void Node::add_input_port(
-        std::string key,
+        const std::string &key,
         Port* port
         ) {
     add_port(key, port, false);
 }
 
-void Node::add_output_port(std::string key, Port* port) {
+void Node::add_output_port(
+        const std::string &key,
+        Port* port
+        ) {
     add_port(key, port, true);
 }
 

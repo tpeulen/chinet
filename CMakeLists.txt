@@ -22,8 +22,8 @@ endif(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
 
 
 ###############################
-
 # Windows
+###############################
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++11")
     if(BIT MATCHES "64")
@@ -31,7 +31,9 @@ if(MSVC)
     endif(BIT MATCHES "64")
 endif(MSVC)
 
+##################################
 # MACOSX_DEPLOYEMENT_TARGET
+##################################
 # explicit link to libc++ for recent osx versions
 if(APPLE)
     # MESSAGE(STATUS "link to libc++ on modern osx versions")
@@ -42,7 +44,7 @@ if(APPLE)
     set(CMAKE_MACOSX_RPATH 0)
 endif(APPLE)
 
-
+###############################
 # OpenMP
 ###############################
 OPTION (USE_OpenMP "Use OpenMP" ON)
@@ -54,16 +56,19 @@ IF(USE_OpenMP)
     ENDIF()
 ENDIF()
 
+###############################
 # Cpp-taskflow
 ###############################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/cpp-taskflow/)
 
+###############################
 # Boost
 ###############################
 FIND_PACKAGE(Boost 1.50 COMPONENTS system REQUIRED)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR} )
 LINK_LIBRARIES(${Boost_LIBRARIES})
 
+###############################
 # Eigen3
 ###############################
 FIND_PACKAGE(Eigen3 3.2 QUIET NO_MODULE REQUIRED)
@@ -72,6 +77,15 @@ if (NOT TARGET Eigen3::Eigen)
     SET(EIGEN3_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/thirdparty/eigen)
 endif (NOT TARGET Eigen3::Eigen)
 INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
+
+#[[
+###############################
+# IMP
+###############################
+FIND_PACKAGE(IMP REQUIRED)
+INCLUDE(${IMP_USE_FILE})
+INCLUDE_DIRECTORIES(SYSTEM ${IMP_INCLUDE_DIR})
+]]#
 
 #[[
 # Boost histogram

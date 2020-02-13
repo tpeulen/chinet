@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <memory>
 #include <algorithm>
-#include <math.h>
+#include <cmath>
 #include <cstdlib>
 
 #include <CNode.h>
@@ -27,7 +27,7 @@ private:
      * If the attribute points to another port, the value returned by the
      * method @class Port::get_value_vector corresponds to the value the other Port.
      */
-    std::shared_ptr<Port> link_;
+    Port* link_ = nullptr;
 
     /*!
      * @brief This attribute stores the Ports that are dependent on the value
@@ -212,19 +212,20 @@ public:
     bool write_to_db();
     bool read_from_db(const std::string &oid_string);
 
-    void link(std::shared_ptr<Port> &v)
+    void set_link(Port* v)
     {
-        set_oid("link", v->get_bson_oid());
         if(v != nullptr){
+            set_oid("link", v->get_bson_oid());
             link_ = v;
             v->linked_to_.push_back(this);
+        } else{
+            unlink();
         }
     }
 
     bool unlink()
     {
         set_oid("link", get_bson_oid());
-
         bool re = true;
         re &= remove_links_to_port();
         link_ = nullptr;
@@ -241,13 +242,14 @@ public:
         return linked_to_;
     }
 
-    std::shared_ptr<Port> get_link()
+    Port* get_link()
     {
         return link_;
     }
 
     // Operators
-    //--------------------------------------------------------------------
+    //---------------------------------------
+
     Port* operator+(Port* v);
     Port* operator*(Port* v);
 //    Port operator-(Port &v);

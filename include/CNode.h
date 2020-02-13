@@ -26,9 +26,6 @@ private:
     bool node_valid_ = false;
     std::map<std::string, std::shared_ptr<Port>> ports;
 
-    // Methods
-    //--------------------------------------------------------------------
-
 protected:
     void fill_input_output_port_lookups();
     rttr::method meth_ = rttr::type::get_global_method("nothing");
@@ -70,9 +67,13 @@ public:
 
     std::map<std::string, std::shared_ptr<Port>> get_ports();
     std::shared_ptr<Port> get_port(const std::string &port_name);
-    void add_port(std::string key, Port*, bool is_source, bool fill_in_out=true);
-    void add_input_port(std::string key, Port*);
-    void add_output_port(std::string key, Port*);
+    void add_port(
+            const std::string &key,
+            Port*, bool is_source,
+            bool fill_in_out=true
+                    );
+    void add_input_port(const std::string &key, Port*);
+    void add_output_port(const std::string &key, Port*);
 
     std::shared_ptr<Port> get_input_port(const std::string &port_name);
     std::shared_ptr<Port> get_output_port(const std::string &port_name);

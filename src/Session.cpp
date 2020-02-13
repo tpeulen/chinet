@@ -139,7 +139,7 @@ bool Session::link_nodes(
         auto itp = ports.find(port_name);
         auto itpt = ports.find(target_port_name);
         if(itp != ports.end() && itpt != target_ports.end()){
-            ports[port_name]->link(target_ports[target_port_name]);
+            ports[port_name]->set_link(target_ports[target_port_name].get());
             return true;
         }
     }

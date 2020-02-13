@@ -7,7 +7,7 @@ Port* Port::operator+(Port* v)
     auto re = new Port();
     re->set_value_type(this->get_value_type());
     auto node = new Node();
-    std::string name = this->get_name()  + "+" + v->get_name();
+    std::string name = get_name()  + " + " + v->get_name();
     node->set_name(name);
     node->add_input_port(this->get_name(), this);
     node->add_input_port(v->get_name(), v);
