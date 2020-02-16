@@ -31,14 +31,11 @@ private:
 protected:
 
     std::string object_name;
-
     bson_t document;
-
     std::string uri_string;
     std::string db_string;
     std::string app_string;
     std::string collection_string;
-
     bson_oid_t oid_document;
     bson_oid_t oid_precursor;
     uint64_t time_of_death;
@@ -54,11 +51,11 @@ protected:
 
     const bson_t* get_document();
 
-    const void set_document(bson_t b){
+    void set_document(bson_t b){
         document = b;
     }
 
-    const void set_document(bson_t *doc){
+    void set_document(bson_t *doc){
         bson_init(&document);
         bson_copy_to(doc, &document);
     }
@@ -76,7 +73,6 @@ protected:
      * @return true in case of a successful write.
      */
     bool write_to_db(const bson_t &doc, int write_option = 0);
-
     bool read_from_db();
 
     template <typename T>
@@ -128,7 +124,11 @@ protected:
             const std::map<std::string, std::shared_ptr<T>> &mongo_obj_array){
 
         bson_t child;
-        bson_append_array_begin(doc, target_field_name.c_str(), target_field_name.size(), &child);
+        bson_append_array_begin(
+                doc,
+                target_field_name.c_str(), target_field_name.size(),
+                &child
+                );
         for(auto &v : mongo_obj_array){
             const bson_oid_t b = v.second->get_bson_oid();
             bson_append_oid(&child, "", 0, &b);
@@ -180,9 +180,9 @@ protected:
     bool create_and_connect_objects_from_oid_array(
             const bson_t *doc,
             const char *array_name,
-            std::map<std::string, std::shared_ptr<T>> *target_map){
+            std::map<std::string, std::shared_ptr<T>> *target_map)
+    {
         bool return_value = true;
-
         bson_iter_t iter;
         bson_iter_t child;
         if (bson_iter_init_find (&iter, doc, array_name) &&
@@ -212,9 +212,15 @@ protected:
         return return_value;
     }
 
-    static void append_string(bson_t *dst, std::string key, std::string content, size_t size=0);
+    static void append_string(
+            bson_t *dst, std::string key,
+            std::string content,
+            size_t size=0
+                    );
 
-    static const std::string get_string_by_key(bson_t *doc, std::string key);
+    static const std::string get_string_by_key(
+            bson_t *doc, std::string key
+            );
 
     static std::string oid_to_string(bson_oid_t oid){
         char oid_str[25];
@@ -222,7 +228,10 @@ protected:
         return std::string(oid_str, 25);
     }
 
-    static bool string_to_oid(const std::string &oid_string, bson_oid_t *oid);
+    static bool string_to_oid(
+            const std::string &oid_string,
+            bson_oid_t *oid
+            );
 
 public:
 

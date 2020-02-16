@@ -20,7 +20,7 @@ MongoObject::MongoObject() :
             "_id", BCON_OID(&oid_document),
             "precursor", BCON_OID(&oid_document),
             "death", BCON_INT64(time_of_death),
-            "name", ""
+            "name", object_name.c_str()
     );
     set_document(doc);
 }
@@ -324,6 +324,12 @@ bson_t MongoObject::get_bson()
         bson_append_int64(&doc, "death", 5, time_of_death);
     }
 
+    // name
+    append_string(
+            &doc, "name",
+            object_name.c_str(), object_name.size()
+            );
+
     return doc;
 }
 
@@ -420,9 +426,17 @@ bool MongoObject::string_to_oid(const std::string &oid_string, bson_oid_t *oid)
 void MongoObject::append_string(bson_t *dst, const std::string key, const std::string content, size_t size)
 {
     if (size != 0) {
-        bson_append_utf8(dst, key.c_str(), key.size(), content.c_str(), size);
+        bson_append_utf8(
+                dst,
+                key.c_str(), key.size(),
+                content.c_str(), size
+                );
     } else {
-        bson_append_utf8(dst, key.c_str(), key.size(), content.c_str(), content.size());
+        bson_append_utf8(
+                dst,
+                key.c_str(), key.size(),
+                content.c_str(), content.size()
+                );
     }
 }
 

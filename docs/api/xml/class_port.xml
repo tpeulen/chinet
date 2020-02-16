@@ -4,7 +4,7 @@
     <compoundname>Port</compoundname>
     <basecompoundref refid="class_value_port" prot="public" virt="non-virtual">ValuePort</basecompoundref>
     <includes refid="_port_8h" local="no">Port.h</includes>
-    <innerclass refid="class_port_1_1get__value" prot="protected">Port::get_value</innerclass>
+    <innerclass refid="class_port_1_1get__value" prot="protected">Port::get_value_vector</innerclass>
       <sectiondef kind="public-attrib">
       <memberdef kind="variable" id="class_port_1a7e6cb81c715e20f7432d6c78a9e3c269" prot="public" static="no" mutable="no">
         <type><ref refid="class_port_links" kindref="compound">PortLinks</ref>&lt; double &gt;</type>
@@ -153,10 +153,10 @@
       </memberdef>
       <memberdef kind="function" id="class_port_1acc11e1890530dd4bc0b9e3c7778ef5ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
-        <definition>void Port::get_value</definition>
+        <definition>void Port::get_value_vector</definition>
         <argsstring>(double **out, int *nbr_out)</argsstring>
-        <name>get_value</name>
-        <reimplements refid="class_value_port_1aea5af6fc415d13f868e5d676d1d9402e">get_value</reimplements>
+        <name>get_value_vector</name>
+        <reimplements refid="class_value_port_1aea5af6fc415d13f868e5d676d1d9402e">get_value_vector</reimplements>
         <param>
           <type>double **</type>
           <declname>out</declname>
@@ -175,10 +175,10 @@
       </memberdef>
       <memberdef kind="function" id="class_port_1a82509b87aa9d775d0a40e2b446f2b7ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>std::vector&lt; double &gt;</type>
-        <definition>std::vector&lt;double&gt; Port::get_value</definition>
+        <definition>std::vector&lt;double&gt; Port::get_value_vector</definition>
         <argsstring>()</argsstring>
-        <name>get_value</name>
-        <reimplements refid="class_value_port_1a12f11f190a32156f9afbcf38d9da0d2d">get_value</reimplements>
+        <name>get_value_vector</name>
+        <reimplements refid="class_value_port_1a12f11f190a32156f9afbcf38d9da0d2d">get_value_vector</reimplements>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -356,8 +356,8 @@
       <member refid="class_mongo_object_1ad155a8808f999f8e3dd0cfc055b33e2a" prot="public" virt="non-virtual"><scope>Port</scope><name>get_oid</name></member>
       <member refid="class_mongo_object_1af0cf1568e5b1b87a971e93bba4ec0a40" prot="public" virt="non-virtual"><scope>Port</scope><name>get_singleton</name></member>
       <member refid="class_mongo_object_1a33799f83d7343fc5385869f5a907aeea" prot="protected" virt="non-virtual"><scope>Port</scope><name>get_string_by_key</name></member>
-      <member refid="class_port_1acc11e1890530dd4bc0b9e3c7778ef5ff" prot="public" virt="virtual"><scope>Port</scope><name>get_value</name></member>
-      <member refid="class_port_1a82509b87aa9d775d0a40e2b446f2b7ad" prot="public" virt="virtual"><scope>Port</scope><name>get_value</name></member>
+      <member refid="class_port_1acc11e1890530dd4bc0b9e3c7778ef5ff" prot="public" virt="virtual"><scope>Port</scope><name>get_value_vector</name></member>
+      <member refid="class_port_1a82509b87aa9d775d0a40e2b446f2b7ad" prot="public" virt="virtual"><scope>Port</scope><name>get_value_vector</name></member>
       <member refid="class_mongo_object_1ae67113e87e4dadcd51c23aa373eba61d" prot="public" virt="non-virtual"><scope>Port</scope><name>is_connected_to_db</name></member>
       <member refid="class_base_port_1a70e1e794dd608fbe7865a05d5133aa87" prot="public" virt="non-virtual"><scope>Port</scope><name>is_fixed</name></member>
       <member refid="class_base_port_1a79cc42bec526d771d7439a5b3651a5c5" prot="public" virt="non-virtual"><scope>Port</scope><name>is_output</name></member>

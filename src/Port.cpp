@@ -4,10 +4,21 @@
 // --------------------------------------------------------------------
 Port* Port::operator+(Port* v)
 {
-    auto re = new Port();
-    re->set_value_type(this->get_value_type());
-    auto node = new Node();
+    int new_value_type = MAX(value_type, v->value_type);
     std::string name = get_name()  + " + " + v->get_name();
+    auto re = new Port(
+            nullptr,
+            0,
+            new_value_type,
+            false,
+            true,
+            true,
+            false,
+            0, 0,
+            name,
+            false
+            );
+    auto node = new Node();
     node->set_name(name);
     node->add_input_port(this->get_name(), this);
     node->add_input_port(v->get_name(), v);
@@ -18,8 +29,6 @@ Port* Port::operator+(Port* v)
         node->set_callback("addition_int", "C");
     }
     re->set_node(node);
-    re->set_name(name);
-    re->set_port_type(true);
     node->evaluate();
     return re;
 }
@@ -130,15 +139,15 @@ bson_t Port::get_bson()
 {
     bson_t dst = get_bson_excluding("value", "bounds", NULL);
     if(value_type == 0){
-        double* va; int nv;
-        get_own_value(&va, &nv);
-        auto v = std::vector<double>();
-        v.assign(va, va + nv);
-        append_number_array(&dst, "value", v);
-    } else{
         long* va; int nv;
         get_own_value(&va, &nv);
         auto v = std::vector<long>();
+        v.assign(va, va + nv);
+        append_number_array(&dst, "value", v);
+    } else{
+        double* va; int nv;
+        get_own_value(&va, &nv);
+        auto v = std::vector<double>();
         v.assign(va, va + nv);
         append_number_array(&dst, "value", v);
     }

@@ -85,7 +85,7 @@
     <member refid="class_exponential_decay_1a9146c03894e4cb44c027873c6568d622" kind="function"><name>set_convolution_mode</name></member>
     <member refid="class_exponential_decay_1aa97cd46757c9e2cb0b08a68d91f53a04" kind="function"><name>set_fluorescence_lifetimes</name></member>
   </compound>
-  <compound refid="class_port_1_1get__value" kind="class"><name>Port::get_value</name>
+  <compound refid="class_port_1_1get__value" kind="class"><name>Port::get_value_vector</name>
   </compound>
   <compound refid="class_mongo_object" kind="class"><name>MongoObject</name>
     <member refid="class_mongo_object_1a82fa8acb9bf94a11c96b99df5dfce4dd" kind="variable"><name>is_connected_to_db_</name></member>
@@ -212,8 +212,8 @@
     <member refid="class_port_1afe166c2a6b10ad34d47472a150366bc1" kind="function"><name>~Port</name></member>
     <member refid="class_port_1a18b368a7d48acb802b6671693f54adcb" kind="function"><name>set_value</name></member>
     <member refid="class_port_1a28311c7a8fe9e2838aa8ae63a37d2d9a" kind="function"><name>set_value</name></member>
-    <member refid="class_port_1acc11e1890530dd4bc0b9e3c7778ef5ff" kind="function"><name>get_value</name></member>
-    <member refid="class_port_1a82509b87aa9d775d0a40e2b446f2b7ad" kind="function"><name>get_value</name></member>
+    <member refid="class_port_1acc11e1890530dd4bc0b9e3c7778ef5ff" kind="function"><name>get_value_vector</name></member>
+    <member refid="class_port_1a82509b87aa9d775d0a40e2b446f2b7ad" kind="function"><name>get_value_vector</name></member>
     <member refid="class_port_1aec33d8bfca05139b1e319f15d2b3a1b8" kind="function"><name>link</name></member>
     <member refid="class_port_1a9a9f8bbbde14187dfb55ef6fbc27492b" kind="function"><name>unlink</name></member>
   </compound>
@@ -256,8 +256,8 @@
     <member refid="class_value_port_1a12c448537833e3a7fca772c4a076131b" kind="function"><name>~ValuePort</name></member>
     <member refid="class_value_port_1a9eaeb8abfb060cc2dd2c2b087ecb3bb9" kind="function"><name>set_value</name></member>
     <member refid="class_value_port_1a0647059eb7965920af4e622625b5e67e" kind="function"><name>set_value</name></member>
-    <member refid="class_value_port_1aea5af6fc415d13f868e5d676d1d9402e" kind="function"><name>get_value</name></member>
-    <member refid="class_value_port_1a12f11f190a32156f9afbcf38d9da0d2d" kind="function"><name>get_value</name></member>
+    <member refid="class_value_port_1aea5af6fc415d13f868e5d676d1d9402e" kind="function"><name>get_value_vector</name></member>
+    <member refid="class_value_port_1a12f11f190a32156f9afbcf38d9da0d2d" kind="function"><name>get_value_vector</name></member>
     <member refid="class_value_port_1a9b241081b386fe6de942ffce150b7eda" kind="function"><name>get_bson</name></member>
     <member refid="class_value_port_1a85845e2f4ee6cd21ffcd3942e60886ea" kind="function"><name>write_to_db</name></member>
     <member refid="class_value_port_1aacece741e134ac67f447e7e1d0822bca" kind="function"><name>read_from_db</name></member>

@@ -71,14 +71,18 @@ public:
     };
 
     Port(
+            char* value_bytes = nullptr,
+            int n_value_bytes = 0,
+            int value_type = 1,
             bool fixed = false,
             bool is_output = false,
             bool is_reactive = false,
             bool is_bounded = false,
             double lb = 0,
             double ub = 0,
-            std::string name = ""
-    )
+            std::string name = "",
+            bool copy_values = false
+    ) : MongoObject(name)
     {
         append_string(&document, "type", "port");
         bson_append_bool(&document, "is_output", 9, false);
@@ -96,8 +100,20 @@ public:
             bounds_.push_back(lb);
             bounds_.push_back(ub);
         }
-        value_type = 0;
-        set_name(name);
+        Port::value_type = value_type;
+        if(value_bytes != nullptr){
+            if(value_type == 1){
+                set_value<double>(
+                        (double*) value_bytes, n_value_bytes,
+                        copy_values
+                        );
+            } else if(value_type == 0){
+                set_value<long>(
+                        (long*) value_bytes, n_value_bytes,
+                        copy_values
+                        );
+            }
+        }
     }
 
     void set_node(Node* node_ptr);
@@ -121,7 +137,11 @@ public:
     }
 
     template <typename T>
-    void set_value(T *input, int n_input)
+    void set_value(
+            T *input,
+            int n_input,
+            bool copy_values = true
+            )
     {
         if(is_fixed()){
 #if DEBUG
@@ -137,7 +157,13 @@ public:
             buffer_ = std::realloc(buffer_, n_input * sizeof(T));
         if(buffer_ != nullptr)
         {
-            memcpy(buffer_, input, n_input * sizeof(T));
+            if(copy_values){
+                memcpy(buffer_, input, n_input * sizeof(T));
+            } else{
+                free(buffer_);
+                buffer_ = input;
+                n_buffer_ = n_input;
+            }
             n_buffer_ = n_input;
             if (node_ != nullptr) {
 #if DEBUG
@@ -209,7 +235,7 @@ public:
     void set_port_type(bool is_output);
     bool is_reactive();
     bool is_float(){
-        return (get_value_type() == 0);
+        return (get_value_type() == 1);
     }
     void set_reactive(bool reactive);
     bool write_to_db();

@@ -19,6 +19,7 @@
 %apply (double* INPLACE_ARRAY1, int DIM1) {(double *input, int n_input)}
 %apply (double** ARGOUTVIEW_ARRAY1, int* DIM1) {(double **output, int *n_output)}
 %apply (long* INPLACE_ARRAY1, int DIM1) {(long *input, int n_input)}
+%apply (char* INPLACE_ARRAY1, int DIM1) {(char *value_bytes, int value_bytes)}
 %apply (long** ARGOUTVIEW_ARRAY1, int* DIM1) {(long **output, int *n_output)}
 
 %template(vector_port_ptr) std::vector<Port*>;
@@ -51,10 +52,6 @@
         __swig_setmethods__["node"] = set_node
         __swig_getmethods__["bounds"] = get_bounds
         __swig_setmethods__["bounds"] = set_bounds
-
-        if _newclass:
-            value = property(get_node, set_node)
-            bounds = property(get_bounds, set_bounds)
     %}
 
 }
@@ -81,12 +78,13 @@ def init(
         *args,
         **kwargs
         ):
-    old_init(self, *args, **kwargs)
-    if v.dtype.kind == 'i':
-        Port.value_type = 1
+    value = np.atleast_1d(value)
+    if value.dtype.kind == 'i':
+        kwargs['value_type'] = 0
     else:
-        Port.value_type = 0
-    self.value = np.atleast_1d(np.array(value))
+        kwargs['value_type'] = 1
+    old_init(self, *args, **kwargs)
+    self.value = value
 Port.__init__ = init
 %}
 
