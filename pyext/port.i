@@ -8,14 +8,13 @@
 
 %include "./include/numpy.i"
 %include "std_vector.i";
+%init %{
+    import_array();
+%}
 
 %include <std_shared_ptr.i>
 %shared_ptr(Port)
 %shared_ptr(Node)
-
-%init %{
-    import_array();
-%}
 
 %apply (double* IN_ARRAY1, int DIM1) {(double *input, int n_input)}
 %apply (double** ARGOUTVIEW_ARRAY1, int* DIM1) {(double **output, int *n_output)}
@@ -31,8 +30,6 @@
 %attribute(Port, bool, is_output, is_output, set_port_type);
 %attribute(Port, bool, reactive, is_reactive, set_reactive);
 %attribute(Port, bool, bounded, is_bounded, set_bounded);
-%attributestring(Port, std::string, name, get_name, set_name);
-%attribute(Port, Port*, link, get_link, set_link);
 
 %include "../include/Port.h"
 %extend Port{
@@ -58,8 +55,8 @@
     __swig_setmethods__["node"] = set_node
     __swig_getmethods__["bytes"] = get_bytes
     __swig_setmethods__["bytes"] = set_bytes
-    __swig_getmethods__["bounds"] = get_bounds
-    __swig_setmethods__["bounds"] = set_bounds
+    __swig_setmethods__["link"] = set_link
+    __swig_getmethods__["link"] = get_bytes
 
     @property
     def value(self):
@@ -75,7 +72,18 @@
         else:
             self.set_value_d(v, True)
 
-    def __init__(self, value = [], *args, **kwargs):
+    @property
+    def bounds(self):
+        if self.bounded:
+            return self.get_bounds()
+        else:
+            return None, None
+
+    @bounds.setter
+    def bounds(self, v):
+        self.set_bounds(np.array(v, dtype=np.float64))
+
+    def __init__(self, value=[], *args, **kwargs):
         import numpy as np
         this = _chinet.new_Port(*args, **kwargs)
         try:

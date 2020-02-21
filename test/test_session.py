@@ -46,7 +46,7 @@ class Tests(unittest.TestCase):
         self.assertEqual(na1.get_name(), na2.get_name())
 
     def test_read_session_template(self):
-        template_file = "../inputs/session_template.json"
+        template_file = "inputs/session_template.json"
 
         with open(template_file, 'r') as fp:
             json_string = fp.read()
@@ -91,7 +91,7 @@ class Tests(unittest.TestCase):
             self.assertListEqual(v, [1., 2., 3., 4., 5.])
 
     def test_create_node_template(self):
-        template_file = "../inputs/node_template.json"
+        template_file = "inputs/node_template.json"
 
         json_string = ""
         with open(template_file, 'r') as fp:

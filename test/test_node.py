@@ -2,6 +2,7 @@ import utils
 import os
 import unittest
 import sys
+import numpy as np
 import json
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -34,20 +35,25 @@ class NodeCallbackMultiply(cn.NodeCallback):
 class Tests(unittest.TestCase):
 
     def test_node_init(self):
-        ports = {
-            'inA': cn.Port(7.0),
-            'inB': cn.Port(13.0),
-            'outC': cn.Port(0.0, False, True)
-        }
-        node_with_ports = cn.Node(ports)
-
+        node_with_ports = cn.Node(
+            {
+                'inA': cn.Port(7.0),
+                'inB': cn.Port(13.0),
+                'outC': cn.Port(
+                    value=0.0,
+                    fixed=False,
+                    is_output=True
+                )
+            }
+        )
         self.assertEqual(
             node_with_ports.get_input_ports().keys(),
             ['inA', 'inB']
         )
-
-        values = [v.get_value() for v in node_with_ports.get_ports().values()]
-        self.assertEqual(values, [7.0, 13.0, 0.0])
+        values = np.hstack(
+            [v.value for v in node_with_ports.get_ports().values()]
+        )
+        self.assertEqual(values, np.array([7.0, 13.0, 0.0]))
 
     def test_node_name(self):
         node = cn.Node()
@@ -60,55 +66,83 @@ class Tests(unittest.TestCase):
         portB = cn.Port(23)
         node.add_input_port(portB_name, portB)
 
-        portOut1 = cn.Port()
-        node.add_output_port("outA", portOut1)
+        outA = cn.Port()
+        node.add_output_port("outA", outA)
 
-        self.assertEqual(node.get_name(), ", : (inA,inB,)->(outA,)")
+        self.assertEqual(
+            node.name,
+            ", : (inA,inB,)->(outA,)"
+        )
 
-        node.set_callback("multiply", "C")
-        self.assertEqual(node.get_name(), ", multiply: (inA,inB,)->(outA,)")
+        node.set_callback("multiply_int", "C")
+        self.assertEqual(
+            node.get_name(),
+            ", multiply_int: (inA,inB,)->(outA,)"
+        )
 
         node.set_name("NodeName")
-        self.assertEqual(node.get_name(), "NodeName, multiply: (inA,inB,)->(outA,)")
+        self.assertEqual(
+            node.get_name(),
+            'NodeName, multiply_int: (inA,inB,)->(outA,)'
+        )
 
     def test_node_ports(self):
+        import chinet as cn
         node = cn.Node()
-
         portA_name = "portA"
         portA = cn.Port(17)
         node.add_input_port(portA_name, portA)
-
         portB_name = "portB"
         portB = cn.Port(23)
         node.add_output_port(portB_name, portB)
 
-        self.assertEqual(portA, node.get_input_port(portA_name))
+        self.assertEqual(
+            portA,
+            node.get_input_port(portA_name)
+        )
         self.assertEqual(portB, node.get_output_port(portB_name))
 
     def test_node_C_RTTR_callback(self):
         """Test chinet RTTR C callbacks"""
         node = cn.Node()
-
         inA = cn.Port([2., 3., 4.])
+        inB = cn.Port([2., 3., 4.])
         node.add_input_port("inA", inA)
-
+        node.add_input_port("inB", inB)
         outA = cn.Port()
         node.add_output_port("outA", outA)
-
-        node.set_callback("multiply", "C")
-
+        node.set_callback("multiply_double", "C")
         node.evaluate()
-        self.assertEqual((inA.get_value().prod() == outA.get_value()).all(), True)
+        self.assertEqual(
+            np.allclose(
+                inA.value * inB.value,
+                outA.value
+            ),
+            True
+        )
 
     def test_node_C_RTTR_callback_2(self):
         """Test chinet RTTR C callbacks"""
         node = cn.Node(
             {
-                "inA": cn.Port([2., 3., 4.], False, False),
-                "outA": cn.Port(0, False, True)
+                "inA": cn.Port(
+                    value=[2., 3., 4.],
+                    fixed=False,
+                    is_output=False
+                ),
+                "inB": cn.Port(
+                    value=[2., 3., 4.],
+                    fixed=False,
+                    is_output=False
+                ),
+                "outA": cn.Port(
+                    0,
+                    False,
+                    True
+                )
             }
         )
-        node.set_callback("multiply", "C")
+        node.set_callback("multiply_double", "C")
         self.assertEqual(node.is_valid(), False)
 
         node.evaluate()
@@ -116,9 +150,13 @@ class Tests(unittest.TestCase):
 
         outA = node.get_ports()["outA"]
         inA = node.get_ports()["inA"]
+        inB = node.get_ports()["inB"]
 
         self.assertEqual(
-            (inA.get_value().prod() == outA.get_value()).all(),
+            np.allclose(
+                inA.value * inB.value,
+                outA.value
+            ),
             True
         )
 
@@ -126,13 +164,10 @@ class Tests(unittest.TestCase):
         """Test chinet Node class python callbacks"""
 
         node = cn.Node()
-
         portIn1 = cn.Port(55)
         node.add_input_port("portA", portIn1)
-
         portIn2 = cn.Port(2)
         node.add_input_port("portB", portIn2)
-
         portOut1 = cn.Port()
         node.add_output_port("portC", portOut1)
 
@@ -141,7 +176,10 @@ class Tests(unittest.TestCase):
         node.set_callback(cb)
         node.evaluate()
 
-        self.assertEqual(portOut1.get_value(), portIn1.get_value() * portIn2.get_value())
+        self.assertEqual(
+            portOut1.get_value(),
+            portIn1.get_value() * portIn2.get_value()
+        )
 
     def test_node_python_callback_2(self):
         """Test chinet Node class python callbacks"""

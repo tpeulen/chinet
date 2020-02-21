@@ -2,11 +2,11 @@
 
 // Operator
 // --------------------------------------------------------------------
-Port* Port::operator+(Port* v)
+std::shared_ptr<Port> Port::operator+(std::shared_ptr<Port> v)
 {
     int new_value_type = MAX(value_type, v->value_type);
     std::string name = get_name()  + " + " + v->get_name();
-    auto re = new Port(
+    auto re = std::make_shared<Port>(
             new_value_type,
             false,
             true,
@@ -17,7 +17,7 @@ Port* Port::operator+(Port* v)
             );
     auto node = new Node();
     node->set_name(name);
-    node->add_input_port(this->get_name(), this);
+    node->add_input_port(this->get_name(), getptr());
     node->add_input_port(v->get_name(), v);
     node->add_output_port(name, re);
     if(this->get_value_type() == 0){
@@ -29,6 +29,29 @@ Port* Port::operator+(Port* v)
     node->evaluate();
     return re;
 }
+
+std::shared_ptr<Port> Port::operator*(std::shared_ptr<Port> v)
+{
+    auto re = std::make_shared<Port>();
+    re->set_value_type(this->get_value_type());
+    auto node = new Node();
+    std::string name = this->get_name()  + "+" + v->get_name();
+    node->set_name(name);
+    node->add_input_port(this->get_name(), getptr());
+    node->add_input_port(v->get_name(), v);
+    node->add_output_port(name, re);
+    if(this->get_value_type() == 0){
+        node->set_callback("multiply_double", "C");
+    } else if(this->get_value_type() == 1){
+        node->set_callback("multiply_int", "C");
+    }
+    re->set_node(node);
+    re->set_name(name);
+    re->set_port_type(true);
+    node->evaluate();
+    return re;
+}
+
 
 void Port::get_bytes(
         unsigned char **output, int *n_output,
@@ -53,27 +76,6 @@ void Port::set_bytes(
     }
 }
 
-Port* Port::operator*(Port* v)
-{
-    auto re = new Port();
-    re->set_value_type(this->get_value_type());
-    auto node = new Node();
-    std::string name = this->get_name()  + "+" + v->get_name();
-    node->set_name(name);
-    node->add_input_port(this->get_name(), this);
-    node->add_input_port(v->get_name(), v);
-    node->add_output_port(name, re);
-    if(this->get_value_type() == 0){
-        node->set_callback("multiply_double", "C");
-    } else if(this->get_value_type() == 1){
-        node->set_callback("multiply_int", "C");
-    }
-    re->set_node(node);
-    re->set_name(name);
-    re->set_port_type(true);
-    node->evaluate();
-    return re;
-}
 
 //
 //Port Port::operator-(Port &v)

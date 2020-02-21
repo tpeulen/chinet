@@ -71,7 +71,6 @@ class Tests(unittest.TestCase):
         mo = cn.MongoObject()
         mo.set_array_double("d", (1.1, 2.2))
         self.assertTupleEqual(mo.get_array_double("d"), (1.1, 2.2))
-
         mo.set_array_int("i", [3, 4])
         self.assertEqual(mo.get_array_int("i"), (3, 4))
 

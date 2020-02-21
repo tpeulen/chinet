@@ -23,10 +23,10 @@
 %include "std_shared_ptr.i";
 
 %template(map_string_string) std::map<std::string, std::string>;
-%template(vector_string) std::vector<std::string>;
-
+%template(VectorString) std::vector<std::string>;
 %template(VectorDouble) std::vector<double>;
 %template(VectorInt) std::vector<int>;
+%template(VectorLong) std::vector<long>;
 
 %extend vector<double> {
 

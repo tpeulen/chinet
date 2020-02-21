@@ -12,7 +12,7 @@
 class Node;
 
 
-class Port : public MongoObject
+class Port : public MongoObject, std::enable_shared_from_this<Port>
 {
 
 private:
@@ -29,7 +29,7 @@ private:
      * If the attribute points to another port, the value returned by the
      * method @class Port::get_value_vector corresponds to the value the other Port.
      */
-    Port* link_ = nullptr;
+    std::shared_ptr<Port> link_ = nullptr;
 
     /*!
      * @brief This attribute stores the Ports that are dependent on the value
@@ -60,6 +60,11 @@ private:
     }
 
 public:
+
+    std::shared_ptr<Port> getptr() {
+        return shared_from_this();
+    }
+
     int value_type = 0; // 0 long vector, 1 double vector, 2 numpy binary
     size_t current_size(){
         return n_buffer_elements_;
@@ -75,13 +80,13 @@ public:
     };
 
     Port(
-            int value_type = 1,
             bool fixed = false,
             bool is_output = false,
             bool is_reactive = false,
             bool is_bounded = false,
             double lb = 0,
             double ub = 0,
+            int value_type = 1,
             std::string name = ""
     ) : MongoObject(name)
     {
@@ -242,7 +247,7 @@ public:
         return (size_t)(&buffer_);
     }
 
-    void set_link(Port* v)
+    void set_link(std::shared_ptr<Port> v)
     {
         if(v != nullptr){
             set_oid("link", v->get_bson_oid());
@@ -272,7 +277,7 @@ public:
         return linked_to_;
     }
 
-    Port* get_link()
+    std::shared_ptr<Port> get_link()
     {
         return link_;
     }
@@ -280,8 +285,8 @@ public:
     // Operators
     //---------------------------------------
 
-    Port* operator+(Port* v);
-    Port* operator*(Port* v);
+    std::shared_ptr<Port> operator+(std::shared_ptr<Port> v);
+    std::shared_ptr<Port> operator*(std::shared_ptr<Port> v);
 //    Port operator-(Port &v);
 //    Port operator/(Port &v);
 

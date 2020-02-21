@@ -16,7 +16,7 @@ MongoObject(name)
     append_string(&document, "type", "node");
 }
 
-Node::Node(std::map<std::string, Port*> ports) :
+Node::Node(std::map<std::string, std::shared_ptr<Port>> ports) :
            Node(){
     for(auto &o: ports){
         o.second->set_name(o.first);
@@ -38,7 +38,9 @@ bool Node::read_from_db(const std::string &oid_string){
     bool return_value = true;
 
     return_value &= MongoObject::read_from_db(oid_string);
-    return_value &= create_and_connect_objects_from_oid_doc(&document, "ports", &ports);
+    return_value &= create_and_connect_objects_from_oid_doc(
+            &document, "ports", &ports
+            );
 #if DEBUG
     std::cout << "callback-restore: " << get_string_by_key(&document, "callback") << std::endl;
     std::cout << "callback_type-restore: " << get_string_by_key(&document, "callback_type") << std::endl;
@@ -93,20 +95,21 @@ std::string Node::get_name(){
     return r;
 }
 
+
 std::map<std::string, std::shared_ptr<Port>> Node::get_ports(){
     return ports;
 }
 
-std::shared_ptr<Port> Node::get_port(const std::string &port_name){
-    return ports[port_name];
+Port* Node::get_port(const std::string &port_name){
+    return ports[port_name].get();
 }
 
-std::shared_ptr<Port> Node::get_input_port(const std::string &port_name){
-    return in_[port_name];
+Port* Node::get_input_port(const std::string &port_name){
+    return in_[port_name].get();
 }
 
-std::shared_ptr<Port> Node::get_output_port(const std::string &port_name){
-    return out_[port_name];
+Port* Node::get_output_port(const std::string &port_name){
+    return out_[port_name].get();
 }
 
 std::map<std::string, std::shared_ptr<Port>> Node::get_input_ports(){
@@ -152,26 +155,26 @@ void Node::set_callback(std::shared_ptr<NodeCallback> cb){
 //--------------------------------------------------------------------
 void Node::add_port(
         const std::string &key,
-        Port* port,
+        std::shared_ptr<Port> port,
         bool is_output,
         bool fill_in_out
         ) {
     port->set_port_type(is_output);
     port->set_node(this);
-    if ( ports.find(key) == ports.end() ) {
+    if (ports.find(key) == ports.end() ) {
         // not found
 #ifdef DEBUG
         std::clog << "Port " << key << " was created in node "<< get_name() << std::endl;
 #endif
-        ports[key] = std::shared_ptr<Port>(port);
+        ports[key] = port;
     } else {
         // found
         auto p = ports[key];
-        if(port != p.get()){
+        if(port != p){
 #ifdef DEBUG
             std::clog << "WARNING: Port " << key << " overrides existing port." << std::endl;
 #endif
-            ports[key] = std::shared_ptr<Port>(port);
+            ports[key] = port;
         } else{
             std::cerr << "WARNING: Port " << key << " already exists." << std::endl;
             std::cerr << "-- Assigning Port " << key << " to " << std::endl;
@@ -184,14 +187,14 @@ void Node::add_port(
 
 void Node::add_input_port(
         const std::string &key,
-        Port* port
+        std::shared_ptr<Port> port
         ) {
     add_port(key, port, false);
 }
 
 void Node::add_output_port(
         const std::string &key,
-        Port* port
+        std::shared_ptr<Port> port
         ) {
     add_port(key, port, true);
 }
@@ -206,22 +209,20 @@ bson_t Node::get_bson(){
     );
 
     create_oid_dict_in_doc<Port>(&dst, "ports", ports);
-
     append_string(&dst, "callback", callback);
     append_string(&dst, "callback_type", callback_type_string);
-
     return dst;
 }
 
 void Node::evaluate(){
-#if DEBUG
+    #if DEBUG
     std::clog << "update:callback_type:" << callback_type;
-#endif
+    #endif
     if(callback_type == 0)
     {
-#if DEBUG
+        #if DEBUG
         std::clog << ":registered C function"  << std::endl;
-#endif
+        #endif
         rttr::variant return_value = meth_.invoke({}, in_, out_);
     } else if (callback_class != nullptr) {
             callback_class->run(in_, out_);

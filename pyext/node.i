@@ -11,8 +11,9 @@
 #include "../include/Port.h"
 %}
 
+%shared_ptr(Port)
 %shared_ptr(Node)
-%template(MapStringPort) std::map<std::string, std::shared_ptr<Port>>;
+%template(MapStringSharedPort) std::map<std::string, std::shared_ptr<Port>>;
 %template(MapStringDouble) std::map<std::string, double>;
 
 %include "../include/CNode.h"

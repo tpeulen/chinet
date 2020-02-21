@@ -423,7 +423,12 @@ bool MongoObject::string_to_oid(const std::string &oid_string, bson_oid_t *oid)
     }
 }
 
-void MongoObject::append_string(bson_t *dst, const std::string key, const std::string content, size_t size)
+void MongoObject::append_string(
+        bson_t *dst,
+        const std::string key,
+        const std::string content,
+        size_t size
+        )
 {
     if (size != 0) {
         bson_append_utf8(

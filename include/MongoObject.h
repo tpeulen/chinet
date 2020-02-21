@@ -72,7 +72,8 @@ protected:
     void create_oid_dict_in_doc(
             bson_t *doc,
             std::string key,
-            const std::map<std::string, std::shared_ptr<T>> &mongo_obj_array){
+            const std::map<std::string, std::shared_ptr<T>> &mongo_obj_array
+            ){
 
         bson_t child;
         bson_append_document_begin(doc, key.c_str(), key.size(), &child);
@@ -87,7 +88,6 @@ protected:
     void append_number_array(bson_t *doc, std::string key, T &values){
         bson_t child;
         bson_append_array_begin(doc, key.c_str(), key.size(), &child);
-
         if(
                 (std::is_same<T, std::vector<long>>::value) ||
                 (std::is_same<T, std::vector<int>>::value)
@@ -146,7 +146,7 @@ protected:
                     bson_oid_t oid;
                     bson_oid_copy(bson_iter_oid(&child), &oid);
                     // create new obj
-                    auto o = std::make_shared<T>();
+                    auto o = new T();
                     // connect obj to db
                     return_value &= connect_object_to_db(o);
                     // read obj from db
@@ -156,7 +156,7 @@ protected:
                     o->read_from_db(oid_to_string(oid));
                     std::string key = bson_iter_key(&child);
                     // add obj to the target map
-                    target_map->insert(std::pair<std::string, std::shared_ptr<T>>(key, o));
+                    target_map->insert(std::pair<std::string, T*>(key, o));
                 }
             }
         } else{
@@ -289,10 +289,10 @@ public:
     T get_singleton(const char *key){
         T v(0);
         bson_iter_t iter;
-        if(std::is_same<T, int>::value) {
+        if(std::is_same<T, int>::value || std::is_same<T, long>::value) {
             if (bson_iter_init_find(&iter, &document, key) &&
                 (BSON_ITER_HOLDS_INT64(&iter))) {
-                return (int) bson_iter_int64(&iter);
+                return (T) bson_iter_int64(&iter);
             }
         }
         else if(std::is_same<T, double>::value) {
@@ -357,14 +357,14 @@ public:
             }
             return v;
         }
-        else if(std::is_same<T, int>::value){
+        else if(std::is_same<T, int>::value || std::is_same<T, long>::value){
             if (bson_iter_init_find(&iter, &document, key) &&
                 (BSON_ITER_HOLDS_ARRAY(&iter))) {
                 bson_iter_t iter_array;
                 bson_iter_recurse(&iter, &iter_array);
                 while (bson_iter_next(&iter_array) &&
                        BSON_ITER_HOLDS_INT64(&iter_array)) {
-                    v.push_back((int) bson_iter_int64(&iter_array));
+                    v.push_back((T) bson_iter_int64(&iter_array));
                 }
             }
             return v;
@@ -385,12 +385,15 @@ public:
     }
 
     template <typename T>
-    void set_array(const char* key, std::vector<T> value){
-        bson_t src = MongoObject::get_bson();
-        bson_t dst; bson_init (&dst);
-        bson_copy_to_excluding_noinit(&src, &dst,
-                                      key,
-                                      NULL
+    void set_array(
+            const char* key,
+            std::vector<T> value
+            ){
+        bson_t dst; bson_init(&dst);
+        bson_copy_to_excluding_noinit(
+                &document, &dst,
+                key,
+                NULL
         );
         append_number_array(&dst, key, value);
         bson_copy_to(&dst, &document);

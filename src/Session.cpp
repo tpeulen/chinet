@@ -81,7 +81,7 @@ std::shared_ptr<Node> Session::create_node(json node_template, std::string node_
                 const std::string &port_key = it2.key();
                 auto port_json = node_template["ports"][port_key];
                 auto port = create_port(port_json, port_key);
-                node->add_port(port_key, port.get(), port->is_output());
+                node->add_port(port_key, port, port->is_output());
             }
         } else if (it.key() == "callback") {
             callback = node_template["callback"].get<std::string>();
@@ -139,14 +139,17 @@ bool Session::link_nodes(
         auto itp = ports.find(port_name);
         auto itpt = ports.find(target_port_name);
         if(itp != ports.end() && itpt != target_ports.end()){
-            ports[port_name]->set_link(target_ports[target_port_name].get());
+            ports[port_name]->set_link(target_ports[target_port_name]);
             return true;
         }
     }
     return false;
 }
 
-void Session::add_node(std::string name, std::shared_ptr<Node> object)
+void Session::add_node(
+        std::string name,
+        std::shared_ptr<Node> object
+)
 {
     nodes[name] = object;
     object->set_name(name);

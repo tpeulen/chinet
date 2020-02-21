@@ -6,7 +6,7 @@ template <typename T>
 inline void mul(
         T* tmp,
         size_t &n_elements,
-        const std::map<std::string, std::shared_ptr<Port>> &inputs
+        const std::map<std::string, Port*> &inputs
         )
 {
     for(int i=0; i<n_elements; i++) tmp[i] = 1.0;
@@ -23,7 +23,7 @@ template <typename T>
 inline void add(
         T* tmp,
         size_t &n_elements,
-        const std::map<std::string, std::shared_ptr<Port>> &inputs
+        const std::map<std::string, Port*> &inputs
 )
 {
     for(int i=0; i<n_elements; i++) tmp[i] = 0.0;
@@ -36,10 +36,11 @@ inline void add(
     }
 }
 
+
 template <typename T>
 void combine(
-        std::map<std::string, std::shared_ptr<Port>> &inputs,
-        std::map<std::string, std::shared_ptr<Port>> &outputs,
+        std::map<std::string, Port*> &inputs,
+        std::map<std::string, Port*> &outputs,
         int operation
         ){
     size_t n_elements = UINT_MAX;
@@ -84,8 +85,8 @@ void combine(
 
 template <typename T>
 void addition(
-        std::map<std::string, std::shared_ptr<Port>> &inputs,
-        std::map<std::string, std::shared_ptr<Port>> &outputs
+        std::map<std::string, Port*> &inputs,
+        std::map<std::string, Port*> &outputs
 )
 {
     combine<T>(inputs, outputs, 0);
@@ -93,21 +94,21 @@ void addition(
 
 template <typename T>
 void multiply(
-        std::map<std::string, std::shared_ptr<Port>> &inputs,
-        std::map<std::string, std::shared_ptr<Port>> &outputs
+        std::map<std::string, Port*> &inputs,
+        std::map<std::string, Port*> &outputs
 )
 {
     combine<T>(inputs, outputs, 1);
 }
 
 void nothing(
-        std::map<std::string, std::shared_ptr<Port>> &inputs,
-        std::map<std::string, std::shared_ptr<Port>> &outputs){
+        std::map<std::string, Port*> &inputs,
+        std::map<std::string, Port*> &outputs){
 }
 
 void passthrough(
-        std::map<std::string, std::shared_ptr<Port>> &inputs,
-        std::map<std::string, std::shared_ptr<Port>> &outputs
+        std::map<std::string, Port*> &inputs,
+        std::map<std::string, Port*> &outputs
         ){
     for(auto it_in = inputs.cbegin(), end_in = inputs.cend(),
             it_out = outputs.cbegin(), end_out = outputs.cend();
@@ -132,8 +133,8 @@ void passthrough(
 }
 
 void convolve_sum_of_exponentials_periodic(
-        std::map<std::string, std::shared_ptr<Port>> &inputs,
-        std::map<std::string, std::shared_ptr<Port>> &outputs
+        std::map<std::string, Port*> &inputs,
+        std::map<std::string, Port*> &outputs
         ){
     // Make sure that all inputs are set
 
@@ -161,8 +162,8 @@ void convolve_sum_of_exponentials_periodic(
 }
 
 void AV(
-        std::map<std::string, std::shared_ptr<Port>> &inputs,
-        std::map<std::string, std::shared_ptr<Port>> &output){
+        std::map<std::string, Port*> &inputs,
+        std::map<std::string, Port*> &output){
     /*
     auto g = dyeDensity(
             
