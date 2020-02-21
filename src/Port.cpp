@@ -7,16 +7,13 @@ Port* Port::operator+(Port* v)
     int new_value_type = MAX(value_type, v->value_type);
     std::string name = get_name()  + " + " + v->get_name();
     auto re = new Port(
-            nullptr,
-            0,
             new_value_type,
             false,
             true,
             true,
             false,
             0, 0,
-            name,
-            false
+            name
             );
     auto node = new Node();
     node->set_name(name);
@@ -24,13 +21,36 @@ Port* Port::operator+(Port* v)
     node->add_input_port(v->get_name(), v);
     node->add_output_port(name, re);
     if(this->get_value_type() == 0){
-        node->set_callback("addition_double", "C");
-    } else if(this->get_value_type() == 1){
         node->set_callback("addition_int", "C");
+    } else if(this->get_value_type() == 1){
+        node->set_callback("addition_double", "C");
     }
     re->set_node(node);
     node->evaluate();
     return re;
+}
+
+void Port::get_bytes(
+        unsigned char **output, int *n_output,
+        bool copy
+        ){
+    *n_output = n_buffer_elements_ * buffer_element_size_;
+    if(copy){
+        auto out = malloc(n_buffer_elements_ * buffer_element_size_);
+        memcpy(out, buffer_, n_buffer_elements_);
+        *output = static_cast<unsigned char*>(out);
+    } else{
+        *output = static_cast<unsigned char*>(buffer_);
+    }
+}
+
+void Port::set_bytes(
+        unsigned char *input, int n_input
+){
+    buffer_ = realloc(buffer_, n_input);
+    if(buffer_ != nullptr){
+        memcpy(buffer_, input, n_input);
+    }
 }
 
 Port* Port::operator*(Port* v)
@@ -112,15 +132,15 @@ bool Port::read_from_db(const std::string &oid_string)
 {
     bool re = MongoObject::read_from_db(oid_string);
     auto v = MongoObject::get_array<double>("value");
-    n_buffer_ = v.size();
-    buffer_ = std::realloc(buffer_, sizeof(double) * n_buffer_);
+    n_buffer_elements_ = v.size();
+    buffer_ = std::realloc(buffer_, sizeof(double) * n_buffer_elements_);
     if(buffer_ != nullptr)
     {
-        n_buffer_ = v.size();
+        n_buffer_elements_ = v.size();
         if(value_type == 0){
-            memcpy(buffer_, v.data(), n_buffer_ * sizeof(double));
+            memcpy(buffer_, v.data(), n_buffer_elements_ * sizeof(double));
         } else{
-            memcpy(buffer_, v.data(), n_buffer_ * sizeof(int));
+            memcpy(buffer_, v.data(), n_buffer_elements_ * sizeof(int));
         }
     }
     return re;

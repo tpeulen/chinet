@@ -18,7 +18,9 @@ class Port : public MongoObject
 private:
 
     void* buffer_;
-    size_t n_buffer_ = 0;
+    bool own_buffer = false;
+    int n_buffer_elements_ = 0;
+    int buffer_element_size_ = 1;
     std::vector<double> bounds_{};
     Node* node_ = nullptr;
 
@@ -58,21 +60,21 @@ private:
     }
 
 public:
-    int value_type = 0; // 0 double vector, 1 int vector, 2 double, 3 int
+    int value_type = 0; // 0 long vector, 1 double vector, 2 numpy binary
     size_t current_size(){
-        return n_buffer_;
+        return n_buffer_elements_;
     }
 
     // Constructor & Destructor
     //--------------------------------------------------------------------
     ~Port(){
         remove_links_to_port();
-        free(buffer_);
+        if(own_buffer){
+            free(buffer_);
+        }
     };
 
     Port(
-            char* value_bytes = nullptr,
-            int n_value_bytes = 0,
             int value_type = 1,
             bool fixed = false,
             bool is_output = false,
@@ -80,8 +82,7 @@ public:
             bool is_bounded = false,
             double lb = 0,
             double ub = 0,
-            std::string name = "",
-            bool copy_values = false
+            std::string name = ""
     ) : MongoObject(name)
     {
         append_string(&document, "type", "port");
@@ -101,19 +102,6 @@ public:
             bounds_.push_back(ub);
         }
         Port::value_type = value_type;
-        if(value_bytes != nullptr){
-            if(value_type == 1){
-                set_value<double>(
-                        (double*) value_bytes, n_value_bytes,
-                        copy_values
-                        );
-            } else if(value_type == 0){
-                set_value<long>(
-                        (long*) value_bytes, n_value_bytes,
-                        copy_values
-                        );
-            }
-        }
     }
 
     void set_node(Node* node_ptr);
@@ -143,6 +131,14 @@ public:
             bool copy_values = true
             )
     {
+        own_buffer = copy_values;
+        buffer_element_size_ = sizeof(T);
+        n_buffer_elements_ = n_input;
+        if(std::is_same<T, double>::value){
+            value_type = 1;
+        } else{
+            value_type = 0;
+        }
         if(is_fixed()){
 #if DEBUG
             std::clog << "Change value of fixed port - action ignored." << std::endl;
@@ -153,58 +149,53 @@ public:
         std::clog << "Number of elements: " << n_input << std::endl;
         std::clog << "Port:" << get_name() << ".set_value" << std::endl;
 #endif
-        if(n_input  > n_buffer_)
-            buffer_ = std::realloc(buffer_, n_input * sizeof(T));
-        if(buffer_ != nullptr)
-        {
-            if(copy_values){
+        if(copy_values){
+            if(n_input > n_buffer_elements_)
+                buffer_ = std::realloc(buffer_, n_input * sizeof(T));
+            if(buffer_ != nullptr){
                 memcpy(buffer_, input, n_input * sizeof(T));
-            } else{
-                free(buffer_);
-                buffer_ = input;
-                n_buffer_ = n_input;
             }
-            n_buffer_ = n_input;
-            if (node_ != nullptr) {
+        } else{
+            buffer_ = input;
+        }
+        if (node_ != nullptr) {
 #if DEBUG
-                std::clog << "Port is attached to node:" << node_->get_name() << std::endl;
+            std::clog << "Port is attached to node:" << node_->get_name() << std::endl;
 #endif
-                update_attached_node();
-            }
+            update_attached_node();
         }
     }
 
     template <typename T>
     void update_buffer(){
         auto v = get_array<T>("value");
-        n_buffer_ = v.size();
-        buffer_ = realloc(buffer_, sizeof(T) * n_buffer_);
-        memcpy(buffer_, v.data(), n_buffer_ * sizeof(T));
+        n_buffer_elements_ = v.size();
+        buffer_ = realloc(buffer_, buffer_element_size_ * n_buffer_elements_);
+        memcpy(buffer_, v.data(), n_buffer_elements_ * sizeof(T));
     }
 
     template <typename T>
     void get_own_value(T **output, int *n_output){
-        if (n_buffer_ == 0) {
+        if (n_buffer_elements_ == 0) {
 #if DEBUG
             std::clog << "Updating buffer from bson" << std::endl;
 #endif
-            std::clog << "Updating buffer from bson" << std::endl;
             update_buffer<T>();
         }
         if (is_bounded() && bound_is_valid()) {
 #if DEBUG
             std::clog << "bound values to: (" << bounds_[0] << ", " << bounds_[1] << ")" << std::endl;
 #endif
-            auto bounded_array = (T*) malloc(n_buffer_ * sizeof(T));
-            memcpy(bounded_array, buffer_, (size_t) n_buffer_ * sizeof(T));
+            auto bounded_array = (T*) malloc(n_buffer_elements_ * sizeof(T));
+            memcpy(bounded_array, buffer_, (size_t) n_buffer_elements_ * sizeof(T));
             Functions::map_to_bounds<T>(
-                    bounded_array, n_buffer_,
+                    bounded_array, n_buffer_elements_,
                     bounds_[0], bounds_[1]
                     );
-            *n_output = n_buffer_;
+            *n_output = n_buffer_elements_;
             *output = reinterpret_cast<T*>(bounded_array);
         } else {
-            *n_output = n_buffer_;
+            *n_output = n_buffer_elements_;
             *output = reinterpret_cast<T*>(buffer_);
         }
     }
@@ -240,6 +231,16 @@ public:
     void set_reactive(bool reactive);
     bool write_to_db();
     bool read_from_db(const std::string &oid_string);
+    void get_bytes(unsigned char **output, int *n_output, bool copy=false);
+    void set_bytes(unsigned char *input, int n_input);
+    void set_buffer_ptr(size_t ptr, int n_elements, int element_size){
+        buffer_ = (void*) ptr;
+        buffer_element_size_ = element_size;
+        n_buffer_elements_ = n_elements;
+    }
+    size_t get_buffer_ptr(){
+        return (size_t)(&buffer_);
+    }
 
     void set_link(Port* v)
     {

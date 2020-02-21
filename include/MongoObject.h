@@ -21,12 +21,10 @@ class MongoObject{
 private:
 
     bool is_connected_to_db_;
-
     mongoc_uri_t *uri;
     mongoc_client_t *client;
     bson_error_t error;
     mongoc_collection_t *collection;
-
 
 protected:
 
@@ -42,13 +40,9 @@ protected:
 
     // Getter & Setter
     //--------------------------------------------------------------------
-
     bson_oid_t get_bson_oid();
-
     virtual bson_t get_bson();
-
     bson_t get_bson_excluding(const char* first, ...);
-
     const bson_t* get_document();
 
     void set_document(bson_t b){
@@ -62,8 +56,7 @@ protected:
 
     // Methods
     //--------------------------------------------------------------------
-
-    /// Writes a BSON document to the connected MongoDB
+    //! Writes a BSON document to the connected MongoDB
     /*!
      *
      * @param doc a pointer to the BSON document that is written to the MongoDB
@@ -113,7 +106,6 @@ protected:
                 bson_append_bool(&child, "", 0, v);
             }
         }
-
         bson_append_array_end(doc, &child);
     }
 
@@ -239,7 +231,7 @@ public:
     MongoObject(std::string name);
     ~MongoObject();
 
-    /// Connects the instance of @class MongoObject to a database
+    //! Connects the instance of @class MongoObject to a database
     /*!
      *
      * @param uri_string
@@ -353,7 +345,6 @@ public:
     std::vector<T> get_array(const char* key){
         bson_iter_t iter;
         std::vector<T> v{};
-
         if(std::is_same<T, double>::value){
             if (bson_iter_init_find(&iter, &document, key) &&
                 (BSON_ITER_HOLDS_ARRAY(&iter))){
@@ -406,11 +397,8 @@ public:
     }
 
     std::string get_json(const char *key){
-
         std::string re;
-
         bson_iter_t iter, desc;
-
         bson_iter_init (&iter, &document);
         if(bson_iter_find_descendant (&iter, key, &desc)){
             if (BSON_ITER_HOLDS_DOCUMENT (&desc)) {
@@ -431,9 +419,7 @@ public:
 
     // Operators
     //--------------------------------------------------------------------
-
     virtual std::shared_ptr<MongoObject> operator[](std::string key);
-
     bool operator==(MongoObject const& b){
         return (
                 bson_oid_equal(&b.oid_document, &oid_document) &&
