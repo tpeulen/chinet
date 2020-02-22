@@ -276,7 +276,7 @@ void Port::update_attached_node() {
     std::clog << "-- Port is output: " << is_output() << std::endl;
     std::clog << "-- Updating the node: " << node_->get_name() << std::endl;
 #endif
-    node_->set_node_to_invalid();
+    node_->set_valid(false);
     if (is_reactive() && !is_output()) {
         node_->evaluate();
     }

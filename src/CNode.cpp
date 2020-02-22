@@ -123,20 +123,21 @@ std::map<std::string, std::shared_ptr<Port>> Node::get_output_ports(){
 // Setter
 //--------------------------------------------------------------------
 void Node::set_callback(std::string s_callback, std::string s_callback_type){
+#if DEBUG
+    std::clog << "NODE SET CALLBACK" << std::endl;
+#endif
     this->callback = s_callback;
     this->callback_type_string = s_callback_type;
 #if DEBUG
-    std::clog << " " << callback << " " << callback_type_string << std::endl;
+    std::clog << "-- Callback type: " << callback_type_string << std::endl;
+    std::clog << "-- Callback name: " << callback << std::endl;
 #endif
     if(s_callback_type == "C"){
-#if DEBUG
-        std::clog << "C call back" << std::endl;
-#endif
         callback_type = 0;
         meth_ = rttr::type::get_global_method(callback);
         if(!meth_){
 #if DEBUG
-            std::cerr << "The class type " << callback << " does not exist." <<
+            std::cerr << "ERROR: The class type " << callback << " does not exist." <<
                       " No callback set. " << std::endl;
 #endif
         }
@@ -247,7 +248,7 @@ void Node::evaluate(){
 #if DEBUG
             std::clog << "-- Node " << n->get_name() << " of port " << o.second->get_name() << " set to invalid." << std::endl;
 #endif
-            n->set_node_to_invalid();
+            n->set_valid(false);
         }
     }
     node_valid_ = true;
@@ -291,8 +292,8 @@ bool Node::inputs_valid(){
     return true;
 }
 
-void Node::set_node_to_invalid(){
-    node_valid_ = false;
+void Node::set_valid(bool is_valid){
+    node_valid_ = is_valid;
     for(auto &v : out_)
     {
         auto output_port = v.second;

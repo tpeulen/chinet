@@ -182,6 +182,10 @@ public:
             std::clog << "-- Updating attached node." << std::endl;
 #endif
             update_attached_node();
+#if DEBUG
+            std::clog << "-- Updating dependent ports." << std::endl;
+#endif
+            set_value_of_dependents(input, n_input);
         }
     }
 

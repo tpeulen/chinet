@@ -27,6 +27,7 @@ private:
     std::map<std::string, std::shared_ptr<Port>> ports;
 
 protected:
+
     void fill_input_output_port_lookups();
     rttr::method meth_ = rttr::type::get_global_method("nothing");
     std::map<std::string, std::shared_ptr<Port>> in_;
@@ -82,8 +83,7 @@ public:
     //--------------------------------------------------------------------
     void set_callback(std::shared_ptr<NodeCallback> cb);
     void set_callback(std::string callback, std::string callback_type);
-    void set_node_to_invalid();
-
+    void set_valid(bool is_valid=false);
 };
 
 

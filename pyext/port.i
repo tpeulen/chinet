@@ -53,10 +53,15 @@
     %{
     __swig_getmethods__["node"] = get_node
     __swig_setmethods__["node"] = set_node
+    if _newclass: node = property(get_node, set_node)
+
     __swig_getmethods__["bytes"] = get_bytes
     __swig_setmethods__["bytes"] = set_bytes
-    __swig_setmethods__["link"] = set_link
+    if _newclass: bytes = property(get_bytes, set_bytes)
+
     __swig_getmethods__["link"] = get_link
+    __swig_setmethods__["link"] = set_link
+    if _newclass: link = property(get_link, set_link)
 
     @property
     def value(self):

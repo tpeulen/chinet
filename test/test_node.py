@@ -17,7 +17,7 @@ class CallbackNodePassOn(cn.NodeCallback):
         cn.NodeCallback.__init__(self, *args, **kwargs)
 
     def run(self, inputs, outputs):
-        outputs["outA"].set_value(inputs["inA"].get_value())
+        outputs["outA"].value = inputs["inA"].value
 
 
 class NodeCallbackMultiply(cn.NodeCallback):
@@ -28,8 +28,8 @@ class NodeCallbackMultiply(cn.NodeCallback):
     def run(self, inputs, outputs):
         mul = 1.0
         for key in inputs:
-            mul *= inputs[key].get_value()
-        outputs["portC"].set_value(mul)
+            mul *= inputs[key].value
+        outputs["portC"].value = mul
 
 
 class Tests(unittest.TestCase):
@@ -51,7 +51,7 @@ class Tests(unittest.TestCase):
             ['inA', 'inB']
         )
         values = np.hstack(
-            [v.value for v in node_with_ports.get_ports().values()]
+            [v.value for v in node_with_ports.ports.values()]
         )
         self.assertEqual(
             np.allclose(
@@ -144,21 +144,21 @@ class Tests(unittest.TestCase):
                     is_output=False
                 ),
                 "outA": cn.Port(
-                    0,
-                    False,
-                    True
+                    value=0,
+                    fixed=False,
+                    is_output=True
                 )
             }
         )
         node.set_callback("multiply_double", "C")
-        self.assertEqual(node.is_valid(), False)
+        self.assertEqual(node.valid, False)
 
         node.evaluate()
-        self.assertEqual(node.is_valid(), True)
+        self.assertEqual(node.valid, True)
 
-        outA = node.get_ports()["outA"]
-        inA = node.get_ports()["inA"]
-        inB = node.get_ports()["inB"]
+        outA = node.ports["outA"]
+        inA = node.ports["inA"]
+        inB = node.ports["inB"]
 
         self.assertEqual(
             np.allclose(
@@ -184,8 +184,8 @@ class Tests(unittest.TestCase):
         node.evaluate()
 
         self.assertEqual(
-            portOut1.get_value(),
-            portIn1.get_value() * portIn2.get_value()
+            portOut1.value,
+            portIn1.value * portIn2.value
         )
 
     def test_node_python_callback_2(self):
@@ -202,8 +202,8 @@ class Tests(unittest.TestCase):
         )
         node.evaluate()
         self.assertEqual(
-            portOut1.get_value(),
-            portIn1.get_value() * portIn2.get_value()
+            portOut1.value,
+            portIn1.value * portIn2.value
         )
 
     def test_node_write_to_db(self):
@@ -263,8 +263,13 @@ class Tests(unittest.TestCase):
         of a node changes, the node is set to invalid. A node is set to valid
         when it is evaluated. When a node is initialized it is invalid.
         """
-
-        out_node_1 = cn.Port(1.0, False, True)
+        import chinet as cn
+        out_node_1 = cn.Port(
+            1.0,
+            fixed=False,
+            is_reactive=True,
+            is_output=True
+        )
         in_node_1 = cn.Port(3.0)
         node_1 = cn.Node(
             {
@@ -276,16 +281,16 @@ class Tests(unittest.TestCase):
         node_1.set_callback(cb)
 
         self.assertListEqual(
-            list(out_node_1.get_value()),
+            list(out_node_1.value),
             [1.0]
         )
         self.assertListEqual(
-            list(in_node_1.get_value()),
+            list(in_node_1.value),
             [3.0]
         )
-        self.assertEqual(node_1.is_valid(), False)
+        self.assertEqual(node_1.valid, False)
         node_1.evaluate()
-        self.assertEqual(node_1.is_valid(), True)
+        self.assertEqual(node_1.valid, True)
 
     def test_node_valid_reactive_port(self):
         """
@@ -297,8 +302,17 @@ class Tests(unittest.TestCase):
         the node is evaluated.
         """
 
-        out_node_1 = cn.Port(1.0, False, True)
-        in_node_1 = cn.Port(3.0, False, False, True)  # is_fixed, is_output, is_reactive
+        out_node_1 = cn.Port(
+            value=1.0,
+            fixed=False,
+            is_output=True
+        )
+        in_node_1 = cn.Port(
+            value=3.0,
+            fixed=False,
+            is_output=False,
+            is_reactive=True
+        )
         node_1 = cn.Node(
             {
                 'inA': in_node_1,
@@ -308,14 +322,14 @@ class Tests(unittest.TestCase):
         cb = CallbackNodePassOn()
         node_1.set_callback(cb)
 
-        self.assertEqual(node_1.is_valid(), False)
+        self.assertEqual(node_1.valid, False)
 
         # A reactive port calls Node::evaluate when its value changes
-        in_node_1.set_value(12)
-        self.assertEqual(node_1.is_valid(), True)
+        in_node_1.value = 12
+        self.assertEqual(node_1.valid, True)
 
         self.assertEqual(
-            list(out_node_1.get_value()),
+            list(out_node_1.value),
             [12]
         )
 
@@ -336,8 +350,17 @@ class Tests(unittest.TestCase):
         of a node changes, the node is set to invalid. A node is set to valid
         when it is evaluated. When a node is initialized it is invalid.
         """
-        in_node_1 = cn.Port(3.0, False, False, False)  # is_fixed, is_output, is_reactive
-        out_node_1 = cn.Port(1.0, False, True)
+        in_node_1 = cn.Port(
+            value=3.0,
+            fixed=False,
+            is_output=False,
+            is_reactive=False
+        )
+        out_node_1 = cn.Port(
+            value=1.0,
+            fixed=False,
+            is_output=True
+        )
         node_1 = cn.Node(
             {
                 'inA': in_node_1,
@@ -347,24 +370,32 @@ class Tests(unittest.TestCase):
         node_1.set_callback("passthrough", "C")
 
         self.assertListEqual(
-            list(in_node_1.get_value()),
+            list(in_node_1.value),
             [3.0]
         )
         self.assertListEqual(
-            list(out_node_1.get_value()),
+            list(out_node_1.value),
             [1.0]
         )
 
-        self.assertEqual(node_1.is_valid(), False)
+        self.assertEqual(node_1.valid, False)
         node_1.evaluate()
-        self.assertEqual(node_1.is_valid(), True)
+        self.assertEqual(node_1.valid, True)
         self.assertListEqual(
-            list(in_node_1.get_value()),
-            list(out_node_1.get_value())
+            list(in_node_1.value),
+            list(out_node_1.value)
         )
-
-        in_node_2 = cn.Port(13.0, False, False, False)
-        out_node_2 = cn.Port(1.0, False, True)
+        in_node_2 = cn.Port(
+            value=13.0,
+            fixed=False,
+            is_output=False,
+            is_reactive=False
+        )
+        out_node_2 = cn.Port(
+            value=1.0,
+            fixed=False,
+            is_output=True
+        )
         node_2 = cn.Node(
             {
                 'inA': in_node_2,
@@ -372,29 +403,29 @@ class Tests(unittest.TestCase):
             }
         )
         node_2.set_callback("passthrough", "C")
-        in_node_2.link(out_node_1)
+        in_node_2.link = out_node_1
 
-        self.assertEqual(node_2.is_valid(), False)
+        self.assertEqual(node_2.valid, False)
         node_2.evaluate()
-        self.assertEqual(node_2.is_valid(), True)
+        self.assertEqual(node_2.valid, True)
         self.assertEqual(
-            list(out_node_2.get_value()),
+            list(out_node_2.value),
             [3.0]
         )
 
-        in_node_1.set_value(13)
-        self.assertEqual(node_1.is_valid(), False)
-        self.assertEqual(node_2.is_valid(), False)
+        in_node_1.value = 13
+        self.assertEqual(node_1.valid, False)
+        self.assertEqual(node_2.valid, False)
 
         node_1.evaluate()
         self.assertEqual(
-            list(out_node_1.get_value()),
+            list(out_node_1.value),
             [13.0]
         )
 
         node_2.evaluate()
         self.assertEqual(
-            list(out_node_2.get_value()),
+            list(out_node_2.value),
             [13.0]
         )
 
@@ -409,14 +440,23 @@ class Tests(unittest.TestCase):
         node_2 has one input (inA) and one output. The input of node_2 is
         connected to the output of node_1:
 
-                (inA->(Node1, outA))-(node_2)-(outA)
+                (inA->(node_1, outA))-(node_2)-(outA)
 
         In this example all ports are "non-reactive" meaning, when the input
         of a node changes, the node is set to invalid. A node is set to valid
         when it is evaluated. When a node is initialized it is invalid.
         """
-        in_node_1 = cn.Port(3.0, False, False, True)
-        out_node_1 = cn.Port(1.0, False, True)
+        in_node_1 = cn.Port(
+            value=3.0,
+            fixed=False,
+            is_output=False,
+            is_reactive=True
+        )
+        out_node_1 = cn.Port(
+            value=1.0,
+            fixed=False,
+            is_output=True
+        )
         node_1 = cn.Node(
             {
                 'inA': in_node_1,
@@ -425,8 +465,17 @@ class Tests(unittest.TestCase):
         )
         node_1.set_callback("passthrough", "C")
 
-        in_node_2 = cn.Port(1.0, False, False, True)
-        out_node_2 = cn.Port(1.0, False, True)
+        in_node_2 = cn.Port(
+            value=1.0,
+            fixed=False,
+            is_output=False,
+            is_reactive=True
+        )
+        out_node_2 = cn.Port(
+            value=1.0,
+            fixed=False,
+            is_output=True
+        )
         node_2 = cn.Node(
             {
                 'inA': in_node_2,
@@ -434,13 +483,13 @@ class Tests(unittest.TestCase):
             }
         )
         node_2.set_callback("passthrough", "C")
-        in_node_2.link(out_node_1)
-        in_node_1.set_value(13)
+        in_node_2.link = out_node_1
+        in_node_1.value = 13
 
-        self.assertEqual(node_1.is_valid(), True)
-        self.assertEqual(node_2.is_valid(), True)
+        self.assertEqual(node_1.valid, True)
+        self.assertEqual(node_2.valid, True)
         self.assertEqual(
-            list(out_node_2.get_value()),
+            list(out_node_2.value),
             [13.0]
         )
 
