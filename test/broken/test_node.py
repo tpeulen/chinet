@@ -53,7 +53,13 @@ class Tests(unittest.TestCase):
         values = np.hstack(
             [v.value for v in node_with_ports.get_ports().values()]
         )
-        self.assertEqual(values, np.array([7.0, 13.0, 0.0]))
+        self.assertEqual(
+            np.allclose(
+                values,
+                np.array([7.0, 13.0, 0.0])
+            ),
+            True
+        )
 
     def test_node_name(self):
         node = cn.Node()
@@ -87,7 +93,6 @@ class Tests(unittest.TestCase):
         )
 
     def test_node_ports(self):
-        import chinet as cn
         node = cn.Node()
         portA_name = "portA"
         portA = cn.Port(17)
@@ -100,7 +105,10 @@ class Tests(unittest.TestCase):
             portA,
             node.get_input_port(portA_name)
         )
-        self.assertEqual(portB, node.get_output_port(portB_name))
+        self.assertEqual(
+            portB,
+            node.get_output_port(portB_name)
+        )
 
     def test_node_C_RTTR_callback(self):
         """Test chinet RTTR C callbacks"""
@@ -162,7 +170,6 @@ class Tests(unittest.TestCase):
 
     def test_node_python_callback_1(self):
         """Test chinet Node class python callbacks"""
-
         node = cn.Node()
         portIn1 = cn.Port(55)
         node.add_input_port("portA", portIn1)
@@ -183,24 +190,21 @@ class Tests(unittest.TestCase):
 
     def test_node_python_callback_2(self):
         """Test chinet Node class python callbacks"""
-
         node = cn.Node()
-
         portIn1 = cn.Port(55)
         node.add_input_port("portA", portIn1)
-
         portIn2 = cn.Port(2)
         node.add_input_port("portB", portIn2)
-
         portOut1 = cn.Port()
         node.add_output_port("portC", portOut1)
-
         node.set_callback(
             NodeCallbackMultiply().__disown__()
         )
         node.evaluate()
-
-        self.assertEqual(portOut1.get_value(), portIn1.get_value() * portIn2.get_value())
+        self.assertEqual(
+            portOut1.get_value(),
+            portIn1.get_value() * portIn2.get_value()
+        )
 
     def test_node_write_to_db(self):
         db_dict = {

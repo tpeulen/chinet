@@ -6,7 +6,7 @@ template <typename T>
 inline void mul(
         T* tmp,
         size_t &n_elements,
-        const std::map<std::string, Port*> &inputs
+        const std::map<std::string, std::shared_ptr<Port>> &inputs
         )
 {
     for(int i=0; i<n_elements; i++) tmp[i] = 1.0;
@@ -23,7 +23,7 @@ template <typename T>
 inline void add(
         T* tmp,
         size_t &n_elements,
-        const std::map<std::string, Port*> &inputs
+        const std::map<std::string, std::shared_ptr<Port>> &inputs
 )
 {
     for(int i=0; i<n_elements; i++) tmp[i] = 0.0;
@@ -39,29 +39,35 @@ inline void add(
 
 template <typename T>
 void combine(
-        std::map<std::string, Port*> &inputs,
-        std::map<std::string, Port*> &outputs,
+        std::map<std::string, std::shared_ptr<Port>> &inputs,
+        std::map<std::string, std::shared_ptr<Port>> &outputs,
         int operation
         ){
-    size_t n_elements = UINT_MAX;
-    for(auto &o : inputs){
 #if DEBUG
-        std::clog << "Determining vector with smallest length" << std::endl;
+    std::clog << "-- Combining values of input ports."  << std::endl;
 #endif
+    size_t n_elements = UINT_MAX;
+#if DEBUG
+    std::clog << "-- Determining input vector with smallest length." << std::endl;
+#endif
+    for(auto &o : inputs){
         n_elements = MIN(n_elements, o.second->current_size());
     }
 #if DEBUG
-    std::clog << "Smallest length: " << n_elements << std::endl;
+    std::clog << "-- The smallest input vector has a length of: " << n_elements << std::endl;
 #endif
     auto tmp = (T*) malloc(n_elements * sizeof(T));
-#if DEBUG
-    std::clog << "C callback: multiply" << std::endl;
-#endif
     switch(operation){
         case 0:
+#if DEBUG
+            std::clog << "-- Adding input ports" << std::endl;
+#endif
             add(tmp, n_elements, inputs);
             break;
         case 1:
+#if DEBUG
+            std::clog << "-- Multiplying input ports" << std::endl;
+#endif
             mul(tmp, n_elements, inputs);
             break;
         default:
@@ -70,14 +76,15 @@ void combine(
     if(!outputs.empty()){
         if (outputs.find("outA") == outputs.end() ) {
 #if DEBUG
-            std::clog << "Error: Node does not define output port with the name 'outA' " << std::endl;
+            std::clog << "ERROR: Node does not define output port with the name 'outA' " << std::endl;
 #endif
             outputs.begin()->second->set_value(tmp, n_elements);
         } else {
+            std::clog << "Setting value to output " << std::endl;
             outputs["outA"]->set_value(tmp, n_elements);
         }
     } else{
-        std::cerr << "There are no output ports." << std::endl;
+        std::cerr << "ERROR: There are no output ports." << std::endl;
     }
     free(tmp);
 }
@@ -85,30 +92,33 @@ void combine(
 
 template <typename T>
 void addition(
-        std::map<std::string, Port*> &inputs,
-        std::map<std::string, Port*> &outputs
+        std::map<std::string, std::shared_ptr<Port>> &inputs,
+        std::map<std::string, std::shared_ptr<Port>> &outputs
 )
 {
+#if DEBUG
+    std::clog << "addition"  << std::endl;
+#endif
     combine<T>(inputs, outputs, 0);
 }
 
 template <typename T>
 void multiply(
-        std::map<std::string, Port*> &inputs,
-        std::map<std::string, Port*> &outputs
+        std::map<std::string, std::shared_ptr<Port>> &inputs,
+        std::map<std::string, std::shared_ptr<Port>> &outputs
 )
 {
     combine<T>(inputs, outputs, 1);
 }
 
 void nothing(
-        std::map<std::string, Port*> &inputs,
-        std::map<std::string, Port*> &outputs){
+        std::map<std::string, std::shared_ptr<Port>> &inputs,
+        std::map<std::string, std::shared_ptr<Port>> &outputs){
 }
 
 void passthrough(
-        std::map<std::string, Port*> &inputs,
-        std::map<std::string, Port*> &outputs
+        std::map<std::string, std::shared_ptr<Port>> &inputs,
+        std::map<std::string, std::shared_ptr<Port>> &outputs
         ){
     for(auto it_in = inputs.cbegin(), end_in = inputs.cend(),
             it_out = outputs.cbegin(), end_out = outputs.cend();

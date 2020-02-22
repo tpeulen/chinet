@@ -116,14 +116,21 @@ namespace Functions {
             T *values,
             int n_values,
             double lower_bound,
-            double upper_bound
+            double upper_bound,
+            bool periodic=false
             )
     {
         T delta = upper_bound - lower_bound;
-        for(int i = 0; i<n_values; i++)
-        {
-            values[i] = lower_bound + ((upper_bound - lower_bound) / 2.) * (sin(values[i]) + 1.);
-            //values[i] = upper_bound - delta / (exp(values[i]/delta) + 1.0);
+        if(periodic){
+            for(int i = 0; i<n_values; i++)
+            {
+                values[i] = lower_bound + (delta / 2.) * (sin(values[i]) + 1.);
+            }
+        } else{
+            for(int i = 0; i<n_values; i++)
+            {
+                values[i] = upper_bound - delta / (exp(values[i]/delta) + 1.0);
+            }
         }
     }
 

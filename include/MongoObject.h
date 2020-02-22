@@ -13,7 +13,7 @@
 
 #include "Functions.h"
 
-#define CHINET_DEBUG 1
+#define DEBUG 1
 
 
 class MongoObject{
@@ -150,7 +150,7 @@ protected:
                     // connect obj to db
                     return_value &= connect_object_to_db(o);
                     // read obj from db
-#if CHINET_DEBUG
+#if DEBUG
                     std::cout << oid_to_string(oid) << std::endl;
 #endif
                     o->read_from_db(oid_to_string(oid));
@@ -160,7 +160,7 @@ protected:
                 }
             }
         } else{
-#if CHINET_DEBUG
+#if DEBUG
             std::cerr << "Error: no nodes section in Session" << std::endl;
 #endif
             return_value &= false;
@@ -196,7 +196,7 @@ protected:
                 }
             }
         } else{
-#if CHINET_DEBUG
+#if DEBUG
             std::cerr << "Error: no nodes section in Session" << std::endl;
 #endif
             return_value &= false;

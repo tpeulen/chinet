@@ -16,11 +16,11 @@
 %shared_ptr(Port)
 %shared_ptr(Node)
 
-%apply (double* IN_ARRAY1, int DIM1) {(double *input, int n_input)}
+%apply (double* INPLACE_ARRAY1, int DIM1) {(double *input, int n_input)}
 %apply (double** ARGOUTVIEW_ARRAY1, int* DIM1) {(double **output, int *n_output)}
-%apply (long* IN_ARRAY1, int DIM1) {(long *input, int n_input)}
+%apply (long* INPLACE_ARRAY1, int DIM1) {(long *input, int n_input)}
 %apply (long** ARGOUTVIEW_ARRAY1, int* DIM1) {(long **output, int *n_output)}
-%apply (unsigned char* IN_ARRAY1, int DIM1) {(unsigned char *input, int n_input)}
+%apply (unsigned char* INPLACE_ARRAY1, int DIM1) {(unsigned char *input, int n_input)}
 %apply (unsigned char** ARGOUTVIEW_ARRAY1, int* DIM1) {(unsigned char **output, int *n_output)}
 
 %template(vector_port_ptr) std::vector<Port*>;
@@ -56,7 +56,7 @@
     __swig_getmethods__["bytes"] = get_bytes
     __swig_setmethods__["bytes"] = set_bytes
     __swig_setmethods__["link"] = set_link
-    __swig_getmethods__["link"] = get_bytes
+    __swig_getmethods__["link"] = get_link
 
     @property
     def value(self):
@@ -67,6 +67,8 @@
 
     @value.setter
     def value(self, v):
+        if not isinstance(v, np.ndarray):
+            v = np.atleast_1d(v)
         if v.dtype.kind == 'i':
             self.set_value_i(v, True)
         else:
@@ -83,8 +85,12 @@
     def bounds(self, v):
         self.set_bounds(np.array(v, dtype=np.float64))
 
-    def __init__(self, value=[], *args, **kwargs):
-        import numpy as np
+    def __init__(
+            self,
+            value=[],
+            fixed=False,
+            *args, **kwargs
+        ):
         this = _chinet.new_Port(*args, **kwargs)
         try:
             self.this.append(this)
@@ -96,5 +102,6 @@
             self.set_value_i(value)
         else:
             self.set_value_d(value)
+        self.fixed = fixed
     %}
 }

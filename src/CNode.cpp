@@ -159,25 +159,31 @@ void Node::add_port(
         bool is_output,
         bool fill_in_out
         ) {
+#ifdef DEBUG
+    std::clog << "ADDING PORT TO NODE" << std::endl;
+    std::clog << "-- Name of node: " << get_name() << std::endl;
+    std::clog << "-- Key of port: " << key << std::endl;
+    std::clog << "-- Port is_output: " << is_output << std::endl;
+    std::clog << "-- Fill value of output: " << fill_in_out << std::endl;
+#endif
     port->set_port_type(is_output);
     port->set_node(this);
     if (ports.find(key) == ports.end() ) {
-        // not found
 #ifdef DEBUG
-        std::clog << "Port " << key << " was created in node "<< get_name() << std::endl;
+        std::clog << "-- The key of the port was not found." << std::endl;
+        std::clog << "-- Port " << key << " was created in node. " << std::endl;
 #endif
         ports[key] = port;
     } else {
-        // found
         auto p = ports[key];
         if(port != p){
 #ifdef DEBUG
-            std::clog << "WARNING: Port " << key << " overrides existing port." << std::endl;
+            std::clog << "WARNING: Overwriting the port that was originally associated to the key " << key << "." << std::endl;
 #endif
             ports[key] = port;
         } else{
-            std::cerr << "WARNING: Port " << key << " already exists." << std::endl;
-            std::cerr << "-- Assigning Port " << key << " to " << std::endl;
+            std::cerr << "WARNING: Port is already part of the node." << std::endl;
+            std::cerr << "-- Assigning Port to the key: " << key << "." << std::endl;
         }
     }
     if(fill_in_out){
@@ -215,21 +221,32 @@ bson_t Node::get_bson(){
 }
 
 void Node::evaluate(){
-    #if DEBUG
-    std::clog << "update:callback_type:" << callback_type;
-    #endif
+#if DEBUG
+    std::clog << "NODE EVALUATE" << std::endl;
+    std::clog << "-- Node name: " << get_name() << std::endl;
+    std::clog << "-- Callback_type: " << callback_type << std::endl;
+#endif
     if(callback_type == 0)
     {
-        #if DEBUG
-        std::clog << ":registered C function"  << std::endl;
-        #endif
+#if DEBUG
+        std::clog << "-- Calling registered C function."  << std::endl;
+#endif
         rttr::variant return_value = meth_.invoke({}, in_, out_);
     } else if (callback_class != nullptr) {
+#if DEBUG
+        std::clog << "-- Calling 'run' method of a callback class."  << std::endl;
+#endif
             callback_class->run(in_, out_);
     }
+#if DEBUG
+    std::clog << "-- Setting nodes associated to output ports to invalid."  << std::endl;
+#endif
     for(auto &o : get_output_ports()){
         auto n = o.second->get_node();
         if(n != nullptr){
+#if DEBUG
+            std::clog << "-- Node " << n->get_name() << " of port " << o.second->get_name() << " set to invalid." << std::endl;
+#endif
             n->set_node_to_invalid();
         }
     }

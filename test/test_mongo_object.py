@@ -15,7 +15,10 @@ class Tests(unittest.TestCase):
         mo_name = "test_name"
         mo = cn.MongoObject()
         mo.set_name(mo_name)
-        self.assertEqual(mo.get_name(), cn.MongoObject(mo_name).get_name())
+        self.assertEqual(
+            mo.get_name(),
+            cn.MongoObject(mo_name).get_name()
+        )
 
     def test_mongo_db_connect(self):
         db_dict = {
@@ -76,7 +79,7 @@ class Tests(unittest.TestCase):
 
     @unittest.expectedFailure
     def test_read_json(self):
-        json_file = "./inputs/session_template.json"
+        json_file = "inputs/session_template.json"
 
         json_string = ""
         with open(json_file, 'r') as fp:

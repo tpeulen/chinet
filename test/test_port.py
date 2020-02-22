@@ -17,65 +17,107 @@ class Tests(unittest.TestCase):
         v1 = 23.0
         v2 = 29.0
         p1 = cn.Port()
-        p1.set_value(v1)
-
+        p1.value = v1
         # check setting of value
         p2 = cn.Port(v1)
-
         # check fixing
-        p3 = cn.Port(v1, True)
-        p4 = cn.Port(v1, False)
-
-        self.assertEqual(p1.get_value(), p2.get_value())
-        self.assertEqual(p3.fixed, True)
-        self.assertEqual(p4.fixed, False)
-
+        p3 = cn.Port(
+            value=v1,
+            fixed=True
+        )
+        p4 = cn.Port(
+            value=v1,
+            fixed=False
+        )
         # check linking
         p5 = cn.Port(v2)
-        p5.link(p4)
-        self.assertEqual((p5.get_value() == p4.get_value()).all(), True)
+        p5.link = p4
 
-        #check bounds
+        self.assertEqual(
+            np.allclose(
+                p1.value, p2.value
+            ),
+            True
+        )
+        self.assertEqual(p3.fixed, True)
+        self.assertEqual(p4.fixed, False)
+        self.assertEqual(
+            np.allclose(
+                p5.value,
+                p4.value
+            ),
+            True
+        )
+
+        # check bounds
         fixed = False
         is_output = False
         is_reactive = False
         is_bounded = True
         lower_bound = 2
-        upper_bound = 3
-        value = 10
+        upper_bound = 5
+        value = 0
         p6 = cn.Port(
-            value, fixed,
-            is_output, is_reactive,
-            is_bounded, lower_bound, upper_bound
+            value=value,
+            fixed=fixed,
+            is_output=is_output,
+            is_reactive=is_reactive,
+            is_bounded=is_bounded,
+            lb=lower_bound,
+            ub=upper_bound
         )
-        self.assertEqual(p6.get_value()[0] <= upper_bound, True)
-        self.assertEqual(p6.get_value()[0] >= lower_bound, True)
-        self.assertAlmostEqual(p6.get_value()[0], 3)
+        self.assertEqual(
+            np.all(p6.value < upper_bound),
+            True
+        )
+        self.assertEqual(
+            np.all(p6.value >= lower_bound),
+            True
+        )
+        self.assertAlmostEqual(
+            p6.value[0],
+            lower_bound + 1  # the lower bound is not part of the
+        )
 
     def test_port_bounds(self):
         """Test chinet Port class set_value and get_value"""
-        v1 = np.array([1, 2, 3, 6, 5.5, -3, -2, -6.1, -10000, 10000])
+        v1 = np.array(
+            [1, 2, 3, 6, 5.5, -3, -2, -6.1, -10000, 10000],
+            dtype=np.float
+        )
         p1 = cn.Port()
-        p1.set_value(v1)
+        p1.value = v1
 
-        self.assertEqual((p1.get_value() == v1).all(), True)
+        self.assertEqual(
+            np.allclose(
+                p1.value,
+                v1
+            ),
+            True
+        )
 
+        p1.bounds = 0, 1
         p1.bounded = True
-        p1.set_bounds(0, 1)
 
-        self.assertEqual((p1.get_value() <= 1).all(), True)
-        self.assertEqual((p1.get_value() >= 0).all(), True)
+        self.assertEqual(
+            (p1.value <= 1).all(),
+            True
+        )
+        self.assertEqual(
+            (p1.value >= 0).all(),
+            True
+        )
 
     def test_port_get_set_value(self):
         """Test chinet Port class set_value and get_value"""
         v1 = [1, 2, 3]
         p1 = cn.Port()
-        p1.set_value(v1)
+        p1.value = v1
 
         p2 = cn.Port()
         p2.value = v1
         self.assertEqual(
-            (p1.get_value() == p2.get_value()).all(),
+            (p1.value == p2.value).all(),
             True
         )
 
@@ -83,47 +125,54 @@ class Tests(unittest.TestCase):
         """Test chinet Port class set_value and get_value"""
         v1 = [1, 2, 3, 5, 8]
         v2 = [1, 2, 4, 8, 16]
-        p1 = cn.Port()
-        p1.set_value(v1)
-
         # check setting of value
+        p1 = cn.Port()
         p2 = cn.Port(v1)
+        p1.value = v1
         self.assertListEqual(
-            list(p2.get_value()),
-            list(p1.get_value())
+            list(p2.value),
+            list(p1.value)
         )
-
         # check fixing
         p3 = cn.Port(v1, True)
-        self.assertEqual(p3.fixed, True)
         p4 = cn.Port(v1, False)
+        self.assertEqual(p3.fixed, True)
         self.assertEqual(p4.fixed, False)
 
         # check linking
         p5 = cn.Port(v2, False)
-        p5.link(p4)
-        self.assertListEqual(list(p5.get_value()), list(p4.get_value()))
+        p5.link = p4
+        self.assertEqual(
+            np.allclose(
+                p5.value,
+                p4.value
+            ),
+            True
+        )
 
     def test_port_init_array(self):
         """Test chinet Port class set_value and get_value"""
         array = np.array([1, 2, 3, 5, 8, 13], dtype=np.double)
         p1 = cn.Port()
-        p1.set_value(array)
+        p1.value = array
         p2 = cn.Port(array)
-        self.assertListEqual(list(p1.get_value()), list(p2.get_value()))
+        self.assertListEqual(
+            list(p1.value),
+            list(p2.value)
+        )
 
     def test_set_get_value_1(self):
         """Test chinet Port class set_value and get_value"""
         value = 23.0
         port = cn.Port(value)
-        self.assertEqual(port.get_value(), value)
+        self.assertEqual(port.value, value)
 
     def test_set_get_value_2(self):
         """Test chinet Port class set_value and get_value"""
         value = (1,)
         port = cn.Port()
-        port.set_value(value)
-        self.assertEqual(port.get_value(), value)
+        port.value = value
+        self.assertEqual(port.value, value)
 
     def test_port_link_value(self):
         value1 = np.array([12], dtype=np.double)
@@ -131,15 +180,29 @@ class Tests(unittest.TestCase):
         p1 = cn.Port(value1)
         p2 = cn.Port(value2)
 
-        self.assertEqual(p1.get_value(), value1)
-        self.assertEqual(p2.get_value(), value2)
-        self.assertNotEqual(p1.get_value(), p2.get_value())
+        self.assertEqual(
+            np.allclose(p1.value, value1),
+            True
+        )
+        self.assertEqual(
+            np.allclose(p2.value, value2),
+            True
+        )
+        self.assertEqual(
+            np.allclose(p1.value, p2.value),
+            False
+        )
 
-        p2.link(p1)
-        self.assertEqual(p1.get_value(), p2.get_value())
-
+        p2.link = p1
+        self.assertEqual(
+            np.allclose(p1.value, p2.value),
+            True
+        )
         p2.unlink()
-        self.assertEqual(p2.get_value(), value2)
+        self.assertEqual(
+            np.allclose(p2.value, value2),
+            True
+        )
 
     def test_port_fixed(self):
         p1 = cn.Port(12)
@@ -164,18 +227,16 @@ class Tests(unittest.TestCase):
             'app_string': "chisurf",
             'collection_string': "test_collection"
         }
-
         value_array = (1, 2, 3, 5, 8, 13)
-        value = 17
+        port = cn.Port(
+            value=value_array,
+            fixed=True
+        )
+        connect_success = port.connect_to_db(**db_dict)
+        write_success = port.write_to_db()
 
-        port = cn.Port(value)
-        port.value = value_array
-        port.fixed = True
-
-        port.connect_to_db(**db_dict)
-        print(port.get_json())
-
-        self.assertEqual(port.write_to_db(), True)
+        self.assertEqual(connect_success, True)
+        self.assertEqual(write_success, True)
 
     def test_port_db_restore(self):
         db_dict = {
@@ -189,8 +250,8 @@ class Tests(unittest.TestCase):
         value = 17
 
         port = cn.Port()
-        port.set_value(value)
-        port.set_value(value_array)
+        port.value = value
+        port.value = value_array
 
         port.connect_to_db(**db_dict)
         port.write_to_db()

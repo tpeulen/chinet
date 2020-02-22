@@ -13,6 +13,10 @@
 #include "../include/MongoObject.h"
 %}
 
+%pythonbegin %{
+import numpy as np
+%}
+
 %include "typemaps.i";
 %include "stl.i";
 %include "std_wstring.i";

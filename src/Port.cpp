@@ -2,27 +2,35 @@
 
 // Operator
 // --------------------------------------------------------------------
-std::shared_ptr<Port> Port::operator+(std::shared_ptr<Port> v)
+std::shared_ptr<Port> Port::operator+(
+        std::shared_ptr<Port> v
+        )
 {
+#if DEBUG
+    std::clog << "ADDING PORTS" << std::endl;
+#endif
     int new_value_type = MAX(value_type, v->value_type);
+#if DEBUG
+    std::clog << "-- Value type of resulting port: " << new_value_type << std::endl;
+#endif
     std::string name = get_name()  + " + " + v->get_name();
+#if DEBUG
+    std::clog << "-- Name of resulting port: " << name << std::endl;
+#endif
     auto re = std::make_shared<Port>(
-            new_value_type,
-            false,
-            true,
-            true,
-            false,
-            0, 0,
-            name
+            false, true, true, false, 0, 0, new_value_type, name
             );
+#if DEBUG
+    std::clog << "-- Creating a Node associated to the resulting port." << std::endl;
+#endif
     auto node = new Node();
     node->set_name(name);
     node->add_input_port(this->get_name(), getptr());
     node->add_input_port(v->get_name(), v);
     node->add_output_port(name, re);
-    if(this->get_value_type() == 0){
+    if(new_value_type == 0){
         node->set_callback("addition_int", "C");
-    } else if(this->get_value_type() == 1){
+    } else if(new_value_type == 1){
         node->set_callback("addition_double", "C");
     }
     re->set_node(node);
@@ -264,10 +272,15 @@ void Port::set_node(Node* node_ptr)
 
 void Port::update_attached_node() {
 #if DEBUG
-    std::clog << "Port caused update of node with name: " << node_->get_name() << std::endl;
+    std::clog << "-- Port is reactive: " << is_reactive() << std::endl;
+    std::clog << "-- Port is output: " << is_output() << std::endl;
+    std::clog << "-- Updating the node: " << node_->get_name() << std::endl;
 #endif
     node_->set_node_to_invalid();
     if (is_reactive() && !is_output()) {
         node_->evaluate();
     }
+#if DEBUG
+    std::clog << "-- Node is valid: " << node_->is_valid() << std::endl;
+#endif
 }

@@ -19,8 +19,7 @@ MongoObject::MongoObject() :
     bson_t *doc = BCON_NEW(
             "_id", BCON_OID(&oid_document),
             "precursor", BCON_OID(&oid_document),
-            "death", BCON_INT64(time_of_death),
-            "name", object_name.c_str()
+            "death", BCON_INT64(time_of_death)
     );
     set_document(doc);
 }
@@ -107,10 +106,19 @@ void MongoObject::disconnect_from_db()
     is_connected_to_db_ = false;
 }
 
-bool MongoObject::write_to_db(const bson_t &doc, int write_option)
+bool MongoObject::write_to_db(
+        const bson_t &doc,
+        int write_option
+    )
 {
+#ifdef DEBUG
+    std::clog << "WRITING MONGOOBJECT TO DB" << std::endl;
+#endif
     bool return_value = false;
-
+#ifdef DEBUG
+    std::clog << "-- Connected to DB: " << is_connected_to_db() << std::endl;
+    std::clog << "-- Write option: " << write_option << std::endl;
+#endif
     if (is_connected_to_db()) {
         return_value = true;
 
@@ -125,28 +133,46 @@ bool MongoObject::write_to_db(const bson_t &doc, int write_option)
         );
 
         switch (write_option) {
-
             case 1:
+#ifdef DEBUG
+                std::clog << "-- Replacing object in the DB." << std::endl;
+#endif
                 // option 1 - write as a replacement
-                if (!mongoc_collection_replace_one(collection, query, &doc, nullptr, &reply, &error)) {
-#if DEBUG
+                if (
+                    !mongoc_collection_replace_one(
+                            collection,
+                            query, &doc,
+                            nullptr, &reply, &error
+                    )
+                ) {
+#ifdef DEBUG
                     std::cerr << error.message;
 #endif
                     return_value &= false;
                 }
                 break;
-
             case 2:
+#ifdef DEBUG
+                std::clog << "-- Inserting as a new object in DB." << std::endl;
+#endif
                 // option 2 - insert as a new document
-                if (!mongoc_collection_insert_one(collection, &doc, nullptr, &reply, &error)) {
-#if DEBUG
+                if (
+                    !mongoc_collection_insert_one(
+                        collection, &doc,
+                        nullptr,
+                        &reply, &error
+                    )
+                ) {
+#ifdef DEBUG
                     std::cerr << error.message;
 #endif
                     return_value &= false;
                 }
                 break;
-
             default:
+#ifdef DEBUG
+                std::clog << "-- Updating existing object in DB." << std::endl;
+#endif
                 // option 0 - write as a update
                 update = BCON_NEW ("$set", BCON_DOCUMENT(&doc));
                 if (!mongoc_collection_find_and_modify(
@@ -167,16 +193,13 @@ bool MongoObject::write_to_db(const bson_t &doc, int write_option)
                 }
                 break;
         }
-
         // destroy
         bson_destroy(update);
         bson_destroy(query);
         bson_destroy(&reply);
-
     } else {
-        std::cerr << "Not connected: cannot write" << std::endl;
+        std::cerr << "ERROR: Not connected to DB - cannot write!" << std::endl;
     }
-
     return return_value;
 }
 
