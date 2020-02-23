@@ -1,5 +1,5 @@
 {% set name = "chinet" %}
-{% set version = "0.0.3" %}
+#{% set version = "0.0.3" %}
 {% set data = load_setup_py_data(setup_file='../setup.py', from_recipe_dir=True) %}
 
 package:
