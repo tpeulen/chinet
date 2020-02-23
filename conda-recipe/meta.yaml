@@ -1,9 +1,11 @@
 {% set name = "chinet" %}
 {% set version = "0.0.3" %}
+{% set data = load_setup_py_data(setup_file='../setup.py', from_recipe_dir=True) %}
 
 package:
   name: "{{ name|lower }}"
-  version: "{{ version|lower }}"
+  version: {{ data.get('version')|lower }}
+#  version: "{{ version|lower }}"
 
 source:
   path: ..
@@ -13,25 +15,24 @@ build:
     #string: np{{ CONDA_NPY }}py{{ CONDA_PY }}_{{ GIT_BUILD_STR }}
 
 requirements:
-  build:
+
+  host:
     - {{ compiler('cxx') }}
     - git
     - cmake
     - swig<4.0.0
     - boost
+    - librttr
     - eigen
     - openmp
     - setuptools
     - python {{ python }}
-  host:
-    - python {{ python }}
-    - numpy
-    - setuptools
-    - librttr
     - libmongoc>=1.15.1
+    - numpy
   run:
     - python {{ python }}
     - librttr
+    - libmongoc>=1.15.1
     - numpy
     - labellib
 

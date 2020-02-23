@@ -49,9 +49,9 @@ class CMakeBuild(build_ext):
 
         if platform.system() == "Windows":
             cmake_args += ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), extdir)]
-            #if sys.maxsize > 2**32:
+            # if sys.maxsize > 2**32:
             #    cmake_args += ['-A', 'x64']
-            #build_args += ['--', '/m']
+            # build_args += ['--', '/m']
         else:
             cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
             build_args += ['--', '-j8']
@@ -88,7 +88,7 @@ setup(
     license='MPL v2.0',
     author='Thomas-Otavio Peulen',
     author_email='thomas.otavio.peulen@gmail.com',
-    version='0.0.2',
+    version='0.0.3',
     ext_modules=[CMakeExtension('chinet')],
     cmdclass={
         'build_ext': CMakeBuild
