@@ -67,7 +67,7 @@ class Tests(unittest.TestCase):
             ub=upper_bound
         )
         self.assertEqual(
-            np.all(p6.value < upper_bound),
+            np.all(p6.value <= upper_bound),
             True
         )
         self.assertEqual(
@@ -76,7 +76,7 @@ class Tests(unittest.TestCase):
         )
         self.assertAlmostEqual(
             p6.value[0],
-            lower_bound + 1  # the lower bound is not part of the
+            lower_bound  # the lower bound is not part of the
         )
 
     def test_port_bounds(self):

@@ -88,7 +88,7 @@ setup(
     license='MPL v2.0',
     author='Thomas-Otavio Peulen',
     author_email='thomas.otavio.peulen@gmail.com',
-    version='0.0.3',
+    version='0.0.4',
     ext_modules=[CMakeExtension('chinet')],
     cmdclass={
         'build_ext': CMakeBuild

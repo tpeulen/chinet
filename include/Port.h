@@ -255,11 +255,12 @@ public:
         if (is_bounded() && bound_is_valid()) {
 #if DEBUG
             std::clog << "-- Values are bounded " << std::endl;
-            std::clog << "-- Bounds: (" << bounds_[0] << ", " << bounds_[1] << ")" << std::endl;
+            std::clog << "-- Bounds: [" << bounds_[0] << ", " << bounds_[1] << "]" << std::endl;
 #endif
             auto bounded_array = (T *) malloc(n_buffer_elements_ * sizeof(T));
             memcpy(bounded_array, origin, (size_t) n_buffer_elements_ * sizeof(T));
-            Functions::map_to_bounds<T>(
+
+            Functions::bound_values<T>(
                     bounded_array, n_buffer_elements_,
                     bounds_[0], bounds_[1]
             );

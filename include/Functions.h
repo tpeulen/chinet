@@ -97,9 +97,9 @@ namespace Functions {
     );
 
     /*!
-     * Maps the array of values @param in place to values to the interval (min, max) determined by
-     * the parameters @param bound_1 and @param bound_2. The values are mapped to the
-     * interval by:
+     * Maps the array of values @param in place to values to the interval
+     * (min, max) determined by the parameters @param bound_1 and @param bound_2.
+     * The values are mapped to the interval by:
      *
      * \f$
      * max(bound_1, bound_2) - abs(bound_1-bound_2)/(exp(value / abs(bound_1-bound_2))+1)
@@ -112,40 +112,66 @@ namespace Functions {
      * @param upper_bound (In)
      */
     template <typename T>
-    void map_to_bounds(
+    void value2internal(
             T *values,
             int n_values,
             double lower_bound,
-            double upper_bound,
-            bool periodic=false
+            double upper_bound
             )
     {
         T delta = upper_bound - lower_bound;
-        if(periodic){
-            for(int i = 0; i<n_values; i++)
-            {
-                values[i] = lower_bound + (delta / 2.) * (sin(values[i]) + 1.);
-            }
-        } else{
-            for(int i = 0; i<n_values; i++)
-            {
-                values[i] = upper_bound - delta / (exp(values[i]/delta) + 1.0);
-            }
+        for(int i = 0; i<n_values; i++)
+        {
+            values[i] = upper_bound - delta / (exp(values[i]/delta) + 1.0);
+        }
+    }
+
+    template <typename T>
+    void internal2value(
+            T *values,
+            int n_values,
+            double lower_bound,
+            double upper_bound
+    )
+    {
+        T delta = upper_bound - lower_bound;
+        for(int i = 0; i<n_values; i++)
+        {
+            values[i] = delta * log(delta / (upper_bound - values[i]) - 1.0);
+        }
+    }
+
+    template <typename T>
+    void bound_values(
+            T *values,
+            int n_values,
+            double lower_bound,
+            double upper_bound
+    )
+    {
+        for(int i = 0; i<n_values; i++)
+        {
+            values[i] = MIN(MAX(values[i], lower_bound), upper_bound);
         }
     }
 
     /*!
-     * This function convolves a sum of exponential decays with an instrument response function (IRF)
+     * This function convolves a sum of exponential decays with an instrument
+     * response function (IRF)
      *
-     * The sum of exponential decays is passed by the lifetime array @param lifetime_spectrum that contains the amplitudes
-     * and the corresponding fluorescence lifetimes in an interleaved array (amplitude_1, lifetime_1, amplitude_2,
-     * lifetime_2, ...). The instrument response function is passed by the array @param irf. The IRF and the and
-     * the sum of exponential decays are convolved up to the index @param convolution_stop. In this convolution,
-     * the time axis is uniform an linear with a time interval specified by the parameter @param dt.
+     * The sum of exponential decays is passed by the lifetime array @param
+     * lifetime_spectrum that contains the amplitudes and the corresponding
+     * fluorescence lifetimes in an interleaved array (amplitude_1, lifetime_1,
+     * amplitude_2, lifetime_2, ...). The instrument response function is
+     * passed by the array @param irf. The IRF and the and the sum of
+     * exponential decays are convolved up to the index @param convolution_stop.
+     * In this convolution, the time axis is uniform an linear with a time
+     * interval specified by the parameter @param dt.
      *
      * @param out The array to which the convoluted decay is written to
      * @param n_out The number of elements in the output array
-     * @param lifetime_spectrum The array containing the fluorescence lifetimes and the amplitudes
+     * @param lifetime_spectrum The array containing the fluorescence lifetimes
+     * and the amplitudes
      * @param n_lifetime_spectrum The number of fluorescence lifetimes
      * @param irf The array containing the instrument response function
      * @param n_irf The number of elements of the instrument response function
