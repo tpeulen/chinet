@@ -111,11 +111,11 @@ bool MongoObject::write_to_db(
         int write_option
     )
 {
-#ifdef DEBUG
+#if DEBUG
     std::clog << "WRITING MONGOOBJECT TO DB" << std::endl;
 #endif
     bool return_value = false;
-#ifdef DEBUG
+#if DEBUG
     std::clog << "-- Connected to DB: " << is_connected_to_db() << std::endl;
     std::clog << "-- Write option: " << write_option << std::endl;
 #endif
@@ -134,7 +134,7 @@ bool MongoObject::write_to_db(
 
         switch (write_option) {
             case 1:
-#ifdef DEBUG
+#if DEBUG
                 std::clog << "-- Replacing object in the DB." << std::endl;
 #endif
                 // option 1 - write as a replacement
@@ -145,14 +145,14 @@ bool MongoObject::write_to_db(
                             nullptr, &reply, &error
                     )
                 ) {
-#ifdef DEBUG
+#if DEBUG
                     std::cerr << error.message;
 #endif
                     return_value &= false;
                 }
                 break;
             case 2:
-#ifdef DEBUG
+#if DEBUG
                 std::clog << "-- Inserting as a new object in DB." << std::endl;
 #endif
                 // option 2 - insert as a new document
@@ -163,14 +163,14 @@ bool MongoObject::write_to_db(
                         &reply, &error
                     )
                 ) {
-#ifdef DEBUG
+#if DEBUG
                     std::cerr << error.message;
 #endif
                     return_value &= false;
                 }
                 break;
             default:
-#ifdef DEBUG
+#if DEBUG
                 std::clog << "-- Updating existing object in DB." << std::endl;
 #endif
                 // option 0 - write as a update

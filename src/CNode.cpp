@@ -160,7 +160,7 @@ void Node::add_port(
         bool is_output,
         bool fill_in_out
         ) {
-#ifdef DEBUG
+#if DEBUG
     std::clog << "ADDING PORT TO NODE" << std::endl;
     std::clog << "-- Name of node: " << get_name() << std::endl;
     std::clog << "-- Key of port: " << key << std::endl;
@@ -170,7 +170,7 @@ void Node::add_port(
     port->set_port_type(is_output);
     port->set_node(this);
     if (ports.find(key) == ports.end() ) {
-#ifdef DEBUG
+#if DEBUG
         std::clog << "-- The key of the port was not found." << std::endl;
         std::clog << "-- Port " << key << " was created in node. " << std::endl;
 #endif
@@ -178,7 +178,7 @@ void Node::add_port(
     } else {
         auto p = ports[key];
         if(port != p){
-#ifdef DEBUG
+#if DEBUG
             std::clog << "WARNING: Overwriting the port that was originally associated to the key " << key << "." << std::endl;
 #endif
             ports[key] = port;
