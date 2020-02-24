@@ -263,7 +263,6 @@ class Tests(unittest.TestCase):
         of a node changes, the node is set to invalid. A node is set to valid
         when it is evaluated. When a node is initialized it is invalid.
         """
-        import chinet as cn
         out_node_1 = cn.Port(
             1.0,
             fixed=False,
