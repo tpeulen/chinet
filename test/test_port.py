@@ -83,7 +83,7 @@ class Tests(unittest.TestCase):
         """Test chinet Port class set_value and get_value"""
         v1 = np.array(
             [1, 2, 3, 6, 5.5, -3, -2, -6.1, -10000, 10000],
-            dtype=np.float
+            dtype=np.double
         )
         p1 = cn.Port()
         p1.value = v1
@@ -127,8 +127,8 @@ class Tests(unittest.TestCase):
         v2 = [1, 2, 4, 8, 16]
         # check setting of value
         p1 = cn.Port()
-        p2 = cn.Port(v1)
         p1.value = v1
+        p2 = cn.Port(v1)
         self.assertListEqual(
             list(p2.value),
             list(p1.value)
