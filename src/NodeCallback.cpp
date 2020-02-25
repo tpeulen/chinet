@@ -80,7 +80,9 @@ void combine(
 #endif
             outputs.begin()->second->set_value(tmp, n_elements);
         } else {
+#if DEBUG
             std::clog << "Setting value to output " << std::endl;
+#endif
             outputs["outA"]->set_value(tmp, n_elements);
         }
     } else{
