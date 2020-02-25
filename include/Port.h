@@ -112,7 +112,7 @@ public:
 
     void set_node(Node *node_ptr);
 
-    Node *get_node();
+    Node* get_node();
 
     // Getter & Setter
     //--------------------------------------------------------------------
@@ -143,39 +143,43 @@ public:
         std::clog << "-- Copy values to local buffer: " << copy_values << std::endl;
         std::clog << "-- Number of input elements: " << n_input << std::endl;
 #endif
-        own_buffer = copy_values;
-        buffer_element_size_ = sizeof(T);
-        n_buffer_elements_ = n_input;
-        if (std::is_same<T, double>::value) {
-            value_type = 1;
-        } else {
-            value_type = 0;
-        }
         if (is_fixed()) {
 #if DEBUG
             std::clog << "WARNING: The port is fixed the action will be ignored." << std::endl;
 #endif
             return;
         }
-        if (copy_values) {
+        own_buffer = copy_values;
+        if (std::is_same<T, double>::value) {
+            value_type = 1;
+        } else {
+            value_type = 0;
+        }
+        if(!copy_values){
+#if DEBUG
+            std::clog << "-- Avoiding copy - assign pointer of local buffer to input." << std::endl;
+#endif
+            free(buffer_);
+            buffer_ = input;
+            buffer_element_size_ = sizeof(T);
+            n_buffer_elements_ = n_input;
+        } else{
 #if DEBUG
             std::clog << "-- Copying values to local buffer." << std::endl;
 #endif
-            if (n_input > n_buffer_elements_)
+            if (n_input * sizeof(T) > n_buffer_elements_ * buffer_element_size_){
 #if DEBUG
                 std::clog << "-- Size of input exceeds the local buffer: reallocating buffer. " << std::endl;
 #endif
                 buffer_ = std::realloc(buffer_, n_input * sizeof(T));
+                buffer_element_size_ = sizeof(T);
+                n_buffer_elements_ = n_input;
+            }
             if (buffer_ != nullptr) {
                 memcpy(buffer_, input, n_input * sizeof(T));
             } else{
                 std::cerr << "ERROR: Could not reallocate local buffer. " << std::endl;
             }
-        } else {
-#if DEBUG
-            std::clog << "-- Avoiding copy - assign pointer of local buffer to input." << std::endl;
-#endif
-            buffer_ = input;
         }
         if (node_ != nullptr) {
 #if DEBUG
