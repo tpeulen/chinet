@@ -17,23 +17,24 @@ build:
 requirements:
 
   host:
-    - {{ compiler('cxx') }}
     - git
+    - python {{ python }}
+    - {{ pin_compatible('numpy') }}
+    - setuptools
+    - {{ compiler('cxx') }}
     - cmake
-    - swig<4.0.0
+    - swig <4.0.0
     - boost
-    - librttr
     - eigen
     - openmp
-    - setuptools
-    - python {{ python }}
-    - libmongoc>=1.15.1
-    - numpy
+    - librttr
+    - libmongoc >=1.15.1
   run:
     - python {{ python }}
+    - {{ pin_compatible('numpy') }}
     - librttr
-    - libmongoc>=1.15.1
-    - numpy
+    - boost
+    - libmongoc >=1.15.1
     - labellib
 
 test:
