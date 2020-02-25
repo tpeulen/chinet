@@ -4,11 +4,10 @@ import unittest
 import sys
 import numpy as np
 import json
+import chinet as cn
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 utils.set_search_paths(TOPDIR)
-
-import chinet as cn
 
 
 class CallbackNodePassOn(cn.NodeCallback):

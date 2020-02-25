@@ -93,6 +93,12 @@ setup(
     cmdclass={
         'build_ext': CMakeBuild
     },
+    install_requires=[
+        'numpy'
+    ],
+    setup_requires=[
+        'numpy'
+    ],
     zip_safe=False,
     classifiers=[
                  'Development Status :: 2 - Pre-Alpha',
