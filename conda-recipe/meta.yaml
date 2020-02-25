@@ -1,9 +1,11 @@
 {% set name = "chinet" %}
-{% set version = "0.0.2" %}
+#{% set version = "0.0.3" %}
+{% set data = load_setup_py_data(setup_file='../setup.py', from_recipe_dir=True) %}
 
 package:
   name: "{{ name|lower }}"
-  version: "{{ version|lower }}"
+  version: {{ data.get('version')|lower }}
+#  version: "{{ version|lower }}"
 
 source:
   path: ..
@@ -13,33 +15,27 @@ build:
     #string: np{{ CONDA_NPY }}py{{ CONDA_PY }}_{{ GIT_BUILD_STR }}
 
 requirements:
-  build:
-    - git
-    - {{ compiler('cxx') }}
-    - python {{ python }}
-    - setuptools
-    - cmake
-    - numpy >=1.10
-    - swig <4.0.0
-    - librttr
-    - libmongoc >=1.15.1
-    - openmp
-    - eigen
-    - boost
+
   host:
+    - git
     - python {{ python }}
-    - setuptools
     - {{ pin_compatible('numpy') }}
-    - hdf5 >=1.8.*
+    - setuptools
+    - {{ compiler('cxx') }}
+    - cmake
+    - swig <4.0.0
+    - boost
+    - eigen
+    - openmp
     - librttr
     - libmongoc >=1.15.1
   run:
     - python {{ python }}
     - {{ pin_compatible('numpy') }}
-    - labellib
-    - hdf5 >=1.8.*
     - librttr
+    - boost
     - libmongoc >=1.15.1
+    - labellib
 
 test:
   imports:
@@ -50,7 +46,9 @@ about:
   license: MPL 2.0
   summary: Python bindings for chinet
   description: |
-    chinet is a C++ library with Python wrapper.
+    chinet is a C++ library with Python wrapper to construct networks of
+    computation node with associated ports that can be deposited in a
+    mongoDB. Chinet is the data management backend of chisurf.
   doc_url: https://github.com/tpeulen.github.io/chinet/
 
 extra:

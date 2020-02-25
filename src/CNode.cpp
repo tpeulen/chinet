@@ -38,8 +38,10 @@ bool Node::read_from_db(const std::string &oid_string){
     bool return_value = true;
 
     return_value &= MongoObject::read_from_db(oid_string);
-    return_value &= create_and_connect_objects_from_oid_doc(&document, "ports", &ports);
-#if CHINET_DEBUG
+    return_value &= create_and_connect_objects_from_oid_doc(
+            &document, "ports", &ports
+            );
+#if DEBUG
     std::cout << "callback-restore: " << get_string_by_key(&document, "callback") << std::endl;
     std::cout << "callback_type-restore: " << get_string_by_key(&document, "callback_type") << std::endl;
 #endif
@@ -93,20 +95,21 @@ std::string Node::get_name(){
     return r;
 }
 
+
 std::map<std::string, std::shared_ptr<Port>> Node::get_ports(){
     return ports;
 }
 
-std::shared_ptr<Port> Node::get_port(const std::string &port_name){
-    return ports[port_name];
+Port* Node::get_port(const std::string &port_name){
+    return ports[port_name].get();
 }
 
-std::shared_ptr<Port> Node::get_input_port(const std::string &port_name){
-    return in_[port_name];
+Port* Node::get_input_port(const std::string &port_name){
+    return in_[port_name].get();
 }
 
-std::shared_ptr<Port> Node::get_output_port(const std::string &port_name){
-    return out_[port_name];
+Port* Node::get_output_port(const std::string &port_name){
+    return out_[port_name].get();
 }
 
 std::map<std::string, std::shared_ptr<Port>> Node::get_input_ports(){
@@ -120,14 +123,21 @@ std::map<std::string, std::shared_ptr<Port>> Node::get_output_ports(){
 // Setter
 //--------------------------------------------------------------------
 void Node::set_callback(std::string s_callback, std::string s_callback_type){
+#if DEBUG
+    std::clog << "NODE SET CALLBACK" << std::endl;
+#endif
     this->callback = s_callback;
     this->callback_type_string = s_callback_type;
+#if DEBUG
+    std::clog << "-- Callback type: " << callback_type_string << std::endl;
+    std::clog << "-- Callback name: " << callback << std::endl;
+#endif
     if(s_callback_type == "C"){
         callback_type = 0;
         meth_ = rttr::type::get_global_method(callback);
         if(!meth_){
-#if CHINET_DEBUG
-            std::cerr << "The class type " << callback << " does not exist." <<
+#if DEBUG
+            std::cerr << "ERROR: The class type " << callback << " does not exist." <<
                       " No callback set. " << std::endl;
 #endif
         }
@@ -144,23 +154,55 @@ void Node::set_callback(std::shared_ptr<NodeCallback> cb){
 
 // Methods
 //--------------------------------------------------------------------
-void Node::add_port(std::string key,
+void Node::add_port(
+        const std::string &key,
         std::shared_ptr<Port> port,
         bool is_output,
-        bool fill_in_out) {
+        bool fill_in_out
+        ) {
+#if DEBUG
+    std::clog << "ADDING PORT TO NODE" << std::endl;
+    std::clog << "-- Name of node: " << get_name() << std::endl;
+    std::clog << "-- Key of port: " << key << std::endl;
+    std::clog << "-- Port is_output: " << is_output << std::endl;
+    std::clog << "-- Fill value of output: " << fill_in_out << std::endl;
+#endif
     port->set_port_type(is_output);
     port->set_node(this);
-    ports[key] = port;
+    if (ports.find(key) == ports.end() ) {
+#if DEBUG
+        std::clog << "-- The key of the port was not found." << std::endl;
+        std::clog << "-- Port " << key << " was created in node. " << std::endl;
+#endif
+        ports[key] = port;
+    } else {
+        auto p = ports[key];
+        if(port != p){
+#if DEBUG
+            std::clog << "WARNING: Overwriting the port that was originally associated to the key " << key << "." << std::endl;
+#endif
+            ports[key] = port;
+        } else{
+            std::cerr << "WARNING: Port is already part of the node." << std::endl;
+            std::cerr << "-- Assigning Port to the key: " << key << "." << std::endl;
+        }
+    }
     if(fill_in_out){
         fill_input_output_port_lookups();
     }
 }
 
-void Node::add_input_port(std::string key, std::shared_ptr<Port> port) {
+void Node::add_input_port(
+        const std::string &key,
+        std::shared_ptr<Port> port
+        ) {
     add_port(key, port, false);
 }
 
-void Node::add_output_port(std::string key, std::shared_ptr<Port> port) {
+void Node::add_output_port(
+        const std::string &key,
+        std::shared_ptr<Port> port
+        ) {
     add_port(key, port, true);
 }
 
@@ -174,30 +216,39 @@ bson_t Node::get_bson(){
     );
 
     create_oid_dict_in_doc<Port>(&dst, "ports", ports);
-
     append_string(&dst, "callback", callback);
     append_string(&dst, "callback_type", callback_type_string);
-
     return dst;
 }
 
 void Node::evaluate(){
-#if CHINET_DEBUG
-    std::clog << "update:callback_type:" << callback_type;
+#if DEBUG
+    std::clog << "NODE EVALUATE" << std::endl;
+    std::clog << "-- Node name: " << get_name() << std::endl;
+    std::clog << "-- Callback_type: " << callback_type << std::endl;
 #endif
     if(callback_type == 0)
     {
-#if CHINET_DEBUG
-        std::clog << ":registered C function"  << std::endl;
+#if DEBUG
+        std::clog << "-- Calling registered C function."  << std::endl;
 #endif
         rttr::variant return_value = meth_.invoke({}, in_, out_);
     } else if (callback_class != nullptr) {
+#if DEBUG
+        std::clog << "-- Calling 'run' method of a callback class."  << std::endl;
+#endif
             callback_class->run(in_, out_);
     }
+#if DEBUG
+    std::clog << "-- Setting nodes associated to output ports to invalid."  << std::endl;
+#endif
     for(auto &o : get_output_ports()){
         auto n = o.second->get_node();
         if(n != nullptr){
-            n->set_node_to_invalid();
+#if DEBUG
+            std::clog << "-- Node " << n->get_name() << " of port " << o.second->get_name() << " set to invalid." << std::endl;
+#endif
+            n->set_valid(false);
         }
     }
     node_valid_ = true;
@@ -229,8 +280,8 @@ void Node::fill_input_output_port_lookups(){
 bool Node::inputs_valid(){
     for(const auto &i : in_){
         auto input_port = i.second;
-        if(input_port->port_links.is_linked()){
-            auto output_port = input_port->port_links.get_link();
+        if(input_port->is_linked()){
+            auto output_port = input_port->get_link();
             auto output_node = output_port->get_node();
             if(!output_node->is_valid())
             {
@@ -241,8 +292,8 @@ bool Node::inputs_valid(){
     return true;
 }
 
-void Node::set_node_to_invalid(){
-    node_valid_ = false;
+void Node::set_valid(bool is_valid){
+    node_valid_ = is_valid;
     for(auto &v : out_)
     {
         auto output_port = v.second;

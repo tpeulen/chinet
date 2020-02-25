@@ -42,21 +42,21 @@ public:
 
 
     // Setter
-    void set_x(double *in, int n_in);
+    void set_x(double *input, int n_input);
     void set_x(std::vector<double> x_);
 
-    void set_ex(double *in, int n_in);
+    void set_ex(double *input, int n_input);
     void set_x_name(std::string v);
 
-    void set_y(double *in, int n_in);
+    void set_y(double *input, int n_input);
     void set_y(std::vector<double> y_);
 
-    void set_ey(double *in, int n_in);
+    void set_ey(double *input, int n_input);
     void set_y_name(std::string v);
 
     // Getter
-    void get_x(double **out, int *n_out);
-    void get_y(double **out, int *n_out);
+    void get_x(double **output, int *n_output);
+    void get_y(double **output, int *n_output);
     std::vector<double> get_x();
     std::vector<double> get_y();
     double sum();

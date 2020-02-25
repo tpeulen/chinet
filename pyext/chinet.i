@@ -1,31 +1,36 @@
 %module(directors="1", package="chinet") chinet
-
+%feature("kwargs", 1);
+%warnfilter(511) std::vector;
+%warnfilter(511) std::map;
+%warnfilter(511) swig::PySwigIterator;
 %include "documentation.i"
-
 %{
 #define SWIG_FILE_WITH_INIT
 #include "../include/Curve.h"
 #include "../include/Functions.h"
 //#include "../include/Decay.h"
 #include "../include/CNode.h"
-#include "../include/Pda.h"
 #include "../include/MongoObject.h"
 %}
 
-%include <typemaps.i>
-%include "stl.i"
-%include "std_wstring.i"
-%include std_string.i
-%include "std_map.i"
+%pythonbegin %{
+import numpy as np
+%}
+
+%include "typemaps.i";
+%include "stl.i";
+%include "std_wstring.i";
+%include "std_string.i";
+%include "std_map.i";
 %include "std_vector.i";
 %include "std_list.i";
-%include "std_shared_ptr.i"
+%include "std_shared_ptr.i";
 
 %template(map_string_string) std::map<std::string, std::string>;
-%template(vector_string) std::vector<std::string>;
-
+%template(VectorString) std::vector<std::string>;
 %template(VectorDouble) std::vector<double>;
 %template(VectorInt) std::vector<int>;
+%template(VectorLong) std::vector<long>;
 
 %extend vector<double> {
 
@@ -69,8 +74,6 @@
 %include "node.i"
 %include "nodecallback.i"
 %include "session.i"
-%include "pda.i"
+//%include "pda.i"
 %include "curve.i"
 //%include "decay.i"
-
-

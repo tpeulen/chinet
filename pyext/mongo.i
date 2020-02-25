@@ -4,10 +4,15 @@
 #include "../include/MongoObject.h"
 %}
 
+%include <std_shared_ptr.i>
 %shared_ptr(MongoObject)
+
 %template(map_string_double_vector) std::map<std::string, std::vector<double>>;
 
 %include "../include/MongoObject.h"
+
+%include attribute.i
+%attributestring(MongoObject, std::string, name, get_name, set_name);
 
 %extend MongoObject {
 
@@ -15,6 +20,8 @@
 
         %template(get_array_double) get_array<double>;
         %template(set_array_double) set_array<double>;
+        %template(get_array_long) get_array<long>;
+        %template(set_array_long) set_array<long>;
         %template(get_array_int) get_array<int>;
         %template(set_array_int) set_array<int>;
         //%template(get_array_bool) get_array<bool>;

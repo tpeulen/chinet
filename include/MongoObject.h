@@ -13,7 +13,7 @@
 
 #include "Functions.h"
 
-#define CHINET_DEBUG 1
+#define DEBUG 0
 
 
 class MongoObject{
@@ -21,52 +21,42 @@ class MongoObject{
 private:
 
     bool is_connected_to_db_;
-
     mongoc_uri_t *uri;
     mongoc_client_t *client;
     bson_error_t error;
     mongoc_collection_t *collection;
 
-
 protected:
 
     std::string object_name;
-
     bson_t document;
-
     std::string uri_string;
     std::string db_string;
     std::string app_string;
     std::string collection_string;
-
     bson_oid_t oid_document;
     bson_oid_t oid_precursor;
     uint64_t time_of_death;
 
     // Getter & Setter
     //--------------------------------------------------------------------
-
     bson_oid_t get_bson_oid();
-
     virtual bson_t get_bson();
-
     bson_t get_bson_excluding(const char* first, ...);
-
     const bson_t* get_document();
 
-    const void set_document(bson_t b){
+    void set_document(bson_t b){
         document = b;
     }
 
-    const void set_document(bson_t *doc){
+    void set_document(bson_t *doc){
         bson_init(&document);
         bson_copy_to(doc, &document);
     }
 
     // Methods
     //--------------------------------------------------------------------
-
-    /// Writes a BSON document to the connected MongoDB
+    //! Writes a BSON document to the connected MongoDB
     /*!
      *
      * @param doc a pointer to the BSON document that is written to the MongoDB
@@ -76,14 +66,14 @@ protected:
      * @return true in case of a successful write.
      */
     bool write_to_db(const bson_t &doc, int write_option = 0);
-
     bool read_from_db();
 
     template <typename T>
     void create_oid_dict_in_doc(
             bson_t *doc,
             std::string key,
-            const std::map<std::string, std::shared_ptr<T>> &mongo_obj_array){
+            const std::map<std::string, std::shared_ptr<T>> &mongo_obj_array
+            ){
 
         bson_t child;
         bson_append_document_begin(doc, key.c_str(), key.size(), &child);
@@ -98,8 +88,10 @@ protected:
     void append_number_array(bson_t *doc, std::string key, T &values){
         bson_t child;
         bson_append_array_begin(doc, key.c_str(), key.size(), &child);
-
-        if(std::is_same<T, std::vector<int>>::value){
+        if(
+                (std::is_same<T, std::vector<long>>::value) ||
+                (std::is_same<T, std::vector<int>>::value)
+                ){
             for(auto &v : values){
                 bson_append_int64(&child, "", 0, v);
             }
@@ -114,7 +106,6 @@ protected:
                 bson_append_bool(&child, "", 0, v);
             }
         }
-
         bson_append_array_end(doc, &child);
     }
 
@@ -125,7 +116,11 @@ protected:
             const std::map<std::string, std::shared_ptr<T>> &mongo_obj_array){
 
         bson_t child;
-        bson_append_array_begin(doc, target_field_name.c_str(), target_field_name.size(), &child);
+        bson_append_array_begin(
+                doc,
+                target_field_name.c_str(), target_field_name.size(),
+                &child
+                );
         for(auto &v : mongo_obj_array){
             const bson_oid_t b = v.second->get_bson_oid();
             bson_append_oid(&child, "", 0, &b);
@@ -151,21 +146,21 @@ protected:
                     bson_oid_t oid;
                     bson_oid_copy(bson_iter_oid(&child), &oid);
                     // create new obj
-                    auto o = std::make_shared<T>();
+                    auto o = new T();
                     // connect obj to db
                     return_value &= connect_object_to_db(o);
                     // read obj from db
-#if CHINET_DEBUG
+#if DEBUG
                     std::cout << oid_to_string(oid) << std::endl;
 #endif
                     o->read_from_db(oid_to_string(oid));
                     std::string key = bson_iter_key(&child);
                     // add obj to the target map
-                    target_map->insert(std::pair<std::string, std::shared_ptr<T>>(key, o));
+                    target_map->insert(std::pair<std::string, T*>(key, o));
                 }
             }
         } else{
-#if CHINET_DEBUG
+#if DEBUG
             std::cerr << "Error: no nodes section in Session" << std::endl;
 #endif
             return_value &= false;
@@ -177,9 +172,9 @@ protected:
     bool create_and_connect_objects_from_oid_array(
             const bson_t *doc,
             const char *array_name,
-            std::map<std::string, std::shared_ptr<T>> *target_map){
+            std::map<std::string, std::shared_ptr<T>> *target_map)
+    {
         bool return_value = true;
-
         bson_iter_t iter;
         bson_iter_t child;
         if (bson_iter_init_find (&iter, doc, array_name) &&
@@ -201,7 +196,7 @@ protected:
                 }
             }
         } else{
-#if CHINET_DEBUG
+#if DEBUG
             std::cerr << "Error: no nodes section in Session" << std::endl;
 #endif
             return_value &= false;
@@ -209,9 +204,15 @@ protected:
         return return_value;
     }
 
-    static void append_string(bson_t *dst, std::string key, std::string content, size_t size=0);
+    static void append_string(
+            bson_t *dst, std::string key,
+            std::string content,
+            size_t size=0
+                    );
 
-    static const std::string get_string_by_key(bson_t *doc, std::string key);
+    static const std::string get_string_by_key(
+            bson_t *doc, std::string key
+            );
 
     static std::string oid_to_string(bson_oid_t oid){
         char oid_str[25];
@@ -219,7 +220,10 @@ protected:
         return std::string(oid_str, 25);
     }
 
-    static bool string_to_oid(const std::string &oid_string, bson_oid_t *oid);
+    static bool string_to_oid(
+            const std::string &oid_string,
+            bson_oid_t *oid
+            );
 
 public:
 
@@ -227,7 +231,7 @@ public:
     MongoObject(std::string name);
     ~MongoObject();
 
-    /// Connects the instance of @class MongoObject to a database
+    //! Connects the instance of @class MongoObject to a database
     /*!
      *
      * @param uri_string
@@ -285,10 +289,10 @@ public:
     T get_singleton(const char *key){
         T v(0);
         bson_iter_t iter;
-        if(std::is_same<T, int>::value) {
+        if(std::is_same<T, int>::value || std::is_same<T, long>::value) {
             if (bson_iter_init_find(&iter, &document, key) &&
                 (BSON_ITER_HOLDS_INT64(&iter))) {
-                return (int) bson_iter_int64(&iter);
+                return (T) bson_iter_int64(&iter);
             }
         }
         else if(std::is_same<T, double>::value) {
@@ -341,7 +345,6 @@ public:
     std::vector<T> get_array(const char* key){
         bson_iter_t iter;
         std::vector<T> v{};
-
         if(std::is_same<T, double>::value){
             if (bson_iter_init_find(&iter, &document, key) &&
                 (BSON_ITER_HOLDS_ARRAY(&iter))){
@@ -354,14 +357,14 @@ public:
             }
             return v;
         }
-        else if(std::is_same<T, int>::value){
+        else if(std::is_same<T, int>::value || std::is_same<T, long>::value){
             if (bson_iter_init_find(&iter, &document, key) &&
                 (BSON_ITER_HOLDS_ARRAY(&iter))) {
                 bson_iter_t iter_array;
                 bson_iter_recurse(&iter, &iter_array);
                 while (bson_iter_next(&iter_array) &&
                        BSON_ITER_HOLDS_INT64(&iter_array)) {
-                    v.push_back((int) bson_iter_int64(&iter_array));
+                    v.push_back((T) bson_iter_int64(&iter_array));
                 }
             }
             return v;
@@ -382,23 +385,23 @@ public:
     }
 
     template <typename T>
-    void set_array(const char* key, std::vector<T> value){
-        bson_t src = MongoObject::get_bson();
-        bson_t dst; bson_init (&dst);
-        bson_copy_to_excluding_noinit(&src, &dst,
-                                      key,
-                                      NULL
+    void set_array(
+            const char* key,
+            std::vector<T> value
+            ){
+        bson_t dst; bson_init(&dst);
+        bson_copy_to_excluding_noinit(
+                &document, &dst,
+                key,
+                NULL
         );
         append_number_array(&dst, key, value);
         bson_copy_to(&dst, &document);
     }
 
     std::string get_json(const char *key){
-
         std::string re;
-
         bson_iter_t iter, desc;
-
         bson_iter_init (&iter, &document);
         if(bson_iter_find_descendant (&iter, key, &desc)){
             if (BSON_ITER_HOLDS_DOCUMENT (&desc)) {
@@ -406,17 +409,11 @@ public:
                 bson_t *arr;
                 const uint8_t *data = NULL;
                 uint32_t len = 0;
-
                 bson_iter_document (&desc, &len, &data);
-
                 arr = bson_new_from_data (data, len);
-
                 str = bson_as_json (arr, NULL);
-
                 re.assign(str);
-
                 bson_free (str);
-
                 bson_destroy (arr);
             }
         }
@@ -425,9 +422,7 @@ public:
 
     // Operators
     //--------------------------------------------------------------------
-
     virtual std::shared_ptr<MongoObject> operator[](std::string key);
-
     bool operator==(MongoObject const& b){
         return (
                 bson_oid_equal(&b.oid_document, &oid_document) &&

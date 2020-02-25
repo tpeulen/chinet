@@ -1,9 +1,12 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.13)
+
+ENABLE_LANGUAGE(CXX)
+set(CMAKE_CXX_STANDARD 11)
+
 SET(PROJECT_NAME chinet)
 PROJECT(${PROJECT_NAME})
 
-include(${CMAKE_SOURCE_DIR}/cmake/TTTRLibFindPython.cmake)
-tttrlib_find_python()
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 
 ##############################################################
 # 32/64 bit detection
@@ -19,21 +22,21 @@ endif(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
 
 
 ###############################
-ENABLE_LANGUAGE(CXX)
-set(CMAKE_CXX_STANDARD 11)
-
 # Windows
+###############################
 if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++11")
     if(BIT MATCHES "64")
         add_definitions(-DMS_WIN64)
     endif(BIT MATCHES "64")
 endif(MSVC)
 
+##################################
 # MACOSX_DEPLOYEMENT_TARGET
+##################################
 # explicit link to libc++ for recent osx versions
 if(APPLE)
-    MESSAGE(STATUS "Explicitely link to libc++ on modern osx versions")
+    # MESSAGE(STATUS "link to libc++ on modern osx versions")
     ADD_DEFINITIONS(-stdlib=libc++)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
@@ -41,7 +44,7 @@ if(APPLE)
     set(CMAKE_MACOSX_RPATH 0)
 endif(APPLE)
 
-
+###############################
 # OpenMP
 ###############################
 OPTION (USE_OpenMP "Use OpenMP" ON)
@@ -53,16 +56,19 @@ IF(USE_OpenMP)
     ENDIF()
 ENDIF()
 
+###############################
 # Cpp-taskflow
 ###############################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/cpp-taskflow/)
 
+###############################
 # Boost
 ###############################
 FIND_PACKAGE(Boost 1.50 COMPONENTS system REQUIRED)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR} )
 LINK_LIBRARIES(${Boost_LIBRARIES})
 
+###############################
 # Eigen3
 ###############################
 FIND_PACKAGE(Eigen3 3.2 QUIET NO_MODULE REQUIRED)
@@ -71,6 +77,15 @@ if (NOT TARGET Eigen3::Eigen)
     SET(EIGEN3_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/thirdparty/eigen)
 endif (NOT TARGET Eigen3::Eigen)
 INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
+
+#[[
+###############################
+# IMP
+###############################
+FIND_PACKAGE(IMP REQUIRED)
+INCLUDE(${IMP_USE_FILE})
+INCLUDE_DIRECTORIES(SYSTEM ${IMP_INCLUDE_DIR})
+]]#
 
 #[[
 # Boost histogram
@@ -83,7 +98,6 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/histogram/include/)
 find_package(RTTR CONFIG REQUIRED Core)
 link_libraries(RTTR::Core)
 message ("-- Found librttr version \"${PACKAGE_VERSION}\"")
-
 
 # libmongoc
 ###############################

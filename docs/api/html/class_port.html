@@ -74,7 +74,7 @@ Inheritance diagram for Port:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_port__inherit__graph.png" border="0" usemap="#_port_inherit__map" alt="Inheritance graph"/></div>
 <map name="_port_inherit__map" id="_port_inherit__map">
-<area shape="rect" id="node2" href="class_value_port.html" title="{ValuePort\n||+ ValuePort()\l+ ValuePort()\l+ ValuePort()\l+ ~ValuePort()\l+ set_value()\l+ set_value()\l+ get_value()\l+ get_value()\l+ get_bson()\l+ write_to_db()\l+ read_from_db()\l}" alt="" coords="36,916,157,1140"/>
+<area shape="rect" id="node2" href="class_value_port.html" title="{ValuePort\n||+ ValuePort()\l+ ValuePort()\l+ ValuePort()\l+ ~ValuePort()\l+ set_value()\l+ set_value()\l+ get_value()\l+ get_value_vector()\l+ get_bson()\l+ write_to_db()\l+ read_from_db()\l}" alt="" coords="36,916,157,1140"/>
 <area shape="rect" id="node3" href="class_base_port.html" title="{BasePort\n|# node_\l|+ is_fixed()\l+ is_output()\l+ is_reactive()\l+ BasePort()\l+ set_fixed()\l+ set_port_type()\l+ set_reactive()\l+ get_node()\l+ set_node()\l}" alt="" coords="36,673,157,868"/>
 <area shape="rect" id="node4" href="class_mongo_object.html" title="Connects the instance of database. " alt="" coords="5,5,188,625"/>
 </map>
@@ -85,7 +85,7 @@ Collaboration diagram for Port:</div>
 <div class="center"><img src="class_port__coll__graph.png" border="0" usemap="#_port_coll__map" alt="Collaboration graph"/></div>
 <map name="_port_coll__map" id="_port_coll__map">
 <area shape="rect" id="node9" href="class_port_links.html" title="{PortLinks\&lt; double \&gt;\n|# link_\l|+ PortLinks()\l+ ~PortLinks()\l+ remove_links_to_port()\l+ is_linked()\l+ link()\l+ unlink()\l+ get_linked_ports()\l+ get_link()\l+ set_value_of_dependents()\l}" alt="" coords="41,2244,232,2439"/>
-<area shape="rect" id="node2" href="class_value_port.html" title="{ValuePort\n||+ ValuePort()\l+ ValuePort()\l+ ValuePort()\l+ ~ValuePort()\l+ set_value()\l+ set_value()\l+ get_value()\l+ get_value()\l+ get_bson()\l+ write_to_db()\l+ read_from_db()\l}" alt="" coords="76,1559,197,1783"/>
+<area shape="rect" id="node2" href="class_value_port.html" title="{ValuePort\n||+ ValuePort()\l+ ValuePort()\l+ ValuePort()\l+ ~ValuePort()\l+ set_value()\l+ set_value()\l+ get_value()\l+ get_value_vector()\l+ get_bson()\l+ write_to_db()\l+ read_from_db()\l}" alt="" coords="76,1559,197,1783"/>
 <area shape="rect" id="node3" href="class_base_port.html" title="{BasePort\n||+ is_fixed()\l+ is_output()\l+ is_reactive()\l+ BasePort()\l+ set_fixed()\l+ set_port_type()\l+ set_reactive()\l+ get_node()\l+ set_node()\l}" alt="" coords="76,1315,197,1509"/>
 <area shape="rect" id="node4" href="class_mongo_object.html" title="Connects the instance of database. " alt="" coords="17,345,200,892"/>
 <area shape="rect" id="node7" href="class_node.html" title="{Node\n|+ callback_class\l# meth_\l# callback_type\l|+ Node()\l+ Node()\l+ Node()\l+ ~Node()\l+ read_from_db()\l+ evaluate()\l+ is_valid()\l+ inputs_valid()\l+ write_to_db()\l+ get_bson()\land 13 more...\l# fill_input_output_port\l_lookups()\l}" alt="" coords="165,969,318,1252"/>
@@ -96,7 +96,7 @@ Collaboration diagram for Port:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_port_1_1get__value.html">get_value</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_port_1_1get__value.html">get_value_vector</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This attribute can point to another <a class="el" href="class_port.html">Port</a> (default value nullptr). If the attribute points to another port, the value returned by the method the value the other <a class="el" href="class_port.html">Port</a>.  <a href="class_port_1_1get__value.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -114,9 +114,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a18b368a7d48acb802b6671693f54adcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28311c7a8fe9e2838aa8ae63a37d2d9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_port.html#a28311c7a8fe9e2838aa8ae63a37d2d9a">set_value</a> (double value)</td></tr>
 <tr class="separator:a28311c7a8fe9e2838aa8ae63a37d2d9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc11e1890530dd4bc0b9e3c7778ef5ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_port.html#acc11e1890530dd4bc0b9e3c7778ef5ff">get_value</a> (double **out, int *nbr_out)</td></tr>
+<tr class="memitem:acc11e1890530dd4bc0b9e3c7778ef5ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_port.html#acc11e1890530dd4bc0b9e3c7778ef5ff">get_value_vector</a> (double **out, int *nbr_out)</td></tr>
 <tr class="separator:acc11e1890530dd4bc0b9e3c7778ef5ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82509b87aa9d775d0a40e2b446f2b7ad"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_port.html#a82509b87aa9d775d0a40e2b446f2b7ad">get_value</a> ()</td></tr>
+<tr class="memitem:a82509b87aa9d775d0a40e2b446f2b7ad"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_port.html#a82509b87aa9d775d0a40e2b446f2b7ad">get_value_vector</a> ()</td></tr>
 <tr class="separator:a82509b87aa9d775d0a40e2b446f2b7ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec33d8bfca05139b1e319f15d2b3a1b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_port.html#aec33d8bfca05139b1e319f15d2b3a1b8">link</a> (std::shared_ptr&lt; <a class="el" href="class_port.html">Port</a> &gt; &amp;v)</td></tr>
 <tr class="separator:aec33d8bfca05139b1e319f15d2b3a1b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -424,7 +424,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="acc11e1890530dd4bc0b9e3c7778ef5ff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acc11e1890530dd4bc0b9e3c7778ef5ff">&#9670;&nbsp;</a></span>get_value() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#acc11e1890530dd4bc0b9e3c7778ef5ff">&#9670;&nbsp;</a></span>get_value_vector() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -433,7 +433,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="class_port_1_1get__value.html">Port::get_value</a> </td>
+          <td class="memname">void <a class="el" href="class_port_1_1get__value.html">Port::get_value_vector</a> </td>
           <td>(</td>
           <td class="paramtype">double **&#160;</td>
           <td class="paramname"><em>out</em>, </td>
@@ -462,7 +462,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <a id="a82509b87aa9d775d0a40e2b446f2b7ad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a82509b87aa9d775d0a40e2b446f2b7ad">&#9670;&nbsp;</a></span>get_value() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a82509b87aa9d775d0a40e2b446f2b7ad">&#9670;&nbsp;</a></span>get_value_vector() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -471,7 +471,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;double&gt; <a class="el" href="class_port_1_1get__value.html">Port::get_value</a> </td>
+          <td class="memname">std::vector&lt;double&gt; <a class="el" href="class_port_1_1get__value.html">Port::get_value_vector</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

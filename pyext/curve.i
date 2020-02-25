@@ -4,8 +4,8 @@
 %}
 
 
-%apply (double* IN_ARRAY1, int DIM1) {(double *in, int n_in)}
-%apply (double** ARGOUTVIEWM_ARRAY1, int* DIM1) {(double **out, int *n_out)}
+%apply (double* IN_ARRAY1, int DIM1) {(double *input, int n_input)}
+%apply (double** ARGOUTVIEWM_ARRAY1, int* DIM1) {(double **output, int *n_output)}
 
 %ignore Curve::get_x();
 %ignore Curve::get_y();
