@@ -40,6 +40,7 @@ purposes.
 *  define and store models jointly with associated data identifies in data base.
 *  Platform independent C/C++ library with interfaces for scripting libraries 
 
+
 # Building and Installation
 
 ## C++ shared library
@@ -80,11 +81,11 @@ For most users the later approach is recommended. Currently,
 pre-compiled packages for the anaconda distribution system are 
 available for:
 
-*  Windows: Python 2.7, Python 3.7 (x64)
-*  Linux: Python 2.7, Python 3.7 (x64)
-*  MacOs: Python 2.7 (x64)
+*  Windows: Python 3.7
+*  Linux: Python 3.7
+*  MacOs: Python 3.7
 
-Legacy 32-bit platforms are not supported.
+Legacy 32-bit platforms and the deprecated Python 2.7 are not supported.
 
 ## Examples
 
