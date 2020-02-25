@@ -30,6 +30,7 @@
 %attribute(Port, bool, is_output, is_output, set_port_type);
 %attribute(Port, bool, reactive, is_reactive, set_reactive);
 %attribute(Port, bool, bounded, is_bounded, set_bounded);
+%attribute(Port, Node*, node, get_node, set_node);
 
 %include "../include/Port.h"
 %extend Port{
@@ -49,12 +50,10 @@
         return os.str();
     }
 
+    // The approach with __swig_getmethods is deprecated in swig 4.0.0
+    // Thus, the code below needs to be changed in the future.
     %pythoncode
     %{
-    __swig_getmethods__["node"] = get_node
-    __swig_setmethods__["node"] = set_node
-    if _newclass: node = property(get_node, set_node)
-
     __swig_getmethods__["bytes"] = get_bytes
     __swig_setmethods__["bytes"] = set_bytes
     if _newclass: bytes = property(get_bytes, set_bytes)
