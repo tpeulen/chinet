@@ -13,7 +13,7 @@
 
 #include "Functions.h"
 
-#define DEBUG 0
+#define VERBOSE 0
 
 
 class MongoObject{
@@ -150,7 +150,7 @@ protected:
                     // connect obj to db
                     return_value &= connect_object_to_db(o);
                     // read obj from db
-#if DEBUG
+#if VERBOSE
                     std::cout << oid_to_string(oid) << std::endl;
 #endif
                     o->read_from_db(oid_to_string(oid));
@@ -160,7 +160,7 @@ protected:
                 }
             }
         } else{
-#if DEBUG
+#if VERBOSE
             std::cerr << "Error: no nodes section in Session" << std::endl;
 #endif
             return_value &= false;
@@ -196,7 +196,7 @@ protected:
                 }
             }
         } else{
-#if DEBUG
+#if VERBOSE
             std::cerr << "Error: no nodes section in Session" << std::endl;
 #endif
             return_value &= false;

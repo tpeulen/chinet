@@ -6,21 +6,21 @@ std::shared_ptr<Port> Port::operator+(
         std::shared_ptr<Port> v
         )
 {
-#if DEBUG
+#if VERBOSE
     std::clog << "ADDING PORTS" << std::endl;
 #endif
     int new_value_type = MAX(value_type, v->value_type);
-#if DEBUG
+#if VERBOSE
     std::clog << "-- Value type of resulting port: " << new_value_type << std::endl;
 #endif
     std::string name = get_name()  + " + " + v->get_name();
-#if DEBUG
+#if VERBOSE
     std::clog << "-- Name of resulting port: " << name << std::endl;
 #endif
     auto re = std::make_shared<Port>(
             false, true, true, false, 0, 0, new_value_type, name
             );
-#if DEBUG
+#if VERBOSE
     std::clog << "-- Creating a Node associated to the resulting port." << std::endl;
 #endif
     auto node = new Node();
@@ -271,7 +271,7 @@ void Port::set_node(Node* node_ptr)
 }
 
 void Port::update_attached_node() {
-#if DEBUG
+#if VERBOSE
     std::clog << "-- Port is reactive: " << is_reactive() << std::endl;
     std::clog << "-- Port is output: " << is_output() << std::endl;
     std::clog << "-- Updating the node: " << node_->get_name() << std::endl;
@@ -280,7 +280,7 @@ void Port::update_attached_node() {
     if (is_reactive() && !is_output()) {
         node_->evaluate();
     }
-#if DEBUG
+#if VERBOSE
     std::clog << "-- Node is valid: " << node_->is_valid() << std::endl;
 #endif
 }
