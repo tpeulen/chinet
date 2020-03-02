@@ -10,3 +10,6 @@
 [submodule "thirdparty/labellib"]
 	path = thirdparty/labellib
 	url = https://github.com/Fluorescence-Tools/LabelLib
+[submodule "thirdparty/eigen3"]
+	path = thirdparty/eigen3
+	url = https://github.com/eigenteam/eigen-git-mirror.git
