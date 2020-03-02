@@ -78,14 +78,14 @@ if(NOT TARGET Eigen3::Eigen)
 endif (NOT TARGET Eigen3::Eigen)
 INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
 
-#[[
 ###############################
 # IMP
 ###############################
 FIND_PACKAGE(IMP REQUIRED)
 INCLUDE(${IMP_USE_FILE})
 INCLUDE_DIRECTORIES(SYSTEM ${IMP_INCLUDE_DIR})
-]]#
+LINK_LIBRARIES(${IMP_kernel_LIBRARY} ${IMP_core_LIBRARY})
+MESSAGE("-- Found IMP")
 
 #[[
 # Boost histogram
@@ -95,18 +95,18 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/histogram/include/)
 
 # RTTR
 ###############################
-find_package(RTTR CONFIG REQUIRED Core)
-link_libraries(RTTR::Core)
-message ("-- Found librttr version \"${PACKAGE_VERSION}\"")
+FIND_PACKAGE(RTTR CONFIG REQUIRED Core)
+LINK_LIBRARIES(RTTR::Core)
+MESSAGE ("-- Found librttr version \"${PACKAGE_VERSION}\"")
 
 # libmongoc
 ###############################
 find_package (libmongoc-1.0)
-message ("-- Found mongoc version \"${MONGOC_VERSION}\"")
-message ("--   include path \"${MONGOC_INCLUDE_DIRS}\"")
-message ("--   libraries \"${MONGOC_LIBRARIES}\"")
-include_directories (${MONGOC_INCLUDE_DIRS})
-link_libraries (${MONGOC_LIBRARIES})
+MESSAGE ("-- Found mongoc version \"${MONGOC_VERSION}\"")
+MESSAGE ("--   include path \"${MONGOC_INCLUDE_DIRS}\"")
+MESSAGE ("--   libraries \"${MONGOC_LIBRARIES}\"")
+INCLUDE_DIRECTORIES (${MONGOC_INCLUDE_DIRS})
+LINK_LIBRARIES (${MONGOC_LIBRARIES})
 add_compile_definitions(${MONGOC_DEFINITIONS})
 
 #[[

@@ -28,6 +28,7 @@ requirements:
     - boost 1.67.0.*
     - librttr 0.9.6.*
     - libmongoc >=1.15.1
+    - imp >=2.12.0
   run:
     - python {{ python }}
     - {{ pin_compatible('numpy') }}
@@ -36,6 +37,7 @@ requirements:
     - boost 1.67.0.* [win]
     - libboost 1.67.0.* [not win]
     - libmongoc >=1.15.1
+    - imp >=2.12.0
 
 test:
   imports:
