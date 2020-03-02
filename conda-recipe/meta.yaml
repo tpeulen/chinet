@@ -21,11 +21,11 @@ requirements:
     - python {{ python }}
     - {{ pin_compatible('numpy') }}
     - setuptools
-    - boost 1.67.0.*
     - git
     - cmake
-    - swig 3.0.12.*
+    - swig
     - intel-openmp
+    - boost 1.67.0.*
     - librttr 0.9.6.*
     - libmongoc >=1.15.1
   run:
