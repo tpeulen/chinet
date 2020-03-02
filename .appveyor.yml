@@ -18,6 +18,7 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda config --add channels tpeulen
+  - conda config --add channels salilab
   - conda create -n build python=3.7 git conda-build anaconda-client conda-verify ripgrep
   - activate build
   - git submodule update --init --force
