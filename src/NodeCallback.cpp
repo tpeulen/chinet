@@ -43,29 +43,29 @@ void combine(
         std::map<std::string, std::shared_ptr<Port>> &outputs,
         int operation
         ){
-#if DEBUG
+#if VERBOSE
     std::clog << "-- Combining values of input ports."  << std::endl;
 #endif
     size_t n_elements = UINT_MAX;
-#if DEBUG
+#if VERBOSE
     std::clog << "-- Determining input vector with smallest length." << std::endl;
 #endif
     for(auto &o : inputs){
         n_elements = MIN(n_elements, o.second->current_size());
     }
-#if DEBUG
+#if VERBOSE
     std::clog << "-- The smallest input vector has a length of: " << n_elements << std::endl;
 #endif
     auto tmp = (T*) malloc(n_elements * sizeof(T));
     switch(operation){
         case 0:
-#if DEBUG
+#if VERBOSE
             std::clog << "-- Adding input ports" << std::endl;
 #endif
             add(tmp, n_elements, inputs);
             break;
         case 1:
-#if DEBUG
+#if VERBOSE
             std::clog << "-- Multiplying input ports" << std::endl;
 #endif
             mul(tmp, n_elements, inputs);
@@ -75,12 +75,12 @@ void combine(
     }
     if(!outputs.empty()){
         if (outputs.find("outA") == outputs.end() ) {
-#if DEBUG
+#if VERBOSE
             std::clog << "ERROR: Node does not define output port with the name 'outA' " << std::endl;
 #endif
             outputs.begin()->second->set_value(tmp, n_elements);
         } else {
-#if DEBUG
+#if VERBOSE
             std::clog << "Setting value to output " << std::endl;
 #endif
             outputs["outA"]->set_value(tmp, n_elements);
@@ -98,7 +98,7 @@ void addition(
         std::map<std::string, std::shared_ptr<Port>> &outputs
 )
 {
-#if DEBUG
+#if VERBOSE
     std::clog << "addition"  << std::endl;
 #endif
     combine<T>(inputs, outputs, 0);

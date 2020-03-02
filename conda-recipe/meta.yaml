@@ -1,11 +1,9 @@
 {% set name = "chinet" %}
-#{% set version = "0.0.3" %}
 {% set data = load_setup_py_data(setup_file='../setup.py', from_recipe_dir=True) %}
 
 package:
   name: "{{ name|lower }}"
   version: {{ data.get('version')|lower }}
-#  version: "{{ version|lower }}"
 
 source:
   path: ..
@@ -17,25 +15,27 @@ build:
 requirements:
 
   host:
-    - git
+    - python {{ python }}
+    - {{ pin_compatible('numpy') }}
+  build:
     - python {{ python }}
     - {{ pin_compatible('numpy') }}
     - setuptools
-    - {{ compiler('cxx') }}
+    - git
     - cmake
-    - swig <4.0.0
-    - boost
-    - eigen
-    - openmp
-    - librttr
+    - swig
+    - intel-openmp
+    - boost 1.67.0.*
+    - librttr 0.9.6.*
     - libmongoc >=1.15.1
   run:
     - python {{ python }}
     - {{ pin_compatible('numpy') }}
-    - librttr
-    - boost
-    - libmongoc >=1.15.1
     - labellib
+    - librttr 0.9.6.*
+    - boost 1.67.0.* [win]
+    - libboost 1.67.0.* [not win]
+    - libmongoc >=1.15.1
 
 test:
   imports:
@@ -43,7 +43,7 @@ test:
 
 about:
   home: https://github.com/tpeulen/chinet
-  license: MPL 2.0
+  license: Mozilla Public License 2.0 (MPL 2.0)
   summary: Python bindings for chinet
   description: |
     chinet is a C++ library with Python wrapper to construct networks of

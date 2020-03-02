@@ -40,10 +40,9 @@ purposes.
 *   define and store models jointly with associated data identifies in data base.
 *   Platform independent C/C++ library with interfaces for scripting libraries 
 
+## Building and Installation
 
-# Building and Installation
-
-## C++ shared library
+### C++ shared library
 
 The C++ shared library can be installed from source with [cmake](https://cmake.org/):
 
@@ -56,11 +55,10 @@ sudo make install
 
 On Linux you can build and install a package instead (prefered):
 
-## Python bindings
+### Python bindings
 The Python bindings can be either be installed by downloading and 
 compiling the source code or by using a precompiled distribution for 
 Python anaconda environment.
-
 
 The following commands can be used to download and compile the source 
 code:
@@ -89,11 +87,26 @@ Legacy 32-bit platforms and the deprecated Python 2.7 are not supported.
 
 ## Examples
 
-
 ```python
+import chinet as cn
 
+v1 = 23.0
+v2 = 29.0
+p1 = cn.Port()
+p1.value = v1
+p2 = cn.Port(v1)
+p3 = cn.Port(
+    value=v1,
+    fixed=True
+)
+p4 = cn.Port(
+    value=v1,
+    fixed=False
+)
+p5 = cn.Port(v2)
+p5.link = p4
+print(p4.value == p1.value)
 ```
-  
 
 ## License
 

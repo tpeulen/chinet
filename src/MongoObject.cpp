@@ -34,7 +34,7 @@ MongoObject::~MongoObject()
 {
     time_of_death = Functions::get_time();
     if (is_connected_to_db()) {
-#if DEBUG
+#if VERBOSE
         std::clog << "Time of death: " << time_of_death << std::endl;
 #endif
         write_to_db();
@@ -58,13 +58,13 @@ bool MongoObject::connect_to_db(
 
     // Database
     //----------------------------------------------------------------
-#if DEBUG
+#if VERBOSE
     std::clog << "connecting to:" << uri_string.c_str() << std::endl;
 #endif
 
     uri = mongoc_uri_new_with_error(uri_string.c_str(), &error);
     if (!uri) {
-#if DEBUG
+#if VERBOSE
         std::cerr << "failed to parse URI:" << uri_string.c_str() << std::endl;
         std::cerr << "error message:       " << error.message << std::endl;
 #endif
@@ -111,11 +111,11 @@ bool MongoObject::write_to_db(
         int write_option
     )
 {
-#if DEBUG
+#if VERBOSE
     std::clog << "WRITING MONGOOBJECT TO DB" << std::endl;
 #endif
     bool return_value = false;
-#if DEBUG
+#if VERBOSE
     std::clog << "-- Connected to DB: " << is_connected_to_db() << std::endl;
     std::clog << "-- Write option: " << write_option << std::endl;
 #endif
@@ -134,7 +134,7 @@ bool MongoObject::write_to_db(
 
         switch (write_option) {
             case 1:
-#if DEBUG
+#if VERBOSE
                 std::clog << "-- Replacing object in the DB." << std::endl;
 #endif
                 // option 1 - write as a replacement
@@ -145,14 +145,14 @@ bool MongoObject::write_to_db(
                             nullptr, &reply, &error
                     )
                 ) {
-#if DEBUG
+#if VERBOSE
                     std::cerr << error.message;
 #endif
                     return_value &= false;
                 }
                 break;
             case 2:
-#if DEBUG
+#if VERBOSE
                 std::clog << "-- Inserting as a new object in DB." << std::endl;
 #endif
                 // option 2 - insert as a new document
@@ -163,14 +163,14 @@ bool MongoObject::write_to_db(
                         &reply, &error
                     )
                 ) {
-#if DEBUG
+#if VERBOSE
                     std::cerr << error.message;
 #endif
                     return_value &= false;
                 }
                 break;
             default:
-#if DEBUG
+#if VERBOSE
                 std::clog << "-- Updating existing object in DB." << std::endl;
 #endif
                 // option 0 - write as a update
@@ -186,7 +186,7 @@ bool MongoObject::write_to_db(
                         false,
                         &reply, &error)
                         ) {
-#if DEBUG
+#if VERBOSE
                     std::cerr << error.message;
 #endif
                     return_value &= false;
@@ -216,7 +216,7 @@ bool MongoObject::read_from_db(const std::string &oid_string)
     if (string_to_oid(oid_string, &oid)) {
 
         if (!is_connected_to_db()) {
-#if DEBUG
+#if VERBOSE
             std::cerr << "Not connected to a DB." << std::endl;
 #endif
             return false;
@@ -226,7 +226,7 @@ bool MongoObject::read_from_db(const std::string &oid_string)
             query = BCON_NEW ("_id", BCON_OID(&oid));
 
             size_t len;
-#if DEBUG
+#if VERBOSE
             std::clog << "reading: " << bson_as_json(query, &len) << std::endl;
 #endif
 
@@ -240,7 +240,7 @@ bool MongoObject::read_from_db(const std::string &oid_string)
 
             const bson_t *doc;
             while (mongoc_cursor_next(cursor, &doc)) {
-#if DEBUG
+#if VERBOSE
                 std::clog << "read content: " << bson_as_json(doc, &len) << std::endl;
 #endif
 
@@ -271,7 +271,7 @@ bool MongoObject::read_from_db(const std::string &oid_string)
             }
 
             if (mongoc_cursor_error(cursor, &error)) {
-#if DEBUG
+#if VERBOSE
                 std::cerr << "An error occurred: " << error.message << std::endl;
 #endif
                 return false;
@@ -283,7 +283,7 @@ bool MongoObject::read_from_db(const std::string &oid_string)
         }
 
     } else {
-#if DEBUG
+#if VERBOSE
         std::cerr << "OID string not valid." << std::endl;
 #endif
         return false;
@@ -408,7 +408,7 @@ std::string MongoObject::create_copy()
     }
 
     size_t len;
-#if DEBUG
+#if VERBOSE
     std::clog << "created copy: " << bson_as_json(&document_copy, &len) << std::endl;
 #endif
 
@@ -439,7 +439,7 @@ bool MongoObject::string_to_oid(const std::string &oid_string, bson_oid_t *oid)
         return true;
     } else {
         bson_oid_init(oid, nullptr);
-#if DEBUG
+#if VERBOSE
         std::cerr << "OID string not valid." << std::endl;
 #endif
         return false;
@@ -480,7 +480,7 @@ const std::string MongoObject::get_string_by_key(bson_t *doc, const std::string 
         str = bson_iter_utf8(&iter, &len);
         return std::string(str, len);
     }
-#if DEBUG
+#if VERBOSE
     std::cerr << "Error: the key does not contain an string" << std::endl;
 #endif
 
@@ -492,7 +492,7 @@ bool MongoObject::read_json(std::string json_string)
     bson_t b;
     bson_error_t error;
     if (!bson_init_from_json(&b, json_string.c_str(), json_string.size(), &error)) {
-#if DEBUG
+#if VERBOSE
         std::cerr << "Error reading JSON: " << error.message << std::endl;
 #endif
         return false;
