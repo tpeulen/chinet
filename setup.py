@@ -4,13 +4,36 @@ import re
 import sys
 import platform
 import subprocess
+import fileinput
+import pathlib
 
 from setuptools import setup, Extension
 from distutils.command.build_ext import build_ext
 from distutils.version import LooseVersion
 
+IMP = None
 
 name = "chinet"  # name of the module
+
+
+def patch_imp():
+    import IMP
+    if IMP.__version__ > '2.12.0':
+        return
+    library_path = pathlib.Path(os.environ['LIBRARY_LIB'])
+    filename = library_path / pathlib.Path("./cmake/IMP/IMPConfig.cmake")
+    with fileinput.FileInput(
+            filename, inplace=True, backup='.bak'
+    ) as file:
+        for line in file:
+            print(
+                line.replace(
+                    ".so." + IMP.__version__, ".lib"
+                ).replace(
+                    '${IMP_LIB_DIR}/lib', '${IMP_LIB_DIR}/'
+                ),
+                end=''
+            )
 
 
 class CMakeExtension(Extension):
@@ -47,16 +70,14 @@ class CMakeBuild(build_ext):
                 self.get_ext_fullpath(ext.name)
             )
         ).replace('\\' , '/')
-
         cmake_args = [
             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
             '-DCMAKE_SWIG_OUTDIR=' + extdir,
         ]
-
         cfg = 'Debug' if self.debug else 'Release'
         build_args = ['--config', cfg]
-
         if platform.system() == "Windows":
+            patch_imp()
             cmake_args += [
                 '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(
                     cfg.upper(), extdir

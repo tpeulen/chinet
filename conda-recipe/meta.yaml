@@ -17,18 +17,18 @@ requirements:
   host:
     - python {{ python }}
     - {{ pin_compatible('numpy') }}
+    - imp 2.12.0.*
   build:
     - python {{ python }}
-    - {{ pin_compatible('numpy') }}
     - setuptools
+    - {{ pin_compatible('numpy') }}
     - git
     - cmake
-    - swig
+    - swig 3.0.12.*
     - intel-openmp
     - boost 1.67.0.*
     - librttr 0.9.6.*
     - libmongoc >=1.15.1
-    - imp >=2.12.0
   run:
     - python {{ python }}
     - {{ pin_compatible('numpy') }}
@@ -37,7 +37,7 @@ requirements:
     - boost 1.67.0.* [win]
     - libboost 1.67.0.* [not win]
     - libmongoc >=1.15.1
-    - imp >=2.12.0
+    - imp 2.12.0.*
 
 test:
   imports:
@@ -49,8 +49,8 @@ about:
   summary: Python bindings for chinet
   description: |
     chinet is a C++ library with Python wrapper to construct networks of
-    computation node with associated ports that can be deposited in a
-    mongoDB. Chinet is the data management backend of chisurf.
+    computation node with associated ports that can be deposited in a mongoDB.
+    Chinet is the data management backend of chisurf.
   doc_url: https://github.com/tpeulen.github.io/chinet/
 
 extra:

@@ -8,9 +8,8 @@ PROJECT(${PROJECT_NAME})
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 
-##############################################################
 # 32/64 bit detection
-###############################################################
+###########################
 if(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
     # If in 64bit mode, we have to define the _OCC64 variable
     add_definitions(-D_OCC64)
@@ -21,9 +20,8 @@ else(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
 endif(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
 
 
-###############################
 # Windows
-###############################
+###########################
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++11")
     if(BIT MATCHES "64")
@@ -31,9 +29,8 @@ if(MSVC)
     endif(BIT MATCHES "64")
 endif(MSVC)
 
-##################################
 # MACOSX_DEPLOYEMENT_TARGET
-##################################
+###########################
 # explicit link to libc++ for recent osx versions
 if(APPLE)
     # MESSAGE(STATUS "link to libc++ on modern osx versions")
@@ -44,9 +41,8 @@ if(APPLE)
     set(CMAKE_MACOSX_RPATH 0)
 endif(APPLE)
 
-###############################
 # OpenMP
-###############################
+###########################
 OPTION (USE_OpenMP "Use OpenMP" ON)
 IF(USE_OpenMP)
     FIND_PACKAGE(OpenMP)
@@ -56,21 +52,18 @@ IF(USE_OpenMP)
     ENDIF()
 ENDIF()
 
-###############################
 # Cpp-taskflow
-###############################
+###########################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/cpp-taskflow/)
 
-###############################
 # Boost
-###############################
+###########################
 FIND_PACKAGE(Boost 1.50 COMPONENTS system REQUIRED)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR} )
 LINK_LIBRARIES(${Boost_LIBRARIES})
 
-###############################
 # Eigen3
-###############################
+###########################
 FIND_PACKAGE(Eigen3 3.2 QUIET NO_MODULE)
 if(NOT TARGET Eigen3::Eigen)
     MESSAGE(STATUS "Using thirdparty/eigen3")
@@ -78,49 +71,39 @@ if(NOT TARGET Eigen3::Eigen)
 endif (NOT TARGET Eigen3::Eigen)
 INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
 
-###############################
+# Python
+###########################
+FIND_PACKAGE(Python)
+INCLUDE_DIRECTORIES(${Python_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${Python_NumPy_PATH})
+
 # IMP
-###############################
+###########################
 FIND_PACKAGE(IMP REQUIRED)
 INCLUDE(${IMP_USE_FILE})
 INCLUDE_DIRECTORIES(SYSTEM ${IMP_INCLUDE_DIR})
 LINK_LIBRARIES(${IMP_kernel_LIBRARY} ${IMP_core_LIBRARY})
 MESSAGE("-- Found IMP")
 
-#[[
-# Boost histogram
-###############################
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/histogram/include/)
-]]#
-
 # RTTR
-###############################
+###########################
 FIND_PACKAGE(RTTR CONFIG REQUIRED Core)
 LINK_LIBRARIES(RTTR::Core)
 MESSAGE ("-- Found librttr version \"${PACKAGE_VERSION}\"")
 
 # libmongoc
-###############################
+###########################
 find_package (libmongoc-1.0)
 MESSAGE ("-- Found mongoc version \"${MONGOC_VERSION}\"")
-MESSAGE ("--   include path \"${MONGOC_INCLUDE_DIRS}\"")
-MESSAGE ("--   libraries \"${MONGOC_LIBRARIES}\"")
+MESSAGE ("-- include path \"${MONGOC_INCLUDE_DIRS}\"")
+MESSAGE ("-- libraries \"${MONGOC_LIBRARIES}\"")
 INCLUDE_DIRECTORIES (${MONGOC_INCLUDE_DIRS})
 LINK_LIBRARIES (${MONGOC_LIBRARIES})
 add_compile_definitions(${MONGOC_DEFINITIONS})
 
 #[[
-# libbson
-###############################
-find_package (libbson-1.0 1.7 REQUIRED)
-message ("-- Found libbson version \"${BSON_VERSION}\"")
-message ("--   include path \"${BSON_INCLUDE_DIRS}\"")
-message ("--   libraries \"${BSON_LIBRARIES}\"")
-link_libraries(${BSON_LIBRARIES})
-include_directories(${BSON_INCLUDE_DIRS})
-
 # libmongocxx
-###############################
+###########################
 find_package(libmongocxx REQUIRED)
 link_libraries(${LIBMONGOCXX_LIBRARIES})
 include_directories(${LIBMONGOCXX_INCLUDE_DIRS})
@@ -129,16 +112,16 @@ message("-- libmongocxx include \"${LIBMONGOCXX_INCLUDE_DIRS}\"")
 ]]
 
 # LabelLib
-###############################
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/labellib/FlexLabel/include/)
+###########################
 #find_package (FlexLabel REQUIRED)
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/labellib/FlexLabel/include/)
 
 # JSON
-###############################
+###########################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/json/single_include/)
 
 # Project
-###############################
+###########################
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)

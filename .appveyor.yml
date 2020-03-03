@@ -1,6 +1,6 @@
 platform:
   - amd64
-image: Visual Studio 2017
+image: Visual Studio 2015
 
 services:
   - mongodb
@@ -51,4 +51,4 @@ notifications:
       - thomas.otavio.peulen@gmail.com
     on_build_success: false
     on_build_failure: true
-    on_build_status_changed: false
+    on_build_status_changed: true
