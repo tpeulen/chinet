@@ -13,6 +13,42 @@ import chinet as cn
 class Tests(unittest.TestCase):
 
     def test_port_init_singelton(self):
+        v1 = 23.0
+        v2 = 29.0
+        p1 = cn.Port(v1)
+        # check setting of value
+        p2 = cn.Port()
+        p2.value = v1
+        # check fixing
+        p3 = cn.Port(
+            value=v1,
+            fixed=True
+        )
+        p4 = cn.Port(
+            value=v1,
+            fixed=False
+        )
+        # check linking
+        p5 = cn.Port(v2)
+        p5.link = p4
+
+        self.assertEqual(
+            np.allclose(
+                p1.value, p2.value
+            ),
+            True
+        )
+        self.assertEqual(p3.fixed, True)
+        self.assertEqual(p4.fixed, False)
+        self.assertEqual(
+            np.allclose(
+                p5.value,
+                p4.value
+            ),
+            True
+        )
+
+    def test_port_init_singelton(self):
         """Test chinet Port class set_value and get_value"""
         v1 = 23.0
         v2 = 29.0

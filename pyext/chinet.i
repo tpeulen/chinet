@@ -6,7 +6,7 @@
 %include "documentation.i"
 %{
 #define SWIG_FILE_WITH_INIT
-#include "../include/Curve.h"
+//#include "../include/Curve.h"
 #include "../include/Functions.h"
 //#include "../include/Decay.h"
 #include "../include/CNode.h"
@@ -25,8 +25,9 @@ import numpy as np
 %include "std_vector.i";
 %include "std_list.i";
 %include "std_shared_ptr.i";
+%include "cpointer.i"
 
-%template(map_string_string) std::map<std::string, std::string>;
+%template(MapStringString) std::map<std::string, std::string>;
 %template(VectorString) std::vector<std::string>;
 %template(VectorDouble) std::vector<double>;
 %template(VectorInt) std::vector<int>;
@@ -68,12 +69,11 @@ import numpy as np
 
 }
 
-%include "cpointer.i"
 %include "mongo.i"
 %include "port.i"
 %include "node.i"
-%include "nodecallback.i"
+//%include "nodecallback.i"
 %include "session.i"
 //%include "pda.i"
-%include "curve.i"
+//%include "curve.i"
 //%include "decay.i"

@@ -169,7 +169,7 @@ public:
 #endif
             if (n_input * sizeof(T) > n_buffer_elements_ * buffer_element_size_){
 #if VERBOSE
-                std::clog << "-- Size of input exceeds the local buffer: reallocating buffer. " << std::endl;
+                std::clog << "-- Size of input exceeds the local buffer: reallocating" << std::endl;
 #endif
                 buffer_ = std::realloc(buffer_, n_input * sizeof(T));
                 buffer_element_size_ = sizeof(T);

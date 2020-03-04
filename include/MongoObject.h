@@ -13,7 +13,7 @@
 
 #include "Functions.h"
 
-#define VERBOSE 0
+#define VERBOSE 1
 
 
 class MongoObject{

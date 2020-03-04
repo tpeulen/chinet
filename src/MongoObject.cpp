@@ -22,12 +22,17 @@ MongoObject::MongoObject() :
             "death", BCON_INT64(time_of_death)
     );
     set_document(doc);
+    set_name(get_oid());
 }
 
 MongoObject::MongoObject(std::string name) :
         MongoObject()
 {
-    set_name(name);
+    if(name.empty()){
+        get_oid();
+    } else{
+        set_name(name);
+    }
 }
 
 MongoObject::~MongoObject()
