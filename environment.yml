@@ -12,6 +12,7 @@ dependencies:
   - cmake
   - nose
   - numpy
+  - numba
   - yaml
   - mongodb
   - eigen
