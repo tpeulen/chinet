@@ -13,6 +13,14 @@ TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 utils.set_search_paths(TOPDIR)
 
 
+db_dict = {
+    'uri_string': "mongodb://localhost:27017",
+    'db_string': "chinet",
+    'app_string': "chisurf",
+    'collection_string': "test_collection"
+}
+
+
 class CallbackNodePassOn(cn.NodeCallback):
 
     def __init__(self, *args, **kwargs):
@@ -218,13 +226,6 @@ class Tests(unittest.TestCase):
         )
 
     def test_node_write_to_db(self):
-        db_dict = {
-            'uri_string': "mongodb://localhost:27017",
-            'db_string': "chinet",
-            'app_string': "chisurf",
-            'collection_string': "test_collection"
-        }
-
         node = cn.Node(
             {
                 'portA': cn.Port(55),
@@ -237,13 +238,7 @@ class Tests(unittest.TestCase):
         self.assertEqual(node.write_to_db(), True)
 
     def test_node_restore_from_db(self):
-        db_dict = {
-            'uri_string': "mongodb://localhost:27017",
-            'db_string': "chinet",
-            'app_string': "chisurf",
-            'collection_string': "test_collection"
-        }
-
+        # Make new node that will be written to the DB
         node = cn.Node(
             {
                 'portA': cn.Port(13.0),
@@ -251,17 +246,18 @@ class Tests(unittest.TestCase):
                 'portC': cn.Port(1.0)
             }
         )
-        node.set_callback("multiply", "C")
+        node.set_callback("multiply_double", "C")
         node.connect_to_db(**db_dict)
         node.write_to_db()
 
+        # Restore the Node
         node_restore = cn.Node()
         node_restore.connect_to_db(**db_dict)
         node_restore.read_from_db(node.get_oid())
 
+        # compare the dictionaries of the nodes
         dict_restore = json.loads(node_restore.get_json())
         dict_original = json.loads(node.get_json())
-
         self.assertEqual(dict_restore, dict_original)
 
     def test_node_valid(self):

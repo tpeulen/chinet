@@ -49,7 +49,7 @@ class Tests(unittest.TestCase):
 
     def test_mongo_oid(self):
         mo = cn.MongoObject()
-        self.assertEqual(len(mo.get_oid()), 25)
+        self.assertEqual(len(mo.get_oid()), 24)
 
     def test_mongo_json(self):
         mo = cn.MongoObject("test_name")

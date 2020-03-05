@@ -37,10 +37,15 @@ MongoObject::MongoObject(std::string name) :
 
 MongoObject::~MongoObject()
 {
+#if VERBOSE
+    std::clog << "DESTROYING MONGOOBJECT" << std::endl;
+    std::clog << "-- MongoObject OID: " << get_oid() << std::endl;
+    std::clog << "-- MongoObject is connected to DB: " << is_connected_to_db() << std::endl;
+#endif
     time_of_death = Functions::get_time();
     if (is_connected_to_db()) {
 #if VERBOSE
-        std::clog << "Time of death: " << time_of_death << std::endl;
+        std::clog << "-- Time of death: " << time_of_death << std::endl;
 #endif
         write_to_db();
         disconnect_from_db();
@@ -54,6 +59,9 @@ bool MongoObject::connect_to_db(
         const std::string &collection_string
 )
 {
+#if VERBOSE
+    std::clog << "CONNECT MONGOOBJECT TO DB" << std::endl;
+#endif
     this->uri_string = uri_string;
     this->db_string = db_string;
     this->app_string = app_string;
@@ -64,14 +72,14 @@ bool MongoObject::connect_to_db(
     // Database
     //----------------------------------------------------------------
 #if VERBOSE
-    std::clog << "connecting to:" << uri_string.c_str() << std::endl;
+    std::clog << "-- Connecting to DB at URI: " << uri_string.c_str() << std::endl;
 #endif
 
     uri = mongoc_uri_new_with_error(uri_string.c_str(), &error);
     if (!uri) {
 #if VERBOSE
-        std::cerr << "failed to parse URI:" << uri_string.c_str() << std::endl;
-        std::cerr << "error message:       " << error.message << std::endl;
+        std::cerr << "-- Failed to parse URI:" << uri_string.c_str() << std::endl;
+        std::cerr << "-- Error message: " << error.message << std::endl;
 #endif
         return false;
     } else {
@@ -210,6 +218,10 @@ bool MongoObject::write_to_db(
 
 bool MongoObject::write_to_db()
 {
+#if VERBOSE
+    std::clog << "WRITING MONGOOBJECT TO DB" << std::endl;
+    std::clog << "-- MongoObject OID: " << get_oid() << std::endl;
+#endif
     return write_to_db(
             get_bson(), 0
     );
@@ -218,7 +230,8 @@ bool MongoObject::write_to_db()
 bool MongoObject::read_from_db(const std::string &oid_string)
 {
 #if VERBOSE
-    std::cerr << "READ OID FROM DB" << std::endl;
+    std::clog << "READ MONGOOBJECT FROM DB" << std::endl;
+    std::clog << "-- Requested MongoObject OID:"<< oid_string << std::endl;
 #endif
     bson_oid_t oid;
     if (string_to_oid(oid_string, &oid)) {
@@ -233,7 +246,6 @@ bool MongoObject::read_from_db(const std::string &oid_string)
             query = BCON_NEW ("_id", BCON_OID(&oid));
             size_t len;
 #if VERBOSE
-            std::clog << "-- Reading OID: " << oid_string << std::endl;
             std::clog << "-- Query result: " << bson_as_json(query, &len) << std::endl;
 #endif
             mongoc_cursor_t *cursor; // cursor pointing to the new document
@@ -247,36 +259,69 @@ bool MongoObject::read_from_db(const std::string &oid_string)
             while (mongoc_cursor_next(cursor, &doc)) {
 #if VERBOSE
                 std::clog << "-- Read content from DB: " << bson_as_json(doc, &len) << std::endl;
-                std::clog << "-- Copying content to node" << std::endl;
+#endif
+#if VERBOSE
+                std::clog << "-- Document content before reinint:" << bson_as_json(&document, &len) << std::endl;
+#endif
+#if VERBOSE
+                std::clog << "-- Reinit local document" << std::endl;
 #endif
                 bson_reinit(&document);
+#if VERBOSE
+                std::clog << "-- Document content after reinint:" << bson_as_json(&document, &len) << std::endl;
+#endif
 #if VERBOSE
                 std::clog << "-- Copying document of query to the document of the node" << std::endl;
 #endif
                 bson_copy_to(doc, &document);
+#if VERBOSE
+                std::clog << "-- Document content after copy: " << bson_as_json(&document, &len) << std::endl;
+#endif
                 bson_oid_copy(&oid, &oid_document);
+#if VERBOSE
+                std::clog << "-- Setting the name and the precursor OID" << std::endl;
+#endif
                 bson_iter_t iter;
-                // oid_precursor
                 if (bson_iter_init(&iter, &document) &&
                     bson_iter_find(&iter, "precursor") &&
                     BSON_ITER_HOLDS_OID(&iter)) {
-#if VERBOSE
-                    std::clog << "-- Setting Node the precursor OID to the OID in the DB" << std::endl;
-#endif
                     bson_oid_copy(bson_iter_oid(&iter), &oid_precursor);
+#if VERBOSE
+                    char oid_str[25];
+                    bson_oid_to_string(&oid_precursor, oid_str);
+                    std::clog << "-- Object's precursor OID set to the OID DB: "<< oid_str << std::endl;
+#endif
                 } else {
 #if VERBOSE
-                    std::clog << "-- Setting Node the precursor OID to the OID in the DB" << std::endl;
+                    char oid_str[25];
+                    bson_oid_to_string(&oid_document, oid_str);
+                    std::clog << "-- Object's precursor OID set to own OID: "<< oid_str << std::endl;
 #endif
                     bson_oid_copy(&oid_document, &oid_precursor);
                 }
-                // time_of_death
+#if VERBOSE
+                std::clog << "-- Updating the time of death" << std::endl;
+#endif
                 if (bson_iter_init(&iter, &document) &&
                     bson_iter_find(&iter, "death") &&
                     BSON_ITER_HOLDS_INT64(&iter)) {
                     time_of_death = bson_iter_int64(&iter);
+#if VERBOSE
+                    std::clog << "-- Set time of death: " << time_of_death << std::endl;
+#endif
                 } else {
                     time_of_death = 0;
+                }
+                if (bson_iter_init(&iter, &document) &&
+                    bson_iter_find(&iter, "name") &&
+                    BSON_ITER_HOLDS_UTF8(&iter)) {
+                    uint32_t length; const char* text;
+                    text = bson_iter_utf8(&iter, &length);
+                    auto name = std::string(text, length);
+                    set_name(name);
+#if VERBOSE
+                    std::clog << "-- Set name to:" << name << std::endl;
+#endif
                 }
             }
             if (mongoc_cursor_error(cursor, &error)) {

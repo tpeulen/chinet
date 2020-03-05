@@ -215,7 +215,7 @@ protected:
     static std::string oid_to_string(bson_oid_t oid){
         char oid_str[25];
         bson_oid_to_string(&oid, oid_str);
-        return std::string(oid_str, 25);
+        return std::string(oid_str, 24);
     }
 
     static bool string_to_oid(
