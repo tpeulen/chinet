@@ -500,7 +500,7 @@ class Tests(unittest.TestCase):
         )
 
     def call_back_setter(self):
-        """This tests the setter of Node using normal python functions
+        """Tests the setter Node.function_callback that takes Python functions
 
         The Ports and the Callback function of a Node can be initialized
         using a normal Python function. The parameters names of the function
@@ -544,20 +544,23 @@ class Tests(unittest.TestCase):
 
         # use of numba decorated function as a Node callback
         node = cn.Node()
+
         @nb.jit(nopython=True)
-        def h(
-                x: np.array,
-                y: np.array
-        ):
+        def h(x: np.array, y: np.array):
             return x * y
+
         node.callback_function = h
         x = node.inputs['x']
         y = node.inputs['y']
         z = node.outputs['out_00']
-        print(z.value)
+        y.value = 2.0
         x.reactive = True
-        x.value = 11.11
-        print(z.value)
+        x.value = np.arange(100, dtype=np.double)
+        self.assertEqual(
+            z.value,
+            x * y
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

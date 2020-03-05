@@ -1,9 +1,9 @@
 name: chinet
 
 channels:
-  - defaults
-  - tpeulen
   - salilab
+  - tpeulen
+  - defaults
 
 dependencies:
   - ipython
