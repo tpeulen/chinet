@@ -23,11 +23,10 @@ install:
   - activate build
   - git submodule update --init --force
   - conda build conda-recipe
-  - bash: conda config --add channels "file://`pwd`/bld-dir"
 
 # to run your custom scripts instead of automatic tests
 test_script:
-  - conda install chinet nose coverage -c "file://`pwd`/bld-dir"
+  - conda install chinet nose coverage -c local
   - cmd: echo %CD%
   - cmd: cd C:\projects\chinet\test\
   - cmd: echo %CD%
