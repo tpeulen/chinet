@@ -20,8 +20,15 @@ def patch_windows_imp():
     import IMP
     if IMP.__version__ > '2.12.0':
         return
-    library_path = pathlib.Path(os.environ['CONDA_PREFIX']) / pathlib.Path("./Library/lib/cmake/IMP/")
-    filename = library_path / pathlib.Path("IMPConfig.cmake")
+    try:
+        # we are likely in a conda build environment
+        library_path = pathlib.Path(os.environ['LIBRARY_LIB'])
+        filename = library_path / pathlib.Path("./cmake/IMP/IMPConfig.cmake")
+    except KeyError:
+        # we are likely not in a conda build environment
+        library_path = pathlib.Path(os.environ['CONDA_PREFIX']) / \
+                       pathlib.Path("./Library/lib/cmake/IMP/")
+        filename = library_path / pathlib.Path("IMPConfig.cmake")
     with fileinput.FileInput(
             filename, inplace=True, backup='.bak'
     ) as file:
