@@ -33,7 +33,7 @@ before_install:
   - conda config --add channels "file://`pwd`/bld-dir"
 
 install:
-  - conda install chinet numba
+  - conda install chinet -c "file://`pwd`/bld-dir"
 
 script:
   - sudo mkdir -p /data/db
