@@ -16,12 +16,12 @@ IMP = None
 name = "chinet"  # name of the module
 
 
-def patch_imp():
+def patch_windows_imp():
     import IMP
     if IMP.__version__ > '2.12.0':
         return
-    library_path = pathlib.Path(os.environ['LIBRARY_LIB'])
-    filename = library_path / pathlib.Path("./cmake/IMP/IMPConfig.cmake")
+    library_path = pathlib.Path(os.environ['CONDA_PREFIX']) / pathlib.Path("./Library/lib/cmake/IMP/")
+    filename = library_path / pathlib.Path("IMPConfig.cmake")
     with fileinput.FileInput(
             filename, inplace=True, backup='.bak'
     ) as file:
@@ -38,7 +38,7 @@ def patch_imp():
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
-        Extension.__init__(self, name, sources=[])
+        super().__init__(name, sources=[])
         self.sourcedir = os.path.abspath(sourcedir)
 
 
@@ -77,7 +77,7 @@ class CMakeBuild(build_ext):
         cfg = 'Debug' if self.debug else 'Release'
         build_args = ['--config', cfg]
         if platform.system() == "Windows":
-            patch_imp()
+            patch_windows_imp()
             cmake_args += [
                 '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(
                     cfg.upper(), extdir

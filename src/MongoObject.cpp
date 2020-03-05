@@ -231,7 +231,8 @@ bool MongoObject::read_from_db(const std::string &oid_string)
 {
 #if VERBOSE
     std::clog << "READ MONGOOBJECT FROM DB" << std::endl;
-    std::clog << "-- Requested MongoObject OID:"<< oid_string << std::endl;
+    auto str = std::string(oid_string.c_str(), oid_string.size());
+    std::clog << "-- Requested MongoObject OID:"<< str << std::endl;
 #endif
     bson_oid_t oid;
     if (string_to_oid(oid_string, &oid)) {
@@ -317,7 +318,7 @@ bool MongoObject::read_from_db(const std::string &oid_string)
                     BSON_ITER_HOLDS_UTF8(&iter)) {
                     uint32_t length; const char* text;
                     text = bson_iter_utf8(&iter, &length);
-                    auto name = std::string(text, length);
+                    std::string name = std::string(text, length);
                     set_name(name);
 #if VERBOSE
                     std::clog << "-- Set name to:" << name << std::endl;
@@ -326,7 +327,7 @@ bool MongoObject::read_from_db(const std::string &oid_string)
             }
             if (mongoc_cursor_error(cursor, &error)) {
 #if VERBOSE
-                std::cerr << "-- An error occurred: " << error.message << std::endl;
+                std::cerr << "-- An error occurred. " << error.message << std::endl;
 #endif
                 return false;
             }

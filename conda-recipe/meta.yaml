@@ -32,6 +32,7 @@ requirements:
   run:
     - python {{ python }}
     - {{ pin_compatible('numpy') }}
+    - numba
     - labellib
     - librttr 0.9.6.*
     - boost 1.67.0.* [win]

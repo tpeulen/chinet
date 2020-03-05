@@ -8,6 +8,7 @@
 #include <memory>
 #include <cmath>
 #include <iterator>
+#include <string>
 
 #include <mongoc.h>
 
