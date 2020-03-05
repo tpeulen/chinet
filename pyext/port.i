@@ -34,6 +34,7 @@
 
 %include "../include/Port.h"
 
+%ignore X::X();
 %extend Port{
 
     public:
@@ -43,13 +44,6 @@
         %template(set_value_i) set_value<long>;
         %template(get_value_c) get_value<unsigned char>;
         %template(set_value_c) set_value<unsigned char>;
-
-    std::string __repr__(){
-        std::ostringstream os;
-        os << $self->get_json();
-        os << std::endl;
-        return os.str();
-    }
 
     %pythoncode "port_extension.py"
 }

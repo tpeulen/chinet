@@ -1,14 +1,14 @@
 #include "MongoObject.h"
 
 
-MongoObject::MongoObject() :
-        uri_string(""),
-        db_string(""),
-        app_string(""),
-        collection_string(""),
-        time_of_death(0),
-        object_name(""),
-        is_connected_to_db_(false)
+MongoObject::MongoObject(std::string name) :
+    uri_string(""),
+    db_string(""),
+    app_string(""),
+    collection_string(""),
+    time_of_death(0),
+    object_name(""),
+    is_connected_to_db_(false)
 {
     bson_oid_init(&oid_document, nullptr);
     bson_oid_copy(&oid_document, &oid_precursor);
@@ -22,14 +22,9 @@ MongoObject::MongoObject() :
             "death", BCON_INT64(time_of_death)
     );
     set_document(doc);
-    set_name(get_oid());
-}
 
-MongoObject::MongoObject(std::string name) :
-        MongoObject()
-{
     if(name.empty()){
-        get_oid();
+        set_name(get_own_oid());
     } else{
         set_name(name);
     }
@@ -39,7 +34,7 @@ MongoObject::~MongoObject()
 {
 #if VERBOSE
     std::clog << "DESTROYING MONGOOBJECT" << std::endl;
-    std::clog << "-- MongoObject OID: " << get_oid() << std::endl;
+    std::clog << "-- MongoObject OID: " << get_own_oid() << std::endl;
     std::clog << "-- MongoObject is connected to DB: " << is_connected_to_db() << std::endl;
 #endif
     time_of_death = Functions::get_time();
@@ -220,7 +215,7 @@ bool MongoObject::write_to_db()
 {
 #if VERBOSE
     std::clog << "WRITING MONGOOBJECT TO DB" << std::endl;
-    std::clog << "-- MongoObject OID: " << get_oid() << std::endl;
+    std::clog << "-- MongoObject OID: " << get_own_oid() << std::endl;
 #endif
     return write_to_db(
             get_bson(), 0
@@ -344,27 +339,47 @@ bool MongoObject::read_from_db(const std::string &oid_string)
     }
 }
 
+
 bool MongoObject::read_from_db()
 {
     return read_from_db(oid_to_string(oid_document));
 }
 
+std::string MongoObject::get_json_of_key(std::string key){
+    std::string re;
+    bson_iter_t iter, desc;
+    bson_iter_init (&iter, &document);
+    if(bson_iter_find_descendant (&iter, key.c_str(), &desc)){
+        if (BSON_ITER_HOLDS_DOCUMENT (&desc)) {
+            char *str = NULL;
+            bson_t *arr;
+            const uint8_t *data = NULL;
+            uint32_t len = 0;
+            bson_iter_document (&desc, &len, &data);
+            arr = bson_new_from_data (data, len);
+            str = bson_as_json (arr, NULL);
+            re.assign(str);
+            bson_free (str);
+            bson_destroy (arr);
+        }
+    }
+    return re;
+}
 
-std::string MongoObject::get_json()
+std::string MongoObject::get_json(int indent)
 {
     size_t len;
     bson_t doc = get_bson();
     char *str = bson_as_json(&doc, &len);
-    return std::string(str, len);
+    if(indent == 0){
+        return std::string(str, len);
+    } else{
+        // use nlohmann json to make pretty
+        auto j = json::parse(str);
+        return j.dump(indent);
+    }
 }
 
-std::string MongoObject::get_json_template()
-{
-    size_t len;
-    bson_t doc = get_bson();//get_bson_excluding("death", "birth", "precursor", NULL);
-    char *str = bson_as_json(&doc, &len);
-    return std::string(str, len);
-}
 
 bson_t MongoObject::get_bson()
 {
@@ -420,16 +435,6 @@ bson_t MongoObject::get_bson_excluding(const char *first, ...)
     bson_copy_to_excluding_noinit_va(&src, &dst, "", va);
     va_end(va);
     return dst;
-}
-
-std::string MongoObject::get_oid()
-{
-    return oid_to_string(oid_document);
-}
-
-bson_oid_t MongoObject::get_bson_oid()
-{
-    return oid_document;
 }
 
 const bson_t *MongoObject::get_document()
@@ -581,14 +586,7 @@ bool MongoObject::read_json(std::string json_string)
 std::shared_ptr<MongoObject> MongoObject::operator[](std::string key)
 {
     auto mo = std::make_shared<MongoObject>();
-    mo->read_json(
-            get_json(key.c_str())
-    );
+    mo->read_json(get_json_of_key(key.c_str()));
     return mo;
-}
-
-void MongoObject::show(std::ostream &out) const
-{
-    //out << get_json().c_str() << std::endl;
 }
 

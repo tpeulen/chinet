@@ -294,7 +294,7 @@ class Tests(unittest.TestCase):
 
         port_reload = cn.Port()
         port_reload.connect_to_db(**db_dict)
-        self.assertEqual(port_reload.read_from_db(port.get_oid()), True)
+        self.assertEqual(port_reload.read_from_db(port.oid), True)
 
         dict_port = json.loads(port.get_json())
         dict_port_restore = json.loads(port.get_json())

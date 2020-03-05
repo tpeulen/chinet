@@ -11,12 +11,7 @@
 #include "../include/MongoObject.h"
 %}
 
-%pythonbegin %{
-import numpy as np
-import chinet as cn
-import inspect
-import typing
-%}
+%pythonbegin "python_imports.py"
 
 %include "typemaps.i";
 %include "stl.i";
@@ -33,8 +28,10 @@ import typing
 %template(VectorDouble) std::vector<double>;
 %template(VectorInt) std::vector<int>;
 %template(VectorLong) std::vector<long>;
+%template(MapStringVectorDouble) std::map<std::string, std::vector<double>>;
 
-%extend vector<double> {
+
+%extend std::vector<double>{
 
     string __str__(){
         std::ostringstream os;

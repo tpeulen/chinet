@@ -5,15 +5,15 @@
 %}
 
 %include <std_shared_ptr.i>
+
 %shared_ptr(MongoObject)
-
-%template(map_string_double_vector) std::map<std::string, std::vector<double>>;
-
-%include "../include/MongoObject.h"
 
 %include attribute.i
 %attributestring(MongoObject, std::string, name, get_name, set_name);
+%attributestring(MongoObject, std::string, oid, get_own_oid, set_own_oid);
+%attributestring(MongoObject, bool, is_connected_to_db, is_connected_to_db);
 
+%include "../include/MongoObject.h"
 %extend MongoObject {
 
     public:
@@ -36,13 +36,6 @@
 
         %template(connect_object_to_db_mongo) connect_object_to_db<std::shared_ptr<MongoObject>>;
 
-    std::string __repr__()
-    {
-        return $self->get_json();
-    }
-
-    std::shared_ptr<MongoObject> __getitem__(std::string key){
-        return (*self)[key];
-    };
+    %pythoncode "mongo_extension.py"
 
 }

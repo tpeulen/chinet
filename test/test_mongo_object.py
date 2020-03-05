@@ -14,10 +14,10 @@ class Tests(unittest.TestCase):
     def test_mongo_init(self):
         mo_name = "test_name"
         mo = cn.MongoObject()
-        mo.set_name(mo_name)
+        mo.name = mo_name
         self.assertEqual(
-            mo.get_name(),
-            cn.MongoObject(mo_name).get_name()
+            mo.name,
+            cn.MongoObject(mo_name).name
         )
 
     def test_mongo_db_connect(self):
@@ -29,16 +29,16 @@ class Tests(unittest.TestCase):
         }
         mo = cn.MongoObject()
         self.assertEqual(mo.connect_to_db(**db_dict), True)
-        self.assertEqual(mo.is_connected_to_db(), True)
+        self.assertEqual(mo.is_connected_to_db, True)
         mo.write_to_db()
         mo.disconnect_from_db()
-        self.assertEqual(mo.is_connected_to_db(), False)
+        self.assertEqual(mo.is_connected_to_db, False)
 
         mo2 = cn.MongoObject()
         mo.connect_object_to_db_mongo(mo2)
-        self.assertEqual(mo2.is_connected_to_db(), True)
+        self.assertEqual(mo2.is_connected_to_db, True)
         mo2.disconnect_from_db()
-        self.assertEqual(mo2.is_connected_to_db(), False)
+        self.assertEqual(mo2.is_connected_to_db, False)
 
         # mo3 = cn.MongoObject()
         # mo3.connect_to_db(
@@ -49,7 +49,7 @@ class Tests(unittest.TestCase):
 
     def test_mongo_oid(self):
         mo = cn.MongoObject()
-        self.assertEqual(len(mo.get_oid()), 24)
+        self.assertEqual(len(mo.oid), 24)
 
     def test_mongo_json(self):
         mo = cn.MongoObject("test_name")

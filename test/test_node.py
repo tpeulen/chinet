@@ -86,7 +86,7 @@ class Tests(unittest.TestCase):
         node.add_output_port("outA", outA)
         object_name, callback, io_map = node.name.split(":")
         self.assertEqual(
-            node.get_oid(),
+            node.oid,
             object_name
         )
         self.assertEqual(
@@ -105,9 +105,9 @@ class Tests(unittest.TestCase):
             "(inA,inB,)->(outA,)"
         )
 
-        node.set_name("NodeName")
+        node.name = "NodeName"
         self.assertEqual(
-            node.get_name(),
+            node.name,
             'NodeName:multiply_int:(inA,inB,)->(outA,)'
         )
 
@@ -253,7 +253,7 @@ class Tests(unittest.TestCase):
         # Restore the Node
         node_restore = cn.Node()
         node_restore.connect_to_db(**db_dict)
-        node_restore.read_from_db(node.get_oid())
+        node_restore.read_from_db(node.oid)
 
         # compare the dictionaries of the nodes
         dict_restore = json.loads(node_restore.get_json())
@@ -526,8 +526,10 @@ class Tests(unittest.TestCase):
 
         # one input to many outputs
         node = cn.Node()
+
         def g(x):
             return x // 4.0, x % 4.0
+
         node.callback_function = g
         x = node.inputs['x']
         out_0 = node.outputs['out_00']

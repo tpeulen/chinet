@@ -40,10 +40,10 @@ class Tests(unittest.TestCase):
 
         na1 = s1.get_nodes()['nodeA']
         na2 = s2.get_nodes()['nodeA']
-        na1.set_name("new name")
+        na1.name = "new name"
 
         # the nodes are references
-        self.assertEqual(na1.get_name(), na2.get_name())
+        self.assertEqual(na1.name, na2.name)
 
     def test_read_session_template(self):
         template_file = "inputs/session_template.json"

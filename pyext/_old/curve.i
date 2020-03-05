@@ -1,6 +1,6 @@
 %module chinet
 %{
-#include "../include/_old/Curve.h"
+#include "../../include/_old/Curve.h"
 
 %}
 

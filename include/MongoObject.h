@@ -1,7 +1,7 @@
 #ifndef CHINET_MONGOOBJECT_H
 #define CHINET_MONGOOBJECT_H
 
-#include <iostream>
+#include <iostream>     // std::cout, std::ios
 #include <map>
 #include <set>
 #include <vector>
@@ -9,6 +9,11 @@
 #include <cmath>
 #include <iterator>
 #include <string>
+#include <sstream>      // std::ostringstream
+
+#include <nlohmann/json.hpp>
+// for convenience
+using json = nlohmann::json;
 
 #include <mongoc.h>
 
@@ -41,9 +46,15 @@ protected:
 
     // Getter & Setter
     //--------------------------------------------------------------------
-    bson_oid_t get_bson_oid();
+    bson_oid_t get_bson_oid()
+    {
+        return oid_document;
+    }
+
     virtual bson_t get_bson();
+
     bson_t get_bson_excluding(const char* first, ...);
+
     const bson_t* get_document();
 
     void set_document(bson_t b){
@@ -191,7 +202,7 @@ protected:
                     // read obj from db
                     o->read_from_db(oid_to_string(new_oid));
                     // add obj to the target set
-                    target_map->insert(std::make_pair(o->get_oid(), o));
+                    target_map->insert(std::make_pair(o->get_own_oid(), o));
                 }
             }
         } else{
@@ -226,8 +237,7 @@ protected:
 
 public:
 
-    MongoObject();
-    MongoObject(std::string name);
+    MongoObject(std::string name="");
     ~MongoObject();
 
     //! Connects the instance of @class MongoObject to a database
@@ -268,13 +278,17 @@ public:
 
     virtual bool read_from_db(const std::string &oid_string);
 
-    std::string get_json();
-
-    std::string get_json_template();
-
     bool read_json(std::string json_string);
 
-    std::string get_oid();
+    std::string get_own_oid()
+    {
+        return oid_to_string(oid_document);
+    }
+
+    void set_own_oid(std::string oid_str)
+    {
+        MongoObject::string_to_oid(oid_str, &oid_document);
+    }
 
     void set_name(std::string name){
         object_name = name;
@@ -393,10 +407,7 @@ public:
     }
 
     template <typename T>
-    void set_array(
-            const char* key,
-            std::vector<T> value
-            ){
+    void set_array(const char* key, std::vector<T> value){
         bson_t dst; bson_init(&dst);
         bson_copy_to_excluding_noinit(
                 &document, &dst,
@@ -407,30 +418,21 @@ public:
         bson_copy_to(&dst, &document);
     }
 
-    std::string get_json(const char *key){
-        std::string re;
-        bson_iter_t iter, desc;
-        bson_iter_init (&iter, &document);
-        if(bson_iter_find_descendant (&iter, key, &desc)){
-            if (BSON_ITER_HOLDS_DOCUMENT (&desc)) {
-                char *str = NULL;
-                bson_t *arr;
-                const uint8_t *data = NULL;
-                uint32_t len = 0;
-                bson_iter_document (&desc, &len, &data);
-                arr = bson_new_from_data (data, len);
-                str = bson_as_json (arr, NULL);
-                re.assign(str);
-                bson_free (str);
-                bson_destroy (arr);
-            }
-        }
-        return re;
+    std::string get_json(int indent=4);
+
+    std::string get_json_of_key(std::string key);
+
+    std::string show(){
+        std::ostringstream os;
+        os << this->get_json();
+        os << std::endl;
+        return os.str();
     }
 
     // Operators
     //--------------------------------------------------------------------
     virtual std::shared_ptr<MongoObject> operator[](std::string key);
+
     bool operator==(MongoObject const& b){
         return (
                 bson_oid_equal(&b.oid_document, &oid_document) &&
@@ -438,11 +440,11 @@ public:
         );
     };
 
-    /**
-     * Shows information about the class
-     * @param out Stream used to show the information
-     */
-    void show(std::ostream &out = std::cout) const;
+    friend std::ostream& operator<<(std::ostream &out, MongoObject& o)
+    {
+        out << o.get_json();
+        return out;
+    }
 
 };
 
