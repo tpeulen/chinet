@@ -6,15 +6,16 @@
 %include "documentation.i"
 %{
 #define SWIG_FILE_WITH_INIT
-//#include "../include/Curve.h"
 #include "../include/Functions.h"
-//#include "../include/Decay.h"
 #include "../include/CNode.h"
 #include "../include/MongoObject.h"
 %}
 
 %pythonbegin %{
 import numpy as np
+import chinet as cn
+import inspect
+import typing
 %}
 
 %include "typemaps.i";
@@ -72,8 +73,5 @@ import numpy as np
 %include "mongo.i"
 %include "port.i"
 %include "node.i"
-//%include "nodecallback.i"
 %include "session.i"
 //%include "pda.i"
-//%include "curve.i"
-//%include "decay.i"

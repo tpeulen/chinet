@@ -6,17 +6,18 @@ channels:
   - salilab
 
 dependencies:
+  - ipython
   - python=3.7
   - setuptools
   - cmake
-  - eigen
   - nose
   - numpy
   - yaml
   - mongodb
+  - eigen
+  - intel-openmp
   - swig 3.0.12.*
   - boost 1.67.0.*
-  - intel-openmp
   - librttr 0.9.6.*
   - libmongoc 1.15.1.*
   - labellib

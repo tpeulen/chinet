@@ -183,7 +183,7 @@ void AV(
     */
 }
 
-RTTR_REGISTRATION {
+RTTR_REGISTRATION{
     using namespace rttr;
     registration::class_<NodeCallback>("NodeCallback").constructor<>().method("run", &NodeCallback::run);
     registration::method("multiply_double", &multiply<double>);

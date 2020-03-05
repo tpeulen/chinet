@@ -1,4 +1,7 @@
-%module chinet
+%module(directors="1", package="chinet") node
+
+/* turn on director wrapping for Callback */
+%feature("director") NodeCallback;
 
 %include "std_vector.i";
 %include "std_map.i";
@@ -12,8 +15,6 @@
     #include "../include/NodeCallback.h"
 %}
 
-/* turn on director wrapping Callback */
-%feature("director") NodeCallback;
 
 %shared_ptr(Port)
 %shared_ptr(Node)
@@ -45,13 +46,6 @@
         return os.str();
     }
     %pythoncode "node_extension.py"
-
-    /*
-    std::shared_ptr<Port> __getitem__(std::string key)
-    {
-            return (*self)[key];
-    };
-     */
 
 }
 

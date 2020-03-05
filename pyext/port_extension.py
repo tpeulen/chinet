@@ -1,6 +1,5 @@
 # The approach with __swig_getmethods is deprecated in swig 4.0.0
 # Thus, the code below needs to be changed in the future.
-
 __swig_getmethods__["bytes"] = get_bytes
 __swig_setmethods__["bytes"] = set_bytes
 if _newclass: bytes = property(get_bytes, set_bytes)

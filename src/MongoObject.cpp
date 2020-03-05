@@ -217,24 +217,25 @@ bool MongoObject::write_to_db()
 
 bool MongoObject::read_from_db(const std::string &oid_string)
 {
+#if VERBOSE
+    std::cerr << "READ OID FROM DB" << std::endl;
+#endif
     bson_oid_t oid;
     if (string_to_oid(oid_string, &oid)) {
-
         if (!is_connected_to_db()) {
 #if VERBOSE
-            std::cerr << "Not connected to a DB." << std::endl;
+            std::cerr << "-- Not connected to a DB." << std::endl;
 #endif
             return false;
         } else {
-            // find the oid in the collection
+            // find the oid in the DB collection
             bson_t *query = nullptr;
             query = BCON_NEW ("_id", BCON_OID(&oid));
-
             size_t len;
 #if VERBOSE
-            std::clog << "reading: " << bson_as_json(query, &len) << std::endl;
+            std::clog << "-- Reading OID: " << oid_string << std::endl;
+            std::clog << "-- Query result: " << bson_as_json(query, &len) << std::endl;
 #endif
-
             mongoc_cursor_t *cursor; // cursor pointing to the new document
             cursor = mongoc_collection_find_with_opts(
                     collection,
@@ -242,29 +243,33 @@ bool MongoObject::read_from_db(const std::string &oid_string)
                     nullptr, // the opts
                     nullptr  // the read_prefs
             );
-
             const bson_t *doc;
             while (mongoc_cursor_next(cursor, &doc)) {
 #if VERBOSE
-                std::clog << "read content: " << bson_as_json(doc, &len) << std::endl;
+                std::clog << "-- Read content from DB: " << bson_as_json(doc, &len) << std::endl;
+                std::clog << "-- Copying content to node" << std::endl;
 #endif
-
                 bson_reinit(&document);
+#if VERBOSE
+                std::clog << "-- Copying document of query to the document of the node" << std::endl;
+#endif
                 bson_copy_to(doc, &document);
-
-                // Copy the data from the document to the object's attributes
                 bson_oid_copy(&oid, &oid_document);
-
                 bson_iter_t iter;
                 // oid_precursor
                 if (bson_iter_init(&iter, &document) &&
                     bson_iter_find(&iter, "precursor") &&
                     BSON_ITER_HOLDS_OID(&iter)) {
+#if VERBOSE
+                    std::clog << "-- Setting Node the precursor OID to the OID in the DB" << std::endl;
+#endif
                     bson_oid_copy(bson_iter_oid(&iter), &oid_precursor);
                 } else {
+#if VERBOSE
+                    std::clog << "-- Setting Node the precursor OID to the OID in the DB" << std::endl;
+#endif
                     bson_oid_copy(&oid_document, &oid_precursor);
                 }
-
                 // time_of_death
                 if (bson_iter_init(&iter, &document) &&
                     bson_iter_find(&iter, "death") &&
@@ -274,10 +279,9 @@ bool MongoObject::read_from_db(const std::string &oid_string)
                     time_of_death = 0;
                 }
             }
-
             if (mongoc_cursor_error(cursor, &error)) {
 #if VERBOSE
-                std::cerr << "An error occurred: " << error.message << std::endl;
+                std::cerr << "-- An error occurred: " << error.message << std::endl;
 #endif
                 return false;
             }
@@ -286,10 +290,9 @@ bool MongoObject::read_from_db(const std::string &oid_string)
             mongoc_cursor_destroy(cursor);
             return true;
         }
-
     } else {
 #if VERBOSE
-        std::cerr << "OID string not valid." << std::endl;
+        std::cerr << "-- Error: OID string not valid." << std::endl;
 #endif
         return false;
     }
@@ -472,6 +475,27 @@ void MongoObject::append_string(
                 );
     }
 }
+
+void MongoObject::set_string(
+        std::string key,
+        std::string str
+){
+    bson_t dst; bson_init(&dst);
+    bson_copy_to_excluding_noinit(
+            &document, &dst,
+            key.c_str(),
+            NULL
+    );
+    bson_append_utf8(
+            &dst,
+            key.c_str(), key.size(),
+            str.c_str(), str.size()
+    );
+    bson_reinit(&document);
+    bson_copy_to(&dst, &document);
+    bson_destroy(&dst);
+}
+
 
 const std::string MongoObject::get_string_by_key(bson_t *doc, const std::string key)
 {

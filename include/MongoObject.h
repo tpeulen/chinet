@@ -134,9 +134,7 @@ protected:
             const char *document_name,
             std::map<std::string, std::shared_ptr<T>> *target_map){
         bool return_value = true;
-
-        bson_iter_t iter;
-        bson_iter_t child;
+        bson_iter_t iter; bson_iter_t child;
         if (bson_iter_init_find (&iter, doc, document_name) &&
             BSON_ITER_HOLDS_DOCUMENT (&iter) &&
             bson_iter_recurse (&iter, &child)) {
@@ -282,6 +280,15 @@ public:
     }
 
     virtual std::string get_name(){
+        return object_name;
+    }
+
+    void set_string(
+            std::string key,
+            std::string str
+    );
+
+    virtual std::string get_string(){
         return object_name;
     }
 

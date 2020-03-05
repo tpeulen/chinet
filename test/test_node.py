@@ -2,9 +2,12 @@ import utils
 import os
 import unittest
 import sys
-import numpy as np
 import json
+
+import numba as nb
+import numpy as np
 import chinet as cn
+
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 utils.set_search_paths(TOPDIR)
@@ -13,7 +16,7 @@ utils.set_search_paths(TOPDIR)
 class CallbackNodePassOn(cn.NodeCallback):
 
     def __init__(self, *args, **kwargs):
-        cn.NodeCallback.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def run(self, inputs, outputs):
         outputs["outA"].value = inputs["inA"].value
@@ -22,7 +25,7 @@ class CallbackNodePassOn(cn.NodeCallback):
 class NodeCallbackMultiply(cn.NodeCallback):
 
     def __init__(self, *args, **kwargs):
-        cn.NodeCallback.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def run(self, inputs, outputs):
         mul = 1.0
@@ -73,22 +76,31 @@ class Tests(unittest.TestCase):
 
         outA = cn.Port()
         node.add_output_port("outA", outA)
-
+        object_name, callback, io_map = node.name.split(":")
         self.assertEqual(
-            node.name,
-            ", : (inA,inB,)->(outA,)"
+            node.get_oid(),
+            object_name
+        )
+        self.assertEqual(
+            io_map,
+            "(inA,inB,)->(outA,)"
         )
 
         node.set_callback("multiply_int", "C")
+        object_name, callback, io_map = node.name.split(":")
         self.assertEqual(
-            node.get_name(),
-            ", multiply_int: (inA,inB,)->(outA,)"
+            callback,
+            "multiply_int"
+        )
+        self.assertEqual(
+            io_map,
+            "(inA,inB,)->(outA,)"
         )
 
         node.set_name("NodeName")
         self.assertEqual(
             node.get_name(),
-            'NodeName, multiply_int: (inA,inB,)->(outA,)'
+            'NodeName:multiply_int:(inA,inB,)->(outA,)'
         )
 
     def test_node_ports(self):
@@ -491,6 +503,65 @@ class Tests(unittest.TestCase):
             [13.0]
         )
 
+    def call_back_setter(self):
+        """This tests the setter of Node using normal python functions
+
+        The Ports and the Callback function of a Node can be initialized
+        using a normal Python function. The parameters names of the function
+        are taken as names of the input Ports. The output Port names are
+        either numbered from out_00 to out_xx if the function returns a
+        tuples or a single object (out_00). Or the names correspond to the
+        keys of a returned dictonary.
+
+        :return:
+        """
+        # one input to one output
+        node = cn.Node()
+        f = lambda x: 2.*x
+        node.callback_function = f
+        x = node.inputs['x']
+        out = node.outputs['out_00']
+        x.reactive = True
+        x.value = 11.0
+        self.assertEqual(
+            out.value,
+            f(x.value)
+        )
+
+        # one input to many outputs
+        node = cn.Node()
+        def g(x):
+            return x // 4.0, x % 4.0
+        node.callback_function = g
+        x = node.inputs['x']
+        out_0 = node.outputs['out_00']
+        out_1 = node.outputs['out_01']
+        x.value = 11.0
+        self.assertEqual(
+            out_0,
+            x // 4.0
+        )
+        self.assertEqual(
+            out_1,
+            x % 4.0
+        )
+
+        # use of numba decorated function as a Node callback
+        node = cn.Node()
+        @nb.jit(nopython=True)
+        def h(
+                x: np.array,
+                y: np.array
+        ):
+            return x * y
+        node.callback_function = h
+        x = node.inputs['x']
+        y = node.inputs['y']
+        z = node.outputs['out_00']
+        print(z.value)
+        x.reactive = True
+        x.value = 11.11
+        print(z.value)
 
 if __name__ == '__main__':
     unittest.main()

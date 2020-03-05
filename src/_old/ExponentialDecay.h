@@ -7,7 +7,7 @@
 
 
 #include <vector>
-#include <Curve.h>
+#include <include/_old/Curve.h>
 #include <Functions.h>
 #include <iostream>
 

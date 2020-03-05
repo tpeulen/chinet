@@ -46,7 +46,9 @@ public:
     //--------------------------------------------------------------------
     Node();
     Node(std::string name);
-    Node(std::map<std::string, std::shared_ptr<Port>> ports);
+    Node(
+        std::map<std::string, std::shared_ptr<Port>> ports
+    );
     ~Node();
 
     // Methods
@@ -73,8 +75,8 @@ public:
             bool is_source,
             bool fill_in_out=true
                     );
-    void add_input_port(const std::string &key, std::shared_ptr<Port>);
-    void add_output_port(const std::string &key, std::shared_ptr<Port>);
+    void add_input_port(const std::string &key, std::shared_ptr<Port> port);
+    void add_output_port(const std::string &key, std::shared_ptr<Port> port);
 
     Port* get_input_port(const std::string &port_name);
     Port* get_output_port(const std::string &port_name);

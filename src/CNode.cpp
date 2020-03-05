@@ -16,8 +16,10 @@ MongoObject(name)
     append_string(&document, "type", "node");
 }
 
-Node::Node(std::map<std::string, std::shared_ptr<Port>> ports) :
-           Node(){
+Node::Node(
+        std::map<std::string, std::shared_ptr<Port>> ports
+)
+{
     for(auto &o: ports){
         o.second->set_name(o.first);
         add_port(o.first, o.second, o.second->is_output(), false);
@@ -35,15 +37,18 @@ Node::~Node() {
 //--------------------------------------------------------------------
 
 bool Node::read_from_db(const std::string &oid_string){
+#if VERBOSE
+    std::clog << "READING NODE FROM DB" << std::endl;
+    std::clog << "Requested OID:" << oid_string << std::endl;
+#endif
     bool return_value = true;
-
     return_value &= MongoObject::read_from_db(oid_string);
     return_value &= create_and_connect_objects_from_oid_doc(
             &document, "ports", &ports
             );
 #if VERBOSE
-    std::cout << "callback-restore: " << get_string_by_key(&document, "callback") << std::endl;
-    std::cout << "callback_type-restore: " << get_string_by_key(&document, "callback_type") << std::endl;
+    std::clog << "callback-restore: " << get_string_by_key(&document, "callback") << std::endl;
+    std::clog << "callback_type-restore: " << get_string_by_key(&document, "callback_type") << std::endl;
 #endif
 
     set_callback(
@@ -73,9 +78,9 @@ bool Node::write_to_db() {
 std::string Node::get_name(){
     std::string r;
     r.append(object_name);
-    r.append(", ");
+    r.append(":");
     r.append(callback);
-    r.append(": ");
+    r.append(":");
     r.append("(");
     for(auto const &n : get_input_ports()){
         r.append(n.first);
