@@ -93,7 +93,7 @@ MESSAGE ("-- Found librttr version \"${PACKAGE_VERSION}\"")
 
 # libmongoc
 ###########################
-find_package (libmongoc-1.0)
+FIND_PACKAGE (libmongoc-1.0)
 MESSAGE ("-- Found mongoc version \"${MONGOC_VERSION}\"")
 MESSAGE ("-- include path \"${MONGOC_INCLUDE_DIRS}\"")
 MESSAGE ("-- libraries \"${MONGOC_LIBRARIES}\"")
@@ -113,7 +113,7 @@ message("-- libmongocxx include \"${LIBMONGOCXX_INCLUDE_DIRS}\"")
 
 # LabelLib
 ###########################
-#find_package (FlexLabel REQUIRED)
+#FIND_PACKAGE (FlexLabel REQUIRED)
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/labellib/FlexLabel/include/)
 
 # JSON

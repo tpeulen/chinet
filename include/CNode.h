@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <map>
+
 #include <rttr/registration>
 
 #include "MongoObject.h"
@@ -44,10 +45,9 @@ public:
 
     // Constructor & Destructor
     //--------------------------------------------------------------------
-    Node();
-    Node(std::string name);
     Node(
-        std::map<std::string, std::shared_ptr<Port>> ports
+        std::string name="",
+        const std::map<std::string, std::shared_ptr<Port>>& ports = std::map<std::string, std::shared_ptr<Port>>()
     );
     ~Node();
 

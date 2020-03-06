@@ -45,8 +45,9 @@ class NodeCallbackMultiply(cn.NodeCallback):
 class Tests(unittest.TestCase):
 
     def test_node_init(self):
-        node_with_ports = cn.Node(
-            {
+        d = {
+            'name': 'NodeName',
+            'ports': {
                 'inA': cn.Port(7.0),
                 'inB': cn.Port(13.0),
                 'outC': cn.Port(
@@ -55,7 +56,8 @@ class Tests(unittest.TestCase):
                     is_output=True
                 )
             }
-        )
+        }
+        node_with_ports = cn.Node(**d)
         self.assertEqual(
             node_with_ports.get_input_ports().keys(),
             ['inA', 'inB']
@@ -151,7 +153,7 @@ class Tests(unittest.TestCase):
     def test_node_C_RTTR_callback_2(self):
         """Test chinet RTTR C callbacks"""
         node = cn.Node(
-            {
+            ports={
                 "inA": cn.Port(
                     value=[2., 3., 4.],
                     fixed=False,
@@ -227,7 +229,7 @@ class Tests(unittest.TestCase):
 
     def test_node_write_to_db(self):
         node = cn.Node(
-            {
+            ports={
                 'portA': cn.Port(55),
                 'portB': cn.Port(2),
                 'portC': cn.Port()
@@ -240,7 +242,7 @@ class Tests(unittest.TestCase):
     def test_node_restore_from_db(self):
         # Make new node that will be written to the DB
         node = cn.Node(
-            {
+            ports={
                 'portA': cn.Port(13.0),
                 'portB': cn.Port(2.0),
                 'portC': cn.Port(1.0)
@@ -278,7 +280,7 @@ class Tests(unittest.TestCase):
         )
         in_node_1 = cn.Port(3.0)
         node_1 = cn.Node(
-            {
+            ports={
                 'inA': in_node_1,
                 'outA': out_node_1
             }
@@ -320,7 +322,7 @@ class Tests(unittest.TestCase):
             is_reactive=True
         )
         node_1 = cn.Node(
-            {
+            ports={
                 'inA': in_node_1,
                 'outA': out_node_1
             }
@@ -368,7 +370,7 @@ class Tests(unittest.TestCase):
             is_output=True
         )
         node_1 = cn.Node(
-            {
+            ports={
                 'inA': in_node_1,
                 'outA': out_node_1
             }
@@ -403,7 +405,7 @@ class Tests(unittest.TestCase):
             is_output=True
         )
         node_2 = cn.Node(
-            {
+            ports={
                 'inA': in_node_2,
                 'outA': out_node_2
             }
@@ -464,7 +466,7 @@ class Tests(unittest.TestCase):
             is_output=True
         )
         node_1 = cn.Node(
-            {
+            ports={
                 'inA': in_node_1,
                 'outA': out_node_1
             }
@@ -483,7 +485,7 @@ class Tests(unittest.TestCase):
             is_output=True
         )
         node_2 = cn.Node(
-            {
+            ports={
                 'inA': in_node_2,
                 'outA': out_node_2
             }

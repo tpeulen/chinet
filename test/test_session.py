@@ -13,14 +13,14 @@ class Tests(unittest.TestCase):
 
     def test_session_init(self):
         n1 = cn.Node(
-            {
+            ports={
                 'portA': cn.Port(1),
                 'portB': cn.Port(2),
                 'portC': cn.Port(3)
             },
         )
         n2 = cn.Node(
-            {
+            ports={
                 'inA': cn.Port(5),
                 'inB': cn.Port(7),
                 'outA': cn.Port(11, False, True),

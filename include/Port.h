@@ -30,7 +30,8 @@ private:
     /*!
      * @brief This attribute can point to another Port (default value nullptr).
      * If the attribute points to another port, the value returned by the
-     * method @class Port::get_value_vector corresponds to the value the other Port.
+     * method @class Port::get_value_vector corresponds to the value the other
+     * Port.
      */
     std::shared_ptr<Port> link_ = nullptr;
 

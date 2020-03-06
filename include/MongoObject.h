@@ -46,17 +46,36 @@ protected:
 
     // Getter & Setter
     //--------------------------------------------------------------------
+
+    //! The object identification number of the @class MongoObject instance
+    /*!
+     *  get_own_bson_oid() Returns the object's ObjectId value (see:
+     *  https://docs.mongodb.com/manual/reference/bson-types/#objectid)
+     *
+     */
+    //! \return
     bson_oid_t get_bson_oid()
     {
         return oid_document;
     }
 
+    /// The BSON document of the @class MongoObject instance
+    /// \return
     virtual bson_t get_bson();
 
+    /// A BSON document containing the @class MongoObject instance BSON document
+    /// excluding a set of keys
+    /// \param first is the first key to exclude.
+    /// \param ... more keys to exclude
+    /// \return a bson_t document
     bson_t get_bson_excluding(const char* first, ...);
 
+    /// Pointer to the BSON document of the MongoObject
+    /// \return
     const bson_t* get_document();
 
+    /// Set the
+    /// \param b
     void set_document(bson_t b){
         document = b;
     }
@@ -220,16 +239,27 @@ protected:
             size_t size=0
                     );
 
+    /// The string contained in a @class bson_t document with the @param key
+    /// \param doc BSON @class bson_t document which is inspected
+    /// \param key
+    /// \return string contained under the @param key
     static const std::string get_string_by_key(
             bson_t *doc, std::string key
             );
 
+    /// Converts a @class bson_oid_t oid into a @class std::string
+    /// \param oid
+    /// \return
     static std::string oid_to_string(bson_oid_t oid){
         char oid_str[25];
         bson_oid_to_string(&oid, oid_str);
         return std::string(oid_str, 25).substr(0, 24);
     }
 
+    /// Converts a @class std::string into a @class bson_oid_t
+    /// \param oid_string
+    /// \param oid
+    /// \return
     static bool string_to_oid(
             const std::string &oid_string,
             bson_oid_t *oid
@@ -269,22 +299,33 @@ public:
     /// Disconnects the @class MongoObject instance from the DB
     void disconnect_from_db();
 
-    /// Returns true if the instance of the @class MongoObject is connected to the DB
+    /// Returns true if the instance of the @class MongoObject is connected
+    /// to the DB
     bool is_connected_to_db();
 
     virtual bool write_to_db();
 
     std::string create_copy();
 
+    /// Read the content of an existing BSON document into the current object
+    /// \param oid_string Object identifier of the queried document in the DB
+    /// \return True if successful otherwise false
     virtual bool read_from_db(const std::string &oid_string);
 
+    /// Read the content of a JSON string into a MongoObject
+    /// \param json_string
+    /// \return
     bool read_json(std::string json_string);
 
+    /// The own object identifiert
+    /// \return
     std::string get_own_oid()
     {
         return oid_to_string(oid_document);
     }
 
+    /// Set the own object identifier without duplicate check
+    /// \param oid_str
     void set_own_oid(std::string oid_str)
     {
         MongoObject::string_to_oid(oid_str, &oid_document);
@@ -298,11 +339,15 @@ public:
         return object_name;
     }
 
+    /// Create and / or set a string in the MongoObject accessed by @param key
+    /// \param key the key to access the content
+    /// \param str The content
     void set_string(
             std::string key,
             std::string str
     );
 
+    // Seems WRONG
     virtual std::string get_string(){
         return object_name;
     }

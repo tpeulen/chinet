@@ -6,26 +6,19 @@
 //--------------------------------------------------------------------
 
 
-Node::Node(){
-    append_string(&document, "type", "node");
-}
-
-Node::Node(std::string name) :
-MongoObject(name)
-{
-    append_string(&document, "type", "node");
-}
-
 Node::Node(
-        std::map<std::string, std::shared_ptr<Port>> ports
-)
+        std::string name,
+        const std::map<std::string, std::shared_ptr<Port>>& ports
+) : MongoObject(name)
 {
+    append_string(&document, "type", "node");
     for(auto &o: ports){
         o.second->set_name(o.first);
         add_port(o.first, o.second, o.second->is_output(), false);
     }
     fill_input_output_port_lookups();
 }
+
 
 // Destructor
 //--------------------------------------------------------------------

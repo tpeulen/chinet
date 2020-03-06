@@ -33,6 +33,4 @@ public:
 };
 
 
-
-
 #endif //chinet_NODECALLBACK_H

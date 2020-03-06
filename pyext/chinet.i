@@ -1,8 +1,6 @@
 %module(directors="1", package="chinet") chinet
 %feature("kwargs", 1);
-%warnfilter(511) std::vector;
-%warnfilter(511) std::map;
-%warnfilter(511) swig::PySwigIterator;
+#pragma SWIG nowarn=511
 %include "documentation.i"
 %{
 #define SWIG_FILE_WITH_INIT
