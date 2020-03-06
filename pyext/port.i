@@ -34,7 +34,6 @@
 
 %include "../include/Port.h"
 
-%ignore X::X();
 %extend Port{
 
     public:

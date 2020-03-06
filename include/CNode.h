@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <map>
+#include <algorithm>
 
 #include <rttr/registration>
 
@@ -28,7 +29,6 @@ private:
     std::map<std::string, std::shared_ptr<Port>> ports;
 
 protected:
-
     void fill_input_output_port_lookups();
     rttr::method meth_ = rttr::type::get_global_method("nothing");
     std::map<std::string, std::shared_ptr<Port>> in_;
@@ -62,13 +62,17 @@ public:
     // Getter
     //--------------------------------------------------------------------
     bson_t get_bson();
+
     std::string get_name();
 
     std::map<std::string, std::shared_ptr<Port>> get_input_ports();
+
     std::map<std::string, std::shared_ptr<Port>> get_output_ports();
 
     std::map<std::string, std::shared_ptr<Port>> get_ports();
+
     Port* get_port(const std::string &port_name);
+
     void add_port(
             const std::string &key,
             std::shared_ptr<Port>,

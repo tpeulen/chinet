@@ -1,6 +1,8 @@
 #include "MongoObject.h"
 
 
+auto MongoObject::registered_objects = std::list<std::shared_ptr<MongoObject>>();
+
 MongoObject::MongoObject(std::string name) :
     uri_string(""),
     db_string(""),
@@ -37,6 +39,24 @@ MongoObject::~MongoObject()
     std::clog << "-- MongoObject OID: " << get_own_oid() << std::endl;
     std::clog << "-- MongoObject is connected to DB: " << is_connected_to_db() << std::endl;
 #endif
+
+#if VERBOSE
+    std::clog << "-- searching for node in registered_objects..." << std::endl;
+    std::clog << "-- number of registered objects: " << registered_objects.size() << std::endl;
+#endif
+    auto& l = registered_objects;
+    for(auto iter = l.begin(); iter != l.end(); iter++)
+    {
+        if (iter->get() == this)
+        {
+#if VERBOSE
+            std::clog << "-- removing node from registered_nodes" << std::endl;
+#endif
+            l.erase(iter);
+            break;
+        }
+    }
+
     time_of_death = Functions::get_time();
     if (is_connected_to_db()) {
 #if VERBOSE
@@ -45,6 +65,27 @@ MongoObject::~MongoObject()
         write_to_db();
         disconnect_from_db();
     }
+}
+
+void MongoObject::register_instance(std::shared_ptr<MongoObject> x){
+    auto& v = registered_objects;
+    if(x == nullptr){
+        x = shared_from_this();
+    }
+    if(std::find(v.begin(),v.end(),x) == v.end())
+    {
+        /* v does not contain x */
+        v.emplace_back(x);
+    }
+}
+
+std::list<std::shared_ptr<MongoObject>> MongoObject::get_instances(){
+    return registered_objects;
+}
+
+
+std::shared_ptr<MongoObject> MongoObject::get_ptr(){
+    return shared_from_this();
 }
 
 bool MongoObject::connect_to_db(
@@ -217,9 +258,7 @@ bool MongoObject::write_to_db()
     std::clog << "WRITING MONGOOBJECT TO DB" << std::endl;
     std::clog << "-- MongoObject OID: " << get_own_oid() << std::endl;
 #endif
-    return write_to_db(
-            get_bson(), 0
-    );
+    return write_to_db(get_bson(), 0);
 }
 
 bool MongoObject::read_from_db(const std::string &oid_string)
@@ -442,10 +481,9 @@ const bson_t *MongoObject::get_document()
     return &document;
 }
 
-std::string MongoObject::create_copy()
+std::string MongoObject::create_copy_in_db()
 {
     bson_t document_copy;
-
     // update oid of copy
     bson_oid_t oid_copy;
     bson_oid_init(&oid_copy, nullptr);
@@ -456,7 +494,6 @@ std::string MongoObject::create_copy()
         BSON_ITER_HOLDS_OID(&iter)) {
         bson_iter_overwrite_oid(&iter, &oid_copy);
     }
-
     // set precursor of copy to current document
     if (bson_iter_init(&iter, &document_copy) &&
         bson_iter_find(&iter, "precursor") &&
@@ -465,14 +502,11 @@ std::string MongoObject::create_copy()
     } else {
         bson_append_oid(&document_copy, "precursor", 9, &oid_document);
     }
-
     size_t len;
 #if VERBOSE
     std::clog << "created copy: " << bson_as_json(&document_copy, &len) << std::endl;
 #endif
-
     write_to_db(document_copy, 2);
-
     return oid_to_string(oid_copy);
 }
 

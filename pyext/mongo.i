@@ -4,9 +4,11 @@
 #include "../include/MongoObject.h"
 %}
 
+%include <std_list.i>;
 %include <std_shared_ptr.i>
 
 %shared_ptr(MongoObject)
+%template(ListMongoObjectPtr) std::list<std::shared_ptr<MongoObject>>;
 
 %include attribute.i
 %attributestring(MongoObject, std::string, name, get_name, set_name);
@@ -36,6 +38,9 @@
 
         %template(connect_object_to_db_mongo) connect_object_to_db<std::shared_ptr<MongoObject>>;
 
-    %pythoncode "mongo_extension.py"
+        std::shared_ptr<MongoObject> __getitem__(char* key) {
+            return(*self)[key];
+        }
 
+    %pythoncode "mongo_extension.py"
 }

@@ -113,3 +113,15 @@ def callback_function(
 
 callback_function = property(None, callback_function)
 
+
+def __init__(
+        self,
+        *args, **kwargs
+):
+    this = _chinet.new_Node(*args, **kwargs)
+    try:
+        self.this.append(this)
+    except:
+        self.this = this
+    self.register_instance(None)
+

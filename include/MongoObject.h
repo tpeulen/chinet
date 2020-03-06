@@ -5,6 +5,7 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <list>
 #include <memory>
 #include <cmath>
 #include <iterator>
@@ -22,9 +23,10 @@ using json = nlohmann::json;
 #define VERBOSE 1
 
 
-class MongoObject{
+class MongoObject : public std::enable_shared_from_this<MongoObject>{
 
 private:
+    static std::list<std::shared_ptr<MongoObject>> registered_objects;
 
     bool is_connected_to_db_;
     mongoc_uri_t *uri;
@@ -233,11 +235,17 @@ protected:
         return return_value;
     }
 
+    /// Append a string to a BSON document
+    /// \param dst pointer to the target BSON document
+    /// \param key the key of the string int the target BSON document
+    /// \param content the string that will be written to the BSON document
+    /// \param size optional parameter for the string size in the BSON document.
     static void append_string(
             bson_t *dst, std::string key,
             std::string content,
             size_t size=0
                     );
+
 
     /// The string contained in a @class bson_t document with the @param key
     /// \param doc BSON @class bson_t document which is inspected
@@ -247,6 +255,7 @@ protected:
             bson_t *doc, std::string key
             );
 
+
     /// Converts a @class bson_oid_t oid into a @class std::string
     /// \param oid
     /// \return
@@ -255,6 +264,7 @@ protected:
         bson_oid_to_string(&oid, oid_str);
         return std::string(oid_str, 25).substr(0, 24);
     }
+
 
     /// Converts a @class std::string into a @class bson_oid_t
     /// \param oid_string
@@ -277,7 +287,7 @@ public:
      * @param db_string
      * @param app_string
      * @param collection_string
-     * @return
+     * @return True if connected successfully
      */
     bool connect_to_db(
             const std::string &uri_string,
@@ -286,6 +296,10 @@ public:
             const std::string &collection_string
     );
 
+    /// Connects other object to the same MongoDB
+    /// \tparam T
+    /// \param o The object that is connected to the same MongoDB
+    /// \return True if connected successfully
     template <typename T>
     bool connect_object_to_db(T o){
         return o->connect_to_db(
@@ -303,9 +317,17 @@ public:
     /// to the DB
     bool is_connected_to_db();
 
+    void register_instance(std::shared_ptr<MongoObject>);
+
+    std::list<std::shared_ptr<MongoObject>> get_instances();
+
+    /// Writes @class MongoObject to the connected MongoDB
+    /// \return
     virtual bool write_to_db();
 
-    std::string create_copy();
+    /// Creates a copy of the object in the connected MongoDB with a new OID.
+    /// \return The OID of the copy
+    std::string create_copy_in_db();
 
     /// Read the content of an existing BSON document into the current object
     /// \param oid_string Object identifier of the queried document in the DB
@@ -317,7 +339,7 @@ public:
     /// \return
     bool read_json(std::string json_string);
 
-    /// The own object identifiert
+    /// The own object identifier
     /// \return
     std::string get_own_oid()
     {
@@ -339,13 +361,12 @@ public:
         return object_name;
     }
 
+    std::shared_ptr<MongoObject> get_ptr();
+
     /// Create and / or set a string in the MongoObject accessed by @param key
     /// \param key the key to access the content
     /// \param str The content
-    void set_string(
-            std::string key,
-            std::string str
-    );
+    void set_string(std::string key, std::string str);
 
     // Seems WRONG
     virtual std::string get_string(){

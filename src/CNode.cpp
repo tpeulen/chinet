@@ -1,10 +1,8 @@
-//#include <Port.h>
 #include "CNode.h"
 #include "Port.h"
 
 // Constructor
 //--------------------------------------------------------------------
-
 
 Node::Node(
         std::string name,
@@ -22,8 +20,7 @@ Node::Node(
 
 // Destructor
 //--------------------------------------------------------------------
-Node::~Node() {
-}
+Node::~Node() = default;
 
 
 // Methods
@@ -67,6 +64,7 @@ bool Node::write_to_db() {
 
 // Getter
 //--------------------------------------------------------------------
+
 
 std::string Node::get_name(){
     std::string r;
