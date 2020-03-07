@@ -1,7 +1,7 @@
 #include "MongoObject.h"
 
 
-auto MongoObject::registered_objects = std::list<std::shared_ptr<MongoObject>>();
+std::list<std::shared_ptr<MongoObject>> MongoObject::registered_objects = std::list<std::shared_ptr<MongoObject>>();
 
 MongoObject::MongoObject(std::string name) :
     uri_string(""),

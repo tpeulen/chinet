@@ -26,6 +26,7 @@ using json = nlohmann::json;
 class MongoObject : public std::enable_shared_from_this<MongoObject>{
 
 private:
+
     static std::list<std::shared_ptr<MongoObject>> registered_objects;
 
     bool is_connected_to_db_;
