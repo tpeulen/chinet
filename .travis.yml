@@ -38,7 +38,7 @@ install:
 script:
   - sudo mkdir -p /data/db
   - sudo mongod &
-  - conda install nose coverage
+  - conda install nose coverage numba
   - ln -sf $(which nosetests) $(pwd)/test/
   - cd $(pwd)/test/
   - echo $PWD

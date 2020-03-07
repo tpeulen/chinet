@@ -26,7 +26,7 @@ install:
 
 # to run your custom scripts instead of automatic tests
 test_script:
-  - conda install chinet nose coverage -c local
+  - conda install chinet nose coverage numba -c local
   - cmd: echo %CD%
   - cmd: cd C:\projects\chinet\test\
   - cmd: echo %CD%
