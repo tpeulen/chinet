@@ -28,7 +28,7 @@ public:
         std::cout << "This print by NodeCallback class from C++" << std::endl;
     }
 
-    NodeCallback() {};
+    NodeCallback() = default;
     virtual ~NodeCallback() {};
 };
 

@@ -25,11 +25,10 @@
 %template(MapStringPortSharedPtr) std::map<std::string, std::shared_ptr<Port>>;
 %template(ListNodePtr) std::list<std::shared_ptr<Node>>;
 %template(MapStringDouble) std::map<std::string, double>;
-
-%include "../include/CNode.h"
 %include "../include/NodeCallback.h"
 
-
+%attribute(Node, bool, valid, is_valid);
+%include "../include/CNode.h"
 %extend Node {
 
     std::string __repr__(){
@@ -45,7 +44,7 @@
         os << ")";
         return os.str();
     }
-    %pythoncode "node_extension.py"
 
+    %pythoncode "node_extension.py"
 }
 

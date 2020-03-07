@@ -1,7 +1,3 @@
-__swig_getmethods__["valid"] = is_valid
-__swig_getmethods__["valid"] = set_valid
-if _newclass: valid = property(is_valid, set_valid)
-
 __swig_getmethods__["inputs"] = get_input_ports
 __swig_getmethods__["inputs"] = None
 if _newclass: inputs = property(get_input_ports, None)
@@ -116,6 +112,9 @@ callback_function = property(None, callback_function)
 
 def __init__(
         self,
+        name="",
+        ports=None,
+        callback_function=None,
         *args, **kwargs
 ):
     this = _chinet.new_Node(*args, **kwargs)
@@ -124,4 +123,9 @@ def __init__(
     except:
         self.this = this
     self.register_instance(None)
-
+    if callable(callback_function):
+        self.callback_function = callback_function
+    elif isinstance(ports, dict):
+        self.set_ports(ports)
+    if len(name) > 0:
+        self.name = name

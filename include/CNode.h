@@ -47,7 +47,8 @@ public:
     //--------------------------------------------------------------------
     Node(
         std::string name="",
-        const std::map<std::string, std::shared_ptr<Port>>& ports = std::map<std::string, std::shared_ptr<Port>>()
+        const std::map<std::string, std::shared_ptr<Port>>& ports = std::map<std::string, std::shared_ptr<Port>>(),
+        std::shared_ptr<NodeCallback> callback_class = nullptr
     );
     ~Node();
 
@@ -70,6 +71,7 @@ public:
     std::map<std::string, std::shared_ptr<Port>> get_output_ports();
 
     std::map<std::string, std::shared_ptr<Port>> get_ports();
+    void set_ports(const std::map<std::string, std::shared_ptr<Port>>& ports);
 
     Port* get_port(const std::string &port_name);
 

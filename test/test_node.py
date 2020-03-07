@@ -501,6 +501,27 @@ class Tests(unittest.TestCase):
             [13.0]
         )
 
+    def test_node_init_with_callback_function(self):
+        @nb.jit(nopython=False)
+        def h(x: np.ndarray, y: np.ndarray):
+            return x * y
+
+        node = cn.Node(
+            callback_function=h,
+            name="NodeName"
+        )
+        v = np.arange(10, dtype=np.double)
+        node.inputs['x'].value = v
+        node.inputs['y'].value = v
+        node.evaluate()
+        self.assertEqual(
+            np.allclose(
+                node.outputs['out_00'].value,
+                v * v
+            ),
+            True
+        )
+
     def call_back_setter(self):
         """Tests the setter Node.function_callback that takes Python functions
 

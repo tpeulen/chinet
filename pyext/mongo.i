@@ -13,7 +13,7 @@
 %include attribute.i
 %attributestring(MongoObject, std::string, name, get_name, set_name);
 %attributestring(MongoObject, std::string, oid, get_own_oid, set_own_oid);
-%attributestring(MongoObject, bool, is_connected_to_db, is_connected_to_db);
+%attribute(MongoObject, bool, is_connected_to_db, is_connected_to_db);
 
 %include "../include/MongoObject.h"
 %extend MongoObject {

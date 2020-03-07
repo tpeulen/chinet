@@ -6,15 +6,15 @@
 
 Node::Node(
         std::string name,
-        const std::map<std::string, std::shared_ptr<Port>>& ports
+        const std::map<std::string, std::shared_ptr<Port>>& ports,
+        std::shared_ptr<NodeCallback> callback_class
 ) : MongoObject(name)
 {
     append_string(&document, "type", "node");
-    for(auto &o: ports){
-        o.second->set_name(o.first);
-        add_port(o.first, o.second, o.second->is_output(), false);
+    set_ports(ports);
+    if(callback_class != nullptr){
+        this->callback_class = callback_class;
     }
-    fill_input_output_port_lookups();
 }
 
 
@@ -94,6 +94,14 @@ std::string Node::get_name(){
 
 std::map<std::string, std::shared_ptr<Port>> Node::get_ports(){
     return ports;
+}
+
+void Node::set_ports(const std::map<std::string, std::shared_ptr<Port>>& ports){
+    for(auto &o: ports){
+        o.second->set_name(o.first);
+        add_port(o.first, o.second, o.second->is_output(), false);
+    }
+    fill_input_output_port_lookups();
 }
 
 Port* Node::get_port(const std::string &port_name){
