@@ -59,7 +59,6 @@ MongoObject::~MongoObject()
     std::clog << "-- Total number of MongoObject instances: " <<
     registered_objects.size() << std::endl;
 #endif
-    auto& l = registered_objects;
 }
 
 void MongoObject::register_instance(std::shared_ptr<MongoObject> x){
@@ -67,10 +66,14 @@ void MongoObject::register_instance(std::shared_ptr<MongoObject> x){
     std::clog << "REGISTER MONGOOBJECT" << std::endl;
 #endif
     auto& v = registered_objects;
+#if VERBOSE
     int use_count_offset = 0;
+#endif
     if(x == nullptr){
         x = get_ptr();
+#if VERBOSE
         use_count_offset++;
+#endif
     }
 #if VERBOSE
     if(x != nullptr){
@@ -91,10 +94,13 @@ void MongoObject::register_instance(std::shared_ptr<MongoObject> x){
 void MongoObject::unregister_instance(std::shared_ptr<MongoObject> x){
 #if VERBOSE
     std::clog << "UNREGISTER MONGOOBJECT" << std::endl;
-#endif
     int use_count_offset = 0;
+#endif
     if(x == nullptr){
-        x = get_ptr(); use_count_offset++;
+        x = get_ptr();
+#if VERBOSE
+        use_count_offset++;
+#endif
     }
 #if VERBOSE
     if(x != nullptr){
@@ -113,7 +119,6 @@ std::list<std::shared_ptr<MongoObject>> MongoObject::get_instances(){
     std::clog << "MONGOOBJECT GET INSTANCES" << std::endl;
 #endif
 #if VERBOSE
-    auto l = std::list<std::shared_ptr<MongoObject>>();
     for(auto &v: registered_objects){
         if(v.use_count() > 1){
             std::clog << "-- OID: " << v->get_own_oid() << std::endl;
