@@ -129,3 +129,6 @@ def __init__(
         self.set_ports(ports)
     if len(name) > 0:
         self.name = name
+
+def __del__(self):
+    super().__del__()

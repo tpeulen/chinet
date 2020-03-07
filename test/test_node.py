@@ -235,7 +235,7 @@ class Tests(unittest.TestCase):
                 'portC': cn.Port()
             }
         )
-        node.set_callback("multiply", "C")
+        node.set_callback("multiply_int", "C")
         self.assertEqual(node.connect_to_db(**db_dict), True)
         self.assertEqual(node.write_to_db(), True)
 

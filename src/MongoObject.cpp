@@ -1,7 +1,8 @@
 #include "MongoObject.h"
 
 
-std::list<std::shared_ptr<MongoObject>> MongoObject::registered_objects = std::list<std::shared_ptr<MongoObject>>();
+std::list<std::shared_ptr<MongoObject>> MongoObject::registered_objects =
+        std::list<std::shared_ptr<MongoObject>>();
 
 MongoObject::MongoObject(std::string name) :
     uri_string(""),
@@ -12,6 +13,9 @@ MongoObject::MongoObject(std::string name) :
     object_name(""),
     is_connected_to_db_(false)
 {
+#if VERBOSE
+    std::clog << "NEW MONGOOBJECT" << std::endl;
+#endif
     bson_oid_init(&oid_document, nullptr);
     bson_oid_copy(&oid_document, &oid_precursor);
     uri = nullptr;
@@ -26,37 +30,23 @@ MongoObject::MongoObject(std::string name) :
     set_document(doc);
 
     if(name.empty()){
-        set_name(get_own_oid());
-    } else{
-        set_name(name);
+        name = get_own_oid();
     }
+#if VERBOSE
+    std::clog << "-- Name: " << name << std::endl;
+    std::clog << "-- OID: " << get_own_oid() << std::endl;
+#endif
+    set_name(name);
 }
 
 MongoObject::~MongoObject()
 {
 #if VERBOSE
     std::clog << "DESTROYING MONGOOBJECT" << std::endl;
-    std::clog << "-- MongoObject OID: " << get_own_oid() << std::endl;
-    std::clog << "-- MongoObject is connected to DB: " << is_connected_to_db() << std::endl;
+    std::clog << "-- OID: " << get_own_oid() << std::endl;
+    std::clog << "-- Connected to DB: " << is_connected_to_db()
+    << std::endl;
 #endif
-
-#if VERBOSE
-    std::clog << "-- searching for node in registered_objects..." << std::endl;
-    std::clog << "-- number of registered objects: " << registered_objects.size() << std::endl;
-#endif
-    auto& l = registered_objects;
-    for(auto iter = l.begin(); iter != l.end(); iter++)
-    {
-        if (iter->get() == this)
-        {
-#if VERBOSE
-            std::clog << "-- removing node from registered_nodes" << std::endl;
-#endif
-            l.erase(iter);
-            break;
-        }
-    }
-
     time_of_death = Functions::get_time();
     if (is_connected_to_db()) {
 #if VERBOSE
@@ -65,24 +55,74 @@ MongoObject::~MongoObject()
         write_to_db();
         disconnect_from_db();
     }
+#if VERBOSE
+    std::clog << "-- Total number of MongoObject instances: " <<
+    registered_objects.size() << std::endl;
+#endif
+    auto& l = registered_objects;
 }
 
 void MongoObject::register_instance(std::shared_ptr<MongoObject> x){
+#if VERBOSE
+    std::clog << "REGISTER MONGOOBJECT" << std::endl;
+#endif
     auto& v = registered_objects;
+    int use_count_offset = 0;
     if(x == nullptr){
-        x = shared_from_this();
+        x = get_ptr();
+        use_count_offset++;
     }
+#if VERBOSE
+    if(x != nullptr){
+        std::clog << "-- OID: " << x->get_own_oid() << std::endl;
+        std::clog << "-- Name: " << x->get_name() << std::endl;
+        std::clog << "-- Use count before registration: " << (x.use_count() - use_count_offset) << std::endl;
+    }
+#endif
     if(std::find(v.begin(),v.end(),x) == v.end())
     {
-        /* v does not contain x */
         v.emplace_back(x);
     }
+#if VERBOSE
+    std::clog << "-- Use count after registration: " << (x.use_count() - use_count_offset)<< std::endl;
+#endif
 }
+
+void MongoObject::unregister_instance(std::shared_ptr<MongoObject> x){
+#if VERBOSE
+    std::clog << "UNREGISTER MONGOOBJECT" << std::endl;
+#endif
+    int use_count_offset = 0;
+    if(x == nullptr){
+        x = get_ptr(); use_count_offset++;
+    }
+#if VERBOSE
+    if(x != nullptr){
+        std::clog << "-- Use count before unregister: " << (x.use_count() - use_count_offset) << std::endl;
+    }
+#endif
+    registered_objects.remove(x);
+#if VERBOSE
+    std::clog << "-- Use count after unregister: " << (x.use_count() - use_count_offset)<< std::endl;
+#endif
+}
+
 
 std::list<std::shared_ptr<MongoObject>> MongoObject::get_instances(){
+#if VERBOSE
+    std::clog << "MONGOOBJECT GET INSTANCES" << std::endl;
+#endif
+#if VERBOSE
+    auto l = std::list<std::shared_ptr<MongoObject>>();
+    for(auto &v: registered_objects){
+        if(v.use_count() > 1){
+            std::clog << "-- OID: " << v->get_own_oid() << std::endl;
+            std::clog << "-- Use count: " << v.use_count() << std::endl;
+        }
+    }
+#endif
     return registered_objects;
 }
-
 
 std::shared_ptr<MongoObject> MongoObject::get_ptr(){
     return shared_from_this();
@@ -131,7 +171,11 @@ bool MongoObject::connect_to_db(
         /*
         * Get a handle on the collection
         */
-        collection = mongoc_client_get_collection(client, db_string.c_str(), collection_string.c_str());
+        collection = mongoc_client_get_collection(
+                client,
+                db_string.c_str(),
+                collection_string.c_str()
+                );
         is_connected_to_db_ = true;
         return true;
     }
@@ -139,6 +183,12 @@ bool MongoObject::connect_to_db(
 
 void MongoObject::disconnect_from_db()
 {
+#if VERBOSE
+    std::clog << "DISCONNECT MONGOOBJECT FROM DB" << std::endl;
+    std::clog << "-- is_connected_to_db: " << is_connected_to_db() << std::endl;
+    std::clog << "-- collection: " << collection << std::endl;
+    std::clog << "-- uri: " << uri << std::endl;
+#endif
     if (is_connected_to_db()) {
         // destroy cursor, collection, session before the client they came from
         if (collection) {
@@ -165,7 +215,7 @@ bool MongoObject::write_to_db(
 #endif
     bool return_value = false;
 #if VERBOSE
-    std::clog << "-- Connected to DB: " << is_connected_to_db() << std::endl;
+    std::clog << "-- is_connected_to_db: " << is_connected_to_db() << std::endl;
     std::clog << "-- Write option: " << write_option << std::endl;
 #endif
     if (is_connected_to_db()) {

@@ -4,13 +4,12 @@
 #include "../include/MongoObject.h"
 %}
 
-%include <std_list.i>;
+%include attribute.i
 %include <std_shared_ptr.i>
+%include <std_list.i>;
 
 %shared_ptr(MongoObject)
 %template(ListMongoObjectPtr) std::list<std::shared_ptr<MongoObject>>;
-
-%include attribute.i
 %attributestring(MongoObject, std::string, name, get_name, set_name);
 %attributestring(MongoObject, std::string, oid, get_own_oid, set_own_oid);
 %attribute(MongoObject, bool, is_connected_to_db, is_connected_to_db);
