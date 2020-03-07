@@ -39,13 +39,13 @@ release = u''
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'matplotlib.sphinxext.only_directives',
-    'matplotlib.sphinxext.plot_directive',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.viewcode',
-    'sphinxcontrib.bibtex',
-    'recommonmark',
-    'sphinx.ext.autosectionlabel'
+    # 'matplotlib.sphinxext.only_directives',
+    # 'matplotlib.sphinxext.plot_directive',
+    # 'sphinx.ext.mathjax',
+    # 'sphinx.ext.viewcode',
+    # 'sphinxcontrib.bibtex',
+    # 'recommonmark',
+    # 'sphinx.ext.autosectionlabel'
 ]
 autosectionlabel_prefix_document = True
 
