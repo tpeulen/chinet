@@ -8,16 +8,28 @@ PROJECT(${PROJECT_NAME})
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 
+
+# Debug build detection
+###########################
+IF(CMAKE_BUILD_TYPE STREQUAL "Release")
+    MESSAGE("Release build")
+    ADD_DEFINITIONS("-DVERBOSE=0")
+ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
+    MESSAGE("Debug build")
+    ADD_DEFINITIONS("-DVERBOSE=1")
+ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
+
+
 # 32/64 bit detection
 ###########################
-if(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
+IF(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
     # If in 64bit mode, we have to define the _OCC64 variable
-    add_definitions(-D_OCC64)
-    set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_FLAGS} -D_OCC64)
-    set(BIT 64)
-else(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
-    set(BIT 32)
-endif(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
+    ADD_DEFINITIONS(-D_OCC64)
+    SET(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_FLAGS} -D_OCC64)
+    SET(BIT 64)
+ELSE(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
+    SET(BIT 32)
+ENDIF(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
 
 
 # Windows
@@ -26,20 +38,20 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++11")
     if(BIT MATCHES "64")
         add_definitions(-DMS_WIN64)
-    endif(BIT MATCHES "64")
-endif(MSVC)
+    ENDIF(BIT MATCHES "64")
+ENDIF(MSVC)
 
 # MACOSX_DEPLOYEMENT_TARGET
 ###########################
 # explicit link to libc++ for recent osx versions
-if(APPLE)
-    # MESSAGE(STATUS "link to libc++ on modern osx versions")
+IF(APPLE)
+    MESSAGE(STATUS "link to libc++ on modern osx versions")
     ADD_DEFINITIONS(-stdlib=libc++)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
     # Don't set MACOSX_RPATH by default
     set(CMAKE_MACOSX_RPATH 0)
-endif(APPLE)
+ENDIF(APPLE)
 
 # OpenMP
 ###########################
@@ -65,10 +77,10 @@ LINK_LIBRARIES(${Boost_LIBRARIES})
 # Eigen3
 ###########################
 FIND_PACKAGE(Eigen3 3.2 QUIET NO_MODULE)
-if(NOT TARGET Eigen3::Eigen)
+IF(NOT TARGET Eigen3::Eigen)
     MESSAGE(STATUS "Using thirdparty/eigen3")
     SET(EIGEN3_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/thirdparty/eigen3)
-endif (NOT TARGET Eigen3::Eigen)
+ENDIF (NOT TARGET Eigen3::Eigen)
 INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
 
 # Python
@@ -99,17 +111,7 @@ MESSAGE ("-- include path \"${MONGOC_INCLUDE_DIRS}\"")
 MESSAGE ("-- libraries \"${MONGOC_LIBRARIES}\"")
 INCLUDE_DIRECTORIES (${MONGOC_INCLUDE_DIRS})
 LINK_LIBRARIES (${MONGOC_LIBRARIES})
-add_compile_definitions(${MONGOC_DEFINITIONS})
-
-#[[
-# libmongocxx
-###########################
-find_package(libmongocxx REQUIRED)
-link_libraries(${LIBMONGOCXX_LIBRARIES})
-include_directories(${LIBMONGOCXX_INCLUDE_DIRS})
-message("-- libmongocxx libraries \"${LIBMONGOCXX_LIBRARIES}\"")
-message("-- libmongocxx include \"${LIBMONGOCXX_INCLUDE_DIRS}\"")
-]]
+ADD_COMPILE_DEFINITIONS(${MONGOC_DEFINITIONS})
 
 # LabelLib
 ###########################

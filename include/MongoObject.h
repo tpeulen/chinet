@@ -20,9 +20,6 @@ using json = nlohmann::json;
 
 #include "Functions.h"
 
-#define VERBOSE 1
-
-
 class MongoObject : public std::enable_shared_from_this<MongoObject>{
 
 private:
@@ -320,7 +317,10 @@ public:
 
     void register_instance(std::shared_ptr<MongoObject>);
 
-    std::list<std::shared_ptr<MongoObject>> get_instances();
+    void unregister_instance(std::shared_ptr<MongoObject>);
+
+    ///
+    static std::list<std::shared_ptr<MongoObject>> get_instances();
 
     /// Writes @class MongoObject to the connected MongoDB
     /// \return

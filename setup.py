@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 import os
 import re
-import sys
 import platform
 import subprocess
 import fileinput
@@ -11,9 +10,11 @@ from setuptools import setup, Extension
 from distutils.command.build_ext import build_ext
 from distutils.version import LooseVersion
 
+
 IMP = None
 
-name = "chinet"  # name of the module
+__name__ = "chinet"  # name of the module
+__version__ = "0.0.5"
 
 
 def patch_windows_imp():
@@ -114,33 +115,19 @@ class CMakeBuild(build_ext):
         )
 
 
-if 'doc' in sys.argv:
-    from sphinx.setup_command import BuildDoc
-
-    cwd = os.getcwd()
-    os.chdir('./include/')
-    subprocess.call(
-        "doxygen ./include/Doxyfile",
-        shell=True
-    )
-    os.chdir('../utility/')
-    subprocess.call(
-        "python doxy2swig.py ../doc2/api/xml/index.xml documentation.i",
-        shell=True
-    )
-    os.chdir(cwd)
+cmdclass = {
+    'build_ext': CMakeBuild
+}
 
 
 setup(
-    name=name,
+    name=__name__,
+    version=__version__,
     license='MPL v2.0',
     author='Thomas-Otavio Peulen',
     author_email='thomas.otavio.peulen@gmail.com',
-    version='0.0.5',
     ext_modules=[CMakeExtension('chinet')],
-    cmdclass={
-        'build_ext': CMakeBuild
-    },
+    cmdclass=cmdclass,
     install_requires=[
         'numpy'
     ],
