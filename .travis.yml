@@ -59,6 +59,17 @@ script:
   - touch _build/html/.nojekyll
   - cd ..
 
+# Tell Travis CI to copy the documentation to the gh-pages branch of
+# your GitHub repository.
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN  # Set in travis-ci.org dashboard, marked secure
+  keep-history: true
+  on:
+    branch: development
+  local_dir: docs/_build/html/
+
 after_success:
   - OS=$TRAVIS_OS_NAME-64
   - pip install codacy-coverage
