@@ -3,3 +3,5 @@ import chinet as cn
 import inspect
 import typing
 import json
+import _chinet
+__version__ = _chinet.VERSION

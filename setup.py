@@ -13,8 +13,16 @@ from distutils.version import LooseVersion
 
 IMP = None
 
-__name__ = "chinet"  # name of the module
-__version__ = "0.0.5"
+
+def read_version(
+        header_file='./include/CNode.h'
+):
+    version = "0.0.0"
+    with open(header_file, "r") as fp:
+        for line in fp.readlines():
+            if "#define" in line and "VERSION" in line:
+                version = line.split()[-1]
+    return version
 
 
 def patch_windows_imp():
@@ -42,7 +50,6 @@ def patch_windows_imp():
                 ),
                 end=''
             )
-
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
@@ -113,6 +120,10 @@ class CMakeBuild(build_ext):
             ['cmake', '--build', '.'] + build_args,
             cwd=self.build_temp
         )
+
+
+__name__ = "chinet"  # name of the module
+__version__ = read_version()
 
 
 cmdclass = {
