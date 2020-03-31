@@ -29,6 +29,7 @@ before_install:
   - conda update -q conda
   - conda info -a
   - conda install python=$BUILD_TARGET conda-build anaconda-client jinja2 git mongodb nose coverage anaconda-client
+  - source activate base
   - git submodule update --init --force
   - conda build conda-recipe --output-folder bld-dir
   - conda config --add channels "file://`pwd`/bld-dir"
