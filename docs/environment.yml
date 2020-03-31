@@ -3,7 +3,6 @@ channels:
   - tpeulen
   - salilab
   - defaults
-  - conda-forge
 dependencies:
   - chinet
   - blas=1.0
