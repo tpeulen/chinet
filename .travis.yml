@@ -28,8 +28,7 @@ before_install:
   - conda config --add channels salilab
   - conda update -q conda
   - conda info -a
-  - conda create -q -n build-environment python=$BUILD_TARGET conda-build anaconda-client jinja2 git mongodb
-  - source activate build-environment
+  - conda install python=$BUILD_TARGET conda-build anaconda-client jinja2 git mongodb nose coverage anaconda-client
   - git submodule update --init --force
   - conda build conda-recipe --output-folder bld-dir
   - conda config --add channels "file://`pwd`/bld-dir"
@@ -86,6 +85,7 @@ deploy:
   keep-history: true
   on:
     branch: development
+    condition: $TRAVIS_OS_NAME = linux
   local_dir: docs/_build/html/
 
 notifications:
