@@ -22,7 +22,7 @@ def read_version(
         for line in fp.readlines():
             if "#define" in line and "VERSION" in line:
                 version = line.split()[-1]
-    return version
+    return version.replace('"', '')
 
 
 def patch_windows_imp():
