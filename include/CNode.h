@@ -1,7 +1,7 @@
 #ifndef chinet_Node_H
 #define chinet_Node_H
 
-#define VERSION "0.0.5"
+#define VERSION "0.0.6"
 
 #include <string>
 #include <vector>
