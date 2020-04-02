@@ -57,12 +57,16 @@ after_success:
   - pip install codacy-coverage
   - coverage xml
   - python-codacy-coverage -r coverage.xml
-  # build the documentation only on linux and upload build
+  # distinguish main and other branches
+  - if [[ "$BRANCH" == "master" ]]; then ANACONDA_LABEL=main; else ANACONDA_LABEL=nightly; fi
+  - conda activate base
+  - anaconda -t $ANACONDA_API_TOKEN upload -u $CONDA_USER -l $ANACONDA_LABEL bld-dir/$OS/*.tar.bz2 --force
+  # build the documentation only on linux
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
       conda activate base
-      anaconda -t $ANACONDA_API_TOKEN upload -u $CONDA_USER -l nightly bld-dir/$OS/*.tar.bz2 --force
+      anaconda -t $ANACONDA_API_TOKEN upload -u $CONDA_USER -l $ANACONDA_LABEL bld-dir/$OS/*.tar.bz2 --force
       cd docs
       conda env create -f environment.yml
       conda activate docs_env
