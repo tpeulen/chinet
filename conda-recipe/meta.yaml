@@ -10,7 +10,9 @@ source:
 
 build:
     number: 0
-    string: np{{ CONDA_NPY }}py{{ CONDA_PY }}_{{ GIT_BUILD_STR }}_{{ environ.get('BRANCH', '') }}
+    # the GIT_BUILD_STR is not defined when using path as source
+    string: np{{ CONDA_NPY }}py{{ CONDA_PY }}_{{ environ.get('BRANCH', '') }}
+    # string: np{{ CONDA_NPY }}py{{ CONDA_PY }}_{{ GIT_BUILD_STR }}_{{ environ.get('BRANCH', '') }}
 
 requirements:
 
