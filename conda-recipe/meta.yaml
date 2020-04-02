@@ -11,7 +11,7 @@ source:
 build:
     number: 0
     # the GIT_BUILD_STR is not defined when using path as source
-    string: np{{ CONDA_NPY }}py{{ CONDA_PY }}{{ environ.get('CONDA_SUFFIX', 'dev') }}
+    string: np{{ CONDA_NPY }}py{{ CONDA_PY }}{{ environ.get('CONDA_SUFFIX', '') }}
     # string: np{{ CONDA_NPY }}py{{ CONDA_PY }}_{{ GIT_BUILD_STR }}_{{ environ.get('BRANCH', '') }}
 
 requirements:
