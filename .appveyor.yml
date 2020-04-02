@@ -15,8 +15,8 @@ init:
 
 install:
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
-  # export BRANCH environment variable to have unified names across different CI services
-  - "SET BRANCH=%APPVEYOR_REPO_BRANCH%"
+  # Use BRANCH environment variable to have unified names across different CI services
+  - SET BRANCH=%APPVEYOR_REPO_BRANCH%
   # the CONDA_SUFFIX is used to distinguish main and dev builds
   - IF "%$BRANCH%"=="master" (SET CONDA_SUFFIX="")
   - conda config --set always_yes yes --set changeps1 no
@@ -41,7 +41,7 @@ test_script:
 ### scripts to run after tests
 deploy_script:
   - if not "%APPVEYOR_REPO_BRANCH%" == "master" (SET ANACONDA_LABEL="nightly") else (SET ANACONDA_LABEL="main")
-  - "SET BLD_DIR=C:\Miniconda3-x64\envs\build\conda-bld"
+  - SET BLD_DIR=C:/Miniconda3-x64/envs/build/conda-bld
   - anaconda -t %ANACONDA_API_TOKEN% upload -u %CONDA_USER% -l %ANACONDA_LABEL% %BLD_DIR%\win-64\*.tar.bz2 --force
 
 build: off
