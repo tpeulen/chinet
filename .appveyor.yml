@@ -26,7 +26,7 @@ install:
   - conda create -n build python=3.7 git conda-build anaconda-client conda-verify ripgrep
   - activate build
   - git submodule update --init --force
-  - if not "%$BRANCH%" == "master" (SET CONDA_SUFFIX="dev")
+  - if not "%$BRANCH%" == "master" (SET CONDA_SUFFIX=dev)
   - conda build conda-recipe
 
 # to run your custom scripts instead of automatic tests
