@@ -15,9 +15,10 @@ environment:
 
 install:
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
-  # export BRANCH environment variable to have unified names across the
-  # different CI services
+  # export BRANCH environment variable to have unified names across different CI services
   - "SET BRANCH=%APPVEYOR_REPO_BRANCH%"
+  # the CONDA_SUFFIX is used to distinguish main and dev builds
+  - IF "%$BRANCH%"=="master" (SET CONDA_SUFFIX="")
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda config --add channels tpeulen
