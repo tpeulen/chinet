@@ -22,6 +22,9 @@ before_install:
   - wget https://repo.continuum.io/miniconda/Miniconda3-$MINICONDA_VERSION-$MINICONDA_OS-x86_64.sh -O miniconda.sh
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
+  # export BRANCH environment variable to have unified names across the
+  # different CI services
+  - export BRANCH=$TRAVIS_BRANCH
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   - conda config --add channels tpeulen
