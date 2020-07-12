@@ -4,4 +4,4 @@ import inspect
 import typing
 import json
 import _chinet
-__version__ = _chinet.VERSION
+__version__ = _chinet.CHINET_VERSION
