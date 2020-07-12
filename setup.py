@@ -20,7 +20,7 @@ def read_version(
     version = "0.0.0"
     with open(header_file, "r") as fp:
         for line in fp.readlines():
-            if "#define" in line and "VERSION" in line:
+            if "#define" in line and "CHINET_VERSION" in line:
                 version = line.split()[-1]
     return version.replace('"', '')
 
@@ -50,6 +50,7 @@ def patch_windows_imp():
                 ),
                 end=''
             )
+
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
@@ -89,7 +90,7 @@ class CMakeBuild(build_ext):
             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
             '-DCMAKE_SWIG_OUTDIR=' + extdir,
         ]
-        cfg = 'Debug' if self.debug else 'Release'
+        cfg = 'Debug' #'Debug' if self.debug else 'Release'
         build_args = ['--config', cfg]
         cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
         if platform.system() == "Windows":

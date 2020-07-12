@@ -13,7 +13,7 @@ MongoObject::MongoObject(std::string name) :
     object_name(""),
     is_connected_to_db_(false)
 {
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "NEW MONGOOBJECT" << std::endl;
 #endif
     bson_oid_init(&oid_document, nullptr);
@@ -32,7 +32,7 @@ MongoObject::MongoObject(std::string name) :
     if(name.empty()){
         name = get_own_oid();
     }
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "-- Name: " << name << std::endl;
     std::clog << "-- OID: " << get_own_oid() << std::endl;
 #endif
@@ -41,7 +41,7 @@ MongoObject::MongoObject(std::string name) :
 
 MongoObject::~MongoObject()
 {
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "DESTROYING MONGOOBJECT" << std::endl;
     std::clog << "-- OID: " << get_own_oid() << std::endl;
     std::clog << "-- Connected to DB: " << is_connected_to_db()
@@ -49,33 +49,33 @@ MongoObject::~MongoObject()
 #endif
     time_of_death = Functions::get_time();
     if (is_connected_to_db()) {
-#if VERBOSE
+#if CHINET_VERBOSE
         std::clog << "-- Time of death: " << time_of_death << std::endl;
 #endif
         write_to_db();
         disconnect_from_db();
     }
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "-- Total number of MongoObject instances: " <<
     registered_objects.size() << std::endl;
 #endif
 }
 
 void MongoObject::register_instance(std::shared_ptr<MongoObject> x){
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "REGISTER MONGOOBJECT" << std::endl;
 #endif
     auto& v = registered_objects;
-#if VERBOSE
+#if CHINET_VERBOSE
     int use_count_offset = 0;
 #endif
     if(x == nullptr){
         x = get_ptr();
-#if VERBOSE
+#if CHINET_VERBOSE
         use_count_offset++;
 #endif
     }
-#if VERBOSE
+#if CHINET_VERBOSE
     if(x != nullptr){
         std::clog << "-- OID: " << x->get_own_oid() << std::endl;
         std::clog << "-- Name: " << x->get_name() << std::endl;
@@ -86,39 +86,36 @@ void MongoObject::register_instance(std::shared_ptr<MongoObject> x){
     {
         v.emplace_back(x);
     }
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "-- Use count after registration: " << (x.use_count() - use_count_offset)<< std::endl;
 #endif
 }
 
 void MongoObject::unregister_instance(std::shared_ptr<MongoObject> x){
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "UNREGISTER MONGOOBJECT" << std::endl;
     int use_count_offset = 0;
 #endif
-    if(x == nullptr){
+    if(x != nullptr){
         x = get_ptr();
-#if VERBOSE
-        use_count_offset++;
-#endif
+        registered_objects.remove(x);
     }
-#if VERBOSE
+#if CHINET_VERBOSE
+   use_count_offset++;
     if(x != nullptr){
         std::clog << "-- Use count before unregister: " << (x.use_count() - use_count_offset) << std::endl;
     }
-#endif
-    registered_objects.remove(x);
-#if VERBOSE
     std::clog << "-- Use count after unregister: " << (x.use_count() - use_count_offset)<< std::endl;
 #endif
+
 }
 
 
 std::list<std::shared_ptr<MongoObject>> MongoObject::get_instances(){
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "MONGOOBJECT GET INSTANCES" << std::endl;
 #endif
-#if VERBOSE
+#if CHINET_VERBOSE
     for(auto &v: registered_objects){
         if(v.use_count() > 1){
             std::clog << "-- OID: " << v->get_own_oid() << std::endl;
@@ -140,7 +137,7 @@ bool MongoObject::connect_to_db(
         const std::string &collection_string
 )
 {
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "CONNECT MONGOOBJECT TO DB" << std::endl;
 #endif
     this->uri_string = uri_string;
@@ -152,13 +149,13 @@ bool MongoObject::connect_to_db(
 
     // Database
     //----------------------------------------------------------------
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "-- Connecting to DB at URI: " << uri_string.c_str() << std::endl;
 #endif
 
     uri = mongoc_uri_new_with_error(uri_string.c_str(), &error);
     if (!uri) {
-#if VERBOSE
+#if CHINET_VERBOSE
         std::cerr << "-- Failed to parse URI:" << uri_string.c_str() << std::endl;
         std::cerr << "-- Error message: " << error.message << std::endl;
 #endif
@@ -188,7 +185,7 @@ bool MongoObject::connect_to_db(
 
 void MongoObject::disconnect_from_db()
 {
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "DISCONNECT MONGOOBJECT FROM DB" << std::endl;
     std::clog << "-- is_connected_to_db: " << is_connected_to_db() << std::endl;
     std::clog << "-- collection: " << collection << std::endl;
@@ -215,11 +212,11 @@ bool MongoObject::write_to_db(
         int write_option
     )
 {
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "WRITING MONGOOBJECT TO DB" << std::endl;
 #endif
     bool return_value = false;
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "-- is_connected_to_db: " << is_connected_to_db() << std::endl;
     std::clog << "-- Write option: " << write_option << std::endl;
 #endif
@@ -238,7 +235,7 @@ bool MongoObject::write_to_db(
 
         switch (write_option) {
             case 1:
-#if VERBOSE
+#if CHINET_VERBOSE
                 std::clog << "-- Replacing object in the DB." << std::endl;
 #endif
                 // option 1 - write as a replacement
@@ -249,14 +246,14 @@ bool MongoObject::write_to_db(
                             nullptr, &reply, &error
                     )
                 ) {
-#if VERBOSE
+#if CHINET_VERBOSE
                     std::cerr << error.message;
 #endif
                     return_value &= false;
                 }
                 break;
             case 2:
-#if VERBOSE
+#if CHINET_VERBOSE
                 std::clog << "-- Inserting as a new object in DB." << std::endl;
 #endif
                 // option 2 - insert as a new document
@@ -267,14 +264,14 @@ bool MongoObject::write_to_db(
                         &reply, &error
                     )
                 ) {
-#if VERBOSE
+#if CHINET_VERBOSE
                     std::cerr << error.message;
 #endif
                     return_value &= false;
                 }
                 break;
             default:
-#if VERBOSE
+#if CHINET_VERBOSE
                 std::clog << "-- Updating existing object in DB." << std::endl;
 #endif
                 // option 0 - write as a update
@@ -290,7 +287,7 @@ bool MongoObject::write_to_db(
                         false,
                         &reply, &error)
                         ) {
-#if VERBOSE
+#if CHINET_VERBOSE
                     std::cerr << error.message;
 #endif
                     return_value &= false;
@@ -309,7 +306,7 @@ bool MongoObject::write_to_db(
 
 bool MongoObject::write_to_db()
 {
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "WRITING MONGOOBJECT TO DB" << std::endl;
     std::clog << "-- MongoObject OID: " << get_own_oid() << std::endl;
 #endif
@@ -318,7 +315,7 @@ bool MongoObject::write_to_db()
 
 bool MongoObject::read_from_db(const std::string &oid_string)
 {
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "READ MONGOOBJECT FROM DB" << std::endl;
     auto str = std::string(oid_string.c_str(), oid_string.size());
     std::clog << "-- Requested MongoObject OID:"<< str << std::endl;
@@ -326,7 +323,7 @@ bool MongoObject::read_from_db(const std::string &oid_string)
     bson_oid_t oid;
     if (string_to_oid(oid_string, &oid)) {
         if (!is_connected_to_db()) {
-#if VERBOSE
+#if CHINET_VERBOSE
             std::cerr << "-- Not connected to a DB." << std::endl;
 #endif
             return false;
@@ -335,7 +332,7 @@ bool MongoObject::read_from_db(const std::string &oid_string)
             bson_t *query = nullptr;
             query = BCON_NEW ("_id", BCON_OID(&oid));
             size_t len;
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- Query result: " << bson_as_json(query, &len) << std::endl;
 #endif
             mongoc_cursor_t *cursor; // cursor pointing to the new document
@@ -347,28 +344,28 @@ bool MongoObject::read_from_db(const std::string &oid_string)
             );
             const bson_t *doc;
             while (mongoc_cursor_next(cursor, &doc)) {
-#if VERBOSE
+#if CHINET_VERBOSE
                 std::clog << "-- Read content from DB: " << bson_as_json(doc, &len) << std::endl;
 #endif
-#if VERBOSE
+#if CHINET_VERBOSE
                 std::clog << "-- Document content before reinint:" << bson_as_json(&document, &len) << std::endl;
 #endif
-#if VERBOSE
+#if CHINET_VERBOSE
                 std::clog << "-- Reinit local document" << std::endl;
 #endif
                 bson_reinit(&document);
-#if VERBOSE
+#if CHINET_VERBOSE
                 std::clog << "-- Document content after reinint:" << bson_as_json(&document, &len) << std::endl;
 #endif
-#if VERBOSE
+#if CHINET_VERBOSE
                 std::clog << "-- Copying document of query to the document of the node" << std::endl;
 #endif
                 bson_copy_to(doc, &document);
-#if VERBOSE
+#if CHINET_VERBOSE
                 std::clog << "-- Document content after copy: " << bson_as_json(&document, &len) << std::endl;
 #endif
                 bson_oid_copy(&oid, &oid_document);
-#if VERBOSE
+#if CHINET_VERBOSE
                 std::clog << "-- Setting the name and the precursor OID" << std::endl;
 #endif
                 bson_iter_t iter;
@@ -376,27 +373,27 @@ bool MongoObject::read_from_db(const std::string &oid_string)
                     bson_iter_find(&iter, "precursor") &&
                     BSON_ITER_HOLDS_OID(&iter)) {
                     bson_oid_copy(bson_iter_oid(&iter), &oid_precursor);
-#if VERBOSE
+#if CHINET_VERBOSE
                     char oid_str[25];
                     bson_oid_to_string(&oid_precursor, oid_str);
                     std::clog << "-- Object's precursor OID set to the OID DB: "<< oid_str << std::endl;
 #endif
                 } else {
-#if VERBOSE
+#if CHINET_VERBOSE
                     char oid_str[25];
                     bson_oid_to_string(&oid_document, oid_str);
                     std::clog << "-- Object's precursor OID set to own OID: "<< oid_str << std::endl;
 #endif
                     bson_oid_copy(&oid_document, &oid_precursor);
                 }
-#if VERBOSE
+#if CHINET_VERBOSE
                 std::clog << "-- Updating the time of death" << std::endl;
 #endif
                 if (bson_iter_init(&iter, &document) &&
                     bson_iter_find(&iter, "death") &&
                     BSON_ITER_HOLDS_INT64(&iter)) {
                     time_of_death = bson_iter_int64(&iter);
-#if VERBOSE
+#if CHINET_VERBOSE
                     std::clog << "-- Set time of death: " << time_of_death << std::endl;
 #endif
                 } else {
@@ -409,13 +406,13 @@ bool MongoObject::read_from_db(const std::string &oid_string)
                     text = bson_iter_utf8(&iter, &length);
                     std::string name = std::string(text, length);
                     set_name(name);
-#if VERBOSE
+#if CHINET_VERBOSE
                     std::clog << "-- Set name to:" << name << std::endl;
 #endif
                 }
             }
             if (mongoc_cursor_error(cursor, &error)) {
-#if VERBOSE
+#if CHINET_VERBOSE
                 std::cerr << "-- An error occurred. " << error.message << std::endl;
 #endif
                 return false;
@@ -426,7 +423,7 @@ bool MongoObject::read_from_db(const std::string &oid_string)
             return true;
         }
     } else {
-#if VERBOSE
+#if CHINET_VERBOSE
         std::cerr << "-- Error: OID string not valid." << std::endl;
 #endif
         return false;
@@ -558,7 +555,7 @@ std::string MongoObject::create_copy_in_db()
         bson_append_oid(&document_copy, "precursor", 9, &oid_document);
     }
     size_t len;
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "created copy: " << bson_as_json(&document_copy, &len) << std::endl;
 #endif
     write_to_db(document_copy, 2);
@@ -587,7 +584,7 @@ bool MongoObject::string_to_oid(const std::string &oid_string, bson_oid_t *oid)
         return true;
     } else {
         bson_oid_init(oid, nullptr);
-#if VERBOSE
+#if CHINET_VERBOSE
         std::cerr << "OID string not valid." << std::endl;
 #endif
         return false;
@@ -649,7 +646,7 @@ const std::string MongoObject::get_string_by_key(bson_t *doc, const std::string 
         str = bson_iter_utf8(&iter, &len);
         return std::string(str, len);
     }
-#if VERBOSE
+#if CHINET_VERBOSE
     std::cerr << "Error: the key does not contain an string" << std::endl;
 #endif
 
@@ -661,7 +658,7 @@ bool MongoObject::read_json(std::string json_string)
     bson_t b;
     bson_error_t error;
     if (!bson_init_from_json(&b, json_string.c_str(), json_string.size(), &error)) {
-#if VERBOSE
+#if CHINET_VERBOSE
         std::cerr << "Error reading JSON: " << error.message << std::endl;
 #endif
         return false;

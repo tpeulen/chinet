@@ -2,7 +2,6 @@
 %feature("kwargs", 1);
 #pragma SWIG nowarn=511
 %include "documentation.i"
-
 %{
     #define SWIG_FILE_WITH_INIT
     #include "../include/Functions.h"

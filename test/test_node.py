@@ -558,20 +558,14 @@ class Tests(unittest.TestCase):
         out_0 = node.outputs['out_00']
         out_1 = node.outputs['out_01']
         x.value = 11.0
-        self.assertEqual(
-            out_0,
-            x // 4.0
-        )
-        self.assertEqual(
-            out_1,
-            x % 4.0
-        )
+        self.assertEqual(out_0, x // 4.0)
+        self.assertEqual(out_1, x % 4.0)
 
         # use of numba decorated function as a Node callback
         node = cn.Node()
 
         @nb.jit(nopython=True)
-        def h(x: np.array, y: np.array):
+        def h(x: np.ndarray, y: np.ndarray):
             return x * y
 
         node.callback_function = h
@@ -581,10 +575,7 @@ class Tests(unittest.TestCase):
         y.value = 2.0
         x.reactive = True
         x.value = np.arange(100, dtype=np.double)
-        self.assertEqual(
-            z.value,
-            x * y
-        )
+        self.assertEqual(z.value, x.value * y.value)
 
 
 if __name__ == '__main__':
