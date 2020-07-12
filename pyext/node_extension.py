@@ -1,14 +1,16 @@
-__swig_getmethods__["inputs"] = get_input_ports
-__swig_getmethods__["inputs"] = None
-if _newclass: inputs = property(get_input_ports, None)
+@property
+def inputs(self):
+    return self.get_input_ports()
 
-__swig_getmethods__["outputs"] = get_output_ports
-__swig_getmethods__["outputs"] = None
-if _newclass: outputs = property(get_output_ports, None)
 
-__swig_getmethods__["ports"] = get_ports
-__swig_getmethods__["ports"] = None
-if _newclass: ports = property(get_ports, None)
+@property
+def outputs(self):
+    return self.get_output_ports()
+
+
+@property
+def ports(self):
+    return self.get_ports()
 
 
 def callback_function(
@@ -20,8 +22,7 @@ def callback_function(
         def __init__(
                 self,
                 cb_function: typing.Callable,
-                *args,
-                **kwargs
+                *args, **kwargs
         ):
             super().__init__(*args, **kwargs)
             self._cb = cb_function
@@ -32,12 +33,10 @@ def callback_function(
                     (inputs[i].name, inputs[i].value) for i in inputs
                 ]
             )
-            output = self._cb(
-                **input_dict
-            )
+            output = self._cb(**input_dict)
             if isinstance(output, dict):
                 for key, ov in zip(outputs, output):
-                    outputs[key].value = ov[1][1]
+                    outputs[key].value = output[key]
             elif isinstance(output, tuple):
                 for key, ov in zip(outputs, output):
                     outputs[key].value = ov
@@ -88,8 +87,8 @@ def callback_function(
         for i in range(len(returned_value)):
             output_names.append("out_" + str(i).zfill(2))
     else:
-        output_names = ['out_00']
-        output_values = returned_value
+        output_names = 'out_00',
+        output_values = returned_value,
     for on, ov in zip(output_names, output_values):
         self.add_output_port(
             key=on,
@@ -102,9 +101,7 @@ def callback_function(
     # create a new CallbackNodePython
     cb_instance = CallbackNodePython(cb_function=cb)
     cb_instance.__disown__()
-    self.set_callback(
-        cb_instance
-    )
+    self.set_callback(cb_instance)
 
 
 callback_function = property(None, callback_function)
