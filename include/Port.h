@@ -7,6 +7,11 @@
 #include <cmath>
 #include <cstdlib>
 
+#include <IMP.h>
+#include <IMP/algebra.h>
+#include <IMP/core.h>
+#include <IMP/flags.h>
+
 #include <CNode.h>
 
 class Node;
@@ -26,6 +31,8 @@ private:
     int buffer_element_size_ = 1;
     std::vector<double> bounds_{};
     Node* node_ = nullptr;
+    IMP::Model* imp_model = nullptr;
+    IMP::Particle* imp_particle;
 
     /*!
      * @brief This attribute can point to another Port (default value nullptr).
@@ -67,7 +74,15 @@ public:
         return shared_this;
     }
 
-    int value_type = 0; // 0 long vector, 1 double vector, 2 numpy binary
+    /// Specifies the type of the Port
+    /*!
+     * 0: long vector
+     * 1: double vector
+     * 2: numpy binary
+     * 3: long singleton
+     * 4: double singleton
+     */
+    int value_type = 0;
     size_t current_size() {
         return n_buffer_elements_;
     }
@@ -134,18 +149,17 @@ public:
 
     template<typename T>
     void set_value(
-            T *input,
-            int n_input,
+            T *input, int n_input,
             bool copy_values = true
     ) {
-#if VERBOSE
+#if CHINET_VERBOSE
         std::clog << "SET PORT VALUE" << std::endl;
         std::clog << "-- Name of port: " << get_name() << std::endl;
         std::clog << "-- Copy values to local buffer: " << copy_values << std::endl;
         std::clog << "-- Number of input elements: " << n_input << std::endl;
 #endif
         if (is_fixed()) {
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "WARNING: The port is fixed the action will be ignored." << std::endl;
 #endif
             return;
@@ -157,7 +171,7 @@ public:
             value_type = 0;
         }
         if(!copy_values){
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- Avoiding copy - assign pointer of local buffer to input." << std::endl;
 #endif
             free(buffer_);
@@ -165,29 +179,29 @@ public:
             buffer_element_size_ = sizeof(T);
             n_buffer_elements_ = n_input;
         } else{
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- Copying values to local buffer." << std::endl;
 #endif
             if (n_input * sizeof(T) > n_buffer_elements_ * buffer_element_size_){
-#if VERBOSE
+#if CHINET_VERBOSE
                 std::clog << "-- Size of input exceeds the local buffer: reallocating" << std::endl;
 #endif
                 buffer_ = std::realloc(buffer_, n_input * sizeof(T));
                 buffer_element_size_ = sizeof(T);
-                n_buffer_elements_ = n_input;
             }
             if (buffer_ != nullptr) {
                 memcpy(buffer_, input, n_input * sizeof(T));
             } else{
                 std::cerr << "ERROR: Could not reallocate local buffer. " << std::endl;
             }
+            n_buffer_elements_ = n_input;
         }
         if (node_ != nullptr) {
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- Updating attached node." << std::endl;
 #endif
             update_attached_node();
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- Updating dependent ports." << std::endl;
 #endif
             set_value_of_dependents(input, n_input);
@@ -208,7 +222,7 @@ public:
             int *n_output,
             bool update_local_buffer = false
     ) {
-#if VERBOSE
+#if CHINET_VERBOSE
         std::clog << "GET OWN VALUE" << std::endl;
         std::clog << "-- Name of Port: " << get_name() << std::endl;
         std::clog << "-- Local value type: " << value_type << std::endl;
@@ -217,13 +231,12 @@ public:
         std::clog << "-- Number of elements in local buffer: " << n_buffer_elements_ << std::endl;
 #endif
         if ((n_buffer_elements_ == 0) || update_local_buffer) {
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- Updating local buffer from bson" << std::endl;
 #endif
             update_buffer<T>();
         }
-
-#if VERBOSE
+#if CHINET_VERBOSE
         std::clog << "-- Checking if types are matching:" << std::endl;
 #endif
         bool types_match = (
@@ -232,7 +245,7 @@ public:
         );
         T* origin;
         if(!types_match){
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- Requested type does not match buffer type - recasting types." << std::endl;
 #endif
             origin = (T *) malloc(n_buffer_elements_ * sizeof(T));
@@ -249,16 +262,16 @@ public:
                 }
             }
         } else{
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- Requested type matches local type. " << std::endl;
 #endif
             origin = reinterpret_cast<T *>(buffer_);
         }
-#if VERBOSE
+#if CHINET_VERBOSE
         std::clog << "-- Checking if value is bounded:" << std::endl;
 #endif
         if (is_bounded() && bound_is_valid()) {
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- Values are bounded " << std::endl;
             std::clog << "-- Bounds: [" << bounds_[0] << ", " << bounds_[1] << "]" << std::endl;
 #endif
@@ -272,7 +285,7 @@ public:
             *n_output = n_buffer_elements_;
             *output = reinterpret_cast<T *>(bounded_array);
         } else {
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- Values are not bounded " << std::endl;
 #endif
             *n_output = n_buffer_elements_;
@@ -283,7 +296,7 @@ public:
     template<typename T>
     void get_value(T **output, int *n_output) {
         if (!is_linked()) {
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "GET VALUE" << std::endl;
             std::clog << "-- Name of Port: " << get_name() << std::endl;
             std::clog << "-- Local value type: " << value_type << std::endl;
@@ -293,18 +306,28 @@ public:
 #endif
             get_own_value(output, n_output);
         } else {
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "GET VALUE" << std::endl;
             std::clog << "-- Port is linked to " << get_link()->get_name() << std::endl;
 #endif
             get_link()->get_value(output, n_output);
         }
-#if VERBOSE
+#if CHINET_VERBOSE
         std::clog << "-- Number of elements: " << *n_output << std::endl;
 #endif
     }
 
     virtual bson_t get_bson() final;
+
+    void set_imp_particle(IMP::Model* m, IMP::Particle* pi){
+        imp_model = m;
+        imp_particle = pi;
+    }
+
+    IMP::Particle* get_imp_particle(){
+        return imp_particle;
+    }
+
 
     // Methods
     //--------------------------------------------------------------------
