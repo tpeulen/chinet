@@ -258,16 +258,6 @@ void Node::evaluate(){
     node_valid_ = true;
 }
 
-bool Node::is_valid(){
-    if(get_input_ports().empty()){
-        return true;
-    }else if(!inputs_valid()){
-        return false;
-    }else{
-        return node_valid_;
-    }
-}
-
 void Node::fill_input_output_port_lookups(){
     out_.clear();
     in_.clear();
@@ -287,10 +277,8 @@ bool Node::inputs_valid(){
         if(input_port->is_linked()){
             auto output_port = input_port->get_link();
             auto output_node = output_port->get_node();
-            if(!output_node->is_valid())
-            {
-                return false;
-            }
+            if(output_node == this) return true;
+            else if(!output_node->is_valid()) return false;
         }
     }
     return true;
@@ -303,4 +291,10 @@ void Node::set_valid(bool is_valid){
         auto output_port = v.second;
         //v.second->set_invalid();
     }
+}
+
+bool Node::is_valid(){
+    if(get_input_ports().empty()) return true;
+    else if(!inputs_valid()) return false;
+    else return node_valid_;
 }

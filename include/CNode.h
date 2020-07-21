@@ -2,6 +2,7 @@
 #define chinet_Node_H
 
 #define CHINET_VERSION "0.0.7"
+//#define CHINET_VERBOSE true
 
 #include <string>
 #include <vector>
@@ -69,7 +70,6 @@ public:
     std::string get_name();
 
     std::map<std::string, std::shared_ptr<Port>> get_input_ports();
-
     std::map<std::string, std::shared_ptr<Port>> get_output_ports();
 
     std::map<std::string, std::shared_ptr<Port>> get_ports();
