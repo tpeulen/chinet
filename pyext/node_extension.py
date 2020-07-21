@@ -86,7 +86,7 @@ def callback_function(
                 value = np.array([1.0], dtype=np.float64)
             elif o.annotation == 'int':
                 value = 1
-            elif 'ndarray' in o.annotation:
+            elif 'ndarray' == o.annotation:
                 value = np.array([1.0], dtype=np.float64)
             elif o.annotation == 'float':
                 value = 1.0
