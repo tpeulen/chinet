@@ -1,9 +1,7 @@
-%module(directors="1") chinet
-%feature("kwargs", 1);
-
 %{
 #include "../include/Port.h"
 #include "../include/CNode.h"
+#include <IMP.h>
 %}
 
 %include "./include/numpy.i"
@@ -29,6 +27,7 @@
 %attribute(Port, bool, fixed, is_fixed, set_fixed);
 %attribute(Port, bool, is_output, is_output, set_port_type);
 %attribute(Port, bool, reactive, is_reactive, set_reactive);
+%attribute(Port, bool, is_linked, is_linked);
 %attribute(Port, bool, bounded, is_bounded, set_bounded);
 %attribute(Port, Node*, node, get_node, set_node);
 
