@@ -111,7 +111,7 @@ class Tests(unittest.TestCase):
             True
         )
         self.assertAlmostEqual(
-            p6.value[0],
+            p6.value,
             lower_bound  # the lower bound is not part of the
         )
 

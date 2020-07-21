@@ -172,10 +172,10 @@ class Tests(unittest.TestCase):
             }
         )
         node.set_callback("multiply_double", "C")
-        self.assertEqual(node.valid, False)
+        self.assertEqual(node.is_valid, False)
 
         node.evaluate()
-        self.assertEqual(node.valid, True)
+        self.assertEqual(node.is_valid, True)
 
         outA = node.ports["outA"]
         inA = node.ports["inA"]
@@ -288,17 +288,11 @@ class Tests(unittest.TestCase):
         cb = CallbackNodePassOn()
         node_1.set_callback(cb)
 
-        self.assertListEqual(
-            list(out_node_1.value),
-            [1.0]
-        )
-        self.assertListEqual(
-            list(in_node_1.value),
-            [3.0]
-        )
-        self.assertEqual(node_1.valid, False)
+        self.assertEqual(out_node_1.value, 1.0)
+        self.assertEqual(in_node_1.value, 3.0)
+        self.assertEqual(node_1.is_valid, False)
         node_1.evaluate()
-        self.assertEqual(node_1.valid, True)
+        self.assertEqual(node_1.is_valid, True)
 
     def test_node_valid_reactive_port(self):
         """
@@ -330,16 +324,12 @@ class Tests(unittest.TestCase):
         cb = CallbackNodePassOn()
         node_1.set_callback(cb)
 
-        self.assertEqual(node_1.valid, False)
+        self.assertEqual(node_1.is_valid, False)
 
         # A reactive port calls Node::evaluate when its value changes
         in_node_1.value = 12
-        self.assertEqual(node_1.valid, True)
-
-        self.assertEqual(
-            list(out_node_1.value),
-            [12]
-        )
+        self.assertEqual(node_1.is_valid, True)
+        self.assertEqual(out_node_1.value, 12)
 
     def test_node_valid_connected_nodes(self):
         """
@@ -377,21 +367,15 @@ class Tests(unittest.TestCase):
         )
         node_1.set_callback("passthrough", "C")
 
-        self.assertListEqual(
-            list(in_node_1.value),
-            [3.0]
-        )
-        self.assertListEqual(
-            list(out_node_1.value),
-            [1.0]
-        )
+        self.assertEqual(in_node_1.value, 3.0)
+        self.assertEqual(out_node_1.value, 1.0)
 
-        self.assertEqual(node_1.valid, False)
+        self.assertEqual(node_1.is_valid, False)
         node_1.evaluate()
-        self.assertEqual(node_1.valid, True)
-        self.assertListEqual(
-            list(in_node_1.value),
-            list(out_node_1.value)
+        self.assertEqual(node_1.is_valid, True)
+        self.assertEqual(
+            in_node_1.value,
+            out_node_1.value
         )
         in_node_2 = cn.Port(
             value=13.0,
@@ -413,29 +397,20 @@ class Tests(unittest.TestCase):
         node_2.set_callback("passthrough", "C")
         in_node_2.link = out_node_1
 
-        self.assertEqual(node_2.valid, False)
+        self.assertEqual(node_2.is_valid, False)
         node_2.evaluate()
-        self.assertEqual(node_2.valid, True)
-        self.assertEqual(
-            list(out_node_2.value),
-            [3.0]
-        )
+        self.assertEqual(node_2.is_valid, True)
+        self.assertEqual(out_node_2.value, 3.0)
 
         in_node_1.value = 13
-        self.assertEqual(node_1.valid, False)
-        self.assertEqual(node_2.valid, False)
+        self.assertEqual(node_1.is_valid, False)
+        self.assertEqual(node_2.is_valid, False)
 
         node_1.evaluate()
-        self.assertEqual(
-            list(out_node_1.value),
-            [13.0]
-        )
+        self.assertEqual(out_node_1.value, 13.0)
 
         node_2.evaluate()
-        self.assertEqual(
-            list(out_node_2.value),
-            [13.0]
-        )
+        self.assertEqual(out_node_2.value, 13.0)
 
     def test_node_valid_connected_nodes_reactive_ports(self):
         """
@@ -494,12 +469,9 @@ class Tests(unittest.TestCase):
         in_node_2.link = out_node_1
         in_node_1.value = 13
 
-        self.assertEqual(node_1.valid, True)
-        self.assertEqual(node_2.valid, True)
-        self.assertEqual(
-            list(out_node_2.value),
-            [13.0]
-        )
+        self.assertEqual(node_1.is_valid, True)
+        self.assertEqual(node_2.is_valid, True)
+        self.assertEqual(out_node_2.value, 13.0)
 
     def test_node_init_with_callback_function(self):
         @nb.jit(nopython=False)
