@@ -90,7 +90,7 @@ class CMakeBuild(build_ext):
             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
             '-DCMAKE_SWIG_OUTDIR=' + extdir,
         ]
-        cfg = 'Debug' #'Debug' if self.debug else 'Release'
+        cfg = 'Debug' if self.debug else 'Release'
         build_args = ['--config', cfg]
         cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
         if platform.system() == "Windows":
