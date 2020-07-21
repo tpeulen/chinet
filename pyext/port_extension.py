@@ -1,23 +1,36 @@
-# The content of this file is embedded by SWIG into the Port class. The code
-# below extends the Port class.
+@property
+def bytes(self):
+    return self.get_bytes()
 
-# The approach used below with __swig_getmethods is deprecated in swig 4.0.0
-# Thus, the code below needs to be changed in the future.
-__swig_getmethods__["bytes"] = get_bytes
-__swig_setmethods__["bytes"] = set_bytes
-if _newclass: bytes = property(get_bytes, set_bytes)
 
-__swig_getmethods__["link"] = get_link
-__swig_setmethods__["link"] = set_link
-if _newclass: link = property(get_link, set_link)
+@bytes.setter
+def bytes(self, v):
+    self.set_bytes(v)
+
+
+@property
+def link(self):
+    return self.get_link()
+
+
+@link.setter
+def link(self, v):
+    self.set_link(v)
 
 
 @property
 def value(self):
-    if self.value_type == 0:
-        return self.get_value_i()
+    if self.get_value_type() == 0:
+        v = self.get_value_i()
+    elif self.get_value_type() == 1:
+        v = self.get_value_d()
+    elif self.get_value_type() == 2:
+        v = self.get_value_i()[0]
+    elif self.get_value_type() == 3:
+        v = self.get_value_d()[0]
     else:
-        return self.get_value_d()
+        v = None
+    return v
 
 
 @value.setter
@@ -56,10 +69,7 @@ def __init__(
         self.this = this
     if not isinstance(value, np.ndarray):
         value = np.atleast_1d(value)
-    if value.dtype.kind == 'i':
-        self.set_value_i(value)
-    else:
-        self.set_value_d(value)
+    self.value = value
     self.fixed = fixed
 
 
