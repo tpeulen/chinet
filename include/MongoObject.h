@@ -179,7 +179,7 @@ protected:
                     // connect obj to db
                     return_value &= connect_object_to_db(o);
                     // read obj from db
-#if VERBOSE
+#if CHINET_VERBOSE
                     std::cout << oid_to_string(oid) << std::endl;
 #endif
                     o->read_from_db(oid_to_string(oid));
@@ -189,7 +189,7 @@ protected:
                 }
             }
         } else{
-#if VERBOSE
+#if CHINET_VERBOSE
             std::cerr << "Error: no nodes section in Session" << std::endl;
 #endif
             return_value &= false;
@@ -225,7 +225,7 @@ protected:
                 }
             }
         } else{
-#if VERBOSE
+#if CHINET_VERBOSE
             std::cerr << "Error: no nodes section in Session" << std::endl;
 #endif
             return_value &= false;
