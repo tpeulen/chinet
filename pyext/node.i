@@ -1,5 +1,3 @@
-%module(directors="1", package="chinet") node
-
 /* turn on director wrapping for Callback */
 %feature("director") NodeCallback;
 
@@ -16,7 +14,6 @@
 #include "../include/NodeCallback.h"
 %}
 
-
 %shared_ptr(Port)
 %shared_ptr(Node)
 %shared_ptr(NodeCallback)
@@ -27,7 +24,7 @@
 %template(MapStringDouble) std::map<std::string, double>;
 %include "../include/NodeCallback.h"
 
-%attribute(Node, bool, valid, is_valid);
+%attribute(Node, bool, is_valid, is_valid);
 %include "../include/CNode.h"
 %extend Node {
 
