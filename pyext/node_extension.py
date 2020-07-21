@@ -1,16 +1,30 @@
 @property
 def inputs(self):
-    return self.get_input_ports()
+    return dict(self.get_input_ports())
 
 
 @property
 def outputs(self):
-    return self.get_output_ports()
+    return dict(self.get_output_ports())
 
 
 @property
 def ports(self):
     return self.get_ports()
+
+
+@ports.setter
+def ports(
+        self,
+        v: typing.Dict[str, object]
+):
+    p = dict()
+    for key in v:
+        if isinstance(v[key], cn.Port):
+            p[key] = v[key]
+        elif isinstance(v[key], dict):
+            p[key] = cn.Port(**v[key])
+    self.set_ports(p)
 
 
 def callback_function(
@@ -27,11 +41,13 @@ def callback_function(
             super().__init__(*args, **kwargs)
             self._cb = cb_function
 
-        def run(self, inputs, outputs):
+        def run(
+                self,
+                inputs: typing.List[cn.Port],
+                outputs: typing.List[cn.Port]
+        ):
             input_dict = dict(
-                [
-                    (inputs[i].name, inputs[i].value) for i in inputs
-                ]
+                [(inputs[i].name, inputs[i].value) for i in inputs]
             )
             output = self._cb(**input_dict)
             if isinstance(output, dict):
@@ -42,36 +58,57 @@ def callback_function(
                     outputs[key].value = ov
             else:
                 next(iter(outputs.values())).value = output
-    self.set_string('source', inspect.getsource(cb))
+
+    if isinstance(cb, str):
+        code_obj = compile(cb, '<string>', 'exec')
+        self.set_string('source', cb)
+        for o in code_obj.co_consts:
+            if isinstance(o, types.CodeType):
+                cb = types.FunctionType(o, globals())
+                break
+    else:
+        self.set_string('source', inspect.getsource(cb))
     # When the cb-function of a node is evaluated, the input Ports are
     # processed by the callback and written to the output Port. Thus,
     # the inputs and outputs need to be defined as Ports. Here, the inputs
     # and the output of the function are inspected to create the Ports of the
     # None.
+
     # get the signature of the function to create input Ports
     signature = inspect.signature(cb)
     input_ports = list()
     for parameter_name in signature.parameters:
         o = signature.parameters[parameter_name]
+        # Check the function signature to use default values as cn.Port value
         if o.default is inspect.Signature.empty:
-            if o.annotation is int:
+            if o.annotation is inspect._empty:
+                print("WARNING no type specified for %s cn.Port." % parameter_name)
+                value = np.array([1.0], dtype=np.float64)
+            elif o.annotation == 'int':
                 value = 1
-            elif o.annotation is np.ndarray:
-                value = np.array([1.0], dtype=np.double)
-            else:
+            elif 'ndarray' in o.annotation:
+                value = np.array([1.0], dtype=np.float64)
+            elif o.annotation == 'float':
                 value = 1.0
+            else:
+                print("WARNING no type specified for %s cn.Port." % parameter_name)
+                value = np.array([1.0], dtype=np.float64)
         else:
             value = o.default
-        p = cn.Port(
-            name=o.name,
-            value=value,
-            is_output=False
-        )
-        input_ports.append(p)
-        self.add_input_port(
-            key=o.name,
-            port=p
-        )
+        if o.name not in self.ports.keys():
+            p = cn.Port(
+                name=o.name,
+                value=value,
+                is_output=False,
+                is_reactive=True
+            )
+            self.add_input_port(
+                key=o.name,
+                port=p
+            )
+            input_ports.append(p)
+        else:
+            input_ports.append(self.get_input_ports()[o.name])
     # run the function once with the default values to get the output
     input_values = dict([(p.name, p.value) for p in input_ports])
     returned_value = cb(**input_values)
@@ -90,14 +127,15 @@ def callback_function(
         output_names = 'out_00',
         output_values = returned_value,
     for on, ov in zip(output_names, output_values):
-        self.add_output_port(
-            key=on,
-            port=cn.Port(
-                name=on,
-                value=ov,
-                is_output=True
+        if on not in self.get_output_ports().keys():
+            self.add_output_port(
+                key=on,
+                port=cn.Port(
+                    name=on,
+                    value=ov,
+                    is_output=True
+                )
             )
-        )
     # create a new CallbackNodePython
     cb_instance = CallbackNodePython(cb_function=cb)
     cb_instance.__disown__()
@@ -107,25 +145,87 @@ def callback_function(
 callback_function = property(None, callback_function)
 
 
-def __init__(
-        self,
-        name="",
-        ports=None,
-        callback_function=None,
-        *args, **kwargs
+def __getattr__(self, name):
+    in_input = name in self.inputs.keys()
+    in_output = name in self.outputs.keys()
+    if in_input and in_output:
+        raise KeyError("Ambiguous access. %s an input and output parameter.")
+    elif not in_output and not in_input:
+        raise AttributeError
+    else:
+        if in_input:
+            return self.inputs[name].value
+        else:
+            return self.outputs[name].value
+
+
+def __setattr__(self, name, value):
+    try:
+        in_input = name in self.inputs.keys()
+        in_output = name in self.outputs.keys()
+        if in_input and in_output:
+            raise KeyError("Ambiguous access. %s an input and output parameter.")
+        elif not in_output and not in_input:
+            raise AttributeError
+        else:
+            if in_input:
+                self.inputs[name].value = value
+            else:
+                self.outputs[name].value = value
+    except:
+        super().__setattr__(name, value)
+
+
+def __call__(self):
+    return self.evaluate()
+
+
+def __del__(self):
+    super().__del__()
+
+
+def __init__(self,
+             obj=None,
+             name: str = "",
+             ports: dict=None,
+             callback_function=None,
+             reactive_inputs=False,
+             overwrite_reactive=False,
+             *args, **kwargs
 ):
+    """
+
+    :param self:
+    :param obj: Either the name (if string) or the callback function (if callable)
+    :param name: The name of the Nose
+    :param ports:
+    :param callback_function: The callback function of the Node object
+    :param reactive_inputs: if True sets all inputs that are created when the
+    object is created to reactive
+    :param args:
+    :param kwargs:
+    :return:
+    """
     this = _chinet.new_Node(*args, **kwargs)
     try:
         self.this.append(this)
     except:
         self.this = this
     self.register_instance(None)
-    if callable(callback_function):
+    if isinstance(ports, dict):
+        self.ports = ports
+    if isinstance(obj, str):
+        name = obj
+    elif callable(obj):
+        callback_function = obj
+    if callable(callback_function) or isinstance(callback_function, str):
         self.callback_function = callback_function
-    elif isinstance(ports, dict):
-        self.set_ports(ports)
     if len(name) > 0:
         self.name = name
-
-def __del__(self):
-    super().__del__()
+    else:
+        if callable(callback_function):
+            self.name = callback_function.__name__
+    if overwrite_reactive:
+        for input_key in self.inputs:
+            input = self.inputs[input_key]
+            input.reactive = reactive_inputs
