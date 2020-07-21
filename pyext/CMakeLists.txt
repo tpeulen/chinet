@@ -8,7 +8,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(MODULE_NAME chinet)
 
-SET_SOURCE_FILES_PROPERTIES(tttrlib.i PROPERTIES CPLUSPLUS ON)
+SET_SOURCE_FILES_PROPERTIES(chinet.i PROPERTIES CPLUSPLUS ON)
 FILE(GLOB SRC_files "../src/*.cpp")
 
 SET_PROPERTY(
@@ -21,7 +21,8 @@ SET_PROPERTY(
 SWIG_ADD_LIBRARY(
         ${MODULE_NAME}
         LANGUAGE python
-        SOURCES chinet.i ${SRC_files}
+        SOURCES chinet.i
+        ${SRC_files}
 )
 
 EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_config_var('LDSHARED'))"
