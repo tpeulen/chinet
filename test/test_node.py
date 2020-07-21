@@ -530,7 +530,7 @@ class Tests(unittest.TestCase):
         are taken as names of the input Ports. The output Port names are
         either numbered from out_00 to out_xx if the function returns a
         tuples or a single object (out_00). Or the names correspond to the
-        keys of a returned dictonary.
+        keys of a returned dictionary.
 
         :return:
         """
