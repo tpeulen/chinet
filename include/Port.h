@@ -68,21 +68,23 @@ private:
         }
     }
 
+    /// Specifies the type of the Port
+    /*!
+     * 0: long vector
+     * 1: double vector
+     * 2: numpy binary
+     * 3: long single number
+     * 4: double single number
+     */
+    int value_type = 0;
+
 public:
 
     std::shared_ptr<Port> getptr() {
         return shared_this;
     }
 
-    /// Specifies the type of the Port
-    /*!
-     * 0: long vector
-     * 1: double vector
-     * 2: numpy binary
-     * 3: long singleton
-     * 4: double singleton
-     */
-    int value_type = 0;
+
     size_t current_size() {
         return n_buffer_elements_;
     }
@@ -170,6 +172,7 @@ public:
         } else {
             value_type = 0;
         }
+        if(n_input == 1) value_type += 2; // use scalar type for single numbers
         if(!copy_values){
 #if CHINET_VERBOSE
             std::clog << "-- Avoiding copy - assign pointer of local buffer to input." << std::endl;
@@ -240,8 +243,8 @@ public:
         std::clog << "-- Checking if types are matching:" << std::endl;
 #endif
         bool types_match = (
-                ((std::is_same<T, double>::value) && (value_type == 1)) ||
-                ((std::is_same<T, long>::value) && (value_type == 0))
+                ((std::is_same<T, double>::value) && ((value_type == 1) || (value_type == 3))) ||
+                ((std::is_same<T, long>::value) && ((value_type == 0) || (value_type == 2)))
         );
         T* origin;
         if(!types_match){
@@ -249,13 +252,13 @@ public:
             std::clog << "-- Requested type does not match buffer type - recasting types." << std::endl;
 #endif
             origin = (T *) malloc(n_buffer_elements_ * sizeof(T));
-            if(value_type == 1){
+            if((value_type == 1) || (value_type == 3)){
                 auto b = reinterpret_cast<double *>(buffer_);
                 for(int i = 0; i < n_buffer_elements_; i++){
                     origin[i] = (T) b[i];
                 }
             }
-            if(value_type == 0){
+            if((value_type == 0) || (value_type == 2)){
                 auto b = reinterpret_cast<long *>(buffer_);
                 for(int i = 0; i < n_buffer_elements_; i++){
                     origin[i] = (T) b[i];
@@ -354,7 +357,7 @@ public:
     bool is_reactive();
 
     bool is_float() {
-        return (get_value_type() == 1);
+        return ((get_value_type() == 1) || (get_value_type() == 3));
     }
 
     void set_reactive(bool reactive);
@@ -385,6 +388,7 @@ public:
         } else {
             unlink();
         }
+        if(node_!=nullptr) update_attached_node();
     }
 
     bool unlink() {
