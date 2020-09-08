@@ -24,12 +24,16 @@ def ports(
             p[key] = v[key]
         elif isinstance(v[key], dict):
             p[key] = cn.Port(**v[key])
+        else:
+            p[key] = cn.Port(value=v[key])
     self.set_ports(p)
 
 
-def callback_function(
+def set_python_callback_function(
         self,
-        cb: typing.Callable
+        cb: typing.Callable,
+        reactive_inputs: bool = True,
+        reactive_outputs: bool = True
 ):
     class CallbackNodePython(cn.NodeCallback):
 
@@ -100,7 +104,7 @@ def callback_function(
                 name=o.name,
                 value=value,
                 is_output=False,
-                is_reactive=True
+                is_reactive=reactive_inputs
             )
             self.add_input_port(
                 key=o.name,
@@ -133,7 +137,8 @@ def callback_function(
                 port=cn.Port(
                     name=on,
                     value=ov,
-                    is_output=True
+                    is_output=True,
+                    is_reactive=reactive_outputs
                 )
             )
     # create a new CallbackNodePython
@@ -142,7 +147,7 @@ def callback_function(
     self.set_callback(cb_instance)
 
 
-callback_function = property(None, callback_function)
+callback_function = property(None, set_python_callback_function)
 
 
 def __getattr__(self, name):
@@ -189,8 +194,8 @@ def __init__(self,
              name: str = "",
              ports: dict=None,
              callback_function=None,
-             reactive_inputs=False,
-             overwrite_reactive=False,
+             reactive_inputs=True,
+             reactive_outputs=True,
              *args, **kwargs
 ):
     """
@@ -218,14 +223,15 @@ def __init__(self,
         name = obj
     elif callable(obj):
         callback_function = obj
+    # set the python callback function
     if callable(callback_function) or isinstance(callback_function, str):
-        self.callback_function = callback_function
+        self.set_python_callback_function(
+            cb=callback_function,
+            reactive_inputs=reactive_inputs,
+            reactive_outputs=reactive_outputs
+        )
     if len(name) > 0:
         self.name = name
     else:
         if callable(callback_function):
             self.name = callback_function.__name__
-    if overwrite_reactive:
-        for input_key in self.inputs:
-            input = self.inputs[input_key]
-            input.reactive = reactive_inputs

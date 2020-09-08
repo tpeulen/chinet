@@ -64,15 +64,18 @@ IF(USE_OpenMP)
     ENDIF()
 ENDIF()
 
+
 # Cpp-taskflow
 ###########################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/cpp-taskflow/)
+
 
 # Boost
 ###########################
 FIND_PACKAGE(Boost 1.50 COMPONENTS system REQUIRED)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR} )
 LINK_LIBRARIES(${Boost_LIBRARIES})
+
 
 # Eigen3
 ###########################
@@ -83,11 +86,13 @@ IF(NOT TARGET Eigen3::Eigen)
 ENDIF (NOT TARGET Eigen3::Eigen)
 INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
 
+
 # Python
 ###########################
 FIND_PACKAGE(Python)
 INCLUDE_DIRECTORIES(${Python_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${Python_NumPy_PATH})
+
 
 # IMP
 ###########################
@@ -100,11 +105,13 @@ MESSAGE(STATUS "IMP_core_LIBRARY='${IMP_core_LIBRARY}'")
 LINK_LIBRARIES(${IMP_kernel_LIBRARY} ${IMP_core_LIBRARY})
 MESSAGE("-- Found IMP")
 
+
 # RTTR
 ###########################
 FIND_PACKAGE(RTTR CONFIG REQUIRED Core)
 LINK_LIBRARIES(RTTR::Core)
 MESSAGE ("-- Found librttr version \"${PACKAGE_VERSION}\"")
+
 
 # libmongoc
 ###########################
@@ -116,14 +123,17 @@ INCLUDE_DIRECTORIES (${MONGOC_INCLUDE_DIRS})
 LINK_LIBRARIES (${MONGOC_LIBRARIES})
 ADD_COMPILE_DEFINITIONS(${MONGOC_DEFINITIONS})
 
+
 # LabelLib
 ###########################
 #FIND_PACKAGE (FlexLabel REQUIRED)
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/labellib/FlexLabel/include/)
 
+
 # JSON
 ###########################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/json/single_include/)
+
 
 # Project
 ###########################

@@ -1,20 +1,25 @@
 @property
-def bytes(self):
+def bytes(self) -> np.ndarray:
     return self.get_bytes()
 
 
 @bytes.setter
-def bytes(self, v):
+def bytes(self, v: np.ndarray):
     self.set_bytes(v)
 
 
 @property
-def link(self):
+def link(self) -> cn.Port:
     return self.get_link()
 
 
 @link.setter
-def link(self, v):
+def link(
+        self,
+        v: cn.Port
+):
+    if self.node is v.node:
+        Warning("Linking to same Node.")
     self.set_link(v)
 
 

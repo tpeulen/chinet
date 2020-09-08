@@ -9,7 +9,7 @@
     #include "../include/MongoObject.h"
 %}
 
-%pythonbegin "python_imports.py"
+%pythonbegin "python_extension.py"
 
 %include "typemaps.i";
 %include "stl.i";
