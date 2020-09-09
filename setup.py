@@ -13,6 +13,12 @@ from distutils.version import LooseVersion
 
 IMP = None
 
+NAME = "chinet"  # name of the module
+DESCRIPTION = "Python bindings for chinet"
+LONG_DESCRIPTION = """"chinet is a C++ library with Python wrapper to construct \
+networks of computation node with associated ports that can be deposited in a \
+mongoDB. Chinet is the data management backend of chisurf."""
+
 
 def read_version(
         header_file='./include/CNode.h'
@@ -58,25 +64,10 @@ class CMakeExtension(Extension):
         self.sourcedir = os.path.abspath(sourcedir)
 
 
+
 class CMakeBuild(build_ext):
 
     def run(self):
-        try:
-            out = subprocess.check_output(['cmake', '--version'])
-        except OSError:
-            raise RuntimeError(
-                "CMake include_dirs.append(st be installed to build the "
-                "following extensions: " + ", ".join(
-                    e.name for e in self.extensions)
-            )
-
-        if platform.system() == "Windows":
-            cmake_version = LooseVersion(
-                re.search(r'version\s*([\d.]+)', out.decode()).group(1)
-            )
-            if cmake_version < '3.13.0':
-                raise RuntimeError("CMake >= 3.13.0 is required on Windows")
-
         for ext in self.extensions:
             self.build_extension(ext)
 
@@ -85,33 +76,56 @@ class CMakeBuild(build_ext):
             os.path.dirname(
                 self.get_ext_fullpath(ext.name)
             )
-        ).replace('\\' , '/')
+        ).replace('\\', '/')
+
         cmake_args = [
             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
-            '-DCMAKE_SWIG_OUTDIR=' + extdir,
+            '-DCMAKE_SWIG_OUTDIR=' + extdir
         ]
         cfg = 'Debug' if self.debug else 'Release'
-        build_args = ['--config', cfg]
+        build_args = ['--config', cfg, '-j 8']
         cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
         if platform.system() == "Windows":
             patch_windows_imp()
             cmake_args += [
-                '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(
-                    cfg.upper(), extdir
-                ),
+                '-DBUILD_PYTHON_INTERFACE=ON',
+                '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), extdir),
                 '-GVisual Studio 14 2015 Win64'
             ]
         else:
             build_args += ['--', '-j8']
-
+            # When using conda try to convince cmake to use
+            # the conda boost
+            CONDA_PREFIX = os.getenv('CONDA_PREFIX')
+            if CONDA_PREFIX is not None:
+                print("Conda prefix is: ", CONDA_PREFIX)
+                print("Convincing cmake to use the conda boost")
+                cmake_args += [
+                    '-DCMAKE_PREFIX_PATH=' + CONDA_PREFIX,
+                    '-DBOOST_ROOT=' + CONDA_PREFIX,
+                    '-DBoost_NO_SYSTEM_PATHS=ON',
+                    '-DBoost_DEBUG=OFF',
+                    '-DBoost_DETAILED_FAILURE_MESSAGE=ON'
+                ]
         env = os.environ.copy()
-        env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(
-            env.get('CXXFLAGS', ''),
-            self.distribution.get_version()
-        )
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
-
+        try:
+            # build the documentation.i file using doxygen and doxy2swig
+            working_directory = pathlib.Path(__file__).parent.absolute()
+            subprocess.check_call(
+                ["doxygen"],
+                cwd=str(working_directory / "docs"),
+                env=env
+            )
+            subprocess.check_call(
+                ["python", "doxy2swig.py", "../docs/_build/xml/index.xml", "../ext/python/documentation.i"],
+                cwd=str(working_directory / "utility"),
+                env=env
+            )
+        except:
+            print("Problem calling doxygen")
+        print("cmake building: " + " ".join(cmake_args))
         subprocess.check_call(
             ['cmake', ext.sourcedir] + cmake_args,
             cwd=self.build_temp,
@@ -123,7 +137,7 @@ class CMakeBuild(build_ext):
         )
 
 
-__name__ = "chinet"  # name of the module
+__name__ = NAME
 __version__ = read_version()
 
 
@@ -140,6 +154,8 @@ setup(
     author_email='thomas.otavio.peulen@gmail.com',
     ext_modules=[CMakeExtension('chinet')],
     cmdclass=cmdclass,
+    description=DESCRIPTION,
+    long_description=LONG_DESCRIPTION,
     install_requires=[
         'numpy'
     ],

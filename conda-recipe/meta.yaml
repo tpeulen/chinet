@@ -1,8 +1,7 @@
-{% set name = "chinet" %}
 {% set data = load_setup_py_data(setup_file='../setup.py', from_recipe_dir=True) %}
 
 package:
-  name: "{{ name|lower }}"
+  name: {{ data.get('name')|lower }}
   version: {{ data.get('version')|lower }}
 
 source:
@@ -10,9 +9,7 @@ source:
 
 build:
     number: 0
-    # the GIT_BUILD_STR is not defined when using path as source
-    string: np{{ CONDA_NPY }}py{{ CONDA_PY }}{{ environ.get('CONDA_SUFFIX', '') }}
-    # string: np{{ CONDA_NPY }}py{{ CONDA_PY }}_{{ GIT_BUILD_STR }}_{{ environ.get('BRANCH', '') }}
+    string: np{{ CONDA_NPY }}py{{ CONDA_PY }}
 
 requirements:
 
@@ -49,11 +46,10 @@ test:
 about:
   home: https://github.com/tpeulen/chinet
   license: Mozilla Public License 2.0 (MPL 2.0)
-  summary: Python bindings for chinet
+  summary: |
+    {{ data.get('description') }}
   description: |
-    chinet is a C++ library with Python wrapper to construct networks of
-    computation node with associated ports that can be deposited in a mongoDB.
-    Chinet is the data management backend of chisurf.
+    {{ data.get('long_description') }}
   doc_url: https://github.com/tpeulen.github.io/chinet/
 
 extra:

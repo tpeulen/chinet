@@ -8,73 +8,146 @@ PROJECT(${PROJECT_NAME})
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 
+if(UNIX AND NOT APPLE)
+    set(LINUX TRUE)
+endif()
 
-# Debug build detection
+## Check for Conda
 ###########################
-IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-    MESSAGE("Release build")
-    ADD_DEFINITIONS("-DCHINET_VERBOSE=0")
-ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
-    MESSAGE("Debug build")
-    ADD_DEFINITIONS("-DCHINET_VERBOSE=1")
-ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
+IF(DEFINED ENV{CONDA_PREFIX})
+    MESSAGE(STATUS "CONDA env seen: --[$ENV{CONDA_PREFIX}]--")
+    SET(ENV{PATH} "$ENV{CONDA_PREFIX}/bin;$ENV{PATH}")
+    # Define python_command that is used to call python and locate the python libraries
+    if (MSVC)
+        INCLUDE_DIRECTORIES($ENV{CONDA_PREFIX}/Library/include)
+        LINK_DIRECTORIES($ENV{CONDA_PREFIX}/Library/lib)
+        SET(python_command $ENV{CONDA_PREFIX}/python.exe)
+    ELSE()
+        INCLUDE_DIRECTORIES($ENV{CONDA_PREFIX}/include)
+        LINK_DIRECTORIES($ENV{CONDA_PREFIX}/lib)
+        SET(python_command $ENV{CONDA_PREFIX}/bin/python)
+    ENDIF()
+ELSE()
+    MESSAGE(STATUS "No conda environment defined")
+ENDIF()
+SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
+
+# Conda
+#######
+if(UNIX)
+    if(DEFINED ENV{CONDA_PREFIX})
+        LINK_DIRECTORIES("$ENV{CONDA_PREFIX}/lib")
+        INCLUDE_DIRECTORIES("$ENV{CONDA_PREFIX}/include")
+    else()
+        LINK_DIRECTORIES(/usr/local/lib)
+        INCLUDE_DIRECTORIES(/usr/local/include)
+    endif()
+endif()
 
 
-# 32/64 bit detection
-###########################
-IF(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
-    # If in 64bit mode, we have to define the _OCC64 variable
-    ADD_DEFINITIONS(-D_OCC64)
-    SET(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_FLAGS} -D_OCC64)
-    SET(BIT 64)
-ELSE(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
-    SET(BIT 32)
-ENDIF(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
-
-
-# Windows
-###########################
-if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++11")
-    if(BIT MATCHES "64")
-        add_definitions(-DMS_WIN64)
-    ENDIF(BIT MATCHES "64")
-ENDIF(MSVC)
-
-# MACOSX_DEPLOYEMENT_TARGET
-###########################
-# explicit link to libc++ for recent osx versions
-IF(APPLE)
-    MESSAGE(STATUS "link to libc++ on modern osx versions")
+# Compiler flags
+#################
+if(LINUX)
+    STRING(APPEND CMAKE_CXX_FLAGS " -march=native -Ofast -mavx2 -ffast-math -funroll-loops")
+    STRING(APPEND CMAKE_C_FLAGS " -march=native -Ofast -mavx2 -ffast-math -funroll-loops")
+endif()
+if(APPLE)
+    FIND_PACKAGE(Threads)
+    # explicit link to libc++ for recent osx versions
+    MESSAGE(STATUS "Explicitly link to libc++ on modern osx versions")
     ADD_DEFINITIONS(-stdlib=libc++)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
-    # Don't set MACOSX_RPATH by default
-    set(CMAKE_MACOSX_RPATH 0)
-ENDIF(APPLE)
+    # Requires AVX and FMA
+    STRING(APPEND CMAKE_CXX_FLAGS " -march=native -Ofast -mavx2 -ffast-math -funroll-loops -mfma")
+    STRING(APPEND CMAKE_C_FLAGS " -march=native -Ofast -mavx2 -ffast-math -funroll-loops -mfma")
+endif()
+if (MSVC)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++11")
+    ADD_DEFINITIONS(-DMS_WIN64)
+    ADD_DEFINITIONS(-D_USE_MATH_DEFINES)
+    # https://devblogs.microsoft.com/cppblog/simd-extension-to-c-openmp-in-visual-studio/
+    # /Oi is for intrinsics
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:AVX2 -openmp:experimental /Oi /O2")
+endif (MSVC)
 
-# OpenMP
+
+# MACOSX
+##############
+if (APPLE)
+    # Don't set MACOSX_RPATH by default
+    # https://github.com/conda/conda/issues/3624
+    if(DEFINED ENV{CONDA_PREFIX})
+        set(MACOSX_RPATH OFF)
+        set(CMAKE_SKIP_RPATH TRUE)
+        set(CMAKE_SKIP_INSTALL_RPATH TRUE)
+    endif()
+endif (APPLE)
+
+# Debug build detection
 ###########################
-OPTION (USE_OpenMP "Use OpenMP" ON)
-IF(USE_OpenMP)
-    FIND_PACKAGE(OpenMP)
-    IF(OPENMP_FOUND)
-        SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-    ENDIF()
-ENDIF()
+IF (CMAKE_BUILD_TYPE STREQUAL "Release")
+    MESSAGE("Release build")
+    ADD_DEFINITIONS("-DVERBOSE_FIT2X=0")
+ELSE (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    MESSAGE("Debug build")
+    ADD_DEFINITIONS("-DVERBOSE_FIT2X=1")
+ENDIF (CMAKE_BUILD_TYPE STREQUAL "Release")
+
+
+################################################################################
+###### INCLUDES AND LIBRARIES
+################################################################################
+
+## OpenMP
+###########################
+if (APPLE)
+    # When using conda use CONDA_PREFIX
+    if(DEFINED ENV{CONDA_PREFIX})
+        SET(OMP_INCLUDE_DIR "$ENV{CONDA_PREFIX}/include")
+        SET(OMP_LIB_DIR "$ENV{CONDA_PREFIX}/lib")
+    else()
+        SET(OMP_INCLUDE_DIR "/usr/local/opt/libomp/include")
+        SET(OMP_LIB_DIR "/usr/local/opt/libomp/lib")
+    endif()
+    # dirty hack to make OpenMP work see:
+    # https://gitlab.kitware.com/cmake/cmake/issues/18098
+    set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I${OMP_INCLUDE_DIR}" CACHE INTERNAL "OpenMP flags for Xcode toolchain.")
+    set(OpenMP_CXX_LIB_NAMES "omp" CACHE INTERNAL "OpenMP lib name for Xcode toolchain.")
+    set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp -I${OMP_INCLUDE_DIR}" CACHE INTERNAL "OpenMP flags for Xcode toolchain.")
+    set(OpenMP_C_LIB_NAMES "libomp" "libgomp" "libiomp5")
+    set(OpenMP_omp_LIBRARY "${OMP_LIB_DIR}/libomp.dylib" CACHE INTERNAL "OpenMP lib name for Xcode toolchain.")
+    set(OpenMP_libomp_LIBRARY ${OpenMP_C_LIB_NAMES})
+    set(OpenMP_libgomp_LIBRARY ${OpenMP_C_LIB_NAMES})
+    set(OpenMP_libiomp5_LIBRARY ${OpenMP_C_LIB_NAMES})
+endif ()
+FIND_PACKAGE(OpenMP REQUIRED)
+LINK_LIBRARIES(OpenMP::OpenMP_CXX)
 
 
 # Cpp-taskflow
 ###########################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/cpp-taskflow/)
 
-
-# Boost
+## Boost
 ###########################
-FIND_PACKAGE(Boost 1.50 COMPONENTS system REQUIRED)
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR} )
+if (WIN32)
+    # use static Boost in Windows
+    set(Boost_USE_STATIC_LIBS ON)
+    set(Boost_USE_STATIC ON)
+    set(Boost_USE_MULTITHREAD)
+endif (WIN32)
+FIND_PACKAGE(Boost 1.36 REQUIRED COMPONENTS date_time filesystem iostreams)
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 LINK_LIBRARIES(${Boost_LIBRARIES})
+MESSAGE(${Boost_INCLUDE_DIRS})
+
+
+# Python
+###########################
+FIND_PACKAGE(Python)
+INCLUDE_DIRECTORIES(${Python_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${Python_NumPy_PATH})
 
 
 # Eigen3
@@ -85,13 +158,6 @@ IF(NOT TARGET Eigen3::Eigen)
     SET(EIGEN3_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/thirdparty/eigen3)
 ENDIF (NOT TARGET Eigen3::Eigen)
 INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
-
-
-# Python
-###########################
-FIND_PACKAGE(Python)
-INCLUDE_DIRECTORIES(${Python_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${Python_NumPy_PATH})
 
 
 # IMP
@@ -135,8 +201,9 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/labellib/FlexLabel/include/)
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/json/single_include/)
 
 
-# Project
-###########################
+################################################################################
+###### Targets
+################################################################################
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
