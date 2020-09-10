@@ -88,7 +88,6 @@ class CMakeBuild(build_ext):
                 self.get_ext_fullpath(ext.name)
             )
         ).replace('\\', '/')
-
         cmake_args = [
             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
             '-DCMAKE_SWIG_OUTDIR=' + extdir
