@@ -9,9 +9,9 @@ MongoObject::MongoObject(std::string name) :
     db_string(""),
     app_string(""),
     collection_string(""),
-    time_of_death(0),
+    is_connected_to_db_(false),
     object_name(""),
-    is_connected_to_db_(false)
+    time_of_death(0)
 {
 #if CHINET_VERBOSE
     std::clog << "NEW MONGOOBJECT" << std::endl;

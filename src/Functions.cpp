@@ -37,7 +37,7 @@ void Functions::roll(int value, std::vector<double> &y)
 
 void Functions::copy_vector_to_array(std::vector<double> &v, double *out, int nout)
 {
-    for (unsigned int i = 0; i < nout; i++) {
+    for (int i = 0; i < nout; i++) {
         out[i] = v[i];
     }
 }
@@ -45,7 +45,7 @@ void Functions::copy_vector_to_array(std::vector<double> &v, double *out, int no
 void Functions::copy_array_to_vector(double *in, int nin, std::vector<double> &v)
 {
     v.resize(nin);
-    for (unsigned int i = 0; i < nin; i++) {
+    for (int i = 0; i < nin; i++) {
         v[i] = in[i];
     }
 }
@@ -149,7 +149,7 @@ void Functions::convolve_sum_of_exponentials_periodic(
 std::vector<double> Functions::diff(std::vector<double> v)
 {
     std::vector<double> dx(v.size() - 1);
-    for (int i = 0; i < dx.size(); i++) {
+    for (size_t i = 0; i < dx.size(); i++) {
         dx[i] = (v[i + 1] - v[i]);
     }
     return dx;

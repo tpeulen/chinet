@@ -30,7 +30,7 @@ inline void add(
     for(auto &o : inputs){
         T* va; int vn;
         o.second->get_value<T>(&va, &vn);
-        for(int i=0; i < n_elements; i++){
+        for(size_t i=0; i < n_elements; i++){
             tmp[i] += va[i];
         }
     }
