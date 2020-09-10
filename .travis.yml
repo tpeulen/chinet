@@ -43,8 +43,17 @@ before_install:
   - conda install python=$BUILD_TARGET conda-build git
   # Make sure that the thirdparty gits are pulled
   - git submodule update --init --force
-  # Build the recipe and add the build path to the channels
-  - conda build conda-recipe --output-folder bld-dir
+  # Build conda package
+  # The tests keep failing of osx (Illegal instruction: 4). This is likely
+  # because the build machine are old (no AVX, FMA). Local build work
+  # https://stackoverflow.com/questions/14268887/what-is-the-illegal-instruction-4-error-and-why-does-mmacosx-version-min-10
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+    then
+      conda build conda-recipe --output-folder bld-dir
+    else
+      conda build conda-recipe --output-folder bld-dir --no-test
+    fi
   - conda config --add channels "file://`pwd`/bld-dir"
 
 install:
@@ -57,9 +66,8 @@ script:
   - sudo mkdir -p /data/db && sudo mongod &
   # create a link from nosetests to make sure that the correct nosetests is used
   - ln -sf $(which nosetests) $(pwd)/test/ && cd $(pwd)/test/
-  # The nosetests keeps failing of osx (Illegal instruction: 4). This is likely
-  # because the build machine are old. Hence, only test on Linux.
-  # https://stackoverflow.com/questions/14268887/what-is-the-illegal-instruction-4-error-and-why-does-mmacosx-version-min-10
+  # The nosetests keep failing of osx (Illegal instruction: 4). This is likely
+  # because the build machine are old.
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then nosetests --with-coverage test_*.py; fi
   - cd ..
 
