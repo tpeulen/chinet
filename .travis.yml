@@ -28,15 +28,15 @@ before_install:
   # Add conda channels
   - conda config --add channels tpeulen
   - conda config --add channels salilab
-  - conda config --add channels "file://`pwd`/bld-dir"
   - conda update -q conda
   # Install conda packages necessary in the host to build the recipe
   - source activate base
   - conda install python=$BUILD_TARGET conda-build git
   # Make sure that the thirdparty gits are pulled
   - git submodule update --init --force
-  # Build the recipe
+  # Build the recipe and add the build path to the channels
   - conda build conda-recipe --output-folder bld-dir
+  - conda config --add channels "file://`pwd`/bld-dir"
 
 install:
   - conda install chinet -c "file://`pwd`/bld-dir"
