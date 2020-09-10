@@ -7,10 +7,20 @@ SET(PROJECT_NAME chinet)
 PROJECT(${PROJECT_NAME})
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
-
 if(UNIX AND NOT APPLE)
     set(LINUX TRUE)
 endif()
+
+################################################################################
+###### OPTIONS
+################################################################################
+option(INSTALL "Install the library and the include files" ON)
+option(BUILD_PYTHON_INTERFACE "Build the python interface" ON)
+option(ENABLE_AVX "Build with AVX" ON)
+
+################################################################################
+###### Conda
+################################################################################
 
 ## Check for Conda
 ###########################
@@ -32,8 +42,8 @@ ELSE()
 ENDIF()
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 
-# Conda
-#######
+## Include and lib dir
+###########################
 if(UNIX)
     if(DEFINED ENV{CONDA_PREFIX})
         LINK_DIRECTORIES("$ENV{CONDA_PREFIX}/lib")
@@ -45,8 +55,9 @@ if(UNIX)
 endif()
 
 
-# Compiler flags
-#################
+################################################################################
+###### Compiler flags
+################################################################################
 if(LINUX)
     STRING(APPEND CMAKE_CXX_FLAGS " -march=native -Ofast -mavx2 -ffast-math -funroll-loops")
     STRING(APPEND CMAKE_C_FLAGS " -march=native -Ofast -mavx2 -ffast-math -funroll-loops")
@@ -58,9 +69,10 @@ if(APPLE)
     ADD_DEFINITIONS(-stdlib=libc++)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
-    # Requires AVX and FMA
-    STRING(APPEND CMAKE_CXX_FLAGS " -march=native -Ofast -mavx2 -ffast-math -funroll-loops -mfma")
-    STRING(APPEND CMAKE_C_FLAGS " -march=native -Ofast -mavx2 -ffast-math -funroll-loops -mfma")
+    IF(ENABLE_AVX)
+        STRING(APPEND CMAKE_CXX_FLAGS " -march=native -Ofast -mavx2 -ffast-math -funroll-loops -mfma")
+        STRING(APPEND CMAKE_C_FLAGS " -march=native -Ofast -mavx2 -ffast-math -funroll-loops -mfma")
+    ENDIF(ENABLE_AVX)
 endif()
 if (MSVC)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++11")
@@ -68,9 +80,10 @@ if (MSVC)
     ADD_DEFINITIONS(-D_USE_MATH_DEFINES)
     # https://devblogs.microsoft.com/cppblog/simd-extension-to-c-openmp-in-visual-studio/
     # /Oi is for intrinsics
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:AVX2 -openmp:experimental /Oi /O2")
+    IF(ENABLE_AVX)
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:AVX2 -openmp:experimental /Oi /O2")
+    ENDIF(ENABLE_AVX)
 endif (MSVC)
-
 
 # MACOSX
 ##############
@@ -208,8 +221,11 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-ADD_SUBDIRECTORY(pyext)
+IF(BUILD_PYTHON_INTERFACE)
+    ADD_SUBDIRECTORY(pyext)
+ENDIF(BUILD_PYTHON_INTERFACE)
 
+IF(INSTALL)
 INSTALL(
         TARGETS ${PROJECT_NAME}
         RUNTIME DESTINATION bin
@@ -217,3 +233,12 @@ INSTALL(
         ARCHIVE DESTINATION lib
         PUBLIC_HEADER DESTINATION include
         )
+ENDIF(INSTALL)
+
+## Compiler warnings
+########################
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /W4 /WX)
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
+endif()
