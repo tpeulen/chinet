@@ -1,12 +1,17 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.13)
-
 ENABLE_LANGUAGE(CXX)
-set(CMAKE_CXX_STANDARD 11)
-
+SET(CMAKE_CXX_STANDARD 14)
 SET(PROJECT_NAME chinet)
 PROJECT(${PROJECT_NAME})
 
+################################################################################
+###### CMAKE
+################################################################################
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
+
+################################################################################
+###### DEFINITIONS
+################################################################################
 if(UNIX AND NOT APPLE)
     set(LINUX TRUE)
 endif()
@@ -137,7 +142,6 @@ endif ()
 FIND_PACKAGE(OpenMP REQUIRED)
 LINK_LIBRARIES(OpenMP::OpenMP_CXX)
 
-
 # Cpp-taskflow
 ###########################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/cpp-taskflow/)
@@ -155,13 +159,11 @@ INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 LINK_LIBRARIES(${Boost_LIBRARIES})
 MESSAGE(${Boost_INCLUDE_DIRS})
 
-
 # Python
 ###########################
 FIND_PACKAGE(Python)
 INCLUDE_DIRECTORIES(${Python_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${Python_NumPy_PATH})
-
 
 # Eigen3
 ###########################
@@ -171,7 +173,6 @@ IF(NOT TARGET Eigen3::Eigen)
     SET(EIGEN3_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/thirdparty/eigen3)
 ENDIF (NOT TARGET Eigen3::Eigen)
 INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
-
 
 # IMP
 ###########################
@@ -184,13 +185,11 @@ MESSAGE(STATUS "IMP_core_LIBRARY='${IMP_core_LIBRARY}'")
 LINK_LIBRARIES(${IMP_kernel_LIBRARY} ${IMP_core_LIBRARY})
 MESSAGE("-- Found IMP")
 
-
 # RTTR
 ###########################
 FIND_PACKAGE(RTTR CONFIG REQUIRED Core)
 LINK_LIBRARIES(RTTR::Core)
 MESSAGE ("-- Found librttr version \"${PACKAGE_VERSION}\"")
-
 
 # libmongoc
 ###########################
@@ -202,17 +201,14 @@ INCLUDE_DIRECTORIES (${MONGOC_INCLUDE_DIRS})
 LINK_LIBRARIES (${MONGOC_LIBRARIES})
 ADD_COMPILE_DEFINITIONS(${MONGOC_DEFINITIONS})
 
-
 # LabelLib
 ###########################
 #FIND_PACKAGE (FlexLabel REQUIRED)
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/labellib/FlexLabel/include/)
 
-
 # JSON
 ###########################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/json/single_include/)
-
 
 ################################################################################
 ###### Targets
@@ -238,7 +234,7 @@ ENDIF(INSTALL)
 ## Compiler warnings
 ########################
 if(MSVC)
-    target_compile_options(${PROJECT_NAME} PRIVATE /W4 /WX)
+    target_compile_options(${PROJECT_NAME} PRIVATE /Wall)
 else()
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
 endif()
