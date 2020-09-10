@@ -83,10 +83,8 @@ after_success:
       cd docs
       conda env create -f environment.yml
       conda activate docs_env
-      make clean
-      make html
-      # chinet.__version__ is passed to PROJECT_NUMBER in
-      # to have a single version number to manage.
+      make clean && make html
+      # chinet.__version__ passed to PROJECT_NUMBER to have a single version number to manage.
       (cat Doxyfile ; echo "PROJECT_NUMBER=$(python -c 'from __future__ import print_function; import chinet; print(chinet.__version__)')" ) | doxygen -
       # Tell GitHub not to use jekyll to compile the docs
       touch _build/html/.nojekyll

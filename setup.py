@@ -10,14 +10,10 @@ from setuptools import setup, Extension
 from distutils.command.build_ext import build_ext
 from distutils.version import LooseVersion
 
-
-IMP = None
-
-NAME = "chinet"  # name of the module
-DESCRIPTION = "Python bindings for chinet"
-LONG_DESCRIPTION = """"chinet is a C++ library with Python wrapper to construct \
-networks of computation node with associated ports that can be deposited in a \
-mongoDB. Chinet is the data management backend of chisurf."""
+try:
+    import IMP
+except ImportError:
+    IMP = None
 
 
 def read_version(
@@ -32,7 +28,6 @@ def read_version(
 
 
 def patch_windows_imp():
-    import IMP
     if IMP.__version__ == '2.12.0':
         try:
             # we are likely in a conda build environment
@@ -150,23 +145,26 @@ class CMakeBuild(build_ext):
         )
 
 
-__name__ = NAME
-__version__ = read_version()
-
-
-cmdclass = {
-    'build_ext': CMakeBuild
-}
-
+VERSION = read_version()
+LICENSE = 'Mozilla Public License 2.0 (MPL 2.0)'
+NAME = "chinet"  # name of the module
+DESCRIPTION = "Python bindings for chinet"
+LONG_DESCRIPTION = """"chinet is a C++ library with Python wrapper to construct \
+networks of computation node with associated ports that can be deposited in a \
+mongoDB. Chinet is the data management backend of chisurf."""
 
 setup(
-    name=__name__,
-    version=__version__,
-    license='MPL v2.0',
+    name=NAME,
+    version=VERSION,
+    license=LICENSE,
     author='Thomas-Otavio Peulen',
     author_email='thomas.otavio.peulen@gmail.com',
-    ext_modules=[CMakeExtension('chinet')],
-    cmdclass=cmdclass,
+    ext_modules=[
+        CMakeExtension('chinet')
+    ],
+    cmdclass={
+        'build_ext': CMakeBuild
+    },
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     install_requires=[
@@ -177,13 +175,13 @@ setup(
     ],
     zip_safe=False,
     classifiers=[
-                 'Development Status :: 2 - Pre-Alpha',
-                 'Intended Audience :: Science/Research',
-                 'License :: OSI Approved :: MIT License',
-                 'Natural Language :: English',
-                 'Operating System :: Microsoft :: Windows',
-                 'Operating System :: POSIX :: Linux',
-                 'Programming Language :: Python',
-                 'Topic :: Scientific/Engineering',
-             ]
+        'Development Status :: 2 - Pre-Alpha',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: POSIX :: Linux',
+        'Programming Language :: Python',
+        'Topic :: Scientific/Engineering',
+    ]
 )
