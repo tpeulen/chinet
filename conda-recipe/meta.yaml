@@ -16,7 +16,7 @@ requirements:
   host:
     - python {{ python }}
     - {{ pin_compatible('numpy') }}
-    # patching IMP in setup.py. Therefore in host env
+    # patching IMP in setup.py therefore in host env
     - imp 2.13.0.* # [win]
   build:
     - python {{ python }}
@@ -24,20 +24,22 @@ requirements:
     - {{ pin_compatible('numpy') }}
     - git
     - cmake
-    - llvm-openmp  # [osx]
     - imp 2.13.0.* # [not win]
     - swig 3.0.12.*
-    - boost 1.67.0.*
+    - boost 1.67.0.* # [py < 38]
+    - boost 1.71.0.* # [py >= 38]
+    - llvm-openmp  # [osx]
     - librttr 0.9.6.*
     - libmongoc >=1.15.1
   run:
     - python {{ python }}
     - {{ pin_compatible('numpy') }}
     - labellib
-    - llvm-openmp # [osx]
     - librttr 0.9.6.*
+    - llvm-openmp  # [osx]
     - boost 1.67.0.* # [win]
-    - libboost 1.67.0.* # [not win]
+    - libboost 1.71.0.* # [not win and py >= 38]
+    - libboost 1.67.0.* # [not win and py < 38]
     - libmongoc >=1.15.1
     - imp 2.13.0.*
 
@@ -47,7 +49,7 @@ test:
 
 about:
   home: https://github.com/tpeulen/chinet
-  license: Mozilla Public License 2.0 (MPL 2.0)
+  license: {{ data.get('license') }}
   summary: |
     {{ data.get('description') }}
   description: |
