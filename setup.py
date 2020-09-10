@@ -33,36 +33,47 @@ def read_version(
 
 def patch_windows_imp():
     import IMP
-    if IMP.__version__ > '2.12.0':
+    if IMP.__version__ == '2.12.0':
+        try:
+            # we are likely in a conda build environment
+            library_path = pathlib.Path(os.environ['LIBRARY_LIB'])
+            filename = library_path / pathlib.Path("./cmake/IMP/IMPConfig.cmake")
+        except KeyError:
+            # we are likely not in a conda build environment
+            library_path = pathlib.Path(os.environ['CONDA_PREFIX']) / \
+                           pathlib.Path("./Library/lib/cmake/IMP/")
+            filename = library_path / pathlib.Path("IMPConfig.cmake")
+        with fileinput.FileInput(filename, inplace=True, backup='.bak') as file:
+            for line in file:
+                print(
+                    line.replace(
+                        ".so." + IMP.__version__, ".lib"
+                    ).replace(
+                        '${IMP_LIB_DIR}/lib', '${IMP_LIB_DIR}/'
+                    ),
+                    end=''
+                )
+    elif '2.13' in IMP.__version__:
+        try:
+            # we are likely in a conda build environment
+            library_path = pathlib.Path(os.environ['LIBRARY_LIB'])
+            filename = library_path / pathlib.Path("./cmake/IMP/IMPConfig.cmake")
+        except KeyError:
+            # we are likely not in a conda build environment
+            library_path = pathlib.Path(os.environ['CONDA_PREFIX']) / \
+                           pathlib.Path("./Library/lib/cmake/IMP/")
+            filename = library_path / pathlib.Path("IMPConfig.cmake")
+        with fileinput.FileInput(filename, inplace=True, backup='.bak') as file:
+            for line in file:
+                print(line.replace(".dll", ".lib"), end='')
+    else:
         return
-    try:
-        # we are likely in a conda build environment
-        library_path = pathlib.Path(os.environ['LIBRARY_LIB'])
-        filename = library_path / pathlib.Path("./cmake/IMP/IMPConfig.cmake")
-    except KeyError:
-        # we are likely not in a conda build environment
-        library_path = pathlib.Path(os.environ['CONDA_PREFIX']) / \
-                       pathlib.Path("./Library/lib/cmake/IMP/")
-        filename = library_path / pathlib.Path("IMPConfig.cmake")
-    with fileinput.FileInput(
-            filename, inplace=True, backup='.bak'
-    ) as file:
-        for line in file:
-            print(
-                line.replace(
-                    ".so." + IMP.__version__, ".lib"
-                ).replace(
-                    '${IMP_LIB_DIR}/lib', '${IMP_LIB_DIR}/'
-                ),
-                end=''
-            )
 
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
         super().__init__(name, sources=[])
         self.sourcedir = os.path.abspath(sourcedir)
-
 
 
 class CMakeBuild(build_ext):
@@ -86,7 +97,10 @@ class CMakeBuild(build_ext):
         build_args = ['--config', cfg, '-j 8']
         cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
         if platform.system() == "Windows":
-            patch_windows_imp()
+            try:
+                patch_windows_imp()
+            except ImportError:
+                print("WARNING: Cannot import IMP")
             cmake_args += [
                 '-DBUILD_PYTHON_INTERFACE=ON',
                 '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), extdir),
