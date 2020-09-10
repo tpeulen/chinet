@@ -5,8 +5,17 @@ matrix:
   include:
     - os: linux
       dist: bionic
+      addons:
+        apt:
+          packages:
+            - doxygen
     - os: osx
       osx_image: xcode9.4
+      addons:
+        homebrew:
+          packages:
+            - doxygen
+          update: true
 
 env:
   - BUILD_TARGET=3.7 MINICONDA_VERSION=latest
@@ -51,7 +60,7 @@ script:
   # The nosetests keeps failing of osx (Illegal instruction: 4). This is likely
   # because the build machine are old. Hence, only test on Linux.
   # https://stackoverflow.com/questions/14268887/what-is-the-illegal-instruction-4-error-and-why-does-mmacosx-version-min-10
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then; nosetests --with-coverage test_*.py; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then nosetests --with-coverage test_*.py; fi
   - cd ..
 
 after_success:
@@ -76,10 +85,8 @@ after_success:
       conda activate docs_env
       make clean
       make html
-      # Use doxygen to build the C++ API documentation.
-      # Here, the value in chinet.__version__ is passed to PROJECT_NUMBER in
-      # so that there is only a single version number to manage.
-      conda install doxygen -c conda-forge
+      # chinet.__version__ is passed to PROJECT_NUMBER in
+      # to have a single version number to manage.
       (cat Doxyfile ; echo "PROJECT_NUMBER=$(python -c 'from __future__ import print_function; import chinet; print(chinet.__version__)')" ) | doxygen -
       # Tell GitHub not to use jekyll to compile the docs
       touch _build/html/.nojekyll
