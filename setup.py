@@ -127,7 +127,7 @@ class CMakeBuild(build_ext):
                 env=env
             )
             subprocess.check_call(
-                ["python", "doxy2swig.py", "../docs/_build/xml/index.xml", "../ext/python/documentation.i"],
+                ["python", "doxy2swig.py", "../docs/_build/xml/index.xml", "../pyext/documentation.i"],
                 cwd=str(working_directory / "utility"),
                 env=env
             )

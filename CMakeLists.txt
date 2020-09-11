@@ -1,17 +1,12 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.13)
+
 ENABLE_LANGUAGE(CXX)
-SET(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)
+
 SET(PROJECT_NAME chinet)
 PROJECT(${PROJECT_NAME})
 
-################################################################################
-###### CMAKE
-################################################################################
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
-
-################################################################################
-###### DEFINITIONS
-################################################################################
 if(UNIX AND NOT APPLE)
     set(LINUX TRUE)
 endif()
@@ -63,17 +58,6 @@ endif()
 ################################################################################
 ###### Compiler flags
 ################################################################################
-
-## Compiler warnings
-########################
-if(MSVC)
-    ADD_COMPILE_OPTIONS(/Wall)
-else()
-    ADD_COMPILE_OPTIONS(-Wall -Wextra -pedantic)
-endif()
-
-## AVX and MATH
-########################
 if(LINUX)
     STRING(APPEND CMAKE_CXX_FLAGS " -march=native -Ofast -mavx2 -ffast-math -funroll-loops")
     STRING(APPEND CMAKE_C_FLAGS " -march=native -Ofast -mavx2 -ffast-math -funroll-loops")
@@ -91,6 +75,7 @@ if(APPLE)
     ENDIF(ENABLE_AVX)
 endif()
 if (MSVC)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++11")
     ADD_DEFINITIONS(-DMS_WIN64)
     ADD_DEFINITIONS(-D_USE_MATH_DEFINES)
     # https://devblogs.microsoft.com/cppblog/simd-extension-to-c-openmp-in-visual-studio/
@@ -100,8 +85,8 @@ if (MSVC)
     ENDIF(ENABLE_AVX)
 endif (MSVC)
 
-# MACOSX - Library path handling
-##################################
+# MACOSX
+##############
 if (APPLE)
     # Don't set MACOSX_RPATH by default
     # https://github.com/conda/conda/issues/3624
@@ -152,6 +137,7 @@ endif ()
 FIND_PACKAGE(OpenMP REQUIRED)
 LINK_LIBRARIES(OpenMP::OpenMP_CXX)
 
+
 # Cpp-taskflow
 ###########################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/cpp-taskflow/)
@@ -159,14 +145,9 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/cpp-taskflow/)
 ## Boost
 ###########################
 if (WIN32)
-    IF(DEFINED ENV{CONDA_PREFIX})
-        # Conda uses static Boost linking
-        set(Boost_USE_STATIC_LIBS ON)
-        set(Boost_USE_STATIC ON)
-    ELSE()
-        set(Boost_USE_STATIC_LIBS OFF)
-        set(Boost_USE_STATIC OFF)
-    ENDIF()
+    # use static Boost in Windows
+    set(Boost_USE_STATIC_LIBS ON)
+    set(Boost_USE_STATIC ON)
     set(Boost_USE_MULTITHREAD)
 endif (WIN32)
 FIND_PACKAGE(Boost 1.36 REQUIRED COMPONENTS date_time filesystem iostreams)
@@ -174,11 +155,13 @@ INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 LINK_LIBRARIES(${Boost_LIBRARIES})
 MESSAGE(${Boost_INCLUDE_DIRS})
 
+
 # Python
 ###########################
 FIND_PACKAGE(Python)
 INCLUDE_DIRECTORIES(${Python_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${Python_NumPy_PATH})
+
 
 # Eigen3
 ###########################
@@ -188,6 +171,7 @@ IF(NOT TARGET Eigen3::Eigen)
     SET(EIGEN3_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/thirdparty/eigen3)
 ENDIF (NOT TARGET Eigen3::Eigen)
 INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
+
 
 # IMP
 ###########################
@@ -200,11 +184,13 @@ MESSAGE(STATUS "IMP_core_LIBRARY='${IMP_core_LIBRARY}'")
 LINK_LIBRARIES(${IMP_kernel_LIBRARY} ${IMP_core_LIBRARY})
 MESSAGE("-- Found IMP")
 
+
 # RTTR
 ###########################
 FIND_PACKAGE(RTTR CONFIG REQUIRED Core)
 LINK_LIBRARIES(RTTR::Core)
 MESSAGE ("-- Found librttr version \"${PACKAGE_VERSION}\"")
+
 
 # libmongoc
 ###########################
@@ -216,19 +202,21 @@ INCLUDE_DIRECTORIES (${MONGOC_INCLUDE_DIRS})
 LINK_LIBRARIES (${MONGOC_LIBRARIES})
 ADD_COMPILE_DEFINITIONS(${MONGOC_DEFINITIONS})
 
+
 # LabelLib
 ###########################
 #FIND_PACKAGE (FlexLabel REQUIRED)
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/labellib/FlexLabel/include/)
 
+
 # JSON
 ###########################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/json/single_include/)
 
+
 ################################################################################
 ###### Targets
 ################################################################################
-FILE(GLOB SRC_files "../src/*.cpp")
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -247,3 +235,10 @@ INSTALL(
         )
 ENDIF(INSTALL)
 
+## Compiler warnings
+########################
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /Wall)
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
+endif()
