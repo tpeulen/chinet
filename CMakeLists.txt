@@ -67,9 +67,9 @@ endif()
 ## Compiler warnings
 ########################
 if(MSVC)
-    ADD_COMPILE_OPTIONS(${PROJECT_NAME} PRIVATE /Wall)
+    ADD_COMPILE_OPTIONS(/Wall)
 else()
-    ADD_COMPILE_OPTIONS(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
+    ADD_COMPILE_OPTIONS(-Wall -Wextra -pedantic)
 endif()
 
 ## AVX and MATH
