@@ -478,6 +478,12 @@ C++ includes: Port.h
 %feature("docstring") Port::get_bson "
 ";
 
+%feature("docstring") Port::set_imp_particle "
+";
+
+%feature("docstring") Port::get_imp_particle "
+";
+
 %feature("docstring") Port::update_attached_node "
 ";
 

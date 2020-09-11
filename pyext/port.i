@@ -1,16 +1,9 @@
 %{
 #include "../include/Port.h"
 #include "../include/CNode.h"
-#include <IMP.h>
+#include "IMP.h"
 %}
 
-%include "./include/numpy.i"
-%include "std_vector.i";
-%init %{
-    import_array();
-%}
-
-%include <std_shared_ptr.i>
 %shared_ptr(Port)
 %shared_ptr(Node)
 
@@ -23,7 +16,6 @@
 
 %template(vector_port_ptr) std::vector<Port*>;
 
-%include attribute.i
 %attribute(Port, bool, fixed, is_fixed, set_fixed);
 %attribute(Port, bool, is_output, is_output, set_port_type);
 %attribute(Port, bool, reactive, is_reactive, set_reactive);

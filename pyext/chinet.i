@@ -9,6 +9,11 @@
     #include "../include/MongoObject.h"
 %}
 
+%include "./include/numpy.i"
+%init %{
+    import_array();
+%}
+
 %pythonbegin "python_extension.py"
 
 %include "typemaps.i";
@@ -20,6 +25,8 @@
 %include "std_list.i";
 %include "std_shared_ptr.i";
 %include "cpointer.i"
+%include "std_set.i";
+%include attribute.i
 
 %template(MapStringString) std::map<std::string, std::string>;
 %template(VectorString) std::vector<std::string>;

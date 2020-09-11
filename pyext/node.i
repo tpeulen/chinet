@@ -1,12 +1,5 @@
 /* turn on director wrapping for Callback */
 %feature("director") NodeCallback;
-
-%include <std_vector.i>;
-%include <std_map.i>;
-%include <std_list.i>;
-%include <std_shared_ptr.i>
-
-
 %{
 #include "../include/CNode.h"
 #include "../include/MongoObject.h"
@@ -26,6 +19,7 @@
 
 %attribute(Node, bool, is_valid, is_valid);
 %include "../include/CNode.h"
+
 %extend Node {
 
     std::string __repr__(){
