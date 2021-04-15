@@ -1,0 +1,88 @@
+stages:
+- build
+- test
+- deploy
+- Trigger-cross-projects
+
+# Change pip's cache directory to be inside the project directory since we can
+# only cache local items.
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  DEPLOY_VARIABLE: "nightly"
+  MINICONDA_VERSION: "latest"
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_REF_NAME =~ /master/
+      variables:
+        DEPLOY_VARIABLE: "main"  # Override globally-defined DEPLOY_VARIABLE
+    - when: always               # Run the pipeline in other cases
+
+build:linux:
+  stage: build
+  tags:
+    - linux
+  image: continuumio/miniconda3:latest
+  before_script:
+    - apt update -yq && apt -yq install build-essential
+  script:
+    - echo "I am the build stage."
+    - source activate
+    - conda install mamba boa conda-verify -c conda-forge
+    - |
+      conda config --add channels salilab
+      conda config --add channels conda-forge
+      conda config --add channels tpeulen
+      conda config --add channels tpeulen/label/nightly
+    - conda mambabuild conda-recipe --output-folder bld-dir
+  artifacts:
+    expire_in: 7 days
+    paths:
+      - bld-dir/
+
+test:linux:
+  variables:
+    MINICONDA_OS: "Linux"
+  stage: test
+  tags:
+    - linux
+  image: continuumio/miniconda3:latest
+  before_script:
+    - conda config --set always_yes yes --set changeps1 no
+  script:
+    - echo "I am a test stage job for debian, running on docker"
+    - source activate base
+    - conda install mamba conda-verify -c conda-forge
+    - mamba update -y -n base -c defaults --all
+    - |
+      conda config --add channels salilab
+      conda config --add channels conda-forge
+      conda config --add channels tpeulen
+      conda config --add channels "file://`pwd`/bld-dir"
+    - mamba create -n test chinet nose mongodb
+    - conda activate test
+    - |
+      cd test
+      mkdir db
+      mongod --dbpath=db &
+      nosetests
+
+deploy:
+  stage: deploy
+  image: continuumio/miniconda3:latest
+  tags:
+    - linux
+  dependencies:
+    - build:linux
+  script:
+    - echo "I am a depolyment stage job for debian, running on docker using continuumio/miniconda3:latest image"
+    - source activate
+    - conda install anaconda-client
+    - anaconda -t ${ANACONDA_API_TOKEN} upload -l ${DEPLOY_VARIABLE} -u ${CONDA_USER} --force bld-dir/linux-64/*.tar.bz2
+
+
+# Downstream projects
+# chisurf:
+#   stage: Trigger-cross-projects
+#   trigger: tpeulen/chisurf
+
