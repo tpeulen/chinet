@@ -23,6 +23,7 @@ requirements:
     - numpy
     - imp {{ imp }}
     - swig 3.0.12.*
+    - cmake
     - boost
     - eigen
     - llvm-openmp  # [osx]
