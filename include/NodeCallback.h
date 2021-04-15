@@ -6,11 +6,12 @@
 #define chinet_NODECALLBACK_H
 
 #include <functional>
+#include <algorithm>
 #include <rttr/registration>
-#include <Port.h>
-#include <CNode.h>
-#include <Functions.h>
-#include <FlexLabel/FlexLabel.h>
+
+#include "Port.h"
+#include "CNode.h"
+#include "Functions.h"
 
 class Port;
 

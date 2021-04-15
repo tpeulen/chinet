@@ -14,34 +14,29 @@ build:
 requirements:
 
   host:
-    - python {{ python }}
-    - {{ pin_compatible('numpy') }}
-    # patching IMP in setup.py therefore in host env
-    - imp 2.13.0.* # [win]
+    - python
+    - numpy
+    - imp {{ imp }} # [win]
   build:
     - python {{ python }}
     - setuptools
-    - {{ pin_compatible('numpy') }}
-    - git
-    - cmake
-    - imp 2.13.0.* # [not win]
+    - numpy
+    - imp {{ imp }}
     - swig 3.0.12.*
-    - boost 1.67.0.* # [py < 38]
-    - boost 1.71.0.* # [py >= 38]
+    - boost
+    - eigen
     - llvm-openmp  # [osx]
-    - librttr 0.9.6.*
+    - librttr
     - libmongoc >=1.15.1
   run:
-    - python {{ python }}
-    - {{ pin_compatible('numpy') }}
-    - labellib
-    - librttr 0.9.6.*
+    - {{ pin_compatible('python') }}
+    - {{ pin_compatible('imp') }}
+    - {{ pin_compatible('labellib') }}
+    - {{ pin_compatible('librttr') }}
+    - {{ pin_compatible('boost') }}
+    - {{ pin_compatible('libmongoc') }}
+    - numpy
     - llvm-openmp  # [osx]
-    - boost 1.67.0.* # [win]
-    - libboost 1.71.0.* # [not win and py >= 38]
-    - libboost 1.67.0.* # [not win and py < 38]
-    - libmongoc >=1.15.1
-    - imp 2.13.0.*
 
 test:
   imports:

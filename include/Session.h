@@ -3,13 +3,13 @@
 
 #include <map>
 #include <memory>
-#include <nlohmann/json.hpp>
 
 #include "MongoObject.h"
 #include "CNode.h"
 #include "Port.h"
 
 
+#include "json.hpp"
 using nlohmann::json;
 
 class Session : public MongoObject

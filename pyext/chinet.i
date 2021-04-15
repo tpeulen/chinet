@@ -1,6 +1,6 @@
 %module(directors="1", package="chinet") chinet
 %feature("kwargs", 1);
-#pragma SWIG nowarn=511
+#pragma SWIG nowarn=314,319,503,511,401,389
 %include "documentation.i"
 %{
     #define SWIG_FILE_WITH_INIT
@@ -9,7 +9,7 @@
     #include "../include/MongoObject.h"
 %}
 
-%include "./include/numpy.i"
+%include "numpy.i"
 %init %{
     import_array();
 %}

@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+
 import os
 import re
 import platform
@@ -109,11 +110,7 @@ class CMakeBuild(build_ext):
                 print("Conda prefix is: ", CONDA_PREFIX)
                 print("Convincing cmake to use the conda boost")
                 cmake_args += [
-                    '-DCMAKE_PREFIX_PATH=' + CONDA_PREFIX,
-                    '-DBOOST_ROOT=' + CONDA_PREFIX,
-                    '-DBoost_NO_SYSTEM_PATHS=ON',
-                    '-DBoost_DEBUG=OFF',
-                    '-DBoost_DETAILED_FAILURE_MESSAGE=ON'
+                    '-DCMAKE_PREFIX_PATH=' + CONDA_PREFIX
                 ]
         env = os.environ.copy()
         if not os.path.exists(self.build_temp):

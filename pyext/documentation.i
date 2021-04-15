@@ -136,9 +136,9 @@ Parameters
 
 The object identification number of the.  
 
-Disconnects the.  
+Disconnects the the DB.  
 
-Connects the instance of.  
+Connects the instance of database.  
 
 The BSON document of the  
 
@@ -157,10 +157,6 @@ Parameters
 Returns
 -------
 a bson_t document  
-
-database  
-
-the DB  
 
 Returns true if the instance of the to the DB  
 

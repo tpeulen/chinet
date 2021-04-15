@@ -11,12 +11,11 @@
 #include <iterator>
 #include <string>
 #include <sstream>      // std::ostringstream
+#include <mongoc.h>
 
-#include <nlohmann/json.hpp>
-// for convenience
+#include "json.hpp"
 using json = nlohmann::json;
 
-#include <mongoc.h>
 
 #include "Functions.h"
 
@@ -26,7 +25,7 @@ private:
 
     static std::list<std::shared_ptr<MongoObject>> registered_objects;
 
-    bool is_connected_to_db_;
+    bool is_connected_to_db_ = false;
     mongoc_uri_t *uri;
     mongoc_client_t *client;
     bson_error_t error;

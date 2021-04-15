@@ -1,10 +1,9 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.13)
+SET(PROJECT_NAME chinet)
+PROJECT(${PROJECT_NAME})
 
 ENABLE_LANGUAGE(CXX)
 set(CMAKE_CXX_STANDARD 11)
-
-SET(PROJECT_NAME chinet)
-PROJECT(${PROJECT_NAME})
 
 ################################################################################
 ###### CMAKE
@@ -25,49 +24,16 @@ option(INSTALL "Install the library and the include files" ON)
 option(BUILD_PYTHON_INTERFACE "Build the python interface" ON)
 option(ENABLE_AVX "Build with AVX" ON)
 
-################################################################################
-###### Conda
-################################################################################
-
-## Check for Conda
-###########################
-IF(DEFINED ENV{CONDA_PREFIX})
-    MESSAGE(STATUS "CONDA env seen: --[$ENV{CONDA_PREFIX}]--")
-    SET(ENV{PATH} "$ENV{CONDA_PREFIX}/bin;$ENV{PATH}")
-    # Define python_command that is used to call python and locate the python libraries
-    if (MSVC)
-        INCLUDE_DIRECTORIES($ENV{CONDA_PREFIX}/Library/include)
-        LINK_DIRECTORIES($ENV{CONDA_PREFIX}/Library/lib)
-        SET(python_command $ENV{CONDA_PREFIX}/python.exe)
-    ELSE()
-        INCLUDE_DIRECTORIES($ENV{CONDA_PREFIX}/include)
-        LINK_DIRECTORIES($ENV{CONDA_PREFIX}/lib)
-        SET(python_command $ENV{CONDA_PREFIX}/bin/python)
-    ENDIF()
-ELSE()
-    MESSAGE(STATUS "No conda environment defined")
-ENDIF()
-SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
-
-## Include and lib dir
-###########################
-if(UNIX)
-    if(DEFINED ENV{CONDA_PREFIX})
-        LINK_DIRECTORIES("$ENV{CONDA_PREFIX}/lib")
-        INCLUDE_DIRECTORIES("$ENV{CONDA_PREFIX}/include")
-    else()
-        LINK_DIRECTORIES(/usr/local/lib)
-        INCLUDE_DIRECTORIES(/usr/local/include)
-    endif()
-endif()
-
+### Conda
+#####################################################
+FIND_PACKAGE(Conda)
 
 ################################################################################
 ###### Compiler flags
 ################################################################################
 if(LINUX)
-    STRING(APPEND CMAKE_CXX_FLAGS " -march=native -Ofast -mavx2 -ffast-math -funroll-loops")
-    STRING(APPEND CMAKE_C_FLAGS " -march=native -Ofast -mavx2 -ffast-math -funroll-loops")
+    STRING(APPEND CMAKE_CXX_FLAGS " -march=native -Ofast -mavx -ffast-math -funroll-loops")
+    STRING(APPEND CMAKE_C_FLAGS " -march=native -Ofast -mavx -ffast-math -funroll-loops")
 endif()
 if(APPLE)
     FIND_PACKAGE(Threads)
@@ -77,8 +43,8 @@ if(APPLE)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
     IF(ENABLE_AVX)
-        STRING(APPEND CMAKE_CXX_FLAGS " -march=native -Ofast -mavx2 -ffast-math -funroll-loops -mfma")
-        STRING(APPEND CMAKE_C_FLAGS " -march=native -Ofast -mavx2 -ffast-math -funroll-loops -mfma")
+        STRING(APPEND CMAKE_CXX_FLAGS " -march=native -Ofast -mavx -ffast-math -funroll-loops")
+        STRING(APPEND CMAKE_C_FLAGS " -march=native -Ofast -mavx -ffast-math -funroll-loops")
     ENDIF(ENABLE_AVX)
 endif()
 if (MSVC)
@@ -108,10 +74,21 @@ endif (APPLE)
 ###########################
 IF (CMAKE_BUILD_TYPE STREQUAL "Release")
     MESSAGE("Release build")
-    ADD_DEFINITIONS("-DVERBOSE_FIT2X=0")
+    IF(MSVC)
+        ADD_COMPILE_OPTIONS(/w)
+    ELSE()
+        ADD_COMPILE_OPTIONS(-w)
+    ENDIF()
 ELSE (CMAKE_BUILD_TYPE STREQUAL "Debug")
     MESSAGE("Debug build")
-    ADD_DEFINITIONS("-DVERBOSE_FIT2X=1")
+    ADD_DEFINITIONS("-DCHINET_VERBOSE=1")
+    ## Enable Compiler warnings
+    #############################
+    IF(MSVC)
+        ADD_COMPILE_OPTIONS(/W4)
+    ELSE()
+        ADD_COMPILE_OPTIONS(-Wall -Wextra -pedantic)
+    ENDIF()
 ENDIF (CMAKE_BUILD_TYPE STREQUAL "Release")
 
 
@@ -144,31 +121,22 @@ endif ()
 FIND_PACKAGE(OpenMP REQUIRED)
 LINK_LIBRARIES(OpenMP::OpenMP_CXX)
 
-
 # Cpp-taskflow
 ###########################
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/cpp-taskflow/)
 
 ## Boost
 ###########################
-if (WIN32)
-    # use static Boost in Windows
-    set(Boost_USE_STATIC_LIBS ON)
-    set(Boost_USE_STATIC ON)
-    set(Boost_USE_MULTITHREAD)
-endif (WIN32)
 FIND_PACKAGE(Boost 1.36 REQUIRED COMPONENTS date_time filesystem iostreams)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 LINK_LIBRARIES(${Boost_LIBRARIES})
 MESSAGE(${Boost_INCLUDE_DIRS})
-
 
 # Python
 ###########################
 FIND_PACKAGE(Python)
 INCLUDE_DIRECTORIES(${Python_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${Python_NumPy_PATH})
-
 
 # Eigen3
 ###########################
@@ -178,7 +146,6 @@ IF(NOT TARGET Eigen3::Eigen)
     SET(EIGEN3_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/thirdparty/eigen3)
 ENDIF (NOT TARGET Eigen3::Eigen)
 INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
-
 
 # IMP
 ###########################
@@ -191,13 +158,11 @@ MESSAGE(STATUS "IMP_core_LIBRARY='${IMP_core_LIBRARY}'")
 LINK_LIBRARIES(${IMP_kernel_LIBRARY} ${IMP_core_LIBRARY})
 MESSAGE("-- Found IMP")
 
-
 # RTTR
 ###########################
 FIND_PACKAGE(RTTR CONFIG REQUIRED Core)
 LINK_LIBRARIES(RTTR::Core)
 MESSAGE ("-- Found librttr version \"${PACKAGE_VERSION}\"")
-
 
 # libmongoc
 ###########################
@@ -208,18 +173,6 @@ MESSAGE ("-- libraries \"${MONGOC_LIBRARIES}\"")
 INCLUDE_DIRECTORIES (${MONGOC_INCLUDE_DIRS})
 LINK_LIBRARIES (${MONGOC_LIBRARIES})
 ADD_COMPILE_DEFINITIONS(${MONGOC_DEFINITIONS})
-
-
-# LabelLib
-###########################
-#FIND_PACKAGE (FlexLabel REQUIRED)
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/labellib/FlexLabel/include/)
-
-
-# JSON
-###########################
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/json/single_include/)
-
 
 ################################################################################
 ###### Targets

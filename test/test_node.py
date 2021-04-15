@@ -8,6 +8,7 @@ import numba as nb
 import numpy as np
 import chinet as cn
 
+from constants import *
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 utils.set_search_paths(TOPDIR)
@@ -227,6 +228,7 @@ class Tests(unittest.TestCase):
             portIn1.value * portIn2.value
         )
 
+    @unittest.skipUnless(CONNECTS, "Cloud not connect to DB")
     def test_node_write_to_db(self):
         node = cn.Node(
             ports={
@@ -239,6 +241,7 @@ class Tests(unittest.TestCase):
         self.assertEqual(node.connect_to_db(**db_dict), True)
         self.assertEqual(node.write_to_db(), True)
 
+    @unittest.skipUnless(CONNECTS, "Cloud not connect to DB")
     def test_node_restore_from_db(self):
         # Make new node that will be written to the DB
         node = cn.Node(

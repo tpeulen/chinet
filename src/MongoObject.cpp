@@ -159,12 +159,17 @@ bool MongoObject::connect_to_db(
         std::cerr << "-- Failed to parse URI:" << uri_string.c_str() << std::endl;
         std::cerr << "-- Error message: " << error.message << std::endl;
 #endif
+        is_connected_to_db_ = false;
         return false;
     } else {
         /*
         * Create a new client instance
         */
         client = mongoc_client_new_from_uri(uri);
+        if (!client) {
+            is_connected_to_db_ = false;
+            return EXIT_FAILURE;
+        }
         /*
         * Register the application name so we can track it in the profile logs
         * on the server. This can also be done from the URI (see other examples).
@@ -564,6 +569,21 @@ std::string MongoObject::create_copy_in_db()
 
 bool MongoObject::is_connected_to_db()
 {
+    if(is_connected_to_db_){
+        // Double check connection by pinging the DB
+        bson_t *b = BCON_NEW ("ping", BCON_INT32 (1));
+        bson_error_t error;
+        bool r;
+        mongoc_server_description_t **sds;
+        size_t i, n;
+
+        /* ensure client has connected */
+        r = mongoc_client_command_simple (client, "db", b, NULL, NULL, &error);
+        if (!r) {
+            MONGOC_ERROR ("could not connect: %s\n", error.message);
+            return false;
+        }
+    }
     return is_connected_to_db_;
 }
 

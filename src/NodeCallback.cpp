@@ -9,7 +9,7 @@ inline void mul(
         const std::map<std::string, std::shared_ptr<Port>> &inputs
         )
 {
-    for(int i=0; i<n_elements; i++) tmp[i] = 1.0;
+    std::fill(tmp, tmp + n_elements, 1.0);
     for(auto &o : inputs){
         T* va; int vn;
         o.second->get_value<T>(&va, &vn);
@@ -26,7 +26,7 @@ inline void add(
         const std::map<std::string, std::shared_ptr<Port>> &inputs
 )
 {
-    for(int i=0; i<n_elements; i++) tmp[i] = 0.0;
+    std::fill(tmp, tmp + n_elements, 1.0);
     for(auto &o : inputs){
         T* va; int vn;
         o.second->get_value<T>(&va, &vn);

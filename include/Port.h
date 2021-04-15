@@ -12,7 +12,7 @@
 #include <IMP/core.h>
 #include <IMP/flags.h>
 
-#include <CNode.h>
+#include "CNode.h"
 
 class Node;
 
@@ -83,7 +83,6 @@ public:
     std::shared_ptr<Port> getptr() {
         return shared_this;
     }
-
 
     size_t current_size() {
         return n_buffer_elements_;
@@ -185,7 +184,7 @@ public:
 #if CHINET_VERBOSE
             std::clog << "-- Copying values to local buffer." << std::endl;
 #endif
-            if (n_input * sizeof(T) > n_buffer_elements_ * buffer_element_size_){
+            if ((int) (n_input * sizeof(T)) > (int) (n_buffer_elements_ * buffer_element_size_)){
 #if CHINET_VERBOSE
                 std::clog << "-- Size of input exceeds the local buffer: reallocating" << std::endl;
 #endif
