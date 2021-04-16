@@ -30,12 +30,14 @@ requirements:
     - doxygen
     - imp {{ imp }}
     - boost
+    - numpy
     - librttr
     - eigen
     - llvm-openmp  # [osx]
     - libmongoc >=1.15.1
   run:
     - python {{ python }}
+    - {{ pin_compatible('numpy') }}
     - {{ pin_compatible('imp') }}
     - {{ pin_compatible('librttr') }}
     - {{ pin_compatible('boost') }}
