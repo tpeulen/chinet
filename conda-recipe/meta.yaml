@@ -30,8 +30,6 @@ requirements:
     - setuptools
     - numpy
     - swig
-    - cmake
-    - doxygen
     - imp {{ imp }}
     - boost
     - numpy

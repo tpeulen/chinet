@@ -28,12 +28,10 @@ build:linux:
   script:
     - echo "I am the build stage."
     - source activate
-    - conda install mamba boa conda-verify -c conda-forge
+    - conda install mamba boa conda-verify doxygen cmake -c conda-forge
     - |
       conda config --add channels salilab
-      conda config --add channels conda-forge
       conda config --add channels tpeulen
-      conda config --add channels tpeulen/label/nightly
     - conda mambabuild conda-recipe --output-folder bld-dir
   artifacts:
     expire_in: 7 days
@@ -56,9 +54,7 @@ test:linux:
     - conda install mamba -c conda-forge
     - |
       conda config --add channels salilab
-      conda config --add channels conda-forge
       conda config --add channels tpeulen
-      conda config --add channels tpeulen/label/nightly
       conda config --add channels "file://`pwd`/bld-dir"
     - mamba create -n test python
     - conda activate test
