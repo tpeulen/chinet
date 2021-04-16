@@ -1,17 +1,9 @@
-build
-*.pro.user
-*.pro.user.*
-CMakeLists.txt.user
-CMakeLists.txt.user.*
-cmake-build-*
-old
-dist
-/*.egg-info
-
+build/
+dist/
+*.egg-info/
+cmake-build-*/
+.vscode/
+.history/
 # Documentation and tools
-/docs/_*
-/docs/paper*
-utility*
-
-.vscode
-.history
+/docs/_*/
+/docs/example/

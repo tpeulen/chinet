@@ -18,19 +18,22 @@ requirements:
     - numpy
     - imp {{ imp }} # [win]
   build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}  
     - python {{ python }}
     - setuptools
     - numpy
     - imp {{ imp }}
     - swig 3.0.12.*
     - cmake
+    - doxygen
     - boost
     - eigen
     - llvm-openmp  # [osx]
     - librttr
     - libmongoc >=1.15.1
   run:
-    - {{ pin_compatible('python') }}
+    - python {{ python }}
     - {{ pin_compatible('imp') }}
     - {{ pin_compatible('labellib') }}
     - {{ pin_compatible('librttr') }}
