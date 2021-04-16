@@ -25,19 +25,18 @@ requirements:
     - {{ compiler('cxx') }}
     - setuptools
     - numpy
-    - imp {{ imp }}
-    - swig 3.0.12.*
+    - swig
     - cmake
     - doxygen
+    - imp {{ imp }}
     - boost
+    - librttr
     - eigen
     - llvm-openmp  # [osx]
-    - librttr
     - libmongoc >=1.15.1
   run:
     - python {{ python }}
     - {{ pin_compatible('imp') }}
-    - {{ pin_compatible('labellib') }}
     - {{ pin_compatible('librttr') }}
     - {{ pin_compatible('boost') }}
     - {{ pin_compatible('libmongoc') }}
