@@ -5,10 +5,12 @@ import re
 import platform
 import subprocess
 import fileinput
-import pathlib
-
+try:
+    import pathlib
+except ImportError:
+    import pathlib2 as pathlib
 from setuptools import setup, Extension
-from distutils.command.build_ext import build_ext
+from setuptools.command.build_ext import build_ext
 from distutils.version import LooseVersion
 
 try:
@@ -72,6 +74,7 @@ class CMakeExtension(Extension):
         self.sourcedir = os.path.abspath(sourcedir)
 
 
+
 class CMakeBuild(build_ext):
 
     def run(self):
@@ -84,18 +87,16 @@ class CMakeBuild(build_ext):
                 self.get_ext_fullpath(ext.name)
             )
         ).replace('\\', '/')
+
         cmake_args = [
             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
             '-DCMAKE_SWIG_OUTDIR=' + extdir
         ]
+
         cfg = 'Debug' if self.debug else 'Release'
-        build_args = ['--config', cfg, '-j 8']
+        build_args = ['--config', cfg]
         cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
         if platform.system() == "Windows":
-            try:
-                patch_windows_imp()
-            except ImportError:
-                print("WARNING: Cannot import IMP")
             cmake_args += [
                 '-DBUILD_PYTHON_INTERFACE=ON',
                 '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), extdir),
@@ -103,35 +104,17 @@ class CMakeBuild(build_ext):
             ]
         else:
             build_args += ['--', '-j8']
-            # When using conda try to convince cmake to use
-            # the conda boost
-            CONDA_PREFIX = os.getenv('CONDA_PREFIX')
-            if CONDA_PREFIX is not None:
-                print("Conda prefix is: ", CONDA_PREFIX)
-                print("Convincing cmake to use the conda boost")
-                cmake_args += [
-                    '-DCMAKE_PREFIX_PATH=' + CONDA_PREFIX
-                ]
+
         env = os.environ.copy()
+        env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(
+            env.get(
+                'CXXFLAGS', ''
+            ),
+            self.distribution.get_version()
+        )
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
-        try:
-            # build the documentation.i file using doxygen and doxy2swig
-            working_directory = pathlib.Path(__file__).parent.absolute()
-            subprocess.check_call(
-                ["doxygen"],
-                cwd=str(working_directory / "docs"),
-                env=env
-            )
-            subprocess.check_call(
-                ["python", "./build_tools/doxy2swig.py", 
-                "../docs/_build/xml/index.xml", "../pyext/documentation.i"],
-                cwd=str(working_directory / "utility"),
-                env=env
-            )
-        except:
-            print("Problem calling doxygen")
-        print("cmake building: " + " ".join(cmake_args))
+        print("BUILDING: " + " ".join(cmake_args))
         subprocess.check_call(
             ['cmake', ext.sourcedir] + cmake_args,
             cwd=self.build_temp,
@@ -139,6 +122,7 @@ class CMakeBuild(build_ext):
         )
         subprocess.check_call(
             ['cmake', '--build', '.'] + build_args,
+            # ['ninja'], # + build_args,
             cwd=self.build_temp
         )
 
@@ -150,13 +134,37 @@ DESCRIPTION = "Python bindings for chinet"
 LONG_DESCRIPTION = """"chinet is a C++ library with Python wrapper to construct \
 networks of computation node with associated ports that can be deposited in a \
 mongoDB. Chinet is the data management backend of chisurf."""
+print("CHINET VERSION:", VERSION)
+
+
+# update the documentation.i file using doxygen and doxy2swig
+if "docs" in sys.argv:
+    sys.argv.remove('doc')
+    try:
+        env = os.environ.copy()
+        # build the documentation.i file using doxygen and doxy2swig
+        working_directory = pathlib.Path(__file__).parent.absolute()
+        subprocess.check_call(
+            ["doxygen"],
+            cwd=str(working_directory / "docs"),
+            env=env
+        )
+        subprocess.check_call(
+            ["python", "../build_tools/doxy2swig.py", 
+            "../doc/_build/xml/index.xml", "../ext/python/documentation.i"],
+            cwd=str(working_directory / "build_tools"),
+            env=env
+        )
+    except:
+        print("Problem calling doxygen")
+
 
 setup(
     name=NAME,
     version=VERSION,
     license=LICENSE,
     author='Thomas-Otavio Peulen',
-    author_email='thomas.otavio.peulen@gmail.com',
+    author_email='thomas@peulen.xyz',
     ext_modules=[
         CMakeExtension('chinet')
     ],
@@ -169,7 +177,7 @@ setup(
         'numpy'
     ],
     setup_requires=[
-        'numpy'
+        'setuptools'
     ],
     zip_safe=False,
     classifiers=[

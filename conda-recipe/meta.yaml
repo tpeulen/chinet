@@ -18,6 +18,9 @@ requirements:
   host:
     - python
     - numpy
+    - setuptools
+    - git
+    - pathlib2 # [py27]
     - imp {{ imp }} # [win]
   build:
     - python {{ python }}
