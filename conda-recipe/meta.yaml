@@ -20,9 +20,9 @@ requirements:
     - numpy
     - imp {{ imp }} # [win]
   build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}  
     - python {{ python }}
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
     - setuptools
     - numpy
     - imp {{ imp }}
