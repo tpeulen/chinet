@@ -5,10 +5,6 @@ import re
 import platform
 import subprocess
 import fileinput
-try:
-    import pathlib
-except ImportError:
-    import pathlib2 as pathlib
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 from distutils.version import LooseVersion
@@ -28,6 +24,14 @@ def read_version(
             if "#define" in line and "CHINET_VERSION" in line:
                 version = line.split()[-1]
     return version.replace('"', '')
+
+VERSION = read_version()
+LICENSE = 'Mozilla Public License 2.0 (MPL 2.0)'
+NAME = "chinet"  # name of the module
+DESCRIPTION = "Python bindings for chinet"
+LONG_DESCRIPTION = """"chinet is a C++ library with Python wrapper to construct \
+networks of computation node with associated ports that can be deposited in a \
+mongoDB. Chinet is the data management backend of chisurf."""
 
 
 def patch_windows_imp():
@@ -74,6 +78,19 @@ class CMakeExtension(Extension):
         self.sourcedir = os.path.abspath(sourcedir)
 
 
+def build_swig_documentation():
+    # build the documentation.i file using doxygen and doxy2swig
+    if not os.path.isfile("./ext/python/documentation.i"):
+        print("-- building documentation.i using doxygen and doxy2swig")
+        path = os.path.dirname(os.path.abspath(__file__)) + "/doc"
+        env = os.environ.copy()
+        subprocess.check_call(["doxygen"], cwd=path, env=env)
+        subprocess.check_call(
+            ["python", "doxy2swig.py", "../doc/_build/xml/index.xml", "../ext/python/documentation.i"],
+            cwd=path,
+            env=env
+        )
+
 
 class CMakeBuild(build_ext):
 
@@ -82,6 +99,8 @@ class CMakeBuild(build_ext):
             self.build_extension(ext)
 
     def build_extension(self, ext):
+        print("CHINET VERSION:", VERSION)
+        build_swig_documentation()
         extdir = os.path.abspath(
             os.path.dirname(
                 self.get_ext_fullpath(ext.name)
@@ -127,36 +146,6 @@ class CMakeBuild(build_ext):
         )
 
 
-VERSION = read_version()
-LICENSE = 'Mozilla Public License 2.0 (MPL 2.0)'
-NAME = "chinet"  # name of the module
-DESCRIPTION = "Python bindings for chinet"
-LONG_DESCRIPTION = """"chinet is a C++ library with Python wrapper to construct \
-networks of computation node with associated ports that can be deposited in a \
-mongoDB. Chinet is the data management backend of chisurf."""
-print("CHINET VERSION:", VERSION)
-
-
-# update the documentation.i file using doxygen and doxy2swig
-if "docs" in sys.argv:
-    sys.argv.remove('doc')
-    try:
-        env = os.environ.copy()
-        # build the documentation.i file using doxygen and doxy2swig
-        working_directory = pathlib.Path(__file__).parent.absolute()
-        subprocess.check_call(
-            ["doxygen"],
-            cwd=str(working_directory / "docs"),
-            env=env
-        )
-        subprocess.check_call(
-            ["python", "../build_tools/doxy2swig.py", 
-            "../doc/_build/xml/index.xml", "../ext/python/documentation.i"],
-            cwd=str(working_directory / "build_tools"),
-            env=env
-        )
-    except:
-        print("Problem calling doxygen")
 
 
 setup(
