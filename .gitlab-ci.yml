@@ -73,7 +73,7 @@ deploy:
   dependencies:
     - build:linux
   script:
-    - echo "I am a depolyment stage job."
+    - echo "I am a deploy stage."
     - source activate
     - conda install anaconda-client
     - anaconda -t ${ANACONDA_API_TOKEN} upload -l ${DEPLOY_VARIABLE} -u ${CONDA_USER} --force bld-dir/linux-64/*.tar.bz2
