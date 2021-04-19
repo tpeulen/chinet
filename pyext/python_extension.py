@@ -1,5 +1,8 @@
-from __future__ import annotations
-from collections import UserDict
+import sys
+if sys.version_info > (3, 0):
+    from collections import UserDict
+else:
+    from UserDict import UserDict
 import numpy as np
 import chinet as cn
 import inspect
@@ -24,9 +27,9 @@ def node(func):
 
 class NodeGroup(UserDict):
 
-    name: str
-    inputs: dict = {}
-    outputs: dict = {}
+    name = None# type: str
+    inputs = {} # type: dict
+    outputs = {} # type: dict
 
     @property
     def is_valid(self):
@@ -34,8 +37,8 @@ class NodeGroup(UserDict):
 
     def __init__(
             self,
-            name: str = '',
-            nodes: dict = None
+            name = '', # type: str
+            nodes = None #type: dict
     ):
         self.name = name
         for nk in nodes:
@@ -101,7 +104,8 @@ class NodeGroup(UserDict):
     def __call__(self, *args, **kwargs):
         self.evaluate()
 
-    def add_ports_of_node(self, value: cn.Node):
+    def add_ports_of_node(self, value):
+        # type: (chinet.Node) -> None
         if isinstance(value, cn.Node):
             for k in value.inputs.keys():
                 if k in self.inputs.keys():

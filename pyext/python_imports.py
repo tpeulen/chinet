@@ -1,4 +1,3 @@
-from __future__ import annotations
 import numpy as np
 import chinet as cn
 import inspect

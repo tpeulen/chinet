@@ -14,10 +14,8 @@ def ports(self):
 
 
 @ports.setter
-def ports(
-        self,
-        v: typing.Dict[str, object]
-):
+def ports(self, v):
+    # type: (Dict[str, object]) -> None
     p = dict()
     for key in v:
         if isinstance(v[key], cn.Port):
@@ -31,15 +29,16 @@ def ports(
 
 def set_python_callback_function(
         self,
-        cb: typing.Callable,
-        reactive_inputs: bool = True,
-        reactive_outputs: bool = True
+        cb,
+        reactive_inputs = True,
+        reactive_outputs = True
 ):
+    # type: (Callable, bool, bool) -> None
     class CallbackNodePython(cn.NodeCallback):
 
         def __init__(
                 self,
-                cb_function: typing.Callable,
+                cb_function, # type: Callable
                 *args, **kwargs
         ):
             super().__init__(*args, **kwargs)
@@ -47,8 +46,8 @@ def set_python_callback_function(
 
         def run(
                 self,
-                inputs: typing.List[cn.Port],
-                outputs: typing.List[cn.Port]
+                inputs, # type: List[cn.Port]
+                outputs # type: List[cn.Port]
         ):
             input_dict = dict(
                 [(inputs[i].name, inputs[i].value) for i in inputs]
@@ -191,8 +190,8 @@ def __del__(self):
 
 def __init__(self,
              obj=None,
-             name: str = "",
-             ports: dict=None,
+             name = "", #type: str
+             ports = None, #type: dict
              callback_function=None,
              reactive_inputs=True,
              reactive_outputs=True,

@@ -5,9 +5,11 @@ import re
 import platform
 import subprocess
 import fileinput
+from distutils.version import LooseVersion
+
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
-from distutils.version import LooseVersion
+
 
 try:
     import IMP
@@ -52,8 +54,7 @@ def patch_windows_imp():
                         ".so." + IMP.__version__, ".lib"
                     ).replace(
                         '${IMP_LIB_DIR}/lib', '${IMP_LIB_DIR}/'
-                    ),
-                    end=''
+                    )
                 )
     elif '2.13' in IMP.__version__:
         try:
@@ -67,26 +68,26 @@ def patch_windows_imp():
             filename = library_path / pathlib.Path("IMPConfig.cmake")
         with fileinput.FileInput(filename, inplace=True, backup='.bak') as file:
             for line in file:
-                print(line.replace(".dll", ".lib"), end='')
+                print(line.replace(".dll", ".lib"),)
     else:
         return
 
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
-        super().__init__(name, sources=[])
+        Extension.__init__(self, name, sources=[])
         self.sourcedir = os.path.abspath(sourcedir)
 
 
 def build_swig_documentation():
     # build the documentation.i file using doxygen and doxy2swig
-    if not os.path.isfile("./ext/python/documentation.i"):
+    if not os.path.isfile("./pyext/documentation.i"):
         print("-- building documentation.i using doxygen and doxy2swig")
         path = os.path.dirname(os.path.abspath(__file__)) + "/doc"
         env = os.environ.copy()
         subprocess.check_call(["doxygen"], cwd=path, env=env)
         subprocess.check_call(
-            ["python", "doxy2swig.py", "../doc/_build/xml/index.xml", "../ext/python/documentation.i"],
+            ["python", "doxy2swig.py", "./_build/xml/index.xml", "../pyext/documentation.i"],
             cwd=path,
             env=env
         )

@@ -5,5 +5,7 @@ cmake-build-*/
 .vscode/
 .history/
 # Documentation and tools
-/docs/_*/
-/docs/example/
+/doc/_build/
+/doc/example/
+documentation.i
+__pycache__

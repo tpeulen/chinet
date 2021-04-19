@@ -15,37 +15,51 @@ build:
 
 requirements:
 
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - cmake >=3.13
+    - python {{ python }}
+    - typing [py27]
+    - tttrlib
+    - numpy
+    - cmake
+    - swig
+    - boost
+    - imp {{ imp }}
+    - librttr
+    - libmongoc >=1.15.1
+    - eigen
+  host:
+    - python {{ python }}
+    - typing [py27]
+    - numpy
+    - setuptools
+    - pathlib2 # [py27]
+    - librttr
+    - libmongoc >=1.15.1
+    - imp {{ imp }}
+  run:
+    - python {{ python }}
+    - typing [py27]
+    - {{ pin_compatible('numpy') }}
+    - {{ pin_compatible('librttr') }}
+    - {{ pin_compatible('boost', max_pin='x.x.x') }}
+    - {{ pin_compatible('libmongoc') }}
+    - llvm-openmp  # [osx]
+
   host:
     - python {{ python }}
     - numpy
     - setuptools
-    - cmake
-    - git
-    - pathlib2 # [py27]
-    - imp {{ imp }} # [win]
-  build:
-    - python {{ python }}
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - setuptools
-    - numpy
-    - swig
-    - imp {{ imp }}
-    - boost
-    - numpy
-    - librttr
-    - eigen
-    - llvm-openmp  # [osx]
-    - libmongoc >=1.15.1
+    - tttrlib
   run:
     - python {{ python }}
-    - {{ pin_compatible('numpy') }}
-    - {{ pin_compatible('imp') }}
-    - {{ pin_compatible('librttr') }}
-    - {{ pin_compatible('boost') }}
-    - {{ pin_compatible('libmongoc') }}
     - numpy
-    - llvm-openmp  # [osx]
+    - {{ pin_compatible('tttrlib', max_pin='x.x.x') }}
+    - {{ pin_compatible('boost', max_pin='x.x.x') }}
+    - llvm-openmp # [osx]
+
 
 test:
   imports:
