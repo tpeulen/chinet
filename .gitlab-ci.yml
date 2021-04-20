@@ -32,6 +32,7 @@ build:linux:
     - |
       conda config --add channels salilab
       conda config --add channels tpeulen
+    - conda deactivate # Make sure not in base env
     - conda mambabuild conda-recipe --output-folder bld-dir
   artifacts:
     expire_in: 7 days

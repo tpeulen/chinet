@@ -14,21 +14,25 @@ build:
     string: py{{ PY_VER_MAJOR }}{{ PY_VER_MINOR }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
 
 requirements:
-  host: 
+  build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - python {{ python }}
-    - setuptools
     - cmake
     - swig
     - numpy
     - boost
-    - libmongoc
-    - librttr
-    - boost
-    - libmongoc
-    - librttr
+    - hdf5
+    - fftw
     - imp {{ imp }} # install imp to make sure boost, etc. match
+  host: 
+    - python {{ python }}
+    - setuptools
+    - boost
+    - hdf5
+    - fftw
+    - imp {{ imp }} # install imp to make sure boost, etc. match
+    - libmongoc
+    - librttr
   run:
     - python {{ python }}
     - numpy
