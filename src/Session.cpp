@@ -1,7 +1,3 @@
-//
-// Created by thomas on 4/23/19.
-//
-
 #include "Session.h"
 #include "Port.h"
 
