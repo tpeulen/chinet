@@ -18,20 +18,30 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - python {{ python }}
-    - cmake
+    - setuptools
     - swig
-    - numpy
+    - cmake >=3.13
     - boost
-    - imp {{ imp }} # install imp to make sure boost, etc. match
-    - libmongoc
+    - imp {{ imp }}
+    - tttrlib
+    - numpy
     - librttr
+    - libmongoc >=1.15.1
+  host:
+    - python {{ python }}
+    - boost
+    - imp {{ imp }}
+    - tttrlib
+    - numpy
+    - librttr
+    - libmongoc >=1.15.1
   run:
     - python {{ python }}
-    - numpy
+    - {{ pin_compatible('numpy') }}
+    - {{ pin_compatible('librttr') }}
     - {{ pin_compatible('boost', max_pin='x.x.x') }}
-    - {{ pin_compatible('librttr', max_pin='x.x.x') }}
-    - {{ pin_compatible('libmongoc', max_pin='x.x') }}
-    - llvm-openmp [osx]
+    - {{ pin_compatible('libmongoc') }}
+    - llvm-openmp  # [osx]
 
 test:
   imports:
