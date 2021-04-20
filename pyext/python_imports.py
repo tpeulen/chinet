@@ -1,7 +1,6 @@
 import numpy as np
 import chinet as cn
 import inspect
-import typing
 import json
 import types  # used by Node to identify code objects
 import _chinet

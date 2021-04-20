@@ -1,0 +1,55 @@
+package:
+  name: chinet
+  version: 0.0.8
+source:
+  path: ..
+build:
+  number: '0'
+  string: py27h1234567_0
+requirements:
+  build:
+    - gcc_linux-64
+    - gxx_linux-64
+    - python 2.7
+    - setuptools
+    - swig
+    - cmake >=3.13
+    - boost
+    - imp 2.14
+    - tttrlib
+    - numpy
+    - librttr
+    - libmongoc >=1.15.1
+  host:
+    - python 2.7
+    - boost
+    - imp 2.14
+    - tttrlib
+    - numpy
+    - librttr
+    - libmongoc >=1.15.1
+  run:
+    - python 2.7
+    - numpy
+    - librttr
+    - boost
+    - libmongoc
+test:
+  imports:
+    - chinet
+about:
+  description: '"chinet is a C++ library with Python wrapper to construct networks
+    of computation node with associated ports that can be deposited in a mongoDB.
+    Chinet is the data management backend of chisurf.
+
+    '
+  doc_url: https://github.com/tpeulen.github.io/chinet/
+  home: https://github.com/tpeulen/chinet
+  license: Mozilla Public License 2.0 (MPL 2.0)
+  summary: 'Python bindings for chinet
+
+    '
+extra:
+  final: null
+  recipe-maintainers:
+    - tpeulen

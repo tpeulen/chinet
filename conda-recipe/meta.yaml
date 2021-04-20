@@ -18,48 +18,31 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - cmake >=3.13
     - python {{ python }}
-    - typing [py27]
-    - tttrlib
-    - numpy
-    - cmake
+    - setuptools
     - swig
+    - cmake >=3.13
     - boost
     - imp {{ imp }}
+    - tttrlib
+    - numpy
     - librttr
     - libmongoc >=1.15.1
-    - eigen
   host:
     - python {{ python }}
-    - typing [py27]
+    - boost
+    - imp {{ imp }}
+    - tttrlib
     - numpy
-    - setuptools
-    - pathlib2 # [py27]
     - librttr
     - libmongoc >=1.15.1
-    - imp {{ imp }}
   run:
     - python {{ python }}
-    - typing [py27]
     - {{ pin_compatible('numpy') }}
     - {{ pin_compatible('librttr') }}
     - {{ pin_compatible('boost', max_pin='x.x.x') }}
     - {{ pin_compatible('libmongoc') }}
     - llvm-openmp  # [osx]
-
-  host:
-    - python {{ python }}
-    - numpy
-    - setuptools
-    - tttrlib
-  run:
-    - python {{ python }}
-    - numpy
-    - {{ pin_compatible('tttrlib', max_pin='x.x.x') }}
-    - {{ pin_compatible('boost', max_pin='x.x.x') }}
-    - llvm-openmp # [osx]
-
 
 test:
   imports:

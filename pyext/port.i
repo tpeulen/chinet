@@ -1,7 +1,6 @@
 %{
 #include "../include/Port.h"
 #include "../include/CNode.h"
-#include "IMP.h"
 %}
 
 %shared_ptr(Port)

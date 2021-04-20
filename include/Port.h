@@ -7,10 +7,10 @@
 #include <cmath>
 #include <cstdlib>
 
-#include <IMP.h>
-#include <IMP/algebra.h>
-#include <IMP/core.h>
-#include <IMP/flags.h>
+// #include <IMP.h>
+// #include <IMP/algebra.h>
+// #include <IMP/core.h>
+// #include <IMP/flags.h>
 
 #include "CNode.h"
 
@@ -31,8 +31,8 @@ private:
     int buffer_element_size_ = 1;
     std::vector<double> bounds_{};
     Node* node_ = nullptr;
-    IMP::Model* imp_model = nullptr;
-    IMP::Particle* imp_particle;
+    // IMP::Model* imp_model = nullptr;
+    // IMP::Particle* imp_particle;
 
     /*!
      * @brief This attribute can point to another Port (default value nullptr).
@@ -321,14 +321,14 @@ public:
 
     virtual bson_t get_bson() final;
 
-    void set_imp_particle(IMP::Model* m, IMP::Particle* pi){
-        imp_model = m;
-        imp_particle = pi;
-    }
+    // void set_imp_particle(IMP::Model* m, IMP::Particle* pi){
+    //     imp_model = m;
+    //     imp_particle = pi;
+    // }
 
-    IMP::Particle* get_imp_particle(){
-        return imp_particle;
-    }
+    // IMP::Particle* get_imp_particle(){
+    //     return imp_particle;
+    // }
 
 
     // Methods
