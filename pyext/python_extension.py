@@ -6,7 +6,6 @@ else:
 import numpy as np
 import chinet as cn
 import inspect
-import typing
 import json
 import types  # used by Node to identify code objects
 import _chinet
@@ -49,7 +48,7 @@ class NodeGroup(UserDict):
                     nodes[nk] = cn.Node(*nodes[nk])
                 else:
                     raise ValueError("Node parameters need to be either list, dict, or cn.Node")
-        super().__init__(
+        super(NodeGroup, self).__init__(
             {
                 'nodes': nodes
             }
@@ -73,7 +72,7 @@ class NodeGroup(UserDict):
             self.add_ports_of_node(value)
             self.data['nodes'][key] = value
         else:
-            super().__setitem__(key, value)
+            super(NodeGroup, self).__setitem__(key, value)
 
     def __getitem__(self, key):
         if key in self.data['nodes']:
@@ -86,7 +85,7 @@ class NodeGroup(UserDict):
         try:
             self.inputs[name].value = value
         except KeyError:
-            super().__setattr__(name, value)
+            super(NodeGroup, self).__setattr__(name, value)
 
     def __getattr__(self, name):
         in_input = name in self.inputs.keys()

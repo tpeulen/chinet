@@ -1,25 +1,15 @@
 #! /usr/bin/env python
-import sys
+
 import os
-import re
+import sys
 import platform
 import subprocess
-import fileinput
-from distutils.version import LooseVersion
 
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 
 
-try:
-    import IMP
-except ImportError:
-    IMP = None
-
-
-def read_version(
-        header_file='./include/CNode.h'
-):
+def read_version(header_file):
     version = "0.0.0"
     with open(header_file, "r") as fp:
         for line in fp.readlines():
@@ -27,7 +17,8 @@ def read_version(
                 version = line.split()[-1]
     return version.replace('"', '')
 
-VERSION = read_version()
+
+VERSION = read_version(os.path.dirname(os.path.abspath(__file__)) + '/include/info.h')
 LICENSE = 'Mozilla Public License 2.0 (MPL 2.0)'
 NAME = "chinet"  # name of the module
 DESCRIPTION = "Python bindings for chinet"
@@ -36,44 +27,8 @@ networks of computation node with associated ports that can be deposited in a \
 mongoDB. Chinet is the data management backend of chisurf."""
 
 
-def patch_windows_imp():
-    if IMP.__version__ == '2.12.0':
-        try:
-            # we are likely in a conda build environment
-            library_path = pathlib.Path(os.environ['LIBRARY_LIB'])
-            filename = library_path / pathlib.Path("./cmake/IMP/IMPConfig.cmake")
-        except KeyError:
-            # we are likely not in a conda build environment
-            library_path = pathlib.Path(os.environ['CONDA_PREFIX']) / \
-                           pathlib.Path("./Library/lib/cmake/IMP/")
-            filename = library_path / pathlib.Path("IMPConfig.cmake")
-        with fileinput.FileInput(filename, inplace=True, backup='.bak') as file:
-            for line in file:
-                print(
-                    line.replace(
-                        ".so." + IMP.__version__, ".lib"
-                    ).replace(
-                        '${IMP_LIB_DIR}/lib', '${IMP_LIB_DIR}/'
-                    )
-                )
-    elif '2.13' in IMP.__version__:
-        try:
-            # we are likely in a conda build environment
-            library_path = pathlib.Path(os.environ['LIBRARY_LIB'])
-            filename = library_path / pathlib.Path("./cmake/IMP/IMPConfig.cmake")
-        except KeyError:
-            # we are likely not in a conda build environment
-            library_path = pathlib.Path(os.environ['CONDA_PREFIX']) / \
-                           pathlib.Path("./Library/lib/cmake/IMP/")
-            filename = library_path / pathlib.Path("IMPConfig.cmake")
-        with fileinput.FileInput(filename, inplace=True, backup='.bak') as file:
-            for line in file:
-                print(line.replace(".dll", ".lib"),)
-    else:
-        return
-
-
 class CMakeExtension(Extension):
+
     def __init__(self, name, sourcedir=''):
         Extension.__init__(self, name, sources=[])
         self.sourcedir = os.path.abspath(sourcedir)
@@ -100,8 +55,7 @@ class CMakeBuild(build_ext):
             self.build_extension(ext)
 
     def build_extension(self, ext):
-        print("CHINET VERSION:", VERSION)
-        build_swig_documentation()
+        print(NAME, " VERSION:", VERSION)
         extdir = os.path.abspath(
             os.path.dirname(
                 self.get_ext_fullpath(ext.name)
@@ -142,13 +96,10 @@ class CMakeBuild(build_ext):
         )
         subprocess.check_call(
             ['cmake', '--build', '.'] + build_args,
-            # ['ninja'], # + build_args,
             cwd=self.build_temp
         )
 
-
-
-
+build_swig_documentation()
 setup(
     name=NAME,
     version=VERSION,

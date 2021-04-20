@@ -38,33 +38,6 @@ build:linux:
     paths:
       - bld-dir/
 
-test:linux:
-  variables:
-    MINICONDA_OS: "Linux"
-  stage: test
-  tags:
-    - linux
-  image: continuumio/miniconda3:latest
-  before_script:
-    # setup conda to always accept commands
-    - conda config --set always_yes yes --set changeps1 no
-  script:
-    - echo "I am a test stage."
-    - source activate base
-    - conda install mamba -c conda-forge
-    - |
-      conda config --add channels salilab
-      conda config --add channels tpeulen
-      conda config --add channels "file://`pwd`/bld-dir"
-    - mamba create -n test python
-    - conda activate test
-    - mamba install chinet nose scipy mongodb
-    - |
-      cd test
-      mkdir db
-      mongod --dbpath db &
-      nosetests
-
 deploy:
   stage: deploy
   image: continuumio/miniconda3:latest
@@ -76,7 +49,8 @@ deploy:
     - echo "I am a deploy stage."
     - source activate
     - conda install anaconda-client
-    - anaconda -t ${ANACONDA_API_TOKEN} upload -l ${DEPLOY_VARIABLE} -u ${CONDA_USER} --force bld-dir/linux-64/*.tar.bz2
+    - if [[ "$CI_COMMIT_REF_NAME" == "master" ]]; then ANACONDA_LABEL=main; else ANACONDA_LABEL=nightly; fi
+    - anaconda -t ${ANACONDA_API_TOKEN} upload -l ${ANACONDA_LABEL} -u ${CONDA_USER} --force bld-dir/linux-64/*.tar.bz2
 
 
 # # Downstream projects

@@ -24,9 +24,6 @@ option(INSTALL "Install the library and the include files" ON)
 option(BUILD_PYTHON_INTERFACE "Build the python interface" ON)
 option(ENABLE_AVX "Build with AVX" ON)
 
-### Conda
-#####################################################
-FIND_PACKAGE(Conda)
 
 ################################################################################
 ###### Compiler flags
@@ -121,10 +118,6 @@ endif ()
 FIND_PACKAGE(OpenMP REQUIRED)
 LINK_LIBRARIES(OpenMP::OpenMP_CXX)
 
-# Cpp-taskflow
-###########################
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/cpp-taskflow/)
-
 ## Boost
 ###########################
 FIND_PACKAGE(Boost 1.36 REQUIRED COMPONENTS date_time filesystem iostreams)
@@ -137,26 +130,6 @@ MESSAGE(${Boost_INCLUDE_DIRS})
 FIND_PACKAGE(Python)
 INCLUDE_DIRECTORIES(${Python_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${Python_NumPy_PATH})
-
-# Eigen3
-###########################
-FIND_PACKAGE(Eigen3 3.2 QUIET NO_MODULE)
-IF(NOT TARGET Eigen3::Eigen)
-    MESSAGE(STATUS "Using thirdparty/eigen3")
-    SET(EIGEN3_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/thirdparty/eigen3)
-ENDIF (NOT TARGET Eigen3::Eigen)
-INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
-
-# IMP
-###########################
-FIND_PACKAGE(IMP REQUIRED)
-INCLUDE(${IMP_USE_FILE})
-INCLUDE_DIRECTORIES(${IMP_INCLUDE_DIR})
-MESSAGE(STATUS "IMP_INCLUDE_DIR='${IMP_INCLUDE_DIR}'")
-MESSAGE(STATUS "IMP_kernel_LIBRARY='${IMP_kernel_LIBRARY}'")
-MESSAGE(STATUS "IMP_core_LIBRARY='${IMP_core_LIBRARY}'")
-LINK_LIBRARIES(${IMP_kernel_LIBRARY} ${IMP_core_LIBRARY})
-MESSAGE("-- Found IMP")
 
 # RTTR
 ###########################

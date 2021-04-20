@@ -41,7 +41,7 @@ def set_python_callback_function(
                 cb_function, # type: Callable
                 *args, **kwargs
         ):
-            super().__init__(*args, **kwargs)
+            super(CallbackNodePython, self).__init__(*args, **kwargs)
             self._cb = cb_function
 
         def run(
@@ -78,13 +78,26 @@ def set_python_callback_function(
     # None.
 
     # get the signature of the function to create input Ports
-    signature = inspect.signature(cb)
+    import sys    
+    if sys.version_info[0] > 2:
+        from inspect import signature as sig
+        empty_name = inspect.Signature.empty
+        empty_type = inspect._empty
+        _use_py2 = True
+    else:
+        import funcsigs
+        from funcsigs import signature as sig
+        empty_name = funcsigs._empty
+        empty_type = funcsigs._empty
+        _use_py2 = False
+
+    _sig = sig(cb)
     input_ports = list()
-    for parameter_name in signature.parameters:
-        o = signature.parameters[parameter_name]
+    for parameter_name in _sig.parameters:
+        o = _sig.parameters[parameter_name]
         # Check the function signature to use default values as cn.Port value
-        if o.default is inspect.Signature.empty:
-            if o.annotation is inspect._empty:
+        if o.default is empty_name:
+            if o.annotation is empty_type:
                 print("WARNING no type specified for %s cn.Port." % parameter_name)
                 value = np.array([1.0], dtype=np.float64)
             elif o.annotation == 'int':
@@ -177,7 +190,8 @@ def __setattr__(self, name, value):
             else:
                 self.outputs[name].value = value
     except:
-        super().__setattr__(name, value)
+        # super().__setattr__(name, value)
+        MongoObject.__setattr__(self, name, value)
 
 
 def __call__(self):
@@ -185,7 +199,8 @@ def __call__(self):
 
 
 def __del__(self):
-    super().__del__()
+    # super(Node).__del__()
+    MongoObject.__del__(self)
 
 
 def __init__(self,

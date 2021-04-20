@@ -25,7 +25,7 @@ db_dict = {
 class CallbackNodePassOn(cn.NodeCallback):
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(CallbackNodePassOn, self).__init__(*args, **kwargs)
 
     def run(self, inputs, outputs):
         outputs["outA"].value = inputs["inA"].value
@@ -34,7 +34,7 @@ class CallbackNodePassOn(cn.NodeCallback):
 class NodeCallbackMultiply(cn.NodeCallback):
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(NodeCallbackMultiply, self).__init__(*args, **kwargs)
 
     def run(self, inputs, outputs):
         mul = 1.0
@@ -477,8 +477,9 @@ class Tests(unittest.TestCase):
         self.assertEqual(out_node_2.value, 13.0)
 
     def test_node_init_with_callback_function(self):
-        @nb.jit(nopython=False)
-        def h(x: np.ndarray, y: np.ndarray):
+
+        def h(x, y):
+            # type: (np.ndarray, np.ndarray)
             return x * y
 
         node = cn.Node(
@@ -539,8 +540,8 @@ class Tests(unittest.TestCase):
         # use of numba decorated function as a Node callback
         node = cn.Node()
 
-        @nb.jit(nopython=True)
-        def h(x: np.ndarray, y: np.ndarray):
+        def h(x, y):
+            # type: (np.ndarray, np.ndarray)
             return x * y
 
         node.callback_function = h
