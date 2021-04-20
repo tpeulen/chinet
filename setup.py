@@ -77,6 +77,19 @@ class CMakeBuild(build_ext):
                 '-GVisual Studio 14 2015 Win64'
             ]
         else:
+            # When using conda try to convince cmake to use
+            # the conda boost
+            CONDA_PREFIX = os.getenv('CONDA_PREFIX')
+            if CONDA_PREFIX is not None:
+                print("Conda prefix is: ", CONDA_PREFIX)
+                print("Convincing cmake to use the conda boost")
+                cmake_args += [
+                    '-DCMAKE_PREFIX_PATH=' + CONDA_PREFIX,
+                    '-DBOOST_ROOT=' + CONDA_PREFIX,
+                    '-DBoost_NO_SYSTEM_PATHS=ON',
+                    '-DBoost_DEBUG=ON',
+                    '-DBoost_DETAILED_FAILURE_MESSAGE=ON'
+                ]
             build_args += ['--', '-j8']
 
         env = os.environ.copy()
