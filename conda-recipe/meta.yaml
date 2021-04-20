@@ -1,54 +1,57 @@
-{% set name = "chinet" %}
+{% set PY_VER_MAJOR = PY_VER[0] %}
+{% set PY_VER_MINOR = PY_VER[2] %}
 {% set data = load_setup_py_data(setup_file='../setup.py', from_recipe_dir=True) %}
 
 package:
-  name: "{{ name|lower }}"
+  name: {{ data.get('name')|lower }}
   version: {{ data.get('version')|lower }}
 
 source:
-  path: ..
+  git_url: ..
 
 build:
     number: 0
-    #string: np{{ CONDA_NPY }}py{{ CONDA_PY }}_{{ GIT_BUILD_STR }}
+    string: py{{ PY_VER_MAJOR }}{{ PY_VER_MINOR }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
 
 requirements:
-
-  host:
+  host: 
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
     - python {{ python }}
-    - {{ pin_compatible('numpy') }}
-  build:
-    - python {{ python }}
-    - {{ pin_compatible('numpy') }}
     - setuptools
-    - git
-    - cmake
     - swig
-    - intel-openmp
-    - boost 1.67.0.*
-    - librttr 0.9.6.*
+    - cmake >=3.13
+    - imp {{ imp }}
+    - numpy
+    - boost
+    - librttr
     - libmongoc >=1.15.1
   run:
-    - python {{ python }}
+    - python
     - {{ pin_compatible('numpy') }}
-    - labellib
-    - librttr 0.9.6.*
-    - boost 1.67.0.* [win]
-    - libboost 1.67.0.* [not win]
-    - libmongoc >=1.15.1
+    - {{ pin_compatible('librttr') }}
+    - {{ pin_compatible('boost', max_pin='x.x.x') }}
+    - {{ pin_compatible('libmongoc') }}
+    - llvm-openmp  # [osx]
 
 test:
   imports:
     - chinet
+  requires:
+    - nose
+    - mongodb
+  commands:
+    - cd test && mkdir db
+    - mongod --dbpath db &&
+    - nosetests
 
 about:
   home: https://github.com/tpeulen/chinet
-  license: Mozilla Public License 2.0 (MPL 2.0)
-  summary: Python bindings for chinet
+  license: {{ data.get('license') }}
+  summary: |
+    {{ data.get('description') }}
   description: |
-    chinet is a C++ library with Python wrapper to construct networks of
-    computation node with associated ports that can be deposited in a
-    mongoDB. Chinet is the data management backend of chisurf.
+    {{ data.get('long_description') }}
   doc_url: https://github.com/tpeulen.github.io/chinet/
 
 extra:

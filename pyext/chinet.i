@@ -1,21 +1,20 @@
 %module(directors="1", package="chinet") chinet
 %feature("kwargs", 1);
-%warnfilter(511) std::vector;
-%warnfilter(511) std::map;
-%warnfilter(511) swig::PySwigIterator;
+#pragma SWIG nowarn=314,319,503,511,401,389
 %include "documentation.i"
 %{
-#define SWIG_FILE_WITH_INIT
-#include "../include/Curve.h"
-#include "../include/Functions.h"
-//#include "../include/Decay.h"
-#include "../include/CNode.h"
-#include "../include/MongoObject.h"
+    #define SWIG_FILE_WITH_INIT
+    #include "../include/Functions.h"
+    #include "../include/CNode.h"
+    #include "../include/MongoObject.h"
 %}
 
-%pythonbegin %{
-import numpy as np
+%include "numpy.i"
+%init %{
+    import_array();
 %}
+
+%pythonbegin "python_extension.py"
 
 %include "typemaps.i";
 %include "stl.i";
@@ -25,14 +24,19 @@ import numpy as np
 %include "std_vector.i";
 %include "std_list.i";
 %include "std_shared_ptr.i";
+%include "cpointer.i"
+%include "std_set.i";
+%include attribute.i
 
-%template(map_string_string) std::map<std::string, std::string>;
+%template(MapStringString) std::map<std::string, std::string>;
 %template(VectorString) std::vector<std::string>;
 %template(VectorDouble) std::vector<double>;
 %template(VectorInt) std::vector<int>;
 %template(VectorLong) std::vector<long>;
+%template(MapStringVectorDouble) std::map<std::string, std::vector<double>>;
 
-%extend vector<double> {
+
+%extend std::vector<double>{
 
     string __str__(){
         std::ostringstream os;
@@ -68,12 +72,7 @@ import numpy as np
 
 }
 
-%include "cpointer.i"
 %include "mongo.i"
 %include "port.i"
 %include "node.i"
-%include "nodecallback.i"
 %include "session.i"
-//%include "pda.i"
-%include "curve.i"
-//%include "decay.i"

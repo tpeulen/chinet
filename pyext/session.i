@@ -1,7 +1,3 @@
-%module(directors="1") chinet
-
-%include "std_set.i";
-
 %{
 #include "../include/Session.h"
 %}

@@ -1,26 +1,31 @@
 #ifndef CHINET_MONGOOBJECT_H
 #define CHINET_MONGOOBJECT_H
 
-#include <iostream>
+#include <iostream>     // std::cout, std::ios
 #include <map>
 #include <set>
 #include <vector>
+#include <list>
 #include <memory>
 #include <cmath>
 #include <iterator>
-
+#include <string>
+#include <sstream>      // std::ostringstream
 #include <mongoc.h>
+
+#include "json.hpp"
+using json = nlohmann::json;
+
 
 #include "Functions.h"
 
-#define VERBOSE 0
-
-
-class MongoObject{
+class MongoObject : public std::enable_shared_from_this<MongoObject>{
 
 private:
 
-    bool is_connected_to_db_;
+    static std::list<std::shared_ptr<MongoObject>> registered_objects;
+
+    bool is_connected_to_db_ = false;
     mongoc_uri_t *uri;
     mongoc_client_t *client;
     bson_error_t error;
@@ -40,11 +45,36 @@ protected:
 
     // Getter & Setter
     //--------------------------------------------------------------------
-    bson_oid_t get_bson_oid();
+
+    //! The object identification number of the @class MongoObject instance
+    /*!
+     *  get_own_bson_oid() Returns the object's ObjectId value (see:
+     *  https://docs.mongodb.com/manual/reference/bson-types/#objectid)
+     *
+     */
+    //! \return
+    bson_oid_t get_bson_oid()
+    {
+        return oid_document;
+    }
+
+    /// The BSON document of the @class MongoObject instance
+    /// \return
     virtual bson_t get_bson();
+
+    /// A BSON document containing the @class MongoObject instance BSON document
+    /// excluding a set of keys
+    /// \param first is the first key to exclude.
+    /// \param ... more keys to exclude
+    /// \return a bson_t document
     bson_t get_bson_excluding(const char* first, ...);
+
+    /// Pointer to the BSON document of the MongoObject
+    /// \return
     const bson_t* get_document();
 
+    /// Set the
+    /// \param b
     void set_document(bson_t b){
         document = b;
     }
@@ -134,9 +164,7 @@ protected:
             const char *document_name,
             std::map<std::string, std::shared_ptr<T>> *target_map){
         bool return_value = true;
-
-        bson_iter_t iter;
-        bson_iter_t child;
+        bson_iter_t iter; bson_iter_t child;
         if (bson_iter_init_find (&iter, doc, document_name) &&
             BSON_ITER_HOLDS_DOCUMENT (&iter) &&
             bson_iter_recurse (&iter, &child)) {
@@ -150,7 +178,7 @@ protected:
                     // connect obj to db
                     return_value &= connect_object_to_db(o);
                     // read obj from db
-#if VERBOSE
+#if CHINET_VERBOSE
                     std::cout << oid_to_string(oid) << std::endl;
 #endif
                     o->read_from_db(oid_to_string(oid));
@@ -160,7 +188,7 @@ protected:
                 }
             }
         } else{
-#if VERBOSE
+#if CHINET_VERBOSE
             std::cerr << "Error: no nodes section in Session" << std::endl;
 #endif
             return_value &= false;
@@ -192,11 +220,11 @@ protected:
                     // read obj from db
                     o->read_from_db(oid_to_string(new_oid));
                     // add obj to the target set
-                    target_map->insert(std::make_pair(o->get_oid(), o));
+                    target_map->insert(std::make_pair(o->get_own_oid(), o));
                 }
             }
         } else{
-#if VERBOSE
+#if CHINET_VERBOSE
             std::cerr << "Error: no nodes section in Session" << std::endl;
 #endif
             return_value &= false;
@@ -204,22 +232,41 @@ protected:
         return return_value;
     }
 
+    /// Append a string to a BSON document
+    /// \param dst pointer to the target BSON document
+    /// \param key the key of the string int the target BSON document
+    /// \param content the string that will be written to the BSON document
+    /// \param size optional parameter for the string size in the BSON document.
     static void append_string(
             bson_t *dst, std::string key,
             std::string content,
             size_t size=0
                     );
 
+
+    /// The string contained in a @class bson_t document with the @param key
+    /// \param doc BSON @class bson_t document which is inspected
+    /// \param key
+    /// \return string contained under the @param key
     static const std::string get_string_by_key(
             bson_t *doc, std::string key
             );
 
+
+    /// Converts a @class bson_oid_t oid into a @class std::string
+    /// \param oid
+    /// \return
     static std::string oid_to_string(bson_oid_t oid){
         char oid_str[25];
         bson_oid_to_string(&oid, oid_str);
-        return std::string(oid_str, 25);
+        return std::string(oid_str, 25).substr(0, 24);
     }
 
+
+    /// Converts a @class std::string into a @class bson_oid_t
+    /// \param oid_string
+    /// \param oid
+    /// \return
     static bool string_to_oid(
             const std::string &oid_string,
             bson_oid_t *oid
@@ -227,8 +274,7 @@ protected:
 
 public:
 
-    MongoObject();
-    MongoObject(std::string name);
+    MongoObject(std::string name="");
     ~MongoObject();
 
     //! Connects the instance of @class MongoObject to a database
@@ -238,7 +284,7 @@ public:
      * @param db_string
      * @param app_string
      * @param collection_string
-     * @return
+     * @return True if connected successfully
      */
     bool connect_to_db(
             const std::string &uri_string,
@@ -247,6 +293,10 @@ public:
             const std::string &collection_string
     );
 
+    /// Connects other object to the same MongoDB
+    /// \tparam T
+    /// \param o The object that is connected to the same MongoDB
+    /// \return True if connected successfully
     template <typename T>
     bool connect_object_to_db(T o){
         return o->connect_to_db(
@@ -260,28 +310,66 @@ public:
     /// Disconnects the @class MongoObject instance from the DB
     void disconnect_from_db();
 
-    /// Returns true if the instance of the @class MongoObject is connected to the DB
+    /// Returns true if the instance of the @class MongoObject is connected
+    /// to the DB
     bool is_connected_to_db();
 
+    void register_instance(std::shared_ptr<MongoObject>);
+
+    void unregister_instance(std::shared_ptr<MongoObject>);
+
+    ///
+    static std::list<std::shared_ptr<MongoObject>> get_instances();
+
+    /// Writes @class MongoObject to the connected MongoDB
+    /// \return
     virtual bool write_to_db();
 
-    std::string create_copy();
+    /// Creates a copy of the object in the connected MongoDB with a new OID.
+    /// \return The OID of the copy
+    std::string create_copy_in_db();
 
+    /// Read the content of an existing BSON document into the current object
+    /// \param oid_string Object identifier of the queried document in the DB
+    /// \return True if successful otherwise false
     virtual bool read_from_db(const std::string &oid_string);
 
-    std::string get_json();
-
-    std::string get_json_template();
-
+    /// Read the content of a JSON string into a MongoObject
+    /// \param json_string
+    /// \return
     bool read_json(std::string json_string);
 
-    std::string get_oid();
+    /// The own object identifier
+    /// \return
+    std::string get_own_oid()
+    {
+        return oid_to_string(oid_document);
+    }
+
+    /// Set the own object identifier without duplicate check
+    /// \param oid_str
+    void set_own_oid(std::string oid_str)
+    {
+        MongoObject::string_to_oid(oid_str, &oid_document);
+    }
 
     void set_name(std::string name){
         object_name = name;
     }
 
     virtual std::string get_name(){
+        return object_name;
+    }
+
+    std::shared_ptr<MongoObject> get_ptr();
+
+    /// Create and / or set a string in the MongoObject accessed by @param key
+    /// \param key the key to access the content
+    /// \param str The content
+    void set_string(std::string key, std::string str);
+
+    // Seems WRONG
+    virtual std::string get_string(){
         return object_name;
     }
 
@@ -385,10 +473,7 @@ public:
     }
 
     template <typename T>
-    void set_array(
-            const char* key,
-            std::vector<T> value
-            ){
+    void set_array(const char* key, std::vector<T> value){
         bson_t dst; bson_init(&dst);
         bson_copy_to_excluding_noinit(
                 &document, &dst,
@@ -399,30 +484,21 @@ public:
         bson_copy_to(&dst, &document);
     }
 
-    std::string get_json(const char *key){
-        std::string re;
-        bson_iter_t iter, desc;
-        bson_iter_init (&iter, &document);
-        if(bson_iter_find_descendant (&iter, key, &desc)){
-            if (BSON_ITER_HOLDS_DOCUMENT (&desc)) {
-                char *str = NULL;
-                bson_t *arr;
-                const uint8_t *data = NULL;
-                uint32_t len = 0;
-                bson_iter_document (&desc, &len, &data);
-                arr = bson_new_from_data (data, len);
-                str = bson_as_json (arr, NULL);
-                re.assign(str);
-                bson_free (str);
-                bson_destroy (arr);
-            }
-        }
-        return re;
+    std::string get_json(int indent=4);
+
+    std::string get_json_of_key(std::string key);
+
+    std::string show(){
+        std::ostringstream os;
+        os << this->get_json();
+        os << std::endl;
+        return os.str();
     }
 
     // Operators
     //--------------------------------------------------------------------
     virtual std::shared_ptr<MongoObject> operator[](std::string key);
+
     bool operator==(MongoObject const& b){
         return (
                 bson_oid_equal(&b.oid_document, &oid_document) &&
@@ -430,11 +506,11 @@ public:
         );
     };
 
-    /**
-     * Shows information about the class
-     * @param out Stream used to show the information
-     */
-    void show(std::ostream &out = std::cout) const;
+    friend std::ostream& operator<<(std::ostream &out, MongoObject& o)
+    {
+        out << o.get_json();
+        return out;
+    }
 
 };
 

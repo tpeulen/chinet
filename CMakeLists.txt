@@ -1,150 +1,164 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.13)
+SET(PROJECT_NAME chinet)
+PROJECT(${PROJECT_NAME})
 
 ENABLE_LANGUAGE(CXX)
 set(CMAKE_CXX_STANDARD 11)
 
-SET(PROJECT_NAME chinet)
-PROJECT(${PROJECT_NAME})
-
+################################################################################
+###### CMAKE
+################################################################################
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 
-##############################################################
-# 32/64 bit detection
-###############################################################
-if(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
-    # If in 64bit mode, we have to define the _OCC64 variable
-    add_definitions(-D_OCC64)
-    set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_FLAGS} -D_OCC64)
-    set(BIT 64)
-else(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
-    set(BIT 32)
-endif(${CMAKE_SIZEOF_VOID_P} MATCHES "8")
+################################################################################
+###### DEFINITIONS
+################################################################################
+if(UNIX AND NOT APPLE)
+    set(LINUX TRUE)
+endif()
+
+################################################################################
+###### OPTIONS
+################################################################################
+option(INSTALL "Install the library and the include files" ON)
+option(BUILD_PYTHON_INTERFACE "Build the python interface" ON)
+option(ENABLE_AVX "Build with AVX" ON)
 
 
-###############################
-# Windows
-###############################
-if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++11")
-    if(BIT MATCHES "64")
-        add_definitions(-DMS_WIN64)
-    endif(BIT MATCHES "64")
-endif(MSVC)
-
-##################################
-# MACOSX_DEPLOYEMENT_TARGET
-##################################
-# explicit link to libc++ for recent osx versions
+################################################################################
+###### Compiler flags
+################################################################################
+if(LINUX)
+    STRING(APPEND CMAKE_CXX_FLAGS " -march=native -Ofast -mavx -ffast-math -funroll-loops")
+    STRING(APPEND CMAKE_C_FLAGS " -march=native -Ofast -mavx -ffast-math -funroll-loops")
+endif()
 if(APPLE)
-    # MESSAGE(STATUS "link to libc++ on modern osx versions")
+    FIND_PACKAGE(Threads)
+    # explicit link to libc++ for recent osx versions
+    MESSAGE(STATUS "Explicitly link to libc++ on modern osx versions")
     ADD_DEFINITIONS(-stdlib=libc++)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
+    IF(ENABLE_AVX)
+        STRING(APPEND CMAKE_CXX_FLAGS " -march=native -Ofast -mavx -ffast-math -funroll-loops")
+        STRING(APPEND CMAKE_C_FLAGS " -march=native -Ofast -mavx -ffast-math -funroll-loops")
+    ENDIF(ENABLE_AVX)
+endif()
+if (MSVC)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++11")
+    ADD_DEFINITIONS(-DMS_WIN64)
+    ADD_DEFINITIONS(-D_USE_MATH_DEFINES)
+    # https://devblogs.microsoft.com/cppblog/simd-extension-to-c-openmp-in-visual-studio/
+    # /Oi is for intrinsics
+    IF(ENABLE_AVX)
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:AVX2 -openmp:experimental /Oi /O2")
+    ENDIF(ENABLE_AVX)
+endif (MSVC)
+
+# MACOSX
+##############
+if (APPLE)
     # Don't set MACOSX_RPATH by default
-    set(CMAKE_MACOSX_RPATH 0)
-endif(APPLE)
+    # https://github.com/conda/conda/issues/3624
+    if(DEFINED ENV{CONDA_PREFIX})
+        set(MACOSX_RPATH OFF)
+        set(CMAKE_SKIP_RPATH TRUE)
+        set(CMAKE_SKIP_INSTALL_RPATH TRUE)
+    endif()
+endif (APPLE)
 
-###############################
-# OpenMP
-###############################
-OPTION (USE_OpenMP "Use OpenMP" ON)
-IF(USE_OpenMP)
-    FIND_PACKAGE(OpenMP)
-    IF(OPENMP_FOUND)
-        SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+# Debug build detection
+###########################
+IF (CMAKE_BUILD_TYPE STREQUAL "Release")
+    MESSAGE("Release build")
+    IF(MSVC)
+        ADD_COMPILE_OPTIONS(/w)
+    ELSE()
+        ADD_COMPILE_OPTIONS(-w)
     ENDIF()
-ENDIF()
+ELSE (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    MESSAGE("Debug build")
+    ADD_DEFINITIONS("-DCHINET_VERBOSE=1")
+    ## Enable Compiler warnings
+    #############################
+    IF(MSVC)
+        ADD_COMPILE_OPTIONS(/W4)
+    ELSE()
+        ADD_COMPILE_OPTIONS(-Wall -Wextra -pedantic)
+    ENDIF()
+ENDIF (CMAKE_BUILD_TYPE STREQUAL "Release")
 
-###############################
-# Cpp-taskflow
-###############################
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/cpp-taskflow/)
 
-###############################
-# Boost
-###############################
-FIND_PACKAGE(Boost 1.50 COMPONENTS system REQUIRED)
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR} )
+################################################################################
+###### INCLUDES AND LIBRARIES
+################################################################################
+
+## OpenMP
+###########################
+if (APPLE)
+    # When using conda use CONDA_PREFIX
+    if(DEFINED ENV{CONDA_PREFIX})
+        SET(OMP_INCLUDE_DIR "$ENV{CONDA_PREFIX}/include")
+        SET(OMP_LIB_DIR "$ENV{CONDA_PREFIX}/lib")
+    else()
+        SET(OMP_INCLUDE_DIR "/usr/local/opt/libomp/include")
+        SET(OMP_LIB_DIR "/usr/local/opt/libomp/lib")
+    endif()
+    # dirty hack to make OpenMP work see:
+    # https://gitlab.kitware.com/cmake/cmake/issues/18098
+    set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I${OMP_INCLUDE_DIR}" CACHE INTERNAL "OpenMP flags for Xcode toolchain.")
+    set(OpenMP_CXX_LIB_NAMES "omp" CACHE INTERNAL "OpenMP lib name for Xcode toolchain.")
+    set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp -I${OMP_INCLUDE_DIR}" CACHE INTERNAL "OpenMP flags for Xcode toolchain.")
+    set(OpenMP_C_LIB_NAMES "libomp" "libgomp" "libiomp5")
+    set(OpenMP_omp_LIBRARY "${OMP_LIB_DIR}/libomp.dylib" CACHE INTERNAL "OpenMP lib name for Xcode toolchain.")
+    set(OpenMP_libomp_LIBRARY ${OpenMP_C_LIB_NAMES})
+    set(OpenMP_libgomp_LIBRARY ${OpenMP_C_LIB_NAMES})
+    set(OpenMP_libiomp5_LIBRARY ${OpenMP_C_LIB_NAMES})
+endif ()
+FIND_PACKAGE(OpenMP REQUIRED)
+LINK_LIBRARIES(OpenMP::OpenMP_CXX)
+
+## Boost
+###########################
+FIND_PACKAGE(Boost 1.36 REQUIRED COMPONENTS date_time filesystem iostreams)
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 LINK_LIBRARIES(${Boost_LIBRARIES})
+MESSAGE(${Boost_INCLUDE_DIRS})
 
-###############################
-# Eigen3
-###############################
-FIND_PACKAGE(Eigen3 3.2 QUIET NO_MODULE)
-if(NOT TARGET Eigen3::Eigen)
-    MESSAGE(STATUS "Using thirdparty/eigen3")
-    SET(EIGEN3_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/thirdparty/eigen3)
-endif (NOT TARGET Eigen3::Eigen)
-INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
-
-#[[
-###############################
-# IMP
-###############################
-FIND_PACKAGE(IMP REQUIRED)
-INCLUDE(${IMP_USE_FILE})
-INCLUDE_DIRECTORIES(SYSTEM ${IMP_INCLUDE_DIR})
-]]#
-
-#[[
-# Boost histogram
-###############################
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/histogram/include/)
-]]#
+# Python
+###########################
+FIND_PACKAGE(Python)
+INCLUDE_DIRECTORIES(${Python_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${Python_NumPy_PATH})
 
 # RTTR
-###############################
-find_package(RTTR CONFIG REQUIRED Core)
-link_libraries(RTTR::Core)
-message ("-- Found librttr version \"${PACKAGE_VERSION}\"")
+###########################
+FIND_PACKAGE(RTTR CONFIG REQUIRED Core)
+LINK_LIBRARIES(RTTR::Core)
+MESSAGE ("-- Found librttr version \"${PACKAGE_VERSION}\"")
 
 # libmongoc
-###############################
-find_package (libmongoc-1.0)
-message ("-- Found mongoc version \"${MONGOC_VERSION}\"")
-message ("--   include path \"${MONGOC_INCLUDE_DIRS}\"")
-message ("--   libraries \"${MONGOC_LIBRARIES}\"")
-include_directories (${MONGOC_INCLUDE_DIRS})
-link_libraries (${MONGOC_LIBRARIES})
-add_compile_definitions(${MONGOC_DEFINITIONS})
+###########################
+FIND_PACKAGE (libmongoc-1.0)
+MESSAGE ("-- Found mongoc version \"${MONGOC_VERSION}\"")
+MESSAGE ("-- include path \"${MONGOC_INCLUDE_DIRS}\"")
+MESSAGE ("-- libraries \"${MONGOC_LIBRARIES}\"")
+INCLUDE_DIRECTORIES (${MONGOC_INCLUDE_DIRS})
+LINK_LIBRARIES (${MONGOC_LIBRARIES})
+ADD_COMPILE_DEFINITIONS(${MONGOC_DEFINITIONS})
 
-#[[
-# libbson
-###############################
-find_package (libbson-1.0 1.7 REQUIRED)
-message ("-- Found libbson version \"${BSON_VERSION}\"")
-message ("--   include path \"${BSON_INCLUDE_DIRS}\"")
-message ("--   libraries \"${BSON_LIBRARIES}\"")
-link_libraries(${BSON_LIBRARIES})
-include_directories(${BSON_INCLUDE_DIRS})
-
-# libmongocxx
-###############################
-find_package(libmongocxx REQUIRED)
-link_libraries(${LIBMONGOCXX_LIBRARIES})
-include_directories(${LIBMONGOCXX_INCLUDE_DIRS})
-message("-- libmongocxx libraries \"${LIBMONGOCXX_LIBRARIES}\"")
-message("-- libmongocxx include \"${LIBMONGOCXX_INCLUDE_DIRS}\"")
-]]
-
-# LabelLib
-###############################
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/labellib/FlexLabel/include/)
-#find_package (FlexLabel REQUIRED)
-
-# JSON
-###############################
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/json/single_include/)
-
-# Project
-###############################
+################################################################################
+###### Targets
+################################################################################
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-ADD_SUBDIRECTORY(pyext)
+IF(BUILD_PYTHON_INTERFACE)
+    ADD_SUBDIRECTORY(pyext)
+ENDIF(BUILD_PYTHON_INTERFACE)
 
+IF(INSTALL)
 INSTALL(
         TARGETS ${PROJECT_NAME}
         RUNTIME DESTINATION bin
@@ -152,3 +166,12 @@ INSTALL(
         ARCHIVE DESTINATION lib
         PUBLIC_HEADER DESTINATION include
         )
+ENDIF(INSTALL)
+
+## Compiler warnings
+########################
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /Wall)
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
+endif()

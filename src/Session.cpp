@@ -1,7 +1,3 @@
-//
-// Created by thomas on 4/23/19.
-//
-
 #include "Session.h"
 #include "Port.h"
 
@@ -37,24 +33,24 @@ std::shared_ptr<Port> Session::create_port(
         json port_template,
         std::string port_key
     ) {
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "CREATE PORT" << std::endl;
 #endif
     auto port = std::make_shared<Port>();
     port->set_name(port_key);
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "-- port name: " << port_key << std::endl;
 #endif
     for (json::iterator it_val = port_template.begin(); it_val != port_template.end(); ++it_val) {
         if (it_val.key() == "is_fixed") {
             bool is_fixed = port_template["is_fixed"].get<bool>();
             port->set_fixed(is_fixed);
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- is_fixed: " << is_fixed << std::endl;
 #endif
         } else if (it_val.key() == "value") {
             auto b = port_template["value"].get<std::vector<double>>();
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- number of values: " << b.size() << std::endl;
 #endif
             bool is_fixed = port->is_fixed();
@@ -63,13 +59,13 @@ std::shared_ptr<Port> Session::create_port(
             port->set_fixed(is_fixed);
         } else if (it_val.key() == "is_output"){
             bool is_output = port_template["is_output"].get<bool>();
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- is_output: " << is_output << std::endl;
 #endif
             port->set_port_type(is_output);
         } else if (it_val.key() == "is_reactive"){
             bool is_reactive = port_template["is_reactive"].get<bool>();
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- is_reactive: " << is_reactive << std::endl;
 #endif
             port->set_reactive(is_reactive);
@@ -79,14 +75,14 @@ std::shared_ptr<Port> Session::create_port(
 }
 
 std::shared_ptr<Port> Session::create_port(char* port_template, char* port_key){
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "Session:" << port_template << ":" << port_template << std::endl;
 #endif
     return create_port(json::parse(port_template), port_key);
 }
 
 std::shared_ptr<Node> Session::create_node(json node_template, std::string node_key){
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "CREATE NODE" << std::endl;
 #endif
     auto node = std::make_shared<Node>(node_key);
@@ -94,13 +90,13 @@ std::shared_ptr<Node> Session::create_node(json node_template, std::string node_
     std::string callback_type;
     for (json::iterator it = node_template.begin(); it != node_template.end(); ++it) {
         if (it.key() == "ports") {
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- adding ports... " << std::endl;
 #endif
             auto ports_json = node_template["ports"];
             for (json::iterator it2 = ports_json.begin(); it2 != ports_json.end(); ++it2) {
                 const std::string &port_key = it2.key();
-#if VERBOSE
+#if CHINET_VERBOSE
                 std::clog << "-- adding port key: " << port_key << std::endl;
 #endif
                 auto port_json = node_template["ports"][port_key];
@@ -109,12 +105,12 @@ std::shared_ptr<Node> Session::create_node(json node_template, std::string node_
             }
         } else if (it.key() == "callback") {
             callback = node_template["callback"].get<std::string>();
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- callback: " << callback << std::endl;
 #endif
         } else if (it.key() == "callback_type") {
             callback_type = node_template["callback_type"].get<std::string>();
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- callback_type: " << callback_type << std::endl;
 #endif
         }
@@ -131,7 +127,7 @@ std::shared_ptr<Node> Session::create_node(char* node_template, char* port_key){
 }
 
 bool Session::read_session_template(const std::string &json_string){
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "READ SESSION TEMPLATE" << std::endl;
 #endif
     json session_json = json::parse(json_string);

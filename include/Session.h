@@ -1,19 +1,15 @@
-//
-// Created by thomas on 4/23/19.
-//
-
 #ifndef CHINET_SESSION_H
 #define CHINET_SESSION_H
 
 #include <map>
 #include <memory>
-#include <nlohmann/json.hpp>
 
 #include "MongoObject.h"
 #include "CNode.h"
 #include "Port.h"
 
 
+#include "json.hpp"
 using nlohmann::json;
 
 class Session : public MongoObject

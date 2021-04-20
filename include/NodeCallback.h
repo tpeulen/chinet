@@ -6,11 +6,12 @@
 #define chinet_NODECALLBACK_H
 
 #include <functional>
+#include <algorithm>
 #include <rttr/registration>
-#include <Port.h>
-#include <CNode.h>
-#include <Functions.h>
-#include <FlexLabel/FlexLabel.h>
+
+#include "Port.h"
+#include "CNode.h"
+#include "Functions.h"
 
 class Port;
 
@@ -28,11 +29,9 @@ public:
         std::cout << "This print by NodeCallback class from C++" << std::endl;
     }
 
-    NodeCallback() {};
+    NodeCallback() = default;
     virtual ~NodeCallback() {};
 };
-
-
 
 
 #endif //chinet_NODECALLBACK_H

@@ -7,20 +7,21 @@ TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 utils.set_search_paths(TOPDIR)
 
 import chinet as cn
+from constants import *
 
 
 class Tests(unittest.TestCase):
 
     def test_session_init(self):
         n1 = cn.Node(
-            {
+            ports={
                 'portA': cn.Port(1),
                 'portB': cn.Port(2),
                 'portC': cn.Port(3)
             },
         )
         n2 = cn.Node(
-            {
+            ports={
                 'inA': cn.Port(5),
                 'inB': cn.Port(7),
                 'outA': cn.Port(11, False, True),
@@ -40,10 +41,10 @@ class Tests(unittest.TestCase):
 
         na1 = s1.get_nodes()['nodeA']
         na2 = s2.get_nodes()['nodeA']
-        na1.set_name("new name")
+        na1.name = "new name"
 
         # the nodes are references
-        self.assertEqual(na1.get_name(), na2.get_name())
+        self.assertEqual(na1.name, na2.name)
 
     def test_read_session_template(self):
         template_file = "inputs/session_template.json"

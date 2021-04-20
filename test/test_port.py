@@ -8,9 +8,45 @@ TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 utils.set_search_paths(TOPDIR)
 
 import chinet as cn
-
+from constants import *
 
 class Tests(unittest.TestCase):
+
+    def test_port_init_singelton(self):
+        v1 = 23.0
+        v2 = 29.0
+        p1 = cn.Port(v1)
+        # check setting of value
+        p2 = cn.Port()
+        p2.value = v1
+        # check fixing
+        p3 = cn.Port(
+            value=v1,
+            fixed=True
+        )
+        p4 = cn.Port(
+            value=v1,
+            fixed=False
+        )
+        # check linking
+        p5 = cn.Port(v2)
+        p5.link = p4
+
+        self.assertEqual(
+            np.allclose(
+                p1.value, p2.value
+            ),
+            True
+        )
+        self.assertEqual(p3.fixed, True)
+        self.assertEqual(p4.fixed, False)
+        self.assertEqual(
+            np.allclose(
+                p5.value,
+                p4.value
+            ),
+            True
+        )
 
     def test_port_init_singelton(self):
         """Test chinet Port class set_value and get_value"""
@@ -75,7 +111,7 @@ class Tests(unittest.TestCase):
             True
         )
         self.assertAlmostEqual(
-            p6.value[0],
+            p6.value,
             lower_bound  # the lower bound is not part of the
         )
 
@@ -220,32 +256,21 @@ class Tests(unittest.TestCase):
         p1.reactive = False
         self.assertEqual(p1.reactive, False)
 
+    @unittest.skipUnless(CONNECTS, "Cloud not connect to DB")
     def test_db_write(self):
-        db_dict = {
-            'uri_string': "mongodb://localhost:27017",
-            'db_string': "chinet",
-            'app_string': "chisurf",
-            'collection_string': "test_collection"
-        }
         value_array = (1, 2, 3, 5, 8, 13)
         port = cn.Port(
             value=value_array,
             fixed=True
         )
-        connect_success = port.connect_to_db(**db_dict)
+        connect_success = port.connect_to_db(**DB_DICT)
         write_success = port.write_to_db()
 
         self.assertEqual(connect_success, True)
         self.assertEqual(write_success, True)
 
+    @unittest.skipUnless(CONNECTS, "Cloud not connect to DB")
     def test_port_db_restore(self):
-        db_dict = {
-            'uri_string': "mongodb://localhost:27017",
-            'db_string': "chinet",
-            'app_string': "chisurf",
-            'collection_string': "test_collection"
-        }
-
         value_array = (1, 2, 3, 5, 8, 13)
         value = 17
 
@@ -253,12 +278,12 @@ class Tests(unittest.TestCase):
         port.value = value
         port.value = value_array
 
-        port.connect_to_db(**db_dict)
+        port.connect_to_db(**DB_DICT)
         port.write_to_db()
 
         port_reload = cn.Port()
-        port_reload.connect_to_db(**db_dict)
-        self.assertEqual(port_reload.read_from_db(port.get_oid()), True)
+        port_reload.connect_to_db(**DB_DICT)
+        self.assertEqual(port_reload.read_from_db(port.oid), True)
 
         dict_port = json.loads(port.get_json())
         dict_port_restore = json.loads(port.get_json())

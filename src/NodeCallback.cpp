@@ -9,7 +9,7 @@ inline void mul(
         const std::map<std::string, std::shared_ptr<Port>> &inputs
         )
 {
-    for(int i=0; i<n_elements; i++) tmp[i] = 1.0;
+    std::fill(tmp, tmp + n_elements, 1.0);
     for(auto &o : inputs){
         T* va; int vn;
         o.second->get_value<T>(&va, &vn);
@@ -26,11 +26,11 @@ inline void add(
         const std::map<std::string, std::shared_ptr<Port>> &inputs
 )
 {
-    for(int i=0; i<n_elements; i++) tmp[i] = 0.0;
+    std::fill(tmp, tmp + n_elements, 1.0);
     for(auto &o : inputs){
         T* va; int vn;
         o.second->get_value<T>(&va, &vn);
-        for(int i=0; i < n_elements; i++){
+        for(size_t i=0; i < n_elements; i++){
             tmp[i] += va[i];
         }
     }
@@ -43,29 +43,29 @@ void combine(
         std::map<std::string, std::shared_ptr<Port>> &outputs,
         int operation
         ){
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "-- Combining values of input ports."  << std::endl;
 #endif
     size_t n_elements = UINT_MAX;
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "-- Determining input vector with smallest length." << std::endl;
 #endif
     for(auto &o : inputs){
         n_elements = MIN(n_elements, o.second->current_size());
     }
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "-- The smallest input vector has a length of: " << n_elements << std::endl;
 #endif
     auto tmp = (T*) malloc(n_elements * sizeof(T));
     switch(operation){
         case 0:
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- Adding input ports" << std::endl;
 #endif
             add(tmp, n_elements, inputs);
             break;
         case 1:
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "-- Multiplying input ports" << std::endl;
 #endif
             mul(tmp, n_elements, inputs);
@@ -75,12 +75,12 @@ void combine(
     }
     if(!outputs.empty()){
         if (outputs.find("outA") == outputs.end() ) {
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "ERROR: Node does not define output port with the name 'outA' " << std::endl;
 #endif
             outputs.begin()->second->set_value(tmp, n_elements);
         } else {
-#if VERBOSE
+#if CHINET_VERBOSE
             std::clog << "Setting value to output " << std::endl;
 #endif
             outputs["outA"]->set_value(tmp, n_elements);
@@ -98,7 +98,7 @@ void addition(
         std::map<std::string, std::shared_ptr<Port>> &outputs
 )
 {
-#if VERBOSE
+#if CHINET_VERBOSE
     std::clog << "addition"  << std::endl;
 #endif
     combine<T>(inputs, outputs, 0);
@@ -183,7 +183,7 @@ void AV(
     */
 }
 
-RTTR_REGISTRATION {
+RTTR_REGISTRATION{
     using namespace rttr;
     registration::class_<NodeCallback>("NodeCallback").constructor<>().method("run", &NodeCallback::run);
     registration::method("multiply_double", &multiply<double>);
