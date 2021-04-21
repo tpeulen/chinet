@@ -8,17 +8,6 @@ stages:
 # only cache local items.
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-  DEPLOY_VARIABLE: "nightly"
-  MINICONDA_VERSION: "latest"
-  MAMBA_VERSION: "0.10"
-
-
-workflow:
-  rules:
-    - if: $CI_COMMIT_REF_NAME =~ /master/
-      variables:
-        DEPLOY_VARIABLE: "main"  # Override globally-defined DEPLOY_VARIABLE
-    - when: always               # Run the pipeline in other cases
 
 build:linux:
   stage: build
@@ -28,13 +17,9 @@ build:linux:
   before_script:
     - apt update -yq && apt -yq install build-essential
   script:
-    - echo "I am the build stage."
     - source activate
-    - conda install mamba=$MAMBA_VERSION boa conda-verify doxygen cmake -c conda-forge
-    - |
-      conda config --add channels salilab
-      conda config --add channels tpeulen
-    - conda deactivate # Make sure not in base env
+    - cp .condarc ~/.condarc
+    - conda install mamba=$MAMBA_VERSION boa conda-verify doxygen cmake
     - conda mambabuild conda-recipe --output-folder bld-dir
   artifacts:
     expire_in: 7 days
@@ -49,7 +34,6 @@ deploy:
   dependencies:
     - build:linux
   script:
-    - echo "I am a deploy stage."
     - source activate
     - conda install anaconda-client
     - if [[ "$CI_COMMIT_REF_NAME" == "master" ]]; then ANACONDA_LABEL=main; else ANACONDA_LABEL=nightly; fi
