@@ -54,8 +54,8 @@ deploy:
     - anaconda -t ${ANACONDA_API_TOKEN} upload -l ${ANACONDA_LABEL} -u ${CONDA_USER} --force bld-dir/linux-64/*.tar.bz2
 
 
-# # Downstream projects
-# chisurf:
-#   stage: Trigger-cross-projects
-#   trigger: tpeulen/chisurf
+# Downstream projects
+chisurf:
+  stage: Trigger-cross-projects
+  trigger: tpeulen/chisurf
 
