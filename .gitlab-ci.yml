@@ -10,6 +10,8 @@ variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   DEPLOY_VARIABLE: "nightly"
   MINICONDA_VERSION: "latest"
+  MAMBA_VERSION: "0.10"
+
 
 workflow:
   rules:
@@ -28,7 +30,7 @@ build:linux:
   script:
     - echo "I am the build stage."
     - source activate
-    - conda install mamba boa conda-verify doxygen cmake -c conda-forge
+    - conda install mamba=$MAMBA_VERSION boa conda-verify doxygen cmake -c conda-forge
     - |
       conda config --add channels salilab
       conda config --add channels tpeulen
