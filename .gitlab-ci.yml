@@ -43,5 +43,5 @@ deploy:
 # Downstream projects
 chisurf:
   stage: Trigger-cross-projects
-  trigger: tpeulen/chisurf
+  trigger: chinet/chisurf
 
