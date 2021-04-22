@@ -21,7 +21,6 @@ requirements:
     - setuptools
     - swig
     - cmake >=3.13
-    - imp {{ imp }}
     - numpy
     - boost
     - librttr
