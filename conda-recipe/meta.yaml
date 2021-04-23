@@ -23,6 +23,7 @@ requirements:
     - swig
     - boost {{ boost }}
     - librttr
+    - libmongoc >=1.15.1
     - numpy
   host: 
     - {{ compiler('c') }}
@@ -31,7 +32,7 @@ requirements:
     - numpy
     - boost
     - librttr
-    - libmongoc >=1.15.1
+    - libmongoc
   run:
     - python
     - {{ pin_compatible('numpy') }}
