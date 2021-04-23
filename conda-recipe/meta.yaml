@@ -14,15 +14,22 @@ build:
     string: py{{ PY_VER_MAJOR }}boost{{ boost }}{{ PY_VER_MINOR }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
 
 requirements:
-  host: 
+  build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - python {{ python }}
     - setuptools
+    - cmake
     - swig
-    - cmake >=3.13
-    - numpy
     - boost {{ boost }}
+    - librttr
+    - numpy
+  host: 
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - python {{ python }}
+    - numpy
+    - boost
     - librttr
     - libmongoc >=1.15.1
   run:
