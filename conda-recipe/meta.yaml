@@ -14,7 +14,7 @@ build:
     string: py{{ PY_VER_MAJOR }}boost{{ boost }}{{ PY_VER_MINOR }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
 
 requirements:
-  build:
+  host: 
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - python {{ python }}
@@ -25,14 +25,6 @@ requirements:
     - librttr
     - libmongoc >=1.15.1
     - numpy
-  host: 
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - python {{ python }}
-    - numpy
-    - boost
-    - librttr
-    - libmongoc
   run:
     - python
     - {{ pin_compatible('numpy') }}
