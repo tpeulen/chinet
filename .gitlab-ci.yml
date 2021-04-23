@@ -13,13 +13,12 @@ build:linux:
   stage: build
   tags:
     - linux
-  image: continuumio/miniconda3:latest
+  image: condaforge/mambaforge:latest
   before_script:
     - apt update -yq && apt -yq install build-essential
   script:
-    - source activate
     - cp .condarc ~/.condarc
-    - conda install mamba=$MAMBA_VERSION boa conda-verify doxygen cmake
+    - mamba install boa conda-verify doxygen
     - conda mambabuild conda-recipe --output-folder bld-dir
   artifacts:
     expire_in: 7 days
