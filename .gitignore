@@ -9,3 +9,4 @@ cmake-build-*/
 /doc/example/
 documentation.i
 __pycache__
+bld-dir/
