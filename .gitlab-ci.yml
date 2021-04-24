@@ -15,10 +15,10 @@ build:linux:
     - linux
   image: condaforge/mambaforge:latest
   before_script:
-    - apt update -yq && apt -yq install build-essential
+    - apt update -yq && apt -yq install build-essential doxygen
   script:
     - conda config --add channels tpeulen
-    - mamba install boa conda-verify doxygen
+    - mamba install -y boa
     - conda mambabuild conda-recipe --output-folder bld-dir
   artifacts:
     expire_in: 7 days
