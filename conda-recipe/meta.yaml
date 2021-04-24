@@ -43,11 +43,10 @@ test:
     - chinet
   requires:
     - nose
-    - python
-    - mongodb
+    - python    
   commands:
-    - cd test && mkdir db
-    - mongod --dbpath db &&
+    # - mongodb # mongodb only on py37 -> use system mongodb
+    # - cd test && mkdir db && mongod --dbpath db &&
     - nosetests
 
 about:
