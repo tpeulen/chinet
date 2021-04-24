@@ -18,7 +18,6 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - python {{ python }}
-    - doxygen
     - cmake
     - swig
     - boost {{ boost }}
@@ -44,7 +43,7 @@ test:
     - chinet
   requires:
     - nose
-    - python {{ python }}
+    - python
     - mongodb
   commands:
     - cd test && mkdir db
