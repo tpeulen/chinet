@@ -19,7 +19,7 @@ build:linux:
   script:
     - source activate
     - conda config --add channels tpeulen
-    - mamba install boa conda-verify doxygen
+    - mamba install boa conda-verify
     - conda mambabuild conda-recipe --output-folder bld-dir
   artifacts:
     expire_in: 7 days

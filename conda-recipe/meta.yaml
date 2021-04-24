@@ -14,11 +14,11 @@ build:
     string: py{{ PY_VER_MAJOR }}boost{{ boost }}{{ PY_VER_MINOR }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
 
 requirements:
-  host: 
+  host:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - python {{ python }}
-    - setuptools
+    - doxygen
     - cmake
     - swig
     - boost {{ boost }}
@@ -38,6 +38,7 @@ test:
     - chinet
   requires:
     - nose
+    - python {{ python }}
     - mongodb
   commands:
     - cd test && mkdir db
