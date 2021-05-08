@@ -17,19 +17,19 @@ requirements:
   host:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - python {{ python }}
     - cmake
     - swig
+    - python {{ python }}
     - boost {{ boost }}
     - librttr
     - libmongoc >=1.15.1
     - numpy
   run:
     - python
+    - librttr
+    - libmongoc
     - {{ pin_compatible('numpy') }}
-    - {{ pin_compatible('librttr') }}
     - {{ pin_compatible('boost', max_pin='x.x.x') }}
-    - {{ pin_compatible('libmongoc') }}
     - llvm-openmp  # [osx]
 
 test:

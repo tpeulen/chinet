@@ -12,6 +12,7 @@ build:linux:
   before_script:
     - apt update -yq && apt -yq install build-essential doxygen
   script:
+    - conda activate
     - conda config --add channels tpeulen
     - mamba install -y boa
     - conda mambabuild conda-recipe --output-folder bld-dir
@@ -24,6 +25,7 @@ build:windows:
   tags:
     - win
   script:
+    - conda activate
     - conda config --add channels tpeulen
     - mamba install -y boa
     - conda mambabuild conda-recipe --output-folder bld-dir
