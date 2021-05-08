@@ -4,11 +4,6 @@ stages:
 - deploy
 - Trigger-cross-projects
 
-# Change pip's cache directory to be inside the project directory since we can
-# only cache local items.
-variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-
 build:linux:
   stage: build
   tags:
@@ -21,23 +16,34 @@ build:linux:
     - mamba install -y boa
     - conda mambabuild conda-recipe --output-folder bld-dir
   artifacts:
-    expire_in: 7 days
     paths:
       - bld-dir/
 
-deploy:
+build:windows:
+  stage: build  
+  tags:
+    - win
+  script:
+    - conda config --add channels tpeulen
+    - mamba install -y boa
+    - conda mambabuild conda-recipe --output-folder bld-dir
+  artifacts:
+    paths:
+      - bld-dir/
+
+deploy:conda:
   stage: deploy
-  image: continuumio/miniconda3:latest
+  image: condaforge/mambaforge:latest
   tags:
     - linux
   dependencies:
     - build:linux
+    - build:windows
   script:
     - source activate
-    - conda install anaconda-client
+    - mamba install anaconda-client
     - if [[ "$CI_COMMIT_REF_NAME" == "master" ]]; then DEPLOY_LABEL=main; else DEPLOY_LABEL=nightly; fi
-    - anaconda -t ${ANACONDA_API_TOKEN} upload -l ${DEPLOY_LABEL} -u ${CONDA_USER} --force bld-dir/linux-64/*.tar.bz2
-
+    - anaconda -t ${ANACONDA_API_TOKEN} upload -l ${DEPLOY_LABEL} -u ${CONDA_USER} --force bld-dir/**/*.tar.bz2
 
 # Downstream projects
 chisurf:
