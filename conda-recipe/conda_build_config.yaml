@@ -1,3 +1,5 @@
+CONDA_BUILD_SYSROOT:
+  - /opt/MacOSX10.10.sdk # [osx]
 boost: 
   # # Boost versions for py27
   # # are in conda-forge
