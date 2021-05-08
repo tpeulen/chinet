@@ -42,13 +42,13 @@ requirements:
 test:
   imports:
     - chinet
-  requires:
-    - nose
-    - python    
-  commands:
-    # - mongodb # mongodb only on py37 -> use system mongodb
-    # - cd test && mkdir db && mongod --dbpath db &&
-    - nosetests
+  #requires:
+  #  - nose
+  #  - python    
+  #commands:
+  #  # - mongodb # mongodb only on py37 -> use system mongodb
+  #  # - cd test && mkdir db && mongod --dbpath db &&
+  #  - nosetests
 
 about:
   home: https://github.com/tpeulen/chinet
