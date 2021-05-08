@@ -43,13 +43,29 @@ build:osx:
     paths:
       - bld-dir/
 
+test:linux:
+  stage: build
+  tags:
+    - linux
+  image: condaforge/mambaforge:latest
+  dependencies:
+    - build:linux
+  script:
+    - conda config --add channels tpeulen
+    - mamba install -y python=3.7 mongodb
+    - cd test && mkdir db && mongod --dbpath db &&
+    - nosetests
+  artifacts:
+    paths:
+      - bld-dir/
+
 deploy:conda:
   stage: deploy
   image: condaforge/mambaforge:latest
   tags:
     - linux
   dependencies:
-    - build:linux
+    - test:linux
     - build:windows
     - build:osx
   script:
