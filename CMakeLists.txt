@@ -24,6 +24,34 @@ option(INSTALL "Install the library and the include files" ON)
 option(BUILD_PYTHON_INTERFACE "Build the python interface" ON)
 option(ENABLE_AVX "Build with AVX" ON)
 
+################################################################################
+###### Conda
+################################################################################
+
+## Check for Conda
+###########################
+IF(DEFINED ENV{CONDA_PREFIX})
+    FILE(TO_CMAKE_PATH "$ENV{CONDA_PREFIX}" CONDA_PATH)
+    SET(CMAKE_PREFIX_PATH "${CONDA_PATH}")
+    SET(ENV{PATH} "${CONDA_PATH}/bin;$ENV{PATH}")
+    # Define python_command that is used to call python and locate the python libraries
+    IF(MSVC)
+        SET(CMAKE_MODULE_PATH "${CONDA_PATH}/Library/cmake")
+        INCLUDE_DIRECTORIES(${CONDA_PATH}/Library/include)
+        LINK_DIRECTORIES(${CONDA_PATH}/Library/lib)
+        SET(python_command ${CONDA_PATH}/python.exe)
+    ELSE()
+        SET(CMAKE_MODULE_PATH "${CONDA_PATH}/include/cmake")
+        INCLUDE_DIRECTORIES(${CONDA_PATH}/include)
+        LINK_DIRECTORIES(${CONDA_PATH}}/lib)
+        SET(python_command ${CONDA_PATH}/bin/python)
+    ENDIF()
+    MESSAGE(STATUS "CONDA env seen: --[${CONDA_PATH}]--")
+ELSE()
+    MESSAGE(STATUS "No conda environment defined")
+ENDIF()
+SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
+MESSAGE(STATUS "CMAKE_MODULE_PATH='${CMAKE_MODULE_PATH}'")
 
 ################################################################################
 ###### Compiler flags
@@ -39,10 +67,11 @@ if(APPLE)
     ADD_DEFINITIONS(-stdlib=libc++)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
-    IF(ENABLE_AVX)
-        STRING(APPEND CMAKE_CXX_FLAGS " -march=native -Ofast -mavx -ffast-math -funroll-loops")
-        STRING(APPEND CMAKE_C_FLAGS " -march=native -Ofast -mavx -ffast-math -funroll-loops")
-    ENDIF(ENABLE_AVX)
+#    # Use no AVX on Apple
+#    IF(ENABLE_AVX)
+#        STRING(APPEND CMAKE_CXX_FLAGS " -march=native -Ofast -mavx -ffast-math -funroll-loops")
+#        STRING(APPEND CMAKE_C_FLAGS " -march=native -Ofast -mavx -ffast-math -funroll-loops")
+#    ENDIF(ENABLE_AVX)
 endif()
 if (MSVC)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++11")
@@ -72,15 +101,16 @@ endif (APPLE)
 IF (CMAKE_BUILD_TYPE STREQUAL "Release")
     MESSAGE("Release build")
     IF(MSVC)
-        ADD_COMPILE_OPTIONS(/w)
+        # see: https://stackoverflow.com/questions/58708772/cmake-project-in-visual-studio-gives-flag-override-warnings-command-line-warnin
+        string(REGEX REPLACE "/W[1||3|4]" "/w" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     ELSE()
         ADD_COMPILE_OPTIONS(-w)
     ENDIF()
 ELSE (CMAKE_BUILD_TYPE STREQUAL "Debug")
     MESSAGE("Debug build")
-    ADD_DEFINITIONS("-DCHINET_VERBOSE=1")
     ## Enable Compiler warnings
     #############################
+    ADD_DEFINITIONS("-DCHINET_VERBOSE=1")
     IF(MSVC)
         ADD_COMPILE_OPTIONS(/W4)
     ELSE()
@@ -98,8 +128,8 @@ ENDIF (CMAKE_BUILD_TYPE STREQUAL "Release")
 if (APPLE)
     # When using conda use CONDA_PREFIX
     if(DEFINED ENV{CONDA_PREFIX})
-        SET(OMP_INCLUDE_DIR "$ENV{CONDA_PREFIX}/include")
-        SET(OMP_LIB_DIR "$ENV{CONDA_PREFIX}/lib")
+        SET(OMP_INCLUDE_DIR "${CONDA_PATH}/include")
+        SET(OMP_LIB_DIR "${CONDA_PATH}/lib")
     else()
         SET(OMP_INCLUDE_DIR "/usr/local/opt/libomp/include")
         SET(OMP_LIB_DIR "/usr/local/opt/libomp/lib")
@@ -120,16 +150,37 @@ LINK_LIBRARIES(OpenMP::OpenMP_CXX)
 
 ## Boost
 ###########################
-FIND_PACKAGE(Boost 1.36 REQUIRED COMPONENTS date_time filesystem iostreams)
+IF(DEFINED ENV{CONDA_PREFIX})
+    MESSAGE("Using Conda Boost")
+    SET(Boost_NO_SYSTEM_PATHS ON)
+    SET(Boost_NO_BOOST_CMAKE ON)
+    SET(BOOST_ROOT ${CONDA_PATH})
+    SET(Boost_INCLUDE_DIR ${CONDA_PATH}/include)
+    SET(Boost_LIBRARY_DIR ${CONDA_PATH}/lib)
+    SET(Boost_USE_STATIC_LIBS OFF)
+    SET(Boost_USE_STATIC OFF)
+    SET(Boost_USE_MULTITHREAD)
+    IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        SET(Boost_DEBUG ON)
+        SET(Boost_DETAILED_FAILURE_MESSAGE ON)
+    ENDIF (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    IF (WIN32)
+        # Other root dir location
+        SET(BOOST_ROOT ${CONDA_PATH}/Library)
+        SET(Boost_INCLUDE_DIR ${CONDA_PATH}/Library/include)
+        SET(Boost_LIBRARY_DIR ${CONDA_PATH}/Library/lib)
+        # Win Boost Conda (Anaconda) uses static linking
+        # Conda-forge dynamic linking?
+        # SET(Boost_USE_STATIC_LIBS ON)
+        # SET(Boost_USE_STATIC ON)
+    ENDIF(WIN32)
+ENDIF()
+MESSAGE(${BOOST_ROOT})
+FIND_PACKAGE(Boost 1.36 REQUIRED COMPONENTS filesystem iostreams locale)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 LINK_LIBRARIES(${Boost_LIBRARIES})
 MESSAGE(${Boost_INCLUDE_DIRS})
 
-# Python
-###########################
-FIND_PACKAGE(Python)
-INCLUDE_DIRECTORIES(${Python_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${Python_NumPy_PATH})
 
 # RTTR
 ###########################

@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-
 import os
 import sys
 import platform
@@ -51,6 +50,7 @@ def build_swig_documentation():
 class CMakeBuild(build_ext):
 
     def run(self):
+        build_swig_documentation()
         for ext in self.extensions:
             self.build_extension(ext)
 
@@ -72,24 +72,10 @@ class CMakeBuild(build_ext):
         cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
         if platform.system() == "Windows":
             cmake_args += [
-                '-DBUILD_PYTHON_INTERFACE=ON',
                 '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), extdir),
                 '-GVisual Studio 14 2015 Win64'
             ]
         else:
-            # When using conda try to convince cmake to use
-            # the conda boost
-            CONDA_PREFIX = os.getenv('CONDA_PREFIX')
-            if CONDA_PREFIX is not None:
-                print("Conda prefix is: ", CONDA_PREFIX)
-                print("Convincing cmake to use the conda boost")
-                cmake_args += [
-                    '-DCMAKE_PREFIX_PATH=' + CONDA_PREFIX,
-                    '-DBOOST_ROOT=' + CONDA_PREFIX,
-                    '-DBoost_NO_SYSTEM_PATHS=ON',
-                    '-DBoost_DEBUG=ON',
-                    '-DBoost_DETAILED_FAILURE_MESSAGE=ON'
-                ]
             build_args += ['--', '-j8']
 
         env = os.environ.copy()
@@ -112,7 +98,6 @@ class CMakeBuild(build_ext):
             cwd=self.build_temp
         )
 
-build_swig_documentation()
 setup(
     name=NAME,
     version=VERSION,
