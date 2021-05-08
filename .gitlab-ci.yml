@@ -44,7 +44,7 @@ build:osx:
       - bld-dir/
 
 test:linux:
-  stage: build
+  stage: test
   tags:
     - linux
   image: condaforge/mambaforge:latest
