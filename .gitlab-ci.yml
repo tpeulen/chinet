@@ -31,6 +31,18 @@ build:windows:
     paths:
       - bld-dir/
 
+build:osx:
+  stage: build
+  tags:
+    - osx
+  script:
+    - conda config --add channels tpeulen
+    - mamba install -y boa
+    - conda mambabuild conda-recipe --output-folder bld-dir
+  artifacts:
+    paths:
+      - bld-dir/
+
 deploy:conda:
   stage: deploy
   image: condaforge/mambaforge:latest
@@ -39,6 +51,7 @@ deploy:conda:
   dependencies:
     - build:linux
     - build:windows
+    - build:osx
   script:
     - source activate
     - mamba install anaconda-client
