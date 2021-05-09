@@ -85,8 +85,8 @@ void Functions::convolve_sum_of_exponentials(
 
     double dt_half = dt / 2.0;
 
-    int n_points = MIN(n_out, n_irf);
-    int stop = MIN(n_points, convolution_stop);
+    int n_points = std::min(n_out, n_irf);
+    int stop = std::min(n_points, convolution_stop);
 
     for (int i = 0; i < stop; i++) {
         out[i] = 0;
@@ -121,8 +121,8 @@ void Functions::convolve_sum_of_exponentials_periodic(
         irfStart++;
     }
 
-    int n_points = MIN(n_out, n_irf);
-    stop = MIN(n_points, stop);
+    int n_points = std::min(n_out, n_irf);
+    stop = std::min(n_points, stop);
 
     for (int i = 0; i < stop; i++) {
         out[i] = 0;

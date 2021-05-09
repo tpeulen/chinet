@@ -24,15 +24,11 @@ requirements:
     - boost {{ boost }}
     - librttr
     - libmongoc >=1.15.1
-    - openssl
     - numpy
-    - pkg-config
   host:
     - python
-    - boost
     - librttr
     - libmongoc
-    - openssl
     - numpy
   run:
     - python
