@@ -26,6 +26,7 @@ requirements:
     - libmongoc >=1.15.1
     - openssl
     - numpy
+    - pkg-config
   host:
     - python
     - boost
@@ -35,10 +36,9 @@ requirements:
     - numpy
   run:
     - python
+    - {{ pin_compatible('numpy') }}
     - librttr
     - libmongoc
-    - {{ pin_compatible('numpy') }}
-    - {{ pin_compatible('boost', max_pin='x.x.x') }}
     - llvm-openmp  # [osx]
 
 test:

@@ -67,11 +67,11 @@ if(APPLE)
     ADD_DEFINITIONS(-stdlib=libc++)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
-#    # Use no AVX on Apple
-#    IF(ENABLE_AVX)
-#        STRING(APPEND CMAKE_CXX_FLAGS " -march=native -Ofast -mavx -ffast-math -funroll-loops")
-#        STRING(APPEND CMAKE_C_FLAGS " -march=native -Ofast -mavx -ffast-math -funroll-loops")
-#    ENDIF(ENABLE_AVX)
+    # Use no AVX on Apple
+    IF(ENABLE_AVX)
+        STRING(APPEND CMAKE_CXX_FLAGS " -march=native -Ofast -mavx -ffast-math -funroll-loops")
+        STRING(APPEND CMAKE_C_FLAGS " -march=native -Ofast -mavx -ffast-math -funroll-loops")
+    ENDIF(ENABLE_AVX)
 endif()
 if (MSVC)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++11")
@@ -181,11 +181,11 @@ INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 LINK_LIBRARIES(${Boost_LIBRARIES})
 MESSAGE(${Boost_INCLUDE_DIRS})
 
-
 # RTTR
 ###########################
 FIND_PACKAGE(RTTR CONFIG REQUIRED Core)
 LINK_LIBRARIES(RTTR::Core)
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 MESSAGE ("-- Found librttr version \"${PACKAGE_VERSION}\"")
 
 # libmongoc
@@ -219,10 +219,3 @@ INSTALL(
         )
 ENDIF(INSTALL)
 
-## Compiler warnings
-########################
-if(MSVC)
-    target_compile_options(${PROJECT_NAME} PRIVATE /Wall)
-else()
-    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
-endif()
