@@ -27,12 +27,14 @@ requirements:
     - numpy
   host:
     - python
+    - boost
     - librttr
     - libmongoc
     - numpy
   run:
     - python
-    - {{ pin_compatible('numpy') }}
+    - numpy
+    - boost
     - librttr
     - libmongoc
     - llvm-openmp  # [osx]
