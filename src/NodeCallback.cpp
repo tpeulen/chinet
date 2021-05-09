@@ -51,7 +51,7 @@ void combine(
     std::clog << "-- Determining input vector with smallest length." << std::endl;
 #endif
     for(auto &o : inputs){
-        n_elements = MIN(n_elements, o.second->current_size());
+        n_elements = std::min(n_elements, o.second->current_size());
     }
 #if CHINET_VERBOSE
     std::clog << "-- The smallest input vector has a length of: " << n_elements << std::endl;

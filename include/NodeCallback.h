@@ -1,12 +1,8 @@
-//
-// Created by thomas on 4/3/19.
-//
-
 #ifndef chinet_NODECALLBACK_H
 #define chinet_NODECALLBACK_H
 
 #include <functional>
-#include <algorithm>
+#include <algorithm> /* std::min std::max */
 #include <rttr/registration>
 
 #include "Port.h"

@@ -248,8 +248,8 @@ namespace Functions {
      */
     template <typename T>
     std::vector<T> get_vector_of_min_size(std::vector<T> a, std::vector<T>b){
-        size_t size_min = MIN(a.size(), b.size());
-        size_t size_max = MAX(a.size(), b.size());
+        size_t size_min = std::min(a.size(), b.size());
+        size_t size_max = std::max(a.size(), b.size());
         if(size_max != size_min){
             std::cerr << "The vectors have differ in length: " << size_min << "<" << size_max << std::endl;
         }
