@@ -1,14 +1,8 @@
-//
-// Created by thomas on 3/29/19.
-//
-
 #ifndef chinet_FUNCTIONS_H
 #define chinet_FUNCTIONS_H
-#define MAX(a, b) (((a) > (b)) ? (a) : (b))
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
 #include <vector>
-#include <algorithm>
+#include <algorithm>  /* std::min, STD::max */
 #include <math.h>
 #include <iostream>
 #include <chrono>
@@ -151,7 +145,7 @@ namespace Functions {
     {
         for(int i = 0; i<n_values; i++)
         {
-            values[i] = MIN(MAX(values[i], lower_bound), upper_bound);
+            values[i] = std::min(std::max(values[i], lower_bound), upper_bound);
         }
     }
 

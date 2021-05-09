@@ -31,11 +31,9 @@ IF(BUILD_PYTHON_INTERFACE)
 
     TARGET_LINK_LIBRARIES(
             ${MODULE_NAME}
-            # ${HDF5_LIBRARIES}
             ${PYTHON_LIBRARY}
             ${BSON_LIBRARIES}
             ${CMAKE_THREAD_LIBS_INIT}
-            # ${IMP_kernel_LIBRARY} ${IMP_core_LIBRARY}
     )
 
     IF (NOT PYTHON_LINK_LIBRARIES)

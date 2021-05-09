@@ -3,14 +3,10 @@
 
 #include <cstdint>
 #include <memory>
-#include <algorithm>
+#include <algorithm> /* std::max, std::min */
 #include <cmath>
 #include <cstdlib>
 
-// #include <IMP.h>
-// #include <IMP/algebra.h>
-// #include <IMP/core.h>
-// #include <IMP/flags.h>
 
 #include "CNode.h"
 

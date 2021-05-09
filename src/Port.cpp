@@ -9,7 +9,7 @@ std::shared_ptr<Port> Port::operator+(
 #if CHINET_VERBOSE
     std::clog << "ADDING PORTS" << std::endl;
 #endif
-    int new_value_type = MAX(value_type, v->value_type);
+    int new_value_type = std::max(value_type, v->value_type);
 #if CHINET_VERBOSE
     std::clog << "-- Value type of resulting port: " << new_value_type << std::endl;
 #endif
@@ -200,8 +200,8 @@ void Port::set_bounds(double *input, int n_input)
 {
     if (n_input >= 2) {
         bounds_.clear();
-        double lower = MIN(input[0], input[1]);
-        double upper = MAX(input[0], input[1]);
+        double lower = std::min(input[0], input[1]);
+        double upper = std::max(input[0], input[1]);
         bounds_.push_back(lower);
         bounds_.push_back(upper);
     }
