@@ -52,12 +52,10 @@ test:linux:
     - build:linux
   script:
     - mamba install -y python=3.7 mongodb nose
+    - conda search --channel file://bld-dir --override-channels
     - mamba install chinet
     - cd test && mkdir db && mongod --dbpath db
     - nosetests
-  artifacts:
-    paths:
-      - bld-dir/
 
 deploy:conda:
   stage: deploy
