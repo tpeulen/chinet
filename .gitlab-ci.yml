@@ -51,8 +51,8 @@ test:linux:
   dependencies:
     - build:linux
   script:
-    - mamba install -y python=3.7 chinet mongodb nose
     - conda config --add channels "file://`pwd`/bld-dir"
+    - mamba install -y python=3.7 chinet mongodb nose
     - cd test && mkdir db && mongod --dbpath db
     - nosetests
 
