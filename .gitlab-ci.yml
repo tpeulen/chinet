@@ -51,9 +51,9 @@ test:linux:
   dependencies:
     - build:linux
   script:
-    - conda config --add channels tpeulen
     - mamba install -y python=3.7 mongodb nose
-    - cd test && mkdir db && mongod --dbpath db &&
+    - mamba install chinet
+    - cd test && mkdir db && mongod --dbpath db
     - nosetests
   artifacts:
     paths:
