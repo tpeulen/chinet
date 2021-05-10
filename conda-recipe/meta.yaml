@@ -26,8 +26,8 @@ requirements:
     - libmongoc >=1.15.1
     - numpy
   host:
-    - python
-    - boost
+    - python {{ python }}
+    - boost {{ boost }}
     - librttr
     - libmongoc
     - numpy
