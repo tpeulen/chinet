@@ -1,3 +1,4 @@
+git submodule update --recursive --init --remote
 rmdir build /s /q
 cd doc
 doxygen
