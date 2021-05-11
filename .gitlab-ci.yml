@@ -24,9 +24,9 @@ build:windows:
   tags:
     - win
   script:
-    - conda config --add channels tpeulen
-    - mamba install -y boa
-    - conda mambabuild conda-recipe --output-folder bld-dir
+    - git clone https://gitlab.peulen.xyz/build/conda_config
+    - /conda_config/setup.bat
+    - /conda_config/build.bat
   artifacts:
     paths:
       - bld-dir/
