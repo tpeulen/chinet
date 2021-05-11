@@ -272,10 +272,12 @@ protected:
             bson_oid_t *oid
             );
 
+
 public:
 
-    MongoObject(std::string name="");
     ~MongoObject();
+
+    MongoObject(std::string name="");
 
     //! Connects the instance of @class MongoObject to a database
     /*!

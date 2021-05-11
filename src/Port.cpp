@@ -25,7 +25,7 @@ std::shared_ptr<Port> Port::operator+(
 #endif
     auto node = new Node();
     node->set_name(name);
-    node->add_input_port(this->get_name(), getptr());
+    node->add_input_port(this->get_name(), get_ptr());
     node->add_input_port(v->get_name(), v);
     node->add_output_port(name, re);
     if(new_value_type == 0){
@@ -45,7 +45,7 @@ std::shared_ptr<Port> Port::operator*(std::shared_ptr<Port> v)
     auto node = new Node();
     std::string name = this->get_name()  + "+" + v->get_name();
     node->set_name(name);
-    node->add_input_port(this->get_name(), getptr());
+    node->add_input_port(this->get_name(), get_ptr());
     node->add_input_port(v->get_name(), v);
     node->add_output_port(name, re);
     if(this->get_value_type() == 0){
@@ -154,6 +154,10 @@ bool Port::read_from_db(const std::string &oid_string)
         }
     }
     return re;
+}
+
+std::shared_ptr<Port> Port::get_ptr(){
+    return std::dynamic_pointer_cast<Port>(shared_from_this());
 }
 
 bool Port::write_to_db()

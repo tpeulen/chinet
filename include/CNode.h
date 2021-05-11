@@ -1,8 +1,6 @@
 #ifndef chinet_Node_H
 #define chinet_Node_H
 
-#define CHINET_VERSION "0.0.8"
-//#define CHINET_VERBOSE true
 
 #include <string>
 #include <vector>

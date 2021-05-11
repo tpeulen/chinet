@@ -7,28 +7,20 @@
 #include <cmath>
 #include <cstdlib>
 
-
 #include "CNode.h"
 
 class Node;
 
 
-class Port :
-        public MongoObject,
-        std::enable_shared_from_this<Port>
-{
+class Port : public MongoObject {
 
 private:
-    std::shared_ptr<Port> shared_this;
-
     void *buffer_;
     bool own_buffer = false;
     int n_buffer_elements_ = 0;
     int buffer_element_size_ = 1;
     std::vector<double> bounds_{};
     Node* node_ = nullptr;
-    // IMP::Model* imp_model = nullptr;
-    // IMP::Particle* imp_particle;
 
     /*!
      * @brief This attribute can point to another Port (default value nullptr).
@@ -76,13 +68,11 @@ private:
 
 public:
 
-    std::shared_ptr<Port> getptr() {
-        return shared_this;
-    }
-
     size_t current_size() {
         return n_buffer_elements_;
     }
+
+    virtual std::shared_ptr<Port> get_ptr();
 
     // Constructor & Destructor
     //--------------------------------------------------------------------
@@ -103,7 +93,6 @@ public:
             int value_type = 1,
             std::string name = ""
     ) : MongoObject(name) {
-        shared_this = std::shared_ptr<Port>(this, [](Port *) {});
         append_string(&document, "type", "port");
         bson_append_bool(&document, "is_output", 9, false);
         bson_append_bool(&document, "is_fixed", 8, false);

@@ -77,15 +77,13 @@ endif (APPLE)
 
 # Debug build detection
 ###########################
-IF (CMAKE_BUILD_TYPE STREQUAL "Release")
-    MESSAGE("Release build")
-    IF(MSVC)
-        # see: https://stackoverflow.com/questions/58708772/cmake-project-in-visual-studio-gives-flag-override-warnings-command-line-warnin
-        string(REGEX REPLACE "/W[1||3|4]" "/w" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    ELSE()
-        ADD_COMPILE_OPTIONS(-w)
-    ENDIF()
-ELSE (CMAKE_BUILD_TYPE STREQUAL "Debug")
+IF(MSVC)
+    # see: https://stackoverflow.com/questions/58708772/cmake-project-in-visual-studio-gives-flag-override-warnings-command-line-warnin
+    string(REGEX REPLACE "/W[1||3|4]" "/w" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+ELSE()
+    ADD_COMPILE_OPTIONS(-w)
+ENDIF()
+IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
     MESSAGE("Debug build")
     ## Enable Compiler warnings
     #############################
@@ -95,7 +93,7 @@ ELSE (CMAKE_BUILD_TYPE STREQUAL "Debug")
     ELSE()
         ADD_COMPILE_OPTIONS(-Wall -Wextra -pedantic)
     ENDIF()
-ENDIF (CMAKE_BUILD_TYPE STREQUAL "Release")
+ENDIF (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 
 ################################################################################
@@ -106,13 +104,8 @@ ENDIF (CMAKE_BUILD_TYPE STREQUAL "Release")
 ###########################
 if (APPLE)
     # When using conda use CONDA_PREFIX
-    if(DEFINED ENV{CONDA_PREFIX})
-        SET(OMP_INCLUDE_DIR "${CONDA_PATH}/include")
-        SET(OMP_LIB_DIR "${CONDA_PATH}/lib")
-    else()
-        SET(OMP_INCLUDE_DIR "/usr/local/opt/libomp/include")
-        SET(OMP_LIB_DIR "/usr/local/opt/libomp/lib")
-    endif()
+    SET(OMP_INCLUDE_DIR "/usr/local/opt/libomp/include")
+    SET(OMP_LIB_DIR "/usr/local/opt/libomp/lib")
     # dirty hack to make OpenMP work see:
     # https://gitlab.kitware.com/cmake/cmake/issues/18098
     set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I${OMP_INCLUDE_DIR}" CACHE INTERNAL "OpenMP flags for Xcode toolchain.")
