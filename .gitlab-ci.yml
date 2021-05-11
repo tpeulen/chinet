@@ -56,8 +56,9 @@ test:linux:
     # for chinet
     - conda config --add channels "file://`pwd`/bld-dir"
     - mamba install -y python=3.7 chinet mongodb nose
-    - cd test && mkdir db && mongod --dbpath db
+    - cd test & mkdir db & nohup mongod --dbpath db &
     - nosetests
+    - pkill mongodb
 
 deploy:conda:
   stage: deploy
