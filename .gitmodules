@@ -1,0 +1,3 @@
+[submodule "conda_config"]
+	path = conda_config
+	url = https://gitlab.peulen.xyz/build/conda_config
