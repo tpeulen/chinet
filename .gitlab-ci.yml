@@ -11,7 +11,7 @@ build:linux:
   image: condaforge/mambaforge:latest
   before_script:
     - apt update -yq && apt -yq install build-essential doxygen git
-    - git submodule update --recursive --remote
+    - git submodule update --recursive --init --remote
   script:
     - ./tools/setup.sh
     - ./tools/build.sh
@@ -23,8 +23,9 @@ build:windows:
   stage: build  
   tags:
     - win
+  before_script:
+    - git submodule update --recursive --init --remote
   script:
-    - git submodule update --recursive --remote
     - .\tools\setup.bat
     - .\tools\build.bat
   artifacts:
@@ -35,8 +36,9 @@ build:osx:
   stage: build
   tags:
     - osx
+  before_script:
+    - git submodule update --recursive --init --remote
   script:
-    - git submodule update --recursive --remote
     - ./tools/setup.sh
     - ./tools/build.sh
   artifacts:
@@ -51,7 +53,7 @@ test:linux:
   dependencies:
     - build:linux
   before_script:
-    - git submodule update --recursive --remote
+    - git submodule update --recursive --init --remote
   script:
     # for libmongoc
     - conda config --add channels tpeulen
@@ -73,7 +75,7 @@ deploy:conda:
     - build:windows
     - build:osx
   before_script:
-    - git submodule update --recursive --remote
+    - git submodule update --recursive --init --remote
   script:
     - ./tools/deploy.sh
 
