@@ -1,6 +1,16 @@
 %module(directors="1", package="chinet") chinet
 %feature("kwargs", 1);
+
+#ifdef CHINET_VERBOSE
+// Warning 509: Overloaded method ignored,
+// Warning 511: Ignore overloaded functions
+// Warning 401: Nothing known about base class
+// Warning 453: No typemaps are defined. (Some typemaps are defined and not used)
+// Warning 319: No access specifier given for base class (std::enable_shared_from_this)
+// Warning 362: operator= ignored
 #pragma SWIG nowarn=314,319,503,511,401,389
+#endif
+
 %include "documentation.i"
 %{
     #define SWIG_FILE_WITH_INIT
