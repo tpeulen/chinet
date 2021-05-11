@@ -14,6 +14,7 @@
 %include "documentation.i"
 %{
     #define SWIG_FILE_WITH_INIT
+
     #include "../include/Functions.h"
     #include "../include/CNode.h"
     #include "../include/MongoObject.h"
@@ -82,6 +83,7 @@
 
 }
 
+%include "../include/info.h"
 %include "mongo.i"
 %include "port.i"
 %include "node.i"
