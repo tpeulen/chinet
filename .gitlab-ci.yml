@@ -10,11 +10,11 @@ build:linux:
     - linux
   image: condaforge/mambaforge:latest
   before_script:
-    - apt update -yq && apt -yq install build-essential doxygen
+    - apt update -yq && apt -yq install build-essential doxygen git
   script:
-    - conda config --add channels tpeulen
-    - mamba install -y boa
-    - conda mambabuild conda-recipe --output-folder bld-dir
+    - git clone https://gitlab.peulen.xyz/build/conda_config
+    - ./conda_config/setup.sh
+    - ./conda_config/build.sh
   artifacts:
     paths:
       - bld-dir/
@@ -36,9 +36,9 @@ build:osx:
   tags:
     - osx
   script:
-    - conda config --add channels tpeulen
-    - mamba install -y boa
-    - conda mambabuild conda-recipe --output-folder bld-dir
+    - git clone https://gitlab.peulen.xyz/build/conda_config
+    - ./conda_config/setup.sh
+    - ./conda_config/build.sh
   artifacts:
     paths:
       - bld-dir/
@@ -55,8 +55,9 @@ test:linux:
     - conda config --add channels tpeulen
     # for chinet
     - conda config --add channels "file://`pwd`/bld-dir"
-    - mamba install -y python=3.7 chinet mongodb nose
-    - cd test & mkdir db & nohup mongod --dbpath db &
+    - mamba install -y python=3.7 chinet mongodb nose numba
+    - mkdir db & nohup mongod --dbpath db &
+    - cd test
     - nosetests
     - pkill mongodb
 
@@ -70,10 +71,8 @@ deploy:conda:
     - build:windows
     - build:osx
   script:
-    - source activate
-    - mamba install anaconda-client
-    - if [[ "$CI_COMMIT_REF_NAME" == "master" ]]; then DEPLOY_LABEL=main; else DEPLOY_LABEL=nightly; fi
-    - anaconda -t ${ANACONDA_API_TOKEN} upload -l ${DEPLOY_LABEL} -u ${CONDA_USER} --force bld-dir/**/*.tar.bz2
+    - git clone https://gitlab.peulen.xyz/build/conda_config
+    - ./conda_config/deploy.sh
 
 # Downstream projects
 chisurf:
