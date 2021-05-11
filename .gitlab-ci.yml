@@ -12,8 +12,8 @@ build:linux:
   before_script:
     - apt update -yq && apt -yq install build-essential doxygen git
   script:
-    - ./conda_config/setup.sh
-    - ./conda_config/build.sh
+    - ./tools/setup.sh
+    - ./tools/build.sh
   artifacts:
     paths:
       - bld-dir/
@@ -23,8 +23,8 @@ build:windows:
   tags:
     - win
   script:
-    - .\conda_config\setup.bat
-    - .\conda_config\build.bat
+    - .\tools\setup.bat
+    - .\tools\build.bat
   artifacts:
     paths:
       - bld-dir/
@@ -34,9 +34,9 @@ build:osx:
   tags:
     - osx
   script:
-    - git clone https://gitlab.peulen.xyz/build/conda_config
-    - ./conda_config/setup.sh
-    - ./conda_config/build.sh
+    - git clone https://gitlab.peulen.xyz/build/tools
+    - ./tools/setup.sh
+    - ./tools/build.sh
   artifacts:
     paths:
       - bld-dir/
@@ -69,8 +69,8 @@ deploy:conda:
     - build:windows
     - build:osx
   script:
-    - git clone https://gitlab.peulen.xyz/build/conda_config
-    - ./conda_config/deploy.sh
+    - git clone https://gitlab.peulen.xyz/build/tools
+    - ./tools/deploy.sh
 
 # Downstream projects
 chisurf:
