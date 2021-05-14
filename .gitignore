@@ -7,6 +7,5 @@ cmake-build-*/
 # Documentation and tools
 /doc/_build/
 /doc/example/
-documentation.i
 __pycache__
 bld-dir/

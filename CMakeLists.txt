@@ -22,15 +22,9 @@ endif()
 ################################################################################
 option(INSTALL "Install the library and the include files" ON)
 option(BUILD_PYTHON_INTERFACE "Build the python interface" ON)
+OPTION(BUILD_PYTHON_DOCS "Build documentation of SWIG Python interface" ON)
 option(ENABLE_AVX "Build with AVX" ON)
 
-################################################################################
-###### Conda
-################################################################################
-
-## Check for Conda
-###########################
-FIND_PACKAGE(Conda)
 
 ################################################################################
 ###### Compiler flags
@@ -100,6 +94,10 @@ ENDIF (CMAKE_BUILD_TYPE STREQUAL "Debug")
 ###### INCLUDES AND LIBRARIES
 ################################################################################
 
+## Check for Conda
+###########################
+FIND_PACKAGE(Conda)
+
 ## OpenMP
 ###########################
 if (APPLE)
@@ -153,7 +151,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 IF(BUILD_PYTHON_INTERFACE)
-    ADD_SUBDIRECTORY(pyext)
+    ADD_SUBDIRECTORY(ext)
 ENDIF(BUILD_PYTHON_INTERFACE)
 
 IF(INSTALL)
