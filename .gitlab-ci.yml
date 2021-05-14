@@ -56,7 +56,7 @@ test:linux:
     - conda config --add channels tpeulen
     # for chinet
     - conda config --add channels "file://`pwd`/bld-dir"
-    - mamba install -y python=3.7 chinet mongodb nose numba
+    - mamba install -y python=3.8 chinet mongodb nose numba
     - mkdir db & nohup mongod --dbpath db &
     - cd test
     - nosetests
