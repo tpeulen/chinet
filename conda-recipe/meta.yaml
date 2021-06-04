@@ -17,15 +17,12 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - python {{ python }}
-    - boost-cpp {{ boost }}
-    - numpy
+  host:
     - doxygen
     - cmake
     - swig
-  host:
-    - python
-    - boost-cpp
+    - python {{ python }}
+    - boost-cpp {{ boost }}
     - libmongoc
     - librttr
     - numpy
