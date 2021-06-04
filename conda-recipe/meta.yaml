@@ -17,9 +17,8 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - python {{ python }}
-    - numpy
   host:
+    - python {{ python }}
     - cmake
     - doxygen
     - swig
