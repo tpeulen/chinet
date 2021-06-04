@@ -18,13 +18,14 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - python {{ python }}
+    - boost {{ boost }}
     - numpy
+    - doxygen
     - cmake
     - swig
   host:
     - python
-    - doxygen
-    - boost {{ boost }}
+    - boost
     - libmongoc
     - librttr
     - numpy
