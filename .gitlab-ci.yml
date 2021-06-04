@@ -4,41 +4,45 @@ stages:
 - deploy
 - Trigger-cross-projects
 
+.BuildTemplate: &build_template
+  artifacts:
+    paths:
+      - bld-dir/
 .WinTemplate:  &win_template
+  << : *build_template
   tags:
     - win
+  before_script:
+    - brew install wget git git-lfs
+    - git submodule update --init --recursive --remote
 .OSXTemplate:  &osx_template
+  << : *build_template
   tags:
     - osx
   before_script:
     - brew install wget git git-lfs
+    - git submodule update --init --recursive --remote
 .LinuxTemplate:  &linux_template
+  << : *build_template
   tags:
     - linux
   image: condaforge/mambaforge:latest
   before_script:
-    - apt update -yq && apt -yq install build-essential procps wget git git-lfs libglu1-mesa-dev freeglut3-dev mesa-common-dev libusb-dev
-.BuildTemplate: &build_template
-  before_script:
     - git submodule update --init --recursive --remote
-  artifacts:
-    paths:
-      - bld-dir/
+    - apt update -yq && apt -yq install build-essential procps wget git git-lfs libglu1-mesa-dev freeglut3-dev mesa-common-dev libusb-dev
 
 build:linux:
-  << : [*build_template, *linux_template]
+  << : *linux_template
   stage: build
   script:
     - ./tools/build.sh
-
 build:windows:
-  <<: [*build_template, *win_template]
+  << : *win_template
   stage: build  
   script:
     - .\tools\build.bat
-
 build:osx:
-  <<: [*build_template, *osx_template]
+  << : *osx_template
   stage: build
   script:
     - ./tools/build.sh
