@@ -13,7 +13,6 @@ stages:
   tags:
     - win
   before_script:
-    - brew install wget git git-lfs
     - git submodule update --init --recursive --remote
 .OSXTemplate:  &osx_template
   << : *build_template
