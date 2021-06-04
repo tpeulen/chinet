@@ -18,9 +18,10 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - python {{ python }}
+    - numpy
   host:
-    - doxygen
     - cmake
+    - doxygen
     - swig
     - python
     - boost-cpp {{ boost }}
