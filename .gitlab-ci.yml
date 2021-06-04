@@ -26,8 +26,8 @@ stages:
       - bld-dir/
 
 build:linux:
-  <<: *linux_template
   <<: *build_template
+  <<: *linux_template
   stage: build
   script:
     - ./tools/build.sh
