@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 git submodule update --recursive --init --remote
 rm -r -f build
 cd doc
