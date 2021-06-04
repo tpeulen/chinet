@@ -17,13 +17,12 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - cmake
-    - doxygen
   host:
     - python {{ python }}
-    - boost {{ boost }}
+    - cmake
     - swig
-    - libmongoc >=1.15.1
+    - boost {{ boost }}
+    - doxygen
     - libmongoc
     - numpy
   run:
