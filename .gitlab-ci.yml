@@ -4,53 +4,53 @@ stages:
 - deploy
 - Trigger-cross-projects
 
-build:linux:
-  stage: build
-  tags:
-    - linux
-  image: condaforge/mambaforge:latest
-  before_script:
-    - apt update -yq && apt -yq install build-essential doxygen git
-    - git submodule update --init --recursive --remote
-  script:
-    - ./tools/build.sh
-  artifacts:
-    paths:
-      - bld-dir/
-
-build:windows:
-  stage: build  
+.WinTemplate:  &win_template
   tags:
     - win
-  before_script:
-    - git submodule update --init --recursive --remote
-  script:
-    - .\tools\build.bat
-  artifacts:
-    paths:
-      - bld-dir/
-
-build:osx:
-  stage: build
+.OSXTemplate:  &osx_template
   tags:
     - osx
   before_script:
+    - brew install wget git git-lfs
+.LinuxTemplate:  &linux_template
+  tags:
+    - linux
+  image: condaforge/mambaforge:latest
+  before_script:
+    - apt update -yq && apt -yq install build-essential procps wget git git-lfs libglu1-mesa-dev freeglut3-dev mesa-common-dev libusb-dev
+.BuildTemplate: &build_template
+  before_script:
     - git submodule update --init --recursive --remote
-  script:
-    - ./tools/build.sh
   artifacts:
     paths:
       - bld-dir/
 
+build:linux:
+  <<: *linux_template
+  <<: *build_template
+  stage: build
+  script:
+    - ./tools/build.sh
+
+build:windows:
+  <<: *win_template
+  <<: *build_template
+  stage: build  
+  script:
+    - .\tools\build.bat
+
+build:osx:
+  <<: *osx_template
+  <<: *build_template
+  stage: build
+  script:
+    - ./tools/build.sh
+
 test:linux:
   stage: test
-  tags:
-    - linux
-  image: condaforge/mambaforge:latest
+  <<: *linux_template
   dependencies:
     - build:linux
-  before_script:
-    - git submodule update --init --recursive --remote
   script:
     # for libmongoc
     - conda config --add channels tpeulen
@@ -62,16 +62,12 @@ test:linux:
     - nosetests
 
 deploy:conda:
+  <<: *linux_template
   stage: deploy
-  image: condaforge/mambaforge:latest
-  tags:
-    - linux
   dependencies:
     - test:linux
     - build:windows
     - build:osx
-  before_script:
-    - git submodule update --init --recursive --remote
   script:
     - ./tools/deploy.sh
 

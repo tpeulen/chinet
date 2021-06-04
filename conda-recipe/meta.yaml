@@ -24,6 +24,7 @@ requirements:
     - boost {{ boost }}
     - doxygen
     - libmongoc
+    - librttr
     - numpy
   run:
     - python
