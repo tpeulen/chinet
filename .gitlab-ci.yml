@@ -26,22 +26,19 @@ stages:
       - bld-dir/
 
 build:linux:
-  <<: *build_template
-  <<: *linux_template
+  << : [*build_template, *linux_template]
   stage: build
   script:
     - ./tools/build.sh
 
 build:windows:
-  <<: *win_template
-  <<: *build_template
+  <<: [*build_template, *win_template]
   stage: build  
   script:
     - .\tools\build.bat
 
 build:osx:
-  <<: *osx_template
-  <<: *build_template
+  <<: [*build_template, *osx_template]
   stage: build
   script:
     - ./tools/build.sh
