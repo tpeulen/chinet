@@ -27,10 +27,10 @@ requirements:
     - numpy
   run:
     - python
-    - {{ pin_compatible('boost', max_pin='x.x.x') }}
-    - {{ pin_compatible('numpy') }}
-    - librttr
-    - libmongoc
+    - boost
+    - numpy
+    - {{ pin_compatible('librttr') }}
+    - {{ pin_compatible('libmongoc') }}
     - llvm-openmp  # [osx]
 
 test:
