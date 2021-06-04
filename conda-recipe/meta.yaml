@@ -19,16 +19,11 @@ requirements:
     - {{ compiler('cxx') }}
     - cmake
     - doxygen
-    - swig
-    - python {{ python }}
-    - boost {{ boost }}
-    - librttr
-    - libmongoc >=1.15.1
-    - numpy
   host:
     - python {{ python }}
     - boost {{ boost }}
-    - librttr
+    - swig
+    - libmongoc >=1.15.1
     - libmongoc
     - numpy
   run:
