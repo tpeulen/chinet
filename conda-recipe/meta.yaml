@@ -21,8 +21,6 @@ requirements:
     - cmake
     - swig
     - doxygen
-  host:
-    - python
     - boost {{ boost }}
     - libmongoc
     - librttr
