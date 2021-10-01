@@ -73,11 +73,6 @@ protected:
     /// \return
     const bson_t* get_document();
 
-    /// Set the
-    /// \param b
-    void set_document(bson_t b){
-        document = b;
-    }
 
     void set_document(bson_t *doc){
         bson_init(&document);
