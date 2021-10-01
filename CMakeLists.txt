@@ -22,7 +22,8 @@ endif()
 ################################################################################
 option(INSTALL "Install the library and the include files" ON)
 option(BUILD_PYTHON_INTERFACE "Build the python interface" ON)
-option(ENABLE_AVX "Build with AVX" ON)
+# Turned of because of alignment issues in MVSC 2015
+option(ENABLE_AVX "Build with AVX" OFF) 
 
 ################################################################################
 ###### Conda
@@ -53,7 +54,6 @@ if(APPLE)
     ENDIF(ENABLE_AVX)
 endif()
 if (MSVC)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++11")
     ADD_DEFINITIONS(-DMS_WIN64)
     ADD_DEFINITIONS(-D_USE_MATH_DEFINES)
     # https://devblogs.microsoft.com/cppblog/simd-extension-to-c-openmp-in-visual-studio/
