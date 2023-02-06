@@ -10,8 +10,14 @@ stages:
       - bld-dir/
 .WinTemplate:  &win_template
   << : *build_template
+  image: mambaforge:vs16
   tags:
     - win
+  script:
+    - cmd.exe
+    - conda activate base
+    - cd tools && git pull --force && cd..
+    - .\tools\build.bat
   before_script:
     - git submodule update --init --recursive --remote
 .OSXTemplate:  &osx_template
@@ -25,10 +31,11 @@ stages:
   << : *build_template
   tags:
     - linux
-  image: condaforge/mambaforge:latest
+  image:
+    name: condaforge/linux-anvil-cos7-x86_64
+    entrypoint: [ "/bin/bash", "-i", "-c" ]
   before_script:
     - git submodule update --init --recursive --remote
-    - apt update -yq && apt -yq install build-essential procps wget git git-lfs libglu1-mesa-dev freeglut3-dev mesa-common-dev libusb-dev
 
 build:linux:
   << : *linux_template
