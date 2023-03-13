@@ -31,11 +31,15 @@ stages:
   << : *build_template
   tags:
     - linux
+    - x86_64
   image:
-    name: condaforge/linux-anvil-cos7-x86_64
+    name: condaforge/mambaforge
     entrypoint: [ "/bin/bash", "-i", "-c" ]
   before_script:
-    - yum install -y git
+    - apt update
+    - apt install build-essential
+    - source "/opt/conda/etc/profile.d/conda.sh"
+    - conda activate /opt/conda/
     - git submodule update --init --recursive --remote
 
 build:linux:
@@ -60,11 +64,11 @@ test:linux:
   dependencies:
     - build:linux
   script:
-    # for libmongoc
+    # for librttr
     - conda config --add channels tpeulen
     # for chinet
     - conda config --add channels "file://`pwd`/bld-dir"
-    - mamba install -y python=3.8 chinet mongodb nose numba
+    - mamba install -y chinet mongodb nose numba
     - mkdir db & nohup mongod --dbpath db &
     - cd test
     - nosetests
