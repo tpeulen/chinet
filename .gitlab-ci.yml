@@ -2,14 +2,52 @@ stages:
 - build
 - test
 - deploy
-- Trigger-cross-projects
 
-.BuildTemplate: &build_template
+.build: &build
+  stage: build
   artifacts:
     paths:
       - bld-dir/
-.WinTemplate:  &win_template
-  << : *build_template
+.build_posix: &build_posix
+  <<: *build
+  script:
+    - ./tools/build.sh
+.build:lnx: &build_lnx
+  <<: *build_posix
+  before_script:
+    - source "/opt/conda/etc/profile.d/conda.sh"
+    - conda activate /opt/conda/
+    - git submodule update --init --recursive --remote
+build:lnx_x86:
+  <<: *build_lnx
+  image:
+    name: condaforge/linux-anvil-cos7-x86_64
+    entrypoint: [ "/bin/bash", "-i", "-c" ]
+  tags:
+    - x86_64
+build:lnx_ppc64le:
+  <<: *build_lnx
+  image:
+    name: condaforge/linux-anvil-ppc64le
+    entrypoint: [ "/bin/bash", "-i", "-c" ]
+  tags:
+    - ppc64le
+build:lnx_aarch64:
+  <<: *build_lnx
+  image:
+    name: condaforge/linux-anvil-aarch64
+    entrypoint: [ "/bin/bash", "-i", "-c" ]
+  tags:
+    - aarch64
+build:osx:
+  <<: *build
+  <<: *build_posix
+  tags:
+    - osx
+  before_script:
+    - git submodule update --init --recursive --remote
+build:windows:
+  <<: *build
   image: mambaforge:vs16
   tags:
     - win
@@ -18,73 +56,42 @@ stages:
     - conda activate base
     - cd tools && git pull --force && cd..
     - .\tools\build.bat
-  before_script:
-    - git submodule update --init --recursive --remote
-.OSXTemplate:  &osx_template
-  << : *build_template
-  tags:
-    - osx
-  before_script:
-    - brew reinstall wget git git-lfs
-    - git submodule update --init --recursive --remote
-.LinuxTemplate:  &linux_template
-  << : *build_template
-  tags:
-    - linux
-    - x86_64
-  image:
-    name: condaforge/mambaforge
-    entrypoint: [ "/bin/bash", "-i", "-c" ]
-  before_script:
-    - apt update
-    - apt install build-essential
-    - source "/opt/conda/etc/profile.d/conda.sh"
-    - conda activate /opt/conda/
-    - git submodule update --init --recursive --remote
 
-build:linux:
-  << : *linux_template
-  stage: build
-  script:
-    - ./tools/build.sh
-build:windows:
-  << : *win_template
-  stage: build  
-  script:
-    - .\tools\build.bat
-build:osx:
-  << : *osx_template
-  stage: build
-  script:
-    - ./tools/build.sh
 
 test:linux:
   stage: test
-  <<: *linux_template
-  dependencies:
-    - build:linux
+  tags:
+    - local
+    - linux
+  image: condaforge/mambaforge
+  needs: ["build:lnx_x86"]
+  before_script:
+    - |
+        export DEBIAN_FRONTEND=interactive
+        export TZ=Europe/Berlin
+        apt-get update -qy && apt-get install -qy git nfs-common # sshfs
   script:
-    # for librttr
-    - conda config --add channels tpeulen
-    # for chinet
-    - conda config --add channels "file://`pwd`/bld-dir"
-    - mamba install -y chinet mongodb nose numba
-    - mkdir db & nohup mongod --dbpath db &
-    - cd test
-    - nosetests
+    - |
+        source activate base
+        conda config --add channels tpeulen # for librttr
+        conda config --add channels "file://`pwd`/bld-dir" # for chinet
+        git clone --depth 1 https://gitlab.peulen.xyz/chisurf/chinet && cd chinet && git fetch && git switch $CI_COMMIT_REF_NAME
+        mamba install python librttr nose scipy
+        nosetests test
 
 deploy:conda:
-  <<: *linux_template
   stage: deploy
-  dependencies:
-    - test:linux
-    - build:windows
-    - build:osx
+  image: condaforge/mambaforge
+  tags:
+    - x86_64
+    - linux
+  before_script:
+    - git submodule update --init --recursive --remote
   script:
     - ./tools/deploy.sh
 
 # Downstream projects
-chisurf:
+ chisurf:
   stage: Trigger-cross-projects
   trigger: chisurf/chisurf
 
