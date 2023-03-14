@@ -75,7 +75,7 @@ test:linux:
         conda config --add channels tpeulen # for librttr
         conda config --add channels "file://`pwd`/bld-dir" # for chinet
         git clone --depth 1 https://gitlab.peulen.xyz/chisurf/chinet && cd chinet && git fetch && git switch $CI_COMMIT_REF_NAME
-        mamba install python chinet nose scipy
+        mamba install python chinet nose scipy numba
         nosetests test
 
 deploy:conda:
