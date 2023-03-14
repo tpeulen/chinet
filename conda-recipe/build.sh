@@ -4,4 +4,4 @@ cd doc
 doxygen
 $PYTHON ../tools/doxy2swig.py _build/xml/index.xml ../pyext/documentation.i
 cd ..
-python setup.py install --single-version-externally-managed --record=record.txt
+$PYTHON setup.py install --single-version-externally-managed --record=record.txt
