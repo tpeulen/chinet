@@ -1,9 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.13)
+ENABLE_LANGUAGE(CXX)
+SET(CMAKE_CXX_STANDARD 11)
 SET(PROJECT_NAME chinet)
 PROJECT(${PROJECT_NAME})
-
-ENABLE_LANGUAGE(CXX)
-set(CMAKE_CXX_STANDARD 11)
 
 ################################################################################
 ###### CMAKE
