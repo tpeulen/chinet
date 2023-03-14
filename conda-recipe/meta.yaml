@@ -16,19 +16,26 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - llvm-openmp  # [osx]
-    - cmake
     - swig
+    - cmake
+    - make         # [linux]
+    - ninja
+    - pkg-config   # [not win]
+    - llvm-openmp  # [osx]
+    - libgomp      # [linux]
     - doxygen
     - python
     - numpy
   host:
     - python
+    - doxygen
     - boost-cpp
+    - numpy
     - libmongoc
     - librttr
-    - numpy
   run:
+    - libmongoc
+    - librttr
     - python
     - boost-cpp
     - {{ pin_compatible('numpy') }}
