@@ -1,7 +1,8 @@
 stages:
-- build
-- test
-- deploy
+  - build
+  - test
+  - deploy
+  - Trigger-cross-projects
 
 .build: &build
   stage: build
@@ -40,7 +41,6 @@ build:lnx_aarch64:
   tags:
     - aarch64
 build:osx:
-  <<: *build
   <<: *build_posix
   tags:
     - osx
@@ -56,7 +56,6 @@ build:windows:
     - conda activate base
     - cd tools && git pull --force && cd..
     - .\tools\build.bat
-
 
 test:linux:
   stage: test
@@ -91,7 +90,7 @@ deploy:conda:
     - ./tools/deploy.sh
 
 # Downstream projects
- chisurf:
-  stage: Trigger-cross-projects
-  trigger: chisurf/chisurf
+chisurf:
+ stage: Trigger-cross-projects
+ trigger: chisurf/chisurf
 
