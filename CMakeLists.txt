@@ -102,23 +102,9 @@ ENDIF (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 ## OpenMP
 ###########################
-if (APPLE)
-    # When using conda use CONDA_PREFIX
-    SET(OMP_INCLUDE_DIR "/usr/local/opt/libomp/include")
-    SET(OMP_LIB_DIR "/usr/local/opt/libomp/lib")
-    # dirty hack to make OpenMP work see:
-    # https://gitlab.kitware.com/cmake/cmake/issues/18098
-    set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I${OMP_INCLUDE_DIR}" CACHE INTERNAL "OpenMP flags for Xcode toolchain.")
-    set(OpenMP_CXX_LIB_NAMES "omp" CACHE INTERNAL "OpenMP lib name for Xcode toolchain.")
-    set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp -I${OMP_INCLUDE_DIR}" CACHE INTERNAL "OpenMP flags for Xcode toolchain.")
-    set(OpenMP_C_LIB_NAMES "libomp" "libgomp" "libiomp5")
-    set(OpenMP_omp_LIBRARY "${OMP_LIB_DIR}/libomp.dylib" CACHE INTERNAL "OpenMP lib name for Xcode toolchain.")
-    set(OpenMP_libomp_LIBRARY ${OpenMP_C_LIB_NAMES})
-    set(OpenMP_libgomp_LIBRARY ${OpenMP_C_LIB_NAMES})
-    set(OpenMP_libiomp5_LIBRARY ${OpenMP_C_LIB_NAMES})
-endif ()
 FIND_PACKAGE(OpenMP REQUIRED)
 LINK_LIBRARIES(OpenMP::OpenMP_CXX)
+
 
 ## Boost
 ###########################
