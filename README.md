@@ -1,9 +1,8 @@
 # chinet
-[![Linux Build Status](https://travis-ci.org/tpeulen/chinet.svg?branch=master)](https://travis-ci.org/tpeulen/chinet)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9b8528bd067148d68d55cb3edeb10fe6)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tpeulen/chinet&amp;utm_campaign=Badge_Grade)
-[![Anaconda-Server Badge](https://anaconda.org/tpeulen/chinet/badges/installer/conda.svg)](https://conda.anaconda.org/tpeulen)
 [![Anaconda-Server Version](https://anaconda.org/tpeulen/chinet/badges/version.svg)](https://anaconda.org/tpeulen/chinet)
 [![Anaconda-Server Badge](https://anaconda.org/tpeulen/chinet/badges/platforms.svg)](https://anaconda.org/tpeulen/chinet)
+![conda build](https://github.com/tpeulen/chinet/actions/workflows/conda-build.yml/badge.svg)
+
 
 ## General description
 
