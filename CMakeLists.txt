@@ -4,36 +4,31 @@ SET(CMAKE_CXX_STANDARD 11)
 SET(PROJECT_NAME chinet)
 PROJECT(${PROJECT_NAME})
 
-################################################################################
-###### CMAKE
+## CMAKE
 ################################################################################
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 
-################################################################################
-###### DEFINITIONS
+## DEFINITIONS
 ################################################################################
 if(UNIX AND NOT APPLE)
     set(LINUX TRUE)
 endif()
 
-################################################################################
-###### OPTIONS
+## OPTIONS
 ################################################################################
 option(INSTALL "Install the library and the include files" ON)
 option(BUILD_PYTHON_INTERFACE "Build the python interface" ON)
 # Turned of because of alignment issues in MVSC 2015
 option(ENABLE_AVX "Build with AVX" OFF) 
 
-################################################################################
-###### Conda
+## Conda
 ################################################################################
 
 ## Check for Conda
 ###########################
 FIND_PACKAGE(Conda)
 
-################################################################################
-###### Compiler flags
+## Compiler flags
 ################################################################################
 if(LINUX)
     STRING(APPEND CMAKE_CXX_FLAGS " -march=native -O3 -mavx")
@@ -95,8 +90,7 @@ IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
 ENDIF (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 
-################################################################################
-###### INCLUDES AND LIBRARIES
+## INCLUDES AND LIBRARIES
 ################################################################################
 
 ## OpenMP
@@ -130,8 +124,7 @@ INCLUDE_DIRECTORIES (${MONGOC_INCLUDE_DIRS})
 LINK_LIBRARIES (${MONGOC_LIBRARIES})
 ADD_COMPILE_DEFINITIONS(${MONGOC_DEFINITIONS})
 
-################################################################################
-###### Targets
+## Targets
 ################################################################################
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)
