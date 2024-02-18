@@ -78,16 +78,16 @@ test:linux:
         mamba install python chinet nose scipy numba
         nosetests test
 
-deploy:conda:
-  stage: deploy
-  image: condaforge/mambaforge
-  tags:
-    - x86_64
-    - linux
-  before_script:
-    - git submodule update --init --recursive --remote
-  script:
-    - ./tools/deploy.sh
+#deploy:conda:
+#  stage: deploy
+#  image: condaforge/mambaforge
+#  tags:
+#    - x86_64
+#    - linux
+#  before_script:
+#    - git submodule update --init --recursive --remote
+#  script:
+#    - ./tools/deploy.sh
 
 # Downstream projects
 chisurf:
