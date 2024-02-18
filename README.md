@@ -5,10 +5,10 @@
 
 
 ## General description
-
 chinet is a C++ library to create optimize, sample, and archive global 
 models. A global model is a model, that unites multiple data-sets and
-seeks for a joint description of the united dataset.
+seeks for a joint description of the united dataset. chinet is the backend of 
+[ChiSurf](https://github.com/fluorescence-tools/chisurf).
 
 Global models can unite datasets of the same kind or datasets of 
 different types. A typical examples of a global model in fluorescence 
@@ -28,9 +28,6 @@ evaluated. Independent nodes are evaluated in parallel.
 The state of the evaluation graph can be written to a database for 
 documentation purposes and reconstructed using unique identifies 
 provided by the database. 
-
-chinet is NOT intended as ready-to-use software for specific application 
-purposes.
 
 ## Goals
 
@@ -108,5 +105,4 @@ print(p4.value == p1.value)
 ```
 
 ## License
-
 chinet is released under the open source MIT license.
