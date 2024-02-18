@@ -4,7 +4,7 @@ cmake_policy(SET CMP0086 NEW)
 IF(BUILD_PYTHON_INTERFACE)
     # Python
     ###########################
-    FIND_PACKAGE(Python EXACT COMPONENTS Interpreter Development.Module NumPy)
+    FIND_PACKAGE(Python ${PYTHON_VERSION} EXACT COMPONENTS Interpreter Development.Module NumPy)
     INCLUDE_DIRECTORIES(BEFORE ${Python_NumPy_PATH} ${Python_INCLUDE_DIRS})
     LINK_LIBRARIES(${Python_LIBRARY} Python::NumPy)
 

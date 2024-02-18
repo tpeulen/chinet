@@ -26,7 +26,9 @@ jobs:
 
       - name: "Set SDK on MacOS (if needed)"
         if: startsWith(matrix.os, 'macos')
-        run: build_tools/install_macos_sdk.sh
+        run: |
+          git submodule update --recursive --init --remote
+          tools/install_macos_sdk.sh
 
       - name: Set up Conda
         uses: conda-incubator/setup-miniconda@v3

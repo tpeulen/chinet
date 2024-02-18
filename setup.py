@@ -1,13 +1,10 @@
-#! /usr/bin/env python
 import os
 import sys
 import platform
-import subprocess
-import multiprocessing
-
-from setuptools import setup, Extension
-from setuptools.command.build_ext import build_ext
-
+import inspect
+import setuptools
+import pathlib
+import cmake_build_extension
 
 def read_version(header_file):
     version = "0.0.0"
@@ -19,109 +16,41 @@ def read_version(header_file):
 
 
 VERSION = read_version(os.path.dirname(os.path.abspath(__file__)) + '/include/info.h')
-LICENSE = 'Mozilla Public License 2.0 (MPL 2.0)'
-NAME = "chinet"  # name of the module
-DESCRIPTION = "Python bindings for chinet"
-LONG_DESCRIPTION = """"chinet is a C++ library with Python wrapper to construct \
-networks of computation node with associated ports that can be deposited in a \
-mongoDB. Chinet is the data management backend of chisurf."""
 
 
-class CMakeExtension(Extension):
+# Importing the bindings inside the build_extension_env context manager is necessary only
+# in Windows with Python>=3.8.
+# See https://github.com/diegoferigo/cmake-build-extension/issues/8.
+# Note that if this manager is used in the init file, cmake-build-extension becomes an
+# install_requires that must be added to the setup.cfg. Otherwise, cmake-build-extension
+# could only be listed as build-system requires in pyproject.toml since it would only
+# be necessary for packaging and not during runtime.
+init_py = inspect.cleandoc(
+    """
+    import cmake_build_extension
+    with cmake_build_extension.build_extension_env():
+        from . import bindings
+    """
+)
 
-    def __init__(self, name, sourcedir=''):
-        Extension.__init__(self, name, sources=[])
-        self.sourcedir = os.path.abspath(sourcedir)
-
-
-def build_swig_documentation():
-    # build the documentation.i file using doxygen and doxy2swig
-    if not os.path.isfile("./pyext/documentation.i"):
-        print("-- building documentation.i using doxygen and doxy2swig")
-        path = os.path.dirname(os.path.abspath(__file__)) + "/doc"
-        env = os.environ.copy()
-        subprocess.check_call(["doxygen"], cwd=path, env=env)
-        subprocess.check_call(
-            ["python", "../tools/doxy2swig.py", "./_build/xml/index.xml", "../pyext/documentation.i"],
-            cwd=path,
-            env=env
-        )
-
-
-class CMakeBuild(build_ext):
-
-    def run(self):
-        build_swig_documentation()
-        for ext in self.extensions:
-            self.build_extension(ext)
-
-    def build_extension(self, ext):
-        print(NAME, " VERSION:", VERSION)
-        extdir = os.path.abspath(
-            os.path.dirname(
-                self.get_ext_fullpath(ext.name)
-            )
-        ).replace('\\', '/')
-
-        cmake_args = [
-            '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
-            '-DCMAKE_SWIG_OUTDIR=' + extdir
-        ]
-
-        cfg = 'Debug' if self.debug else 'Release'
-        build_args = ['--config', cfg]
-        cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
-        if platform.system() == "Windows":
-            cmake_args += [
-                '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), extdir),
-                '-GVisual Studio 16 2019'
-            ]
-        else:
-            build_args += [
-                '--',
-                '-j%s' % int(multiprocessing.cpu_count() * 1.5)
-            ]
-        env = os.environ.copy()
-        env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(
-            env.get(
-                'CXXFLAGS', ''
-            ),
-            self.distribution.get_version()
-        )
-        if not os.path.exists(self.build_temp):
-            os.makedirs(self.build_temp)
-        print("BUILDING: " + " ".join(cmake_args))
-        subprocess.check_call(
-            ['cmake', ext.sourcedir] + cmake_args,
-            cwd=self.build_temp,
-            env=env
-        )
-        subprocess.check_call(
-            ['cmake', '--build', '.'] + build_args,
-            cwd=self.build_temp
-        )
-
-setup(
-    name=NAME,
-    version=VERSION,
-    license=LICENSE,
-    author='Thomas-Otavio Peulen',
-    author_email='thomas@peulen.xyz',
+setuptools.setup(
     ext_modules=[
-        CMakeExtension('chinet')
+        cmake_build_extension.CMakeExtension(
+            name='chinet',
+            install_prefix="chinet",
+            cmake_configure_options=[
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DPYTHON_VERSION:str=%s" % platform.python_version(),
+                "-DCMAKE_CXX_FLAGS='-w'",
+                "-DBUILD_PYTHON_INTERFACE=ON",
+                "-DPython_ROOT_DIR='%s'" % pathlib.Path(sys.executable).parent
+            ]
+        )
     ],
-    cmdclass={
-        'build_ext': CMakeBuild
-    },
-    description=DESCRIPTION,
-    long_description=LONG_DESCRIPTION,
-    install_requires=[
-        'numpy'
-    ],
-    setup_requires=[
-        'setuptools'
-    ],
-    zip_safe=False,
+    cmdclass=dict(
+        # Enable the CMakeExtension entries defined above
+        build_ext=cmake_build_extension.BuildExtension,
+    ),
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Science/Research',
@@ -132,4 +61,5 @@ setup(
         'Programming Language :: Python',
         'Topic :: Scientific/Engineering',
     ]
+
 )

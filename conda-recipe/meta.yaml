@@ -1,8 +1,9 @@
-{% set data = load_setup_py_data(setup_file='../setup.py', from_recipe_dir=True) %}
+{% set pyproject = load_file_data('../pyproject.toml', from_recipe_dir=True) %}
+{% set data = pyproject.get('project', {}) %}
 
 package:
-  name: {{ data.get('name')|lower }}
-  version: {{ data.get('version')|lower }}
+  name: {{ data.get('name') }}
+  version: {{ data.get('version') }}
 
 source:
   path: ..
@@ -27,8 +28,10 @@ requirements:
     - numpy
   host:
     - python
+    - cmake-build-extension
     - doxygen
     - boost-cpp
+    - cmake-build-extension
     - numpy
     - libmongoc
     - librttr
@@ -53,7 +56,7 @@ test:
 
 about:
   home: https://github.com/tpeulen/chinet
-  license: {{ data.get('license') }}
+  license: MIT
   summary: |
     {{ data.get('description') }}
   description: |
