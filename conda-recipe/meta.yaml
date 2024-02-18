@@ -5,8 +5,7 @@ package:
   version: {{ data.get('version')|lower }}
 
 source:
-  path: ../
-#  git_url: ..
+  path: ..
 
 build:
   number: 0
@@ -34,11 +33,9 @@ requirements:
     - libmongoc
     - librttr
   run:
-    - libmongoc
-    - librttr
     - python
-    - boost-cpp
-    - {{ pin_compatible('numpy') }}
+    - {{ pin_compatible('boost-cpp', max_pin='x.x') }}
+    - {{ pin_compatible('numpy', max_pin='x.x') }}
     - {{ pin_compatible('librttr') }}
     - {{ pin_compatible('libmongoc') }}
     - llvm-openmp  # [osx]
