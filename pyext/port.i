@@ -29,10 +29,15 @@
     public:
         %template(set_value_d) set_value<double>;
         %template(get_value_d) get_value<double>;
+        %template(update_buffer_d) update_buffer<double>;
+
         %template(get_value_i) get_value<long>;
         %template(set_value_i) set_value<long>;
+        %template(update_buffer_i) update_buffer<long>;
+
         %template(get_value_c) get_value<unsigned char>;
         %template(set_value_c) set_value<unsigned char>;
+        %template(update_buffer_c) update_buffer<unsigned char>;
 
     %pythoncode "port_extension.py"
 }
