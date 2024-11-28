@@ -1,3 +1,5 @@
+git submodule update --recursive --init --remote
+
 cd %SRC_DIR%
 
 rmdir b2 /s /q
