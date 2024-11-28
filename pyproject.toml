@@ -1,5 +1,5 @@
 [project]
-version = "0.0.8"
+version = "0.0.9"
 name = "chinet"
 requires-python = ">=3.8"
 description = "chinet is the C++ backend for chisurf."
