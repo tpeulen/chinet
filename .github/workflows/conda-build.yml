@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - development
+      - main
   release:
     types: ['released', 'prereleased']
   schedule:
@@ -36,7 +37,7 @@ jobs:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
           mamba-version: "*"
-          channels: conda-forge,defaults
+          channels: conda-forge,tpeulen,defaults
           channel-priority: true
 
       - name: Display Conda Settings
