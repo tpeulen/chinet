@@ -16,32 +16,30 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - swig
+    - pkg-config # [not win]
     - cmake
-    - make         # [linux]
     - ninja
+    - make # [not win]
+  host:
+    - swig <4.3.0
+    - cmake-build-extension
     - pkg-config   # [not win]
     - llvm-openmp  # [osx]
     - libgomp      # [linux]
     - doxygen
     - python
-    - numpy
-  host:
-    - python
-    - cmake-build-extension
+    - pip
     - doxygen
     - boost-cpp
-    - cmake-build-extension
     - numpy
     - libmongoc
     - librttr
   run:
     - python
-    - {{ pin_compatible('boost-cpp', max_pin='x.x') }}
-    - {{ pin_compatible('numpy', max_pin='x.x') }}
+    - boost-cpp
+    - numpy
+    - libmongoc
     - {{ pin_compatible('librttr') }}
-    - {{ pin_compatible('libmongoc') }}
-    - llvm-openmp  # [osx]
 
 test:
   imports:
