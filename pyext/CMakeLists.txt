@@ -15,8 +15,7 @@ IF(BUILD_PYTHON_DOCS)
     FIND_PACKAGE(Doxygen REQUIRED)
     MESSAGE(STATUS "Building documentation for Python interface")
     MESSAGE(STATUS "Doxygen executable " ${DOXYGEN_EXECUTABLE})
-    #This will be the main output of our command
-    execute_process(COMMAND ${DOXYGEN_EXECUTABLE} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/doc OUTPUT_QUIET)
+    execute_process(COMMAND ${DOXYGEN_EXECUTABLE} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/doc)
     execute_process(
             COMMAND python ${CMAKE_SOURCE_DIR}/tools/doxy2swig.py ${CMAKE_SOURCE_DIR}/doc/_build/xml/index.xml ${CMAKE_SOURCE_DIR}/pyext/documentation.i
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
