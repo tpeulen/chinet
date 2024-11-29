@@ -33,13 +33,11 @@ requirements:
     - boost-cpp
     - numpy
     - libmongoc
-    - librttr
   run:
     - python
     - boost-cpp
     - numpy
     - libmongoc
-    - {{ pin_compatible('librttr') }}
 
 test:
   imports:
