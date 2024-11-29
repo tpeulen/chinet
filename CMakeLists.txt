@@ -102,20 +102,6 @@ INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 ###########################
 # Add the RTTR submodule directory
 set(RTTR_DIR ${CMAKE_SOURCE_DIR}/thirdparty/rttr)
-# set up option variable for cmake
-#option(BUILD_RTTR_DYNAMIC "Build the dynamic/shared version of RTTR library" ON)
-#option(BUILD_UNIT_TESTS "Build the unit tests of RTTR" ON)
-#option(BUILD_STATIC "Build RTTR as static library" OFF)
-#option(BUILD_WITH_STATIC_RUNTIME_LIBS "Link against the static runtime libraries" OFF)
-#option(BUILD_WITH_RTTI "Enable build with C++ runtime type information for compilation" ON)
-#option(BUILD_BENCHMARKS "Enable this to build the benchmarks" OFF)
-#option(BUILD_EXAMPLES "Enable this to build the examples" On)
-#option(BUILD_DOCUMENTATION "Enable this to build the documentation" ON)
-#option(BUILD_INSTALLER "Enable this to build the installer" ON)
-#option(BUILD_PACKAGE "Enable this to build the installer" ON)
-#option(USE_PCH "Use precompiled header files for compilation" ON)
-#option(CUSTOM_DOXYGEN_STYLE "Enable this option to use a custom doxygen style for HTML documentation; Otherwise the default will be used" ON)
-#option(BUILD_WEBSITE_DOCU "Enable this option to create the special docu for the website" OFF)
 
 # Disable RTTR examples, tests, documentation, ...
 set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
@@ -124,24 +110,16 @@ set(BUILD_DOCUMENTATION OFF CACHE BOOL "" FORCE)
 set(BUILD_BENCHMARKS OFF CACHE BOOL "" FORCE)
 set(BUILD_PACKAGE OFF CACHE BOOL "" FORCE)
 set(CUSTOM_DOXYGEN_STYLE OFF CACHE BOOL "" FORCE)
+set(RTTR_RUNTIME_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}")
 
-#set(BUILD_INSTALLER OFF CACHE BOOL "" FORCE)
-#if (BUILD_INSTALLER)
-#    install_pdb_files(rttr_core_s)
-#    install(TARGETS rttr_core_s EXPORT rttr_targets
-#            RUNTIME       DESTINATION ${RTTR_RUNTIME_INSTALL_DIR}
-#            LIBRARY       DESTINATION ${RTTR_LIBRARY_INSTALL_DIR}
-#            ARCHIVE       DESTINATION ${RTTR_ARCHIVE_INSTALL_DIR}
-#            FRAMEWORK     DESTINATION ${RTTR_FRAMEWORK_INSTALL_DIR})
-#endif()
-SET(RTTR_RUNTIME_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}")
+# Disable type conversion errors/warnings on osx
+if(APPLE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-implicit-const-int-float-conversion")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=implicit-const-int-float-conversion")
+endif()
 
-# Disable type conversion errors/warnings
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-implicit-const-int-float-conversion")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=implicit-const-int-float-conversion")
 add_subdirectory(${RTTR_DIR})
 LINK_LIBRARIES(RTTR::Core)
-
 
 # libmongoc
 ###########################
