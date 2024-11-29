@@ -52,5 +52,5 @@ jobs:
         with:
           shell: bash -el {0}
           run: |
-            mamba install conda-build boa
+            conda install conda-build boa
             conda mambabuild conda-recipe
