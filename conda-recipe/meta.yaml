@@ -17,6 +17,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - pkg-config # [not win]
+    - git
     - cmake
     - ninja
     - make # [not win]
@@ -33,13 +34,11 @@ requirements:
     - boost-cpp
     - numpy
     - libmongoc
-    - librttr
   run:
     - python
     - boost-cpp
     - numpy
     - libmongoc
-    - {{ pin_compatible('librttr') }}
 
 test:
   imports:

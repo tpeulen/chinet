@@ -1,6 +1,7 @@
-cmake_policy(SET CMP0167 NEW)
+cmake_minimum_required(VERSION 3.20)
+cmake_policy(SET CMP0167 NEW) # Fix for INTERFACE_LINK_LIBRARIES generator expression.
+cmake_policy(SET CMP0068 NEW) # Enables RPATH for macOS.
 
-CMAKE_MINIMUM_REQUIRED(VERSION 3.13)
 SET(PROJECT_NAME chinet)
 PROJECT(${PROJECT_NAME})
 
@@ -98,10 +99,28 @@ INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 
 # RTTR
 ###########################
-FIND_PACKAGE(RTTR CONFIG REQUIRED Core)
+# Add the RTTR submodule directory
+SET(RTTR_DIR ${CMAKE_SOURCE_DIR}/thirdparty/rttr)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/rttr/src)
+
+# Disable RTTR examples, tests, documentation, ...
+set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(BUILD_UNIT_TESTS OFF CACHE BOOL "" FORCE)
+set(BUILD_DOCUMENTATION OFF CACHE BOOL "" FORCE)
+set(BUILD_BENCHMARKS OFF CACHE BOOL "" FORCE)
+set(BUILD_PACKAGE OFF CACHE BOOL "" FORCE)
+set(CUSTOM_DOXYGEN_STYLE OFF CACHE BOOL "" FORCE)
+set(BUILD_RTTR_DYNAMIC ON CACHE BOOL "" FORCE)
+set(RTTR_RUNTIME_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}")
+
+# Disable type conversion errors/warnings on osx
+if(APPLE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-implicit-const-int-float-conversion")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=implicit-const-int-float-conversion")
+endif()
+
+add_subdirectory(${RTTR_DIR})
 LINK_LIBRARIES(RTTR::Core)
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
-MESSAGE ("-- Found librttr version \"${PACKAGE_VERSION}\"")
 
 # libmongoc
 ###########################

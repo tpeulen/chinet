@@ -1,11 +1,15 @@
-cd %SRC_DIR%
+@echo off
 
+REM Update git submodules recursively, initializing and fetching remote updates
+git submodule update --init --recursive --remote
+
+REM Remove and recreate the build directory
 rmdir b2 /s /q
 mkdir b2
 cd b2
 
-echo Python version: %PYTHON_VERSION_NUMERIC%
-cmake .. -G "NMake Makefiles" ^
+REM Configure the build using CMake
+cmake .. -G "Visual Studio 17 2022" ^
  -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%" ^
  -DCMAKE_PREFIX_PATH="%PREFIX%" ^
  -DBUILD_PYTHON_INTERFACE=ON ^
@@ -16,6 +20,11 @@ cmake .. -G "NMake Makefiles" ^
  -DBUILD_LIBRARY=OFF ^
  -DBUILD_PYTHON_DOCS=ON ^
  -DWITH_AVX=OFF ^
+ -Wno-dev ^
  -DBoost_USE_STATIC_LIBS=OFF
 
-nmake install
+REM Set compilation to use multiple processes
+set CL=/MP
+
+REM Build and install the project
+cmake --build . --config Release --target install
