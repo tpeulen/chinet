@@ -2,7 +2,7 @@
 #define chinet_FUNCTIONS_H
 
 #include <vector>
-#include <algorithm>  /* std::min, STD::max */
+#include <algorithm>  /* std::min, std::max */
 #include <math.h>
 #include <iostream>
 #include <chrono>
