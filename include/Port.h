@@ -6,6 +6,7 @@
 #include <algorithm> /* std::max, std::min */
 #include <cmath>
 #include <cstdlib>
+#include <cstdint> /* int64 */
 
 #include "CNode.h"
 
@@ -38,13 +39,12 @@ private:
     std::vector<Port *> linked_to_;
 
     bool remove_links_to_port() {
-        if (link_ != nullptr) {
-            // remove pointer to this port in the port to which this is linked
-            auto it = std::find(linked_to_.begin(), linked_to_.end(), this);
-            if (it != linked_to_.end()) {
-                linked_to_.erase(it);
-                return true;
-            }
+        if (link_ == nullptr) return false;
+        auto& linked_ports = link_->linked_to_;
+        auto it = std::find(linked_ports.begin(), linked_ports.end(), this);
+        if (it != linked_ports.end()) {
+            linked_ports.erase(it);
+            return true;
         }
         return false;
     }
@@ -78,10 +78,10 @@ public:
     //--------------------------------------------------------------------
     ~Port() {
         remove_links_to_port();
-        if (own_buffer) {
+        if (own_buffer && buffer_ != nullptr) {
             free(buffer_);
         }
-    };
+    }
 
     Port(
             bool fixed = false,
@@ -228,7 +228,7 @@ public:
 #endif
         bool types_match = (
                 ((std::is_same<T, double>::value) && ((value_type == 1) || (value_type == 3))) ||
-                ((std::is_same<T, long>::value) && ((value_type == 0) || (value_type == 2)))
+                ((std::is_same<T, int64_t>::value) && ((value_type == 0) || (value_type == 2)))
         );
         T* origin;
         if(!types_match){
@@ -361,26 +361,27 @@ public:
     }
 
     size_t get_buffer_ptr() {
-        return (size_t) (&buffer_);
+        return reinterpret_cast<size_t>(buffer_);
     }
 
     void set_link(std::shared_ptr<Port> v) {
-        if (v != nullptr) {
-            set_oid("link", v->get_bson_oid());
-            link_ = v;
-            v->linked_to_.push_back(this);
-        } else {
+        if (v == nullptr) {
             unlink();
+            return;
         }
-        if(node_!=nullptr) update_attached_node();
+        unlink(); // Unlink before linking to new port
+        set_oid("link", v->get_bson_oid());
+        link_ = v;
+        v->linked_to_.push_back(this);
+        if (node_ != nullptr) update_attached_node();
     }
 
     bool unlink() {
+        if (link_ == nullptr) return false;
         set_oid("link", get_bson_oid());
-        bool re = true;
-        re &= remove_links_to_port();
+        bool result = remove_links_to_port();
         link_ = nullptr;
-        return re;
+        return result;
     }
 
     bool is_linked() {

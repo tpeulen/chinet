@@ -1,27 +1,18 @@
-//
-// Created by thomas on 3/29/19.
-//
-
 #include "Functions.h"
 
 
 void Functions::shift(double value, std::vector<double> &x)
 {
-    double ts = -value;
-    int tsi = (int) ts;
-    double tsf = ts - tsi;
+    int tsi = static_cast<int>(-value);
+    double tsf = -value - tsi;
 
-    // shift the values contained in the temporary the vector the integer tsi
     Functions::roll(tsi, x);
 
-    // make a copy and roll it by tsi + 1
-    std::vector<double> x_(x);
-    Functions::roll(tsi + 1, x_);
+    std::vector<double> x_copy(x);
+    Functions::roll(tsi + 1, x_copy);
 
-    // make the
-    // scale the values contained in the temporary y vector by tsf
-    for (unsigned int i = 0; i < x.size(); i++) {
-        x[i] = x[i] * tsf + x_[i] * (1. - tsf);
+    for (size_t i = 0; i < x.size(); i++) {
+        x[i] = x[i] * tsf + x_copy[i] * (1.0 - tsf);
     }
 }
 
@@ -37,24 +28,19 @@ void Functions::roll(int value, std::vector<double> &y)
 
 void Functions::copy_vector_to_array(std::vector<double> &v, double *out, int nout)
 {
-    for (int i = 0; i < nout; i++) {
-        out[i] = v[i];
-    }
+    std::copy(v.begin(), v.begin() + nout, out);
 }
 
 void Functions::copy_array_to_vector(double *in, int nin, std::vector<double> &v)
 {
-    v.resize(nin);
-    for (int i = 0; i < nin; i++) {
-        v[i] = in[i];
-    }
+    v.assign(in, in + nin);
 }
 
 void Functions::copy_vector_to_array(std::vector<double> &v, double **out, int *nout)
 {
-    *out = (double *) malloc(v.size() * sizeof(double));
     *nout = v.size();
-    copy_vector_to_array(v, *out, *nout);
+    *out = static_cast<double *>(malloc(*nout * sizeof(double)));
+    std::copy(v.begin(), v.end(), *out);
 }
 
 void Functions::copy_two_vectors_to_interleaved_array(
@@ -64,13 +50,12 @@ void Functions::copy_two_vectors_to_interleaved_array(
 )
 {
     if (v1.size() == v2.size()) {
-        int n = v1.size() + v2.size();
-        auto r = (double *) malloc(n * sizeof(double));
-        for (unsigned int i = 0; i < v1.size(); i++) {
-            r[2 * i + 0] = v1[i];
-            r[2 * i + 1] = v2[i];
+        int n = 2 * v1.size();
+        *out = static_cast<double *>(malloc(n * sizeof(double)));
+        for (size_t i = 0; i < v1.size(); i++) {
+            (*out)[2 * i] = v1[i];
+            (*out)[2 * i + 1] = v2[i];
         }
-        *out = r;
         *nout = n;
     }
 }
@@ -82,15 +67,9 @@ void Functions::convolve_sum_of_exponentials(
         int convolution_stop,
         double dt)
 {
-
-    double dt_half = dt / 2.0;
-
-    int n_points = std::min(n_out, n_irf);
-    int stop = std::min(n_points, convolution_stop);
-
-    for (int i = 0; i < stop; i++) {
-        out[i] = 0;
-    }
+    double dt_half = dt * 0.5;
+    int stop = std::min({n_out, n_irf, convolution_stop});
+    std::fill(out, out + stop, 0.0);
 
     for (int ne = 0; ne < n_lifetime_spectrum; ne++) {
         double exp_curr = exp(-dt / (lifetime_spectrum[2 * ne + 1] + 1e-12));
@@ -112,27 +91,21 @@ void Functions::convolve_sum_of_exponentials_periodic(
         double period
 )
 {
-
     double dt_half = dt * 0.5;
-    int period_n = (int) (period / dt - 0.5);
-
+    int period_n = static_cast<int>(period / dt - 0.5);
     int irfStart = 0;
     while (irf[irfStart] == 0) {
         irfStart++;
     }
-
     int n_points = std::min(n_out, n_irf);
     stop = std::min(n_points, stop);
+    std::fill(out, out + stop, 0.0);
 
-    for (int i = 0; i < stop; i++) {
-        out[i] = 0;
-    }
-
-    int stop1 = (period_n + irfStart > n_points - 1) ? n_points - 1 : period_n + irfStart;
+    int stop1 = std::min(period_n + irfStart, n_points - 1);
     double fit_curr, exp_curr, tail_a;
     for (int ne = 0; ne < n_lifetimes; ne++) {
         exp_curr = exp(-dt / (lifetime[2 * ne + 1] + 1e-12));
-        tail_a = 1. / (1. - exp(-period / lifetime[2 * ne + 1]));
+        tail_a = 1.0 / (1.0 - exp(-period / lifetime[2 * ne + 1]));
         fit_curr = 0.0;
         for (int i = 0; i < stop1; i++) {
             fit_curr = (fit_curr + dt_half * irf[i - 1]) * exp_curr + dt_half * irf[i];
