@@ -145,7 +145,7 @@ namespace Functions {
     {
         for(int i = 0; i<n_values; i++)
         {
-            values[i] = std::clamp(values[i], static_cast<T>(lower_bound), static_cast<T>(upper_bound));
+          values[i] = (T) std::min(std::max((double)values[i], lower_bound), upper_bound);
         }
     }
 
