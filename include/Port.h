@@ -26,10 +26,23 @@ private:
     std::shared_ptr<Port> link_ = nullptr;
     std::vector<Port *> linked_to_;
 
-    bool remove_links_to_port();
+    bool remove_links_to_port() {
+        if (link_ == nullptr) return false;
+        auto& linked_ports = link_->linked_to_;
+        auto it = std::find(linked_ports.begin(), linked_ports.end(), this);
+        if (it != linked_ports.end()) {
+            linked_ports.erase(it);
+            return true;
+        }
+        return false;
+    }
 
     template<typename T>
-    void set_value_of_dependents(T *input, int n_input);
+    void set_value_of_dependents(T *input, int n_input) {
+        for (auto &v : linked_to_) {
+            v->set_value(input, n_input);
+        }
+    }
 
     int value_type = 0;
     bool fixed_ = false;
@@ -96,11 +109,19 @@ public:
     bool bound_is_valid();
     void set_bounds(double *input, int n_input);
     void get_bounds(double **output, int *n_output);
-    bool is_float();
+
+    bool is_float() {
+        return ((get_value_type() == 1) || (get_value_type() == 3));
+    }
+
     void get_bytes(unsigned char **output, int *n_output, bool copy = false);
+
     void set_bytes(unsigned char *input, int n_input);
+
     void set_buffer_ptr(size_t ptr, int n_elements, int element_size);
+
     size_t get_buffer_ptr();
+
     std::vector<Port *> get_linked_ports();
 
     template<typename T>
