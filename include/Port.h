@@ -104,18 +104,47 @@ public:
     std::vector<Port *> get_linked_ports();
 
     template<typename T>
-    void set_value(T *input, int n_input, bool copy_values = true);
+    void set_value(T *input, int n_input, bool copy_values = true) {
+        if (is_fixed()) {
+            return;
+        }
+        if (copy_values) {
+            buffer_.resize(n_input * sizeof(T));
+            std::memcpy(buffer_.data(), input, n_input * sizeof(T));
+        } else {
+            buffer_ = std::vector<uint8_t>(reinterpret_cast<uint8_t*>(input),
+                                           reinterpret_cast<uint8_t*>(input) + n_input * sizeof(T));
+        }
+        buffer_element_size_ = sizeof(T);
+        if (node_ != nullptr) {
+            update_attached_node();
+            set_value_of_dependents(input, n_input);
+        }
+    }
 
     template<typename T>
-    void get_value(T **output, int *n_output);
+    void get_value(T **output, int *n_output) {
+        *n_output = buffer_.size() / sizeof(T);
+        *output = reinterpret_cast<T*>(buffer_.data());
+    }
 
     template<typename T>
-    void get_own_value(T **output, int *n_output);
+    void get_own_value(T **output, int *n_output) {
+        if (buffer_.empty()) {
+            update_buffer<T>();
+        }
+        *n_output = buffer_.size() / sizeof(T);
+        *output = reinterpret_cast<T*>(buffer_.data());
+    }
 
     virtual bson_t get_bson() final;
 
     template<typename T>
-    void update_buffer();
+    void update_buffer() {
+        auto v = get_array<T>("value");
+        buffer_.resize(v.size() * sizeof(T));
+        std::memcpy(buffer_.data(), v.data(), v.size() * sizeof(T));
+    }
 
     std::vector<uint8_t>& get_buffer() { return buffer_; }
 
