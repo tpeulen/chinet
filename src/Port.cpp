@@ -4,6 +4,65 @@ std::shared_ptr<Port> Port::get_ptr() {
     return std::dynamic_pointer_cast<Port>(shared_from_this());
 }
 
+std::shared_ptr<Port> Port::operator+(
+        std::shared_ptr<Port> v
+)
+{
+#if CHINET_VERBOSE
+    std::clog << "ADDING PORTS" << std::endl;
+#endif
+    int new_value_type = std::max(value_type, v->value_type);
+#if CHINET_VERBOSE
+    std::clog << "-- Value type of resulting port: " << new_value_type << std::endl;
+#endif
+    std::string name = get_name()  + " + " + v->get_name();
+#if CHINET_VERBOSE
+    std::clog << "-- Name of resulting port: " << name << std::endl;
+#endif
+    auto re = std::make_shared<Port>(
+            false, true, true, false, 0, 0, new_value_type, name
+    );
+#if CHINET_VERBOSE
+    std::clog << "-- Creating a Node associated to the resulting port." << std::endl;
+#endif
+    auto node = new Node();
+    node->set_name(name);
+    node->add_input_port(this->get_name(), get_ptr());
+    node->add_input_port(v->get_name(), v);
+    node->add_output_port(name, re);
+    if(new_value_type == 0){
+        node->set_callback("addition_int", "C");
+    } else if(new_value_type == 1){
+        node->set_callback("addition_double", "C");
+    }
+    re->set_node(node);
+    node->evaluate();
+    return re;
+}
+
+std::shared_ptr<Port> Port::operator*(std::shared_ptr<Port> v)
+{
+    auto re = std::make_shared<Port>();
+    re->set_value_type(this->get_value_type());
+    auto node = new Node();
+    std::string name = this->get_name()  + "*" + v->get_name();
+    node->set_name(name);
+    node->add_input_port(this->get_name(), get_ptr());
+    node->add_input_port(v->get_name(), v);
+    node->add_output_port(name, re);
+    if(this->get_value_type() == 0){
+        node->set_callback("multiply_double", "C");
+    } else if(this->get_value_type() == 1){
+        node->set_callback("multiply_int", "C");
+    }
+    re->set_node(node);
+    re->set_name(name);
+    re->set_port_type(true);
+    node->evaluate();
+    return re;
+}
+
+
 void Port::set_link(std::shared_ptr<Port> v) {
     if (v == nullptr) {
         unlink();
@@ -47,9 +106,69 @@ bson_t Port::get_bson()
     return dst;
 }
 
+
+bool Port::bound_is_valid()
+{
+    if (bounds_.size() == 2) {
+        if (bounds_[0] != bounds_[1]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+void Port::set_bounds(double *input, int n_input)
+{
+    if (n_input >= 2) {
+        bounds_.clear();
+        double lower = std::min(input[0], input[1]);
+        double upper = std::max(input[0], input[1]);
+        bounds_.push_back(lower);
+        bounds_.push_back(upper);
+    }
+}
+
+void Port::get_bounds(double **output, int *n_output)
+{
+    *output = bounds_.data();
+    *n_output = bounds_.size();
+}
+
+
+
 void Port::update_attached_node() {
     node_->set_valid(false);
     if (is_reactive() && !is_output()) {
         node_->evaluate();
     }
+}
+
+void Port::get_bytes(unsigned char **output, int *n_output, bool copy) {
+    *n_output = buffer_.size();
+    if (copy) {
+        *output = new unsigned char[*n_output];
+        std::memcpy(*output, buffer_.data(), *n_output);
+    } else {
+        *output = buffer_.data();
+    }
+}
+
+void Port::set_bytes(unsigned char *input, int n_input) {
+    buffer_.resize(n_input);
+    std::memcpy(buffer_.data(), input, n_input);
+}
+
+void Port::set_buffer_ptr(size_t ptr, int n_elements, int element_size) {
+    buffer_.assign(reinterpret_cast<uint8_t*>(ptr),
+                   reinterpret_cast<uint8_t*>(ptr) + (n_elements * element_size));
+    buffer_element_size_ = element_size;
+}
+
+size_t Port::get_buffer_ptr() {
+    return reinterpret_cast<size_t>(buffer_.data());
+}
+
+std::vector<Port *> Port::get_linked_ports() {
+    return linked_to_;
 }
