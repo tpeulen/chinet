@@ -6,38 +6,94 @@
 #include <algorithm> /* std::max, std::min */
 #include <cmath>
 #include <cstdlib>
+#include <unordered_set>
+#include <stdexcept>
 #include <cstdint> /* int64 */
 
 #include "CNode.h"
 
+// Forward declaration
 class Node;
 
-
+/// @class Port
+/// @brief Represents a port in the chinet project, with support for linked dependencies, buffering, and bounds management.
 class Port : public MongoObject {
 
 private:
+
+    /// @brief Pointer to the internal buffer used to store data.
     void *buffer_;
+
+    /// @brief Indicates whether this port owns the buffer memory.
     bool own_buffer = false;
+
+    /// @brief Number of elements currently in the buffer.
     int n_buffer_elements_ = 0;
+
+    /// @brief Size of each element in the buffer.
     int buffer_element_size_ = 1;
+
+    /// @brief Bounds for the Port's values.
     std::vector<double> bounds_{};
+
+    /// @brief Pointer to the Node to which this Port object belongs.
     Node* node_ = nullptr;
 
-    /*!
-     * @brief This attribute can point to another Port (default value nullptr).
-     * If the attribute points to another port, the value returned by the
-     * method @class Port::get_value_vector corresponds to the value the other
-     * Port.
-     */
+    /// @brief Recursively detects cycles in the Port dependency graph.
+    /// @param current The current Port being visited.
+    /// @param target The target Port to detect cyclic dependencies.
+    /// @param visited A set of Ports already visited in the search.
+    /// @return True if a cycle is detected, otherwise false.
+    bool detect_cycle_recursive(Port* current, Port* target, std::unordered_set<Port*>& visited) {
+        if (current == nullptr) {
+            return false; // No cycle when reaching a null pointer
+        }
+
+        if (visited.find(current) != visited.end()) {
+            return true; // A cycle is detected
+        }
+
+        visited.insert(current);
+
+        // Check the link of the current port
+        if (current->link_.get() == target) {
+            return true;
+        }
+
+        // Check recursively through dependents
+        for (auto dependent : current->linked_to_) {
+            if (detect_cycle_recursive(dependent, target, visited)) {
+                return true;
+            }
+        }
+
+        visited.erase(current); // Backtracking step (safe if used elsewhere)
+        return false;
+    }
+
+    /// @brief Checks for cyclic dependencies involving this Port and a target Port.
+    /// @param target The target Port to check.
+    /// @return True if a cyclic dependency is detected, otherwise false.
+    bool check_cyclic_dependency(Port* target) {
+        // Prevent cycles starting with null or self-linking
+        if (this == target) {
+            return true;
+        }
+
+        std::unordered_set<Port*> visited; // Tracks visited nodes
+        return detect_cycle_recursive(this, target, visited);
+    }
+
+    /// @brief Points to another Port (default is nullptr).
+    /// If set, this Port mirrors the value of the linked Port.
     std::shared_ptr<Port> link_ = nullptr;
 
-    /*!
-     * @brief This attribute stores the Ports that are dependent on the value
-     * of this Port object. If this Port object is reactive a change of the
-     * value of this Port object is propagated to the dependent Ports.
-     */
+    /// @brief Stores the Ports dependent on this Port's value.
+    /// Changes to this Port's value are propagated to its dependents if it is reactive.
     std::vector<Port *> linked_to_;
 
+    /// @brief Removes all dependent links to this Port.
+    /// @return True if links were removed, false if none existed.
     bool remove_links_to_port() {
         if (link_ == nullptr) return false;
         auto& linked_ports = link_->linked_to_;
@@ -49,6 +105,10 @@ private:
         return false;
     }
 
+    /// @brief Updates the values of all dependent Ports.
+    /// @tparam T The data type to use for value updates.
+    /// @param input Pointer to the input data.
+    /// @param n_input Number of elements in the input data.
     template<typename T>
     void set_value_of_dependents(T *input, int n_input) {
         for (auto &v : linked_to_) {
@@ -56,18 +116,19 @@ private:
         }
     }
 
-    /// Specifies the type of the Port
-    /*!
-     * 0: long vector
-     * 1: double vector
-     * 2: numpy binary
-     * 3: long single number
-     * 4: double single number
-     */
+    /// @brief Specifies the type of the Port.
+    /// Values correspond to:
+    /// - 0: long vector
+    /// - 1: double vector
+    /// - 2: numpy binary
+    /// - 3: long single number
+    /// - 4: double single number
     int value_type = 0;
 
 public:
 
+    /// @brief Returns the current size of the buffer.
+    /// @return The number of elements in the buffer.
     size_t current_size() {
         return n_buffer_elements_;
     }
@@ -80,6 +141,7 @@ public:
         remove_links_to_port();
         if (own_buffer && buffer_ != nullptr) {
             free(buffer_);
+            buffer_ = nullptr;
         }
     }
 
@@ -104,7 +166,11 @@ public:
         set_fixed(fixed);
         set_port_type(is_output);
         set_reactive(is_reactive);
+
         set_bounded(is_bounded);
+        if (is_bounded && lb > ub) {
+            throw std::invalid_argument("Lower bound cannot be greater than upper bound");
+        }
         if (is_bounded) {
             bounds_.push_back(lb);
             bounds_.push_back(ub);
@@ -364,16 +430,27 @@ public:
         return reinterpret_cast<size_t>(buffer_);
     }
 
-    void set_link(std::shared_ptr<Port> v) {
-        if (v == nullptr) {
-            unlink();
-            return;
+    void set_link(std::shared_ptr<Port> port) {
+        if (check_cyclic_dependency(port.get())) {
+            throw std::runtime_error("Cyclic dependency detected: Cannot link ports.");
         }
-        unlink(); // Unlink before linking to new port
-        set_oid("link", v->get_bson_oid());
-        link_ = v;
-        v->linked_to_.push_back(this);
-        if (node_ != nullptr) update_attached_node();
+
+        // If no cycle detected, update the link and register dependency
+        if (link_ != nullptr) {
+            // Remove this port from the previous link's dependents
+            auto it = std::find(link_->linked_to_.begin(), link_->linked_to_.end(), this);
+            if (it != link_->linked_to_.end()) {
+                link_->linked_to_.erase(it);
+            }
+        }
+
+        // Set the new link
+        link_ = port;
+
+        // Add this port as a dependent to the new link (if not null)
+        if (link_) {
+            link_->linked_to_.push_back(this);
+        }
     }
 
     bool unlink() {
