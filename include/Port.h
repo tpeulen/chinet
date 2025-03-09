@@ -38,7 +38,7 @@ private:
     }
 
     template<typename T>
-    void set_value_of_dependents(T *input, int n_input) {
+    void set_value_of_dependents(const T *input, int n_input) {
         for (auto &v : linked_to_) {
             v->set_value(input, n_input);
         }
@@ -107,8 +107,8 @@ public:
     }
 
     bool bound_is_valid();
-    void set_bounds(double *input, int n_input);
-    void get_bounds(double **output, int *n_output);
+    void set_bounds(std::vector<double> b);
+    std::vector<double> get_bounds();
 
     bool is_float() {
         return ((get_value_type() == 1) || (get_value_type() == 3));
@@ -125,7 +125,7 @@ public:
     std::vector<Port *> get_linked_ports();
 
     template<typename T>
-    void set_value(T *input, int n_input, bool copy_values = true) {
+    void set_value(const T *input, int n_input, bool copy_values = true) {
         if (is_fixed()) {
             return;
         }
@@ -133,8 +133,8 @@ public:
             buffer_.resize(n_input * sizeof(T));
             std::memcpy(buffer_.data(), input, n_input * sizeof(T));
         } else {
-            buffer_ = std::vector<uint8_t>(reinterpret_cast<uint8_t*>(input),
-                                           reinterpret_cast<uint8_t*>(input) + n_input * sizeof(T));
+            buffer_ = std::vector<uint8_t>(reinterpret_cast<const uint8_t*>(input),
+                                           reinterpret_cast<const uint8_t*>(input) + n_input * sizeof(T));
         }
         buffer_element_size_ = sizeof(T);
         if (node_ != nullptr) {
@@ -156,6 +156,23 @@ public:
         }
         *n_output = buffer_.size() / sizeof(T);
         *output = reinterpret_cast<T*>(buffer_.data());
+    }
+
+    template<typename T>
+    void set_value_vector(const std::vector<T>& input) {
+        // Reuse the existing set_value method
+        set_value<T>(input.data(), input.size(), true);
+    }
+
+    template<typename T>
+    std::vector<T> get_value_vector() const {
+        // Determine the number of elements stored
+        size_t n_elements = buffer_.size() / sizeof(T);
+        std::vector<T> output(n_elements);
+        if (!output.empty()) {
+            std::memcpy(output.data(), buffer_.data(), buffer_.size());
+        }
+        return output;
     }
 
     virtual bson_t get_bson() final;

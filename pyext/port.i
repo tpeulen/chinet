@@ -27,6 +27,13 @@
 %extend Port{
 
     public:
+
+        %template(set_value_vd) set_value_vector<double>;
+        %template(get_value_vd) get_value_vector<double>;
+
+        %template(set_value_vi) set_value_vector<long>;
+        %template(get_value_vi) get_value_vector<long>;
+
         %template(set_value_d) set_value<double>;
         %template(get_value_d) get_value<double>;
         %template(update_buffer_d) update_buffer<double>;
