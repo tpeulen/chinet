@@ -27,13 +27,13 @@ def link(self, v):
 @property
 def value(self):
     if self.get_value_type() == 0:
-        v = self.get_value_i()
+        v = self.get_value_vi()
     elif self.get_value_type() == 1:
-        v = self.get_value_d()
+        v = self.get_value_vd()
     elif self.get_value_type() == 2:
-        v = self.get_value_i()[0]
+        v = self.get_value_vi()[0]
     elif self.get_value_type() == 3:
-        v = self.get_value_d()[0]
+        v = self.get_value_vd()[0]
     else:
         v = None
     return v
@@ -44,9 +44,9 @@ def value(self, v):
     if not isinstance(v, np.ndarray):
         v = np.atleast_1d(v)
     if v.dtype.kind == 'i':
-        self.set_value_i(v, True)
+        self.set_value_vi(v)
     else:
-        self.set_value_d(v, True)
+        self.set_value_vd(v)
 
 
 @property
@@ -69,12 +69,11 @@ def __init__(
         *args, **kwargs
 ):
     this = _chinet.new_Port(*args, **kwargs)
+
     try:
         self.this.append(this)
     except:
         self.this = this
-    if not isinstance(value, np.ndarray):
-        value = np.atleast_1d(value)
     self.value = value
     self.fixed = fixed
 
