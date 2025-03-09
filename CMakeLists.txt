@@ -47,12 +47,13 @@ IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
     SET(VERBOSE_TTTRLIB ON)
     if(MSVC)
         ADD_COMPILE_OPTIONS(/Wall)
+        ADD_COMPILE_DEFINITIONS(_ENABLE_EXTENDED_ALIGNED_STORAGE)
     ELSE(MSVC)
         ADD_COMPILE_OPTIONS(-Wall -Wextra -pedantic)
     ENDIF(MSVC)
 ENDIF (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
-# Operation sytem specific flags
+# Operation system specific flags
 IF (MSVC)
     ADD_DEFINITIONS(-DMS_WIN64)
     ADD_DEFINITIONS(-D_USE_MATH_DEFINES)
