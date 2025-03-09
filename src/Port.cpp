@@ -118,21 +118,20 @@ bool Port::bound_is_valid()
 }
 
 
-void Port::set_bounds(double *input, int n_input)
+void Port::set_bounds(std::vector<double> v)
 {
-    if (n_input >= 2) {
+    if (v.size() >= 2) {
         bounds_.clear();
-        double lower = std::min(input[0], input[1]);
-        double upper = std::max(input[0], input[1]);
+        double lower = std::min(v[0], v[1]);
+        double upper = std::max(v[0], v[1]);
         bounds_.push_back(lower);
         bounds_.push_back(upper);
     }
 }
 
-void Port::get_bounds(double **output, int *n_output)
+std::vector<double> Port::get_bounds()
 {
-    *output = bounds_.data();
-    *n_output = bounds_.size();
+    return bounds_;
 }
 
 
