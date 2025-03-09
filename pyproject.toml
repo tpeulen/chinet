@@ -1,7 +1,7 @@
 [project]
 version = "0.0.10"
 name = "chinet"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 description = "chinet is the C++ backend for chisurf."
 readme = "README.md"
 authors = [
