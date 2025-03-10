@@ -74,7 +74,7 @@ def __init__(
         self.this.append(this)
     except:
         self.this = this
-    self.value = value
+    self.value = np.atleast_1d(value)
     self.fixed = fixed
 
 
