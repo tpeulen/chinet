@@ -56,7 +56,29 @@ public:
     }
 
     virtual std::shared_ptr<Port> get_ptr();
-    ~Port() { remove_links_to_port(); }
+
+    ~Port() {
+#if CHINET_VERBOSE
+        std::clog << "DESTROYING PORT" << std::endl;
+        std::clog << "-- OID: " << get_own_oid() << std::endl;
+#endif
+        // If this Port is linked to another, remove itself from that Port's link.
+        if (link_ != nullptr) {
+            unlink();
+        }
+
+        // For each Port that links to this Port, remove the link.
+        // This prevents other Ports from holding a dangling pointer.
+        for (auto* linkedPort : linked_to_) {
+            if (linkedPort != nullptr && linkedPort->is_linked() && linkedPort->get_link().get() == this) {
+                linkedPort->unlink();
+            }
+        }
+        linked_to_.clear();
+
+        // MongoObject destructor will run automatically after this destructor,
+        // cleaning up resources such as BSON documents and MongoDB connections.
+    }
 
     Port(
             bool fixed = false,
