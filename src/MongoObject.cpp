@@ -39,27 +39,51 @@ MongoObject::MongoObject(std::string name) :
     set_name(name);
 }
 
-MongoObject::~MongoObject()
-{
+MongoObject::~MongoObject() {
 #if CHINET_VERBOSE
     std::clog << "DESTROYING MONGOOBJECT" << std::endl;
     std::clog << "-- OID: " << get_own_oid() << std::endl;
-    std::clog << "-- Connected to DB: " << is_connected_to_db()
-    << std::endl;
+    std::clog << "-- Connected to DB: " << std::boolalpha << is_connected_to_db() << std::endl;
 #endif
+
+    // Record the time of destruction.
     time_of_death = Functions::get_time();
-    if (is_connected_to_db()) {
 #if CHINET_VERBOSE
-        std::clog << "-- Time of death: " << time_of_death << std::endl;
+    std::clog << "-- Time of death: " << time_of_death << std::endl;
 #endif
+
+    // If connected to the database, write any pending changes and disconnect.
+    if (is_connected_to_db()) {
         write_to_db();
         disconnect_from_db();
     }
+
+    // Clean up the BSON document to avoid memory leaks.
+    bson_destroy(&document);
+
+    // Free libmongoc resources if they were allocated.
+    if (collection) {
+        mongoc_collection_destroy(collection);
+        collection = nullptr;
+    }
+    if (client) {
+        mongoc_client_destroy(client);
+        client = nullptr;
+    }
+    if (uri) {
+        mongoc_uri_destroy(uri);
+        uri = nullptr;
+    }
+
+    // Optionally, if the instance is registered in a global container,
+    // ensure that it unregisters itself here (taking care not to use shared_from_this()
+    // in the destructor as the object is already in the process of being destroyed).
+
 #if CHINET_VERBOSE
-    std::clog << "-- Total number of MongoObject instances: " <<
-    registered_objects.size() << std::endl;
+    std::clog << "-- Total number of MongoObject instances: " << registered_objects.size() << std::endl;
 #endif
 }
+
 
 void MongoObject::register_instance(std::shared_ptr<MongoObject> x){
 #if CHINET_VERBOSE
@@ -467,13 +491,19 @@ std::string MongoObject::get_json(int indent)
     size_t len;
     bson_t doc = get_bson();
     char *str = bson_as_json(&doc, &len);
-    if(indent == 0){
-        return std::string(str, len);
-    } else{
-        // use nlohmann json to make pretty
-        auto j = json::parse(str);
-        return j.dump(indent);
+    std::string result;
+    if (str) {
+        if(indent == 0){
+            result = std::string(str, len);
+        } else{
+            auto j = json::parse(str);
+            result = j.dump(indent);
+        }
+        bson_free(str); // Free the allocated JSON string.
+    } else {
+        result = "{}"; // or handle the error appropriately.
     }
+    return result;
 }
 
 
