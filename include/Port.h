@@ -91,7 +91,7 @@ public:
             std::string name = ""
     ) : MongoObject(name), fixed_(fixed), is_output_(is_output), is_reactive_(is_reactive), is_bounded_(is_bounded), value_type(value_type) {
         append_string(&document, "type", "port");
-        buffer_.resize(1);
+        buffer_.resize(64); // Reserve a constant memory size for buffers
         if (is_bounded) {
             bounds_.push_back(lb);
             bounds_.push_back(ub);
