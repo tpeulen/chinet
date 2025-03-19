@@ -4,9 +4,7 @@ std::shared_ptr<Port> Port::get_ptr() {
     return std::dynamic_pointer_cast<Port>(shared_from_this());
 }
 
-std::shared_ptr<Port> Port::operator+(
-        std::shared_ptr<Port> v
-)
+std::shared_ptr<Port> Port::operator+(std::shared_ptr<Port> v)
 {
 #if CHINET_VERBOSE
     std::clog << "ADDING PORTS" << std::endl;
@@ -146,8 +144,13 @@ void Port::update_attached_node() {
 void Port::get_bytes(unsigned char **output, int *n_output, bool copy) {
     *n_output = buffer_.size();
     if (copy) {
-        *output = new unsigned char[*n_output];
-        std::memcpy(*output, buffer_.data(), *n_output);
+        auto buffer_size = *n_output;
+        *output = static_cast<unsigned char*>(std::malloc(buffer_size)); // Use malloc for improved performance
+        if (*output) {
+            std::memcpy(*output, buffer_.data(), buffer_size);
+        } else {
+            throw std::runtime_error("Memory allocation failed in get_bytes.");
+        }
     } else {
         *output = buffer_.data();
     }

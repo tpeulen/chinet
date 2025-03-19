@@ -26,17 +26,13 @@ def link(self, v):
 
 @property
 def value(self):
-    if self.get_value_type() == 0:
-        v = self.get_value_vi()
-    elif self.get_value_type() == 1:
-        v = self.get_value_vd()
-    elif self.get_value_type() == 2:
-        v = self.get_value_vi()[0]
-    elif self.get_value_type() == 3:
-        v = self.get_value_vd()[0]
-    else:
-        v = None
-    return v
+    value_getters = {
+        0: self.get_value_vi,
+        1: self.get_value_vd,
+        2: lambda: self.get_value_vi()[0],
+        3: lambda: self.get_value_vd()[0],
+    }
+    return value_getters.get(self.get_value_type(), lambda: None)()
 
 
 @value.setter
