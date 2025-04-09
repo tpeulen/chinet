@@ -713,7 +713,7 @@ bool MongoObject::read_json(std::string json_string)
 #endif
         return false;
     } else {
-        bson_reinit(&document);
+        //bson_reinit(&document);
         bson_copy_to(&b, &document);
         return true;
     }
