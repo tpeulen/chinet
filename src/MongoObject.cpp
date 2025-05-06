@@ -712,11 +712,14 @@ bool MongoObject::read_json(std::string json_string)
         std::cerr << "Error reading JSON: " << error.message << std::endl;
 #endif
         return false;
-    } else {
-        //bson_reinit(&document);
-        bson_copy_to(&b, &document);
-        return true;
     }
+    // Ensure clean ownership transfer
+    bson_destroy(&document);   // Important: avoid memory leak or double-init
+    bson_init(&document);      // Now document is clean
+    bson_copy_to(&b, &document);
+    bson_destroy(&b);          // Cleanup temporary
+
+    return true;
 }
 
 std::shared_ptr<MongoObject> MongoObject::operator[](std::string key)
