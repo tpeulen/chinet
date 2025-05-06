@@ -38,6 +38,7 @@ std::shared_ptr<Port> Port::operator+(std::shared_ptr<Port> v)
     return re;
 }
 
+
 std::shared_ptr<Port> Port::operator*(std::shared_ptr<Port> v)
 {
     auto re = std::make_shared<Port>();
@@ -127,11 +128,11 @@ void Port::set_bounds(std::vector<double> v)
     }
 }
 
+
 std::vector<double> Port::get_bounds()
 {
     return bounds_;
 }
-
 
 
 void Port::update_attached_node() {

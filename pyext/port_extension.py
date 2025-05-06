@@ -17,10 +17,7 @@ def link(self):
 
 
 @link.setter
-def link(self, v):
-    # type: (cn.Port) -> None
-    if self.node is v.node:
-        Warning("Linking to same Node.")
+def link(self, v) -> None:
     self.set_link(v)
 
 

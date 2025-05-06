@@ -167,8 +167,26 @@ public:
 
     template<typename T>
     void get_value(T **output, int *n_output) {
-        *n_output = buffer_.size() / sizeof(T);
-        *output = reinterpret_cast<T*>(buffer_.data());
+        if (!is_linked()) {
+#if CHINET_VERBOSE
+            std::clog << "GET VALUE" << std::endl;
+            std::clog << "-- Name of Port: " << get_name() << std::endl;
+            std::clog << "-- Local value type: " << value_type << std::endl;
+            std::clog << "-- Local buffer is filled: " << (n_buffer_elements_ > 0) << std::endl;
+            std::clog << "-- Number of elements in local buffer: " << n_buffer_elements_ << std::endl;
+            std::clog << "-- Port is not linked." << std::endl;
+#endif
+            get_own_value(output, n_output);
+        } else {
+#if CHINET_VERBOSE
+            std::clog << "GET VALUE" << std::endl;
+            std::clog << "-- Port is linked to " << get_link()->get_name() << std::endl;
+#endif
+            get_link()->get_value(output, n_output);
+        }
+#if CHINET_VERBOSE
+        std::clog << "-- Number of elements: " << *n_output << std::endl;
+#endif
     }
 
     template<typename T>
@@ -188,11 +206,15 @@ public:
 
     template<typename T>
     std::vector<T> get_value_vector() const {
-        // Determine the number of elements stored
-        size_t n_elements = buffer_.size() / sizeof(T);
+        const std::vector<uint8_t>* buff = &buffer_;
+        if (is_linked()) {
+            buff = &link_->buffer_;
+        }
+        size_t n_elements = buff->size() / sizeof(T);
         std::vector<T> output(n_elements);
+
         if (!output.empty()) {
-            std::memcpy(output.data(), buffer_.data(), buffer_.size());
+            std::memcpy(output.data(), buff->data(), buff->size());
         }
         return output;
     }
@@ -215,6 +237,7 @@ public:
 
     std::shared_ptr<Port> operator+(std::shared_ptr<Port> v);
     std::shared_ptr<Port> operator*(std::shared_ptr<Port> v);
+
 };
 
 #endif //chinet_PORT_H
