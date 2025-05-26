@@ -205,8 +205,5 @@ def __init__(
         self.value = np.atleast_1d(value)
     self.fixed = fixed
 
-def __repr__(self):
-    return "Port(%s)" % self.oid
-
 def __str__(self):
     return self.get_json(indent=4)

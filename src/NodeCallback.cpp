@@ -66,9 +66,9 @@ void combine(
             add(tmp, n_elements, inputs);
             break;
         case 1:
-#if CHINET_VERBOSE
-            std::clog << "-- Multiplying input ports" << std::endl;
-#endif
+            if (is_chinet_verbose()) {
+                std::clog << "-- Multiplying input ports" << std::endl;
+            }
             mul(tmp, n_elements, inputs);
             break;
         default:
@@ -76,14 +76,14 @@ void combine(
     }
     if(!outputs.empty()){
         if (outputs.find("outA") == outputs.end() ) {
-#if CHINET_VERBOSE
-            std::clog << "ERROR: Node does not define output port with the name 'outA' " << std::endl;
-#endif
+            if (is_chinet_verbose()) {
+                std::clog << "ERROR: Node does not define output port with the name 'outA' " << std::endl;
+            }
             outputs.begin()->second->set_value(tmp, n_elements);
         } else {
-#if CHINET_VERBOSE
-            std::clog << "Setting value to output " << std::endl;
-#endif
+            if (is_chinet_verbose()) {
+                std::clog << "Setting value to output " << std::endl;
+            }
             outputs["outA"]->set_value(tmp, n_elements);
         }
     } else{
@@ -99,9 +99,9 @@ void addition(
         std::map<std::string, std::shared_ptr<Port>> &outputs
 )
 {
-#if CHINET_VERBOSE
-    std::clog << "addition"  << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "addition"  << std::endl;
+    }
     combine<T>(inputs, outputs, 0);
 }
 

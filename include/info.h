@@ -8,9 +8,6 @@
 //#define CHINET_VERBOSE true
 
 // Function to check if CHINET_VERBOSE environment variable is set
-inline bool is_chinet_verbose() {
-    const char* env = std::getenv("CHINET_VERBOSE");
-    return env != nullptr && std::string(env) != "";
-}
+bool is_chinet_verbose();
 
 #endif //CHINET_INFO_H

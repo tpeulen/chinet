@@ -8,17 +8,26 @@
 #include <cstdlib>
 #include <vector>
 #include <cstring>
+#include "info.h"
 
 #ifdef WITH_MONGODB
 #include <bson.h>
 #endif
 
 #include "CNode.h"
-#include "DatabaseObject.h"
+#ifdef WITH_MONGODB
+#include "MongoObject.h"
+#else
+#include "MemoryObject.h"
+#endif
 
 class Node;
 
-class Port : public DatabaseObject {
+#ifdef WITH_MONGODB
+class Port : public MongoObject {
+#else
+class Port : public MemoryObject {
+#endif
 
 private:
     std::vector<uint8_t> buffer_;
@@ -61,10 +70,10 @@ public:
     virtual std::shared_ptr<Port> get_ptr();
 
     ~Port() {
-#if CHINET_VERBOSE
-        std::clog << "DESTROYING PORT" << std::endl;
-        std::clog << "-- OID: " << get_own_oid() << std::endl;
-#endif
+        if (is_chinet_verbose()) {
+            std::clog << "DESTROYING PORT" << std::endl;
+            std::clog << "-- OID: " << get_own_oid() << std::endl;
+        }
         // If this Port is linked to another, remove itself from that Port's link.
         if (link_ != nullptr) {
             unlink();
@@ -92,7 +101,11 @@ public:
             double ub = 0,
             int value_type = 0,
             std::string name = ""
-    ) : DatabaseObject(name), fixed_(fixed), is_output_(is_output), is_reactive_(is_reactive), is_bounded_(is_bounded), value_type(value_type) {
+#ifdef WITH_MONGODB
+    ) : MongoObject(name), fixed_(fixed), is_output_(is_output), is_reactive_(is_reactive), is_bounded_(is_bounded), value_type(value_type) {
+#else
+    ) : MemoryObject(name), fixed_(fixed), is_output_(is_output), is_reactive_(is_reactive), is_bounded_(is_bounded), value_type(value_type) {
+#endif
 #ifdef WITH_MONGODB
         append_string(&document, "type", "port");
 #else
@@ -271,25 +284,25 @@ public:
     template<typename T>
     void get_value(T **output, int *n_output) {
         if (!is_linked()) {
-#if CHINET_VERBOSE
-            std::clog << "GET VALUE" << std::endl;
-            std::clog << "-- Name of Port: " << get_name() << std::endl;
-            std::clog << "-- Local value type: " << value_type << std::endl;
-            std::clog << "-- Local buffer is filled: " << (n_buffer_elements_ > 0) << std::endl;
-            std::clog << "-- Number of elements in local buffer: " << n_buffer_elements_ << std::endl;
-            std::clog << "-- Port is not linked." << std::endl;
-#endif
+            if (is_chinet_verbose()) {
+                std::clog << "GET VALUE" << std::endl;
+                std::clog << "-- Name of Port: " << get_name() << std::endl;
+                std::clog << "-- Local value type: " << value_type << std::endl;
+                std::clog << "-- Local buffer is filled: " << (current_size() > 0) << std::endl;
+                std::clog << "-- Number of elements in local buffer: " << current_size() << std::endl;
+                std::clog << "-- Port is not linked." << std::endl;
+            }
             get_own_value(output, n_output);
         } else {
-#if CHINET_VERBOSE
-            std::clog << "GET VALUE" << std::endl;
-            std::clog << "-- Port is linked to " << get_link()->get_name() << std::endl;
-#endif
+            if (is_chinet_verbose()) {
+                std::clog << "GET VALUE" << std::endl;
+                std::clog << "-- Port is linked to " << get_link()->get_name() << std::endl;
+            }
             get_link()->get_value(output, n_output);
         }
-#if CHINET_VERBOSE
-        std::clog << "-- Number of elements: " << *n_output << std::endl;
-#endif
+        if (is_chinet_verbose()) {
+            std::clog << "-- Number of elements: " << *n_output << std::endl;
+        }
     }
 
     template<typename T>

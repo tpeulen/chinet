@@ -80,12 +80,16 @@ bool Port::write_to_db() {
     bson_t doc = get_bson();
     return MongoObject::write_to_db(doc, 0);
 #else
-    return DatabaseObject::write_to_db();
+    return MemoryObject::write_to_db();
 #endif
 }
 
 bool Port::read_from_db(const std::string &oid_string) {
-    bool re = DatabaseObject::read_from_db(oid_string);
+#ifdef WITH_MONGODB
+    bool re = MongoObject::read_from_db(oid_string);
+#else
+    bool re = MemoryObject::read_from_db(oid_string);
+#endif
 #ifdef WITH_MONGODB
     auto v = MongoObject::get_array<uint8_t>("value");
 #else
