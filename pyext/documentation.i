@@ -1,12 +1,6 @@
 
 // File: index.xml
 
-// File: classbson__oid__t.xml
-
-// File: classbson__t.xml
-
-// File: class_port_1_1get__value__vector.xml
-
 // File: class_mongo_object.xml
 
 
@@ -34,7 +28,7 @@ Parameters
 
 Returns
 -------
-a bson_t document  
+a bsoncxx::document::value  
 
 Returns true if the instance of the to the DB  
 
@@ -208,14 +202,85 @@ MongoObject::get_instances";
 
 %feature("docstring") Node "
 
+Represents a computational node with ports and callbacks.  
+
+The `Node` class is derived from `MongoObject` and allows interaction with input
+and output ports, evaluation of node functionality, and database communication.
+A callback mechanism is provided via `NodeCallback`.  
+
 C++ includes: CNode.h
 ";
+
+/*
+ Constructor & Destructor 
+*/
+
+/*
+Constructs a new `Node` object.  
+
+Parameters
+----------
+* `name` :  
+    The name of the node (optional, default = \"\").  
+* `ports` :  
+    Map of port names to `Port` objects (optional).  
+* `callback_class` :  
+    Shared pointer to a `NodeCallback` object (optional).  
+
+*/
+
+/*
+ Methods 
+*/
+
+/*
+Reads the node's data from the database by its object ID.  
+
+Parameters
+----------
+* `oid_string` :  
+    The object ID (OID) of the node in the database.  
+
+Returns
+-------
+`true` if the operation succeeds, `false` otherwise.  
+
+*/
+
+/*
+ Getter Methods 
+*/
+
+/*
+Retrieves a BSON representation of the node.  
+
+Returns
+-------
+A BSON object representing the node's properties.  
+
+*/
+
+/*
+ Setter Methods 
+*/
+
+/*
+Configures all ports of a node.  
+
+Parameters
+----------
+* `ports` :  
+    Map of port names to their respective `Port` objects.  
+
+*/
 
 %feature("docstring") Node::Node "
 Node::Node";
 
 %feature("docstring") Node::~Node "
-Node::~Node";
+Node::~Node
+Destroys the `Node` object.  
+";
 
 %feature("docstring") Node::read_from_db "
 Node::read_from_db
@@ -232,61 +297,192 @@ True if successful otherwise false
 ";
 
 %feature("docstring") Node::evaluate "
-Node::evaluate";
+Node::evaluate
+Performs evaluation of the node.  
+";
 
 %feature("docstring") Node::is_valid "
-Node::is_valid";
+Node::is_valid
+Checks whether the node is valid.  
+
+Returns
+-------
+`true` if the node is valid, otherwise `false`.  
+";
 
 %feature("docstring") Node::inputs_valid "
-Node::inputs_valid";
+Node::inputs_valid
+Checks the validity of the node's input ports.  
+
+Returns
+-------
+`true` if all input ports are valid, otherwise `false`.  
+";
 
 %feature("docstring") Node::write_to_db "
-Node::write_to_db";
+Node::write_to_db
+Writes the node's data to the database.  
+
+Returns
+-------
+`true` if the operation succeeds, `false` otherwise.  
+";
 
 %feature("docstring") Node::get_bson "
 Node::get_bson";
 
 %feature("docstring") Node::get_name "
-Node::get_name";
+Node::get_name
+Retrieves the name of the node.  
+
+Returns
+-------
+A string containing the node's name.  
+";
 
 %feature("docstring") Node::get_input_ports "
-Node::get_input_ports";
+Node::get_input_ports
+Gets all input ports of the node.  
+
+Returns
+-------
+A map containing input ports with their names as keys.  
+";
 
 %feature("docstring") Node::get_output_ports "
-Node::get_output_ports";
+Node::get_output_ports
+Gets all output ports of the node.  
+
+Returns
+-------
+A map containing output ports with their names as keys.  
+";
 
 %feature("docstring") Node::get_ports "
-Node::get_ports";
+Node::get_ports
+Gets all ports of the node (both input and output).  
+
+Returns
+-------
+A map containing all ports with their names as keys.  
+";
+
+%feature("docstring") Node::get_port "
+Node::get_port
+Retrieves a port by its name.  
+
+Parameters
+----------
+* `port_name` :  
+    The name of the port to retrieve.  
+
+Returns
+-------
+A pointer to the requested `Port` object.  
+";
+
+%feature("docstring") Node::get_input_port "
+Node::get_input_port
+Retrieves an input port by its name.  
+
+Parameters
+----------
+* `port_name` :  
+    The name of the input port.  
+
+Returns
+-------
+A pointer to the requested input `Port` object.  
+";
+
+%feature("docstring") Node::get_output_port "
+Node::get_output_port
+Retrieves an output port by its name.  
+
+Parameters
+----------
+* `port_name` :  
+    The name of the output port.  
+
+Returns
+-------
+A pointer to the requested output `Port` object.  
+";
 
 %feature("docstring") Node::set_ports "
 Node::set_ports";
 
-%feature("docstring") Node::get_port "
-Node::get_port";
-
 %feature("docstring") Node::add_port "
-Node::add_port";
+Node::add_port
+Adds a port to the node.  
+
+Parameters
+----------
+* `key` :  
+    The name of the port.  
+* `port` :  
+    A shared pointer to the `Port` object.  
+* `is_source` :  
+    Indicates whether the port is a source port.  
+* `fill_in_out` :  
+    Determines whether input/output lookups should be updated.  
+";
 
 %feature("docstring") Node::add_input_port "
-Node::add_input_port";
+Node::add_input_port
+Adds an input port to the node.  
+
+Parameters
+----------
+* `key` :  
+    The name of the input port.  
+* `port` :  
+    A shared pointer to the input `Port` object.  
+";
 
 %feature("docstring") Node::add_output_port "
-Node::add_output_port";
+Node::add_output_port
+Adds an output port to the node.  
 
-%feature("docstring") Node::get_input_port "
-Node::get_input_port";
-
-%feature("docstring") Node::get_output_port "
-Node::get_output_port";
+Parameters
+----------
+* `key` :  
+    The name of the output port.  
+* `port` :  
+    A shared pointer to the output `Port` object.  
+";
 
 %feature("docstring") Node::set_callback "
-Node::set_callback";
+Node::set_callback
+Sets the callback for the node.  
+
+Parameters
+----------
+* `callback` :  
+    The callback's name as a string.  
+* `callback_type` :  
+    The type of the callback as a string.  
+";
 
 %feature("docstring") Node::set_callback "
-Node::set_callback";
+Node::set_callback
+Sets the callback of the node using a `NodeCallback` object.  
+
+Parameters
+----------
+* `cb` :  
+    Shared pointer to the `NodeCallback` object.  
+";
 
 %feature("docstring") Node::set_valid "
-Node::set_valid";
+Node::set_valid
+Sets the validity of the node.  
+
+Parameters
+----------
+* `is_valid` :  
+    A boolean indicating if the node is valid.  
+";
 
 // File: class_node_callback.xml
 
@@ -304,6 +500,8 @@ NodeCallback::NodeCallback";
 
 %feature("docstring") NodeCallback::~NodeCallback "
 NodeCallback::~NodeCallback";
+
+// File: classbsoncxx_1_1oid.xml
 
 // File: class_port.xml
 
@@ -325,44 +523,56 @@ Port::~Port";
 %feature("docstring") Port::Port "
 Port::Port";
 
+%feature("docstring") Port::set_fixed "
+Port::set_fixed";
+
+%feature("docstring") Port::is_fixed "
+Port::is_fixed";
+
+%feature("docstring") Port::set_port_type "
+Port::set_port_type";
+
+%feature("docstring") Port::is_output "
+Port::is_output";
+
+%feature("docstring") Port::set_reactive "
+Port::set_reactive";
+
+%feature("docstring") Port::is_reactive "
+Port::is_reactive";
+
+%feature("docstring") Port::set_bounded "
+Port::set_bounded";
+
+%feature("docstring") Port::is_bounded "
+Port::is_bounded";
+
+%feature("docstring") Port::set_value_type "
+Port::set_value_type";
+
+%feature("docstring") Port::get_value_type "
+Port::get_value_type";
+
 %feature("docstring") Port::set_node "
 Port::set_node";
 
 %feature("docstring") Port::get_node "
 Port::get_node";
 
-%feature("docstring") Port::get_value_type "
-Port::get_value_type";
+%feature("docstring") Port::set_link "
+Port::set_link";
 
-%feature("docstring") Port::set_value_type "
-Port::set_value_type";
+%feature("docstring") Port::is_linked "
+Port::is_linked";
 
-%feature("docstring") Port::set_value "
-Port::set_value";
+%feature("docstring") Port::get_link "
+Port::get_link";
 
-%feature("docstring") Port::update_buffer "
-Port::update_buffer";
-
-%feature("docstring") Port::get_own_value "
-Port::get_own_value";
-
-%feature("docstring") Port::get_value "
-Port::get_value";
-
-%feature("docstring") Port::get_bson "
-Port::get_bson";
-
-%feature("docstring") Port::update_attached_node "
-Port::update_attached_node";
-
-%feature("docstring") Port::set_bounded "
-Port::set_bounded";
+%feature("docstring") Port::unlink "
+Port::unlink";
 
 %feature("docstring") Port::bound_is_valid "
 Port::bound_is_valid";
-
-%feature("docstring") Port::is_bounded "
-Port::is_bounded";
 
 %feature("docstring") Port::set_bounds "
 Port::set_bounds";
@@ -370,26 +580,50 @@ Port::set_bounds";
 %feature("docstring") Port::get_bounds "
 Port::get_bounds";
 
-%feature("docstring") Port::is_fixed "
-Port::is_fixed";
-
-%feature("docstring") Port::set_fixed "
-Port::set_fixed";
-
-%feature("docstring") Port::is_output "
-Port::is_output";
-
-%feature("docstring") Port::set_port_type "
-Port::set_port_type";
-
-%feature("docstring") Port::is_reactive "
-Port::is_reactive";
-
 %feature("docstring") Port::is_float "
 Port::is_float";
 
-%feature("docstring") Port::set_reactive "
-Port::set_reactive";
+%feature("docstring") Port::get_bytes "
+Port::get_bytes";
+
+%feature("docstring") Port::set_bytes "
+Port::set_bytes";
+
+%feature("docstring") Port::set_buffer_ptr "
+Port::set_buffer_ptr";
+
+%feature("docstring") Port::get_buffer_ptr "
+Port::get_buffer_ptr";
+
+%feature("docstring") Port::get_linked_ports "
+Port::get_linked_ports";
+
+%feature("docstring") Port::set_value "
+Port::set_value";
+
+%feature("docstring") Port::get_value "
+Port::get_value";
+
+%feature("docstring") Port::get_own_value "
+Port::get_own_value";
+
+%feature("docstring") Port::set_value_vector "
+Port::set_value_vector";
+
+%feature("docstring") Port::get_value_vector "
+Port::get_value_vector";
+
+%feature("docstring") Port::get_bson "
+Port::get_bson";
+
+%feature("docstring") Port::update_buffer "
+Port::update_buffer";
+
+%feature("docstring") Port::get_buffer "
+Port::get_buffer";
+
+%feature("docstring") Port::update_attached_node "
+Port::update_attached_node";
 
 %feature("docstring") Port::write_to_db "
 Port::write_to_db";
@@ -407,33 +641,6 @@ Returns
 -------
 True if successful otherwise false  
 ";
-
-%feature("docstring") Port::get_bytes "
-Port::get_bytes";
-
-%feature("docstring") Port::set_bytes "
-Port::set_bytes";
-
-%feature("docstring") Port::set_buffer_ptr "
-Port::set_buffer_ptr";
-
-%feature("docstring") Port::get_buffer_ptr "
-Port::get_buffer_ptr";
-
-%feature("docstring") Port::set_link "
-Port::set_link";
-
-%feature("docstring") Port::unlink "
-Port::unlink";
-
-%feature("docstring") Port::is_linked "
-Port::is_linked";
-
-%feature("docstring") Port::get_linked_ports "
-Port::get_linked_ports";
-
-%feature("docstring") Port::get_link "
-Port::get_link";
 
 // File: class_session.xml
 
@@ -585,8 +792,7 @@ Parameters
     and  
 * `bound_2.` :  
     The values are mapped to the interval by:  
-$
-max(bound_1, bound_2) - abs(bound_1-bound_2)/(exp(value /
+$max(bound_1, bound_2) - abs(bound_1-bound_2)/(exp(value /
 abs(bound_1-bound_2))+1)
 $  
 
@@ -715,23 +921,23 @@ Returns
 
 %feature("docstring") Functions::add_documents "
 Functions::add_documents
-Adds the content in the bson_t document src to the document dst omitting the
+Adds the content in the bsoncxx document src to the document dst omitting the
 keys provided by the vector skip.  
 ";
 
-%feature("docstring") Functions::bson_iter_skip "
-Functions::bson_iter_skip
+%feature("docstring") Functions::bson_element_skip "
+Functions::bson_element_skip
 Returns true if the key associated to  
 
 Parameters
 ----------
-* `iter` :  
+* `element` :  
     is in the list of vectors  
 * `skip` :  
-* `iter` :  
-    pointer to a bson_iter_t  
+* `element` :  
+    reference to a bsoncxx::document::element  
 * `skip` :  
-    vector of strings containing keys that are skipped by iter  
+    vector of strings containing keys that are skipped  
 ";
 
 %feature("docstring") Functions::get_vector_of_min_size "
@@ -772,6 +978,4 @@ a vector of size min(a.size(), b.size())
 // File: _r_e_a_d_m_e_8md.xml
 
 // File: dir_d44c64559bbebec7f509842c48db8b23.xml
-
-// File: indexpage.xml
 

@@ -2,7 +2,7 @@
 %feature("director") NodeCallback;
 %{
 #include "../include/CNode.h"
-#include "../include/MongoObject.h"
+#include "../include/DatabaseObject.h"
 #include "../include/Port.h"
 #include "../include/NodeCallback.h"
 %}
@@ -38,4 +38,3 @@
 
     %pythoncode "node_extension.py"
 }
-

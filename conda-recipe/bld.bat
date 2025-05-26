@@ -1,7 +1,7 @@
 @echo off
 
 REM Update git submodules recursively, initializing and fetching remote updates
-git submodule update --init --recursive --remote
+REM git submodule update --init --recursive --remote
 
 REM Remove and recreate the build directory
 rmdir b2 /s /q
@@ -20,6 +20,7 @@ cmake .. -G "Visual Studio 17 2022" ^
  -DBUILD_LIBRARY=OFF ^
  -DBUILD_PYTHON_DOCS=ON ^
  -DWITH_AVX=OFF ^
+ -DWITH_MONGODB=OFF ^
  -Wno-dev ^
  -DBoost_USE_STATIC_LIBS=OFF
 

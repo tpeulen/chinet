@@ -52,6 +52,10 @@ MongoObject::~MongoObject() {
     std::clog << "-- Time of death: " << time_of_death << std::endl;
 #endif
 
+    // Remove this object from the registered objects list
+    // Don't use shared_from_this() in the destructor as it can throw std::bad_weak_ptr
+    unregister_instance(nullptr);
+
     // If connected to the database, write any pending changes and disconnect.
     if (is_connected_to_db()) {
         write_to_db();
@@ -75,10 +79,6 @@ MongoObject::~MongoObject() {
         uri = nullptr;
     }
 
-    // Optionally, if the instance is registered in a global container,
-    // ensure that it unregisters itself here (taking care not to use shared_from_this()
-    // in the destructor as the object is already in the process of being destroyed).
-
 #if CHINET_VERBOSE
     std::clog << "-- Total number of MongoObject instances: " << registered_objects.size() << std::endl;
 #endif
@@ -94,10 +94,20 @@ void MongoObject::register_instance(std::shared_ptr<MongoObject> x){
     int use_count_offset = 0;
 #endif
     if(x == nullptr){
-        x = get_ptr();
+        // If x is null, try to use shared_from_this() to get a valid shared_ptr
+        try {
+            x = shared_from_this();
 #if CHINET_VERBOSE
-        use_count_offset++;
+            use_count_offset++;
 #endif
+        } catch (const std::bad_weak_ptr&) {
+            // If shared_from_this() fails, the object is already being destroyed
+            // and we can't get a valid shared_ptr, so just return
+#if CHINET_VERBOSE
+            std::clog << "Warning: Could not register instance (null shared_ptr and shared_from_this() failed)" << std::endl;
+#endif
+            return;
+        }
     }
 #if CHINET_VERBOSE
     if(x != nullptr){
@@ -121,17 +131,26 @@ void MongoObject::unregister_instance(std::shared_ptr<MongoObject> x){
     int use_count_offset = 0;
 #endif
     if(x != nullptr){
-        x = get_ptr();
         registered_objects.remove(x);
+    } else {
+        // If x is null, try to use shared_from_this() to get a valid shared_ptr
+        try {
+            registered_objects.remove(shared_from_this());
+        } catch (const std::bad_weak_ptr&) {
+            // If shared_from_this() fails, the object is already being destroyed
+            // and we can't get a valid shared_ptr, so just ignore it
+#if CHINET_VERBOSE
+            std::clog << "Warning: Could not unregister instance (null shared_ptr and shared_from_this() failed)" << std::endl;
+#endif
+        }
     }
 #if CHINET_VERBOSE
-   use_count_offset++;
+    use_count_offset++;
     if(x != nullptr){
         std::clog << "-- Use count before unregister: " << (x.use_count() - use_count_offset) << std::endl;
+        std::clog << "-- Use count after unregister: " << (x.use_count() - use_count_offset)<< std::endl;
     }
-    std::clog << "-- Use count after unregister: " << (x.use_count() - use_count_offset)<< std::endl;
 #endif
-
 }
 
 
@@ -151,7 +170,15 @@ std::list<std::shared_ptr<MongoObject>> MongoObject::get_instances(){
 }
 
 std::shared_ptr<MongoObject> MongoObject::get_ptr(){
-    return shared_from_this();
+    try {
+        return shared_from_this();
+    } catch (const std::bad_weak_ptr&) {
+        // If shared_from_this() fails, log a warning and return nullptr
+#if CHINET_VERBOSE
+        std::clog << "Warning: get_ptr() failed (shared_from_this() threw bad_weak_ptr)" << std::endl;
+#endif
+        return nullptr;
+    }
 }
 
 bool MongoObject::connect_to_db(
@@ -208,6 +235,18 @@ bool MongoObject::connect_to_db(
                 collection_string.c_str()
                 );
         is_connected_to_db_ = true;
+
+        // Register this instance (for consistency with MemoryObject)
+        try {
+            register_instance(shared_from_this());
+        } catch (const std::bad_weak_ptr&) {
+            // If shared_from_this() fails, log a warning but continue
+            // This can happen if the object wasn't created with make_shared
+#if CHINET_VERBOSE
+            std::clog << "Warning: Could not register instance in connect_to_db (shared_from_this() failed)" << std::endl;
+#endif
+        }
+
         return true;
     }
 }
@@ -728,4 +767,3 @@ std::shared_ptr<MongoObject> MongoObject::operator[](std::string key)
     mo->read_json(get_json_of_key(key.c_str()));
     return mo;
 }
-

@@ -11,7 +11,9 @@
 #include <iterator>
 #include <string>
 #include <sstream>      // std::ostringstream
+#ifdef WITH_MONGODB
 #include <mongoc.h>
+#endif
 
 #include "json.hpp"
 using json = nlohmann::json;
@@ -26,21 +28,32 @@ private:
     static std::list<std::shared_ptr<MongoObject>> registered_objects;
 
     bool is_connected_to_db_ = false;
+#ifdef WITH_MONGODB
     mongoc_uri_t *uri;
     mongoc_client_t *client;
     bson_error_t error;
     mongoc_collection_t *collection;
+#endif
 
 protected:
 
     std::string object_name;
+#ifdef WITH_MONGODB
     bson_t document;
+#else
+    json document;
+#endif
     std::string uri_string;
     std::string db_string;
     std::string app_string;
     std::string collection_string;
+#ifdef WITH_MONGODB
     bson_oid_t oid_document;
     bson_oid_t oid_precursor;
+#else
+    std::string oid_document;
+    std::string oid_precursor;
+#endif
     uint64_t time_of_death;
 
     // Getter & Setter
@@ -53,6 +66,7 @@ protected:
      *
      */
     //! \return
+#ifdef WITH_MONGODB
     bson_oid_t get_bson_oid()
     {
         return oid_document;
@@ -72,15 +86,28 @@ protected:
     /// Pointer to the BSON document of the MongoObject
     /// \return
     const bson_t* get_document();
+#else
+    std::string get_bson_oid()
+    {
+        return oid_document;
+    }
+#endif
 
 
+#ifdef WITH_MONGODB
     void set_document(bson_t *doc){
         bson_init(&document);
         bson_copy_to(doc, &document);
     }
+#else
+    void set_document(json doc){
+        document = doc;
+    }
+#endif
 
     // Methods
     //--------------------------------------------------------------------
+#ifdef WITH_MONGODB
     //! Writes a BSON document to the connected MongoDB
     /*!
      *
@@ -91,8 +118,10 @@ protected:
      * @return true in case of a successful write.
      */
     bool write_to_db(const bson_t &doc, int write_option = 0);
+#endif
     bool read_from_db();
 
+#ifdef WITH_MONGODB
     template <typename T>
     void create_oid_dict_in_doc(
             bson_t *doc,
@@ -152,7 +181,9 @@ protected:
         }
         bson_append_array_end(doc, &child);
     }
+#endif
 
+#ifdef WITH_MONGODB
     template <typename T>
     bool create_and_connect_objects_from_oid_doc(
             const bson_t *doc,
@@ -226,7 +257,9 @@ protected:
         }
         return return_value;
     }
+#endif
 
+#ifdef WITH_MONGODB
     /// Append a string to a BSON document
     /// \param dst pointer to the target BSON document
     /// \param key the key of the string int the target BSON document
@@ -266,6 +299,7 @@ protected:
             const std::string &oid_string,
             bson_oid_t *oid
             );
+#endif
 
 
 public:
@@ -338,17 +372,31 @@ public:
 
     /// The own object identifier
     /// \return
+#ifdef WITH_MONGODB
     std::string get_own_oid()
     {
         return oid_to_string(oid_document);
     }
+#else
+    std::string get_own_oid()
+    {
+        return oid_document;
+    }
+#endif
 
     /// Set the own object identifier without duplicate check
     /// \param oid_str
+#ifdef WITH_MONGODB
     void set_own_oid(std::string oid_str)
     {
         MongoObject::string_to_oid(oid_str, &oid_document);
     }
+#else
+    void set_own_oid(std::string oid_str)
+    {
+        oid_document = oid_str;
+    }
+#endif
 
     void set_name(std::string name){
         object_name = name;
@@ -370,6 +418,7 @@ public:
         return object_name;
     }
 
+#ifdef WITH_MONGODB
     template<typename T>
     T get_singleton(const char *key){
         T v(0);
@@ -394,7 +443,32 @@ public:
         }
         return v;
     }
+#else
+    template<typename T>
+    T get_singleton(const char *key){
+        T v{};
+        if (document.contains(key)) {
+            if constexpr (std::is_same<T, int>::value || std::is_same<T, long>::value) {
+                if (document[key].is_number_integer()) {
+                    return document[key].get<T>();
+                }
+            }
+            else if constexpr (std::is_same<T, double>::value) {
+                if (document[key].is_number_float()) {
+                    return document[key].get<T>();
+                }
+            }
+            else if constexpr (std::is_same<T, bool>::value) {
+                if (document[key].is_boolean()) {
+                    return document[key].get<T>();
+                }
+            }
+        }
+        return v;
+    }
+#endif
 
+#ifdef WITH_MONGODB
     template <typename T>
     void set_singleton(const char *key, T value){
         bson_iter_t iter;
@@ -423,9 +497,20 @@ public:
             }
         }
     }
+#else
+    template <typename T>
+    void set_singleton(const char *key, T value){
+        document[key] = value;
+    }
+#endif
 
+#ifdef WITH_MONGODB
     void set_oid(const char* key, bson_oid_t value);
+#else
+    void set_oid(const char* key, std::string value);
+#endif
 
+#ifdef WITH_MONGODB
     template <typename T>
     std::vector<T> get_array(const char* key){
         bson_iter_t iter;
@@ -468,7 +553,34 @@ public:
         }
         return v;
     }
+#else
+    template <typename T>
+    std::vector<T> get_array(const char* key){
+        std::vector<T> v{};
+        if (document.contains(key) && document[key].is_array()) {
+            for (auto& item : document[key]) {
+                if constexpr (std::is_same<T, double>::value) {
+                    if (item.is_number_float()) {
+                        v.push_back(item.get<T>());
+                    }
+                }
+                else if constexpr (std::is_same<T, int>::value || std::is_same<T, long>::value) {
+                    if (item.is_number_integer()) {
+                        v.push_back(item.get<T>());
+                    }
+                }
+                else if constexpr (std::is_same<T, bool>::value) {
+                    if (item.is_boolean()) {
+                        v.push_back(item.get<T>());
+                    }
+                }
+            }
+        }
+        return v;
+    }
+#endif
 
+#ifdef WITH_MONGODB
     template <typename T>
     void set_array(const char* key, std::vector<T> value){
         bson_t dst; bson_init(&dst);
@@ -480,6 +592,16 @@ public:
         append_number_array(&dst, key, value);
         bson_copy_to(&dst, &document);
     }
+#else
+    template <typename T>
+    void set_array(const char* key, std::vector<T> value){
+        json array = json::array();
+        for (auto& v : value) {
+            array.push_back(v);
+        }
+        document[key] = array;
+    }
+#endif
 
     std::string get_json(int indent=0);
 
@@ -497,10 +619,17 @@ public:
     virtual std::shared_ptr<MongoObject> operator[](std::string key);
 
     bool operator==(MongoObject const& b){
+#ifdef WITH_MONGODB
         return (
                 bson_oid_equal(&b.oid_document, &oid_document) &&
                 (uri_string == b.uri_string)
         );
+#else
+        return (
+                oid_document == b.oid_document &&
+                (uri_string == b.uri_string)
+        );
+#endif
     };
 
     friend std::ostream& operator<<(std::ostream &out, MongoObject& o)

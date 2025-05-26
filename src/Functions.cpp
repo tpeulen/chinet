@@ -138,6 +138,7 @@ uint64_t Functions::get_time()
     return value.count();
 }
 
+#ifdef WITH_MONGODB
 bool Functions::bson_iter_skip(bson_iter_t *iter, std::vector<std::string> *skip)
 {
     for (auto &sk : *skip) {
@@ -159,3 +160,4 @@ void Functions::add_documents(bson_t *src, bson_t *dst, std::vector<std::string>
         }
     }
 }
+#endif

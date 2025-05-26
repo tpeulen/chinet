@@ -8,9 +8,13 @@ Node::Node(
         std::string name,
         const std::map<std::string, std::shared_ptr<Port>>& ports,
         std::shared_ptr<NodeCallback> callback_class
-) : MongoObject(name)
+) : DatabaseObject(name)
 {
+#ifdef WITH_MONGODB
     append_string(&document, "type", "node");
+#else
+    document["type"] = "node";
+#endif
     set_ports(ports);
     if(callback_class != nullptr){
         this->callback_class = callback_class;
@@ -32,7 +36,9 @@ bool Node::read_from_db(const std::string &oid_string){
     std::clog << "Requested OID:" << oid_string << std::endl;
 #endif
     bool return_value = true;
-    return_value &= MongoObject::read_from_db(oid_string);
+    return_value &= DatabaseObject::read_from_db(oid_string);
+
+#ifdef WITH_MONGODB
     return_value &= create_and_connect_objects_from_oid_doc(
             &document, "ports", &ports
             );
@@ -45,12 +51,26 @@ bool Node::read_from_db(const std::string &oid_string){
             get_string_by_key(&document, "callback"),
             get_string_by_key(&document, "callback_type")
             );
+#else
+    return_value &= create_and_connect_objects_from_oid_doc(
+            document, "ports", &ports
+            );
+#if CHINET_VERBOSE
+    std::clog << "callback-restore: " << document["callback"].get<std::string>() << std::endl;
+    std::clog << "callback_type-restore: " << document["callback_type"].get<std::string>() << std::endl;
+#endif
+
+    set_callback(
+            document["callback"].get<std::string>(),
+            document["callback_type"].get<std::string>()
+            );
+#endif
 
     return return_value;
 }
 
 bool Node::write_to_db() {
-    bool re = MongoObject::write_to_db();
+    bool re = DatabaseObject::write_to_db();
 
     for(auto &o : ports){
         if(!o.second->is_connected_to_db()){
@@ -210,8 +230,11 @@ void Node::add_output_port(
     add_port(key, port, true);
 }
 
+#ifdef WITH_MONGODB
 bson_t Node::get_bson(){
-    bson_t dst = MongoObject::get_bson_excluding(
+    // Since we're inheriting from DatabaseObject which is a typedef for MongoObject when WITH_MONGODB is defined,
+    // we can safely cast to MongoObject* here
+    bson_t dst = static_cast<MongoObject*>(this)->get_bson_excluding(
             "input_ports",
             "output_ports",
              "callback",
@@ -224,6 +247,7 @@ bson_t Node::get_bson(){
     append_string(&dst, "callback_type", callback_type_string);
     return dst;
 }
+#endif
 
 void Node::evaluate(){
 #if CHINET_VERBOSE

@@ -191,7 +191,7 @@ def __setattr__(self, name, value):
                 self.outputs[name].value = value
     except:
         # super().__setattr__(name, value)
-        MongoObject.__setattr__(self, name, value)
+        DatabaseObject.__setattr__(self, name, value)
 
 
 def __call__(self):
@@ -200,7 +200,7 @@ def __call__(self):
 
 def __del__(self):
     # super(Node).__del__()
-    MongoObject.__del__(self)
+    DatabaseObject.__del__(self)
 
 
 def __init__(self,

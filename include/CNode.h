@@ -11,7 +11,7 @@
 #include <map>
 #include <algorithm>
 #include <rttr/registration>
-#include "MongoObject.h"
+#include "DatabaseObject.h"
 #include "Port.h"
 #include "NodeCallback.h"
 
@@ -22,11 +22,11 @@ class NodeCallback;
 /// @class Node
 /// @brief Represents a computational node with ports and callbacks.
 ///
-/// The `Node` class is derived from `MongoObject` and allows interaction
+/// The `Node` class is derived from `DatabaseObject` and allows interaction
 /// with input and output ports, evaluation of node functionality,
 /// and database communication. A callback mechanism is provided via
 /// `NodeCallback`.
-class Node : public MongoObject {
+class Node : public DatabaseObject {
 
 private:
     friend Port; ///< Declares `Port` as a friend class to enable access to private members.
@@ -92,7 +92,9 @@ public:
     /// @{
     /// @brief Retrieves a BSON representation of the node.
     /// @return A BSON object representing the node's properties.
-    bson_t get_bson();
+#ifdef WITH_MONGODB
+    bson_t get_bson() final;
+#endif
 
     /// @brief Retrieves the name of the node.
     /// @return A string containing the node's name.

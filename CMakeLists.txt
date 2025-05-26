@@ -7,7 +7,7 @@ PROJECT(${PROJECT_NAME})
 
 # C++ standard
 ENABLE_LANGUAGE(CXX)
-SET(CMAKE_CXX_STANDARD 11)
+SET(CMAKE_CXX_STANDARD 17)
 
 # CMAKE
 ###########
@@ -23,6 +23,7 @@ OPTION(BUILD_LIBRARY "Build the library and the include files" ON)
 OPTION(BUILD_PYTHON_INTERFACE "Build Python interface" ON)
 OPTION(BUILD_PYTHON_DOCS "Build documentation of SWIG Python interface" OFF)
 OPTION(VERBOSE_CHINET "Verbose build" OFF)
+OPTION(WITH_MONGODB "Build with MongoDB support" OFF)
 
 
 ## System specific compiler flags
@@ -125,13 +126,23 @@ LINK_LIBRARIES(RTTR::Core)
 
 # libmongoc
 ###########################
-FIND_PACKAGE (libmongoc-1.0)
-MESSAGE ("-- Found mongoc version \"${MONGOC_VERSION}\"")
-MESSAGE ("-- include path \"${MONGOC_INCLUDE_DIRS}\"")
-MESSAGE ("-- libraries \"${MONGOC_LIBRARIES}\"")
-INCLUDE_DIRECTORIES (${MONGOC_INCLUDE_DIRS})
-LINK_LIBRARIES (${MONGOC_LIBRARIES})
-ADD_COMPILE_DEFINITIONS(${MONGOC_DEFINITIONS})
+IF(WITH_MONGODB)
+    FIND_PACKAGE (libmongoc-1.0)
+    IF(libmongoc-1.0_FOUND)
+        MESSAGE ("-- Found mongoc version \"${MONGOC_VERSION}\"")
+        MESSAGE ("-- include path \"${MONGOC_INCLUDE_DIRS}\"")
+        MESSAGE ("-- libraries \"${MONGOC_LIBRARIES}\"")
+        INCLUDE_DIRECTORIES (${MONGOC_INCLUDE_DIRS})
+        LINK_LIBRARIES (${MONGOC_LIBRARIES})
+        ADD_COMPILE_DEFINITIONS(${MONGOC_DEFINITIONS})
+        ADD_COMPILE_DEFINITIONS(WITH_MONGODB)
+    ELSE()
+        MESSAGE ("-- MongoDB not found, using in-memory implementation")
+        SET(WITH_MONGODB OFF CACHE BOOL "Build with MongoDB support" FORCE)
+    ENDIF()
+ELSE()
+    MESSAGE ("-- MongoDB support disabled, using in-memory implementation")
+ENDIF()
 
 IF(VERBOSE_CHINET)
     ADD_COMPILE_DEFINITIONS(CHINET_VERBOSE)
@@ -139,7 +150,15 @@ ENDIF(VERBOSE_CHINET)
 
 # Targets
 #############################
-FILE(GLOB_RECURSE SRC_files "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+# Get all source files except MongoObject.cpp
+FILE(GLOB SRC_files "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+LIST(REMOVE_ITEM SRC_files "${CMAKE_CURRENT_SOURCE_DIR}/src/MongoObject.cpp")
+
+# Include MongoObject.cpp only if MongoDB is enabled
+IF(WITH_MONGODB)
+    LIST(APPEND SRC_files "${CMAKE_CURRENT_SOURCE_DIR}/src/MongoObject.cpp")
+ENDIF()
+
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -163,5 +182,3 @@ IF(CMAKE_BUILD_TYPE STREQUAL "Debug")
         message(STATUS "LINK_DIRECTORIES='${dir}'")
     endforeach()
 ENDIF(CMAKE_BUILD_TYPE STREQUAL "Debug")
-
-

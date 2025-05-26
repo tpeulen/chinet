@@ -1,9 +1,11 @@
 {% set pyproject = load_file_data('../pyproject.toml', from_recipe_dir=True) %}
 {% set data = pyproject.get('project', {}) %}
+{% set setup_data = load_setup_py_data(setup_file='../setup.py', from_recipe_dir=True) %}
+{% set version = setup_data.get('version') %}
 
 package:
   name: {{ data.get('name') }}
-  version: {{ data.get('version') }}
+  version: {{ version }}
 
 source:
   path: ..
@@ -33,12 +35,10 @@ requirements:
     - doxygen
     - boost-cpp
     - numpy
-    - libmongoc
   run:
     - python
     - boost-cpp
     - numpy
-    - libmongoc
 
 test:
   imports:

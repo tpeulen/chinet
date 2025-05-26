@@ -13,66 +13,75 @@ from constants import *
 
 class Tests(unittest.TestCase):
 
-    def test_mongo_init(self):
-        mo_name = "test_name"
-        mo = cn.MongoObject()
-        mo.name = mo_name
+    def test_database_init(self):
+        """Test initialization of DatabaseObject"""
+        obj_name = "test_name"
+        obj = cn.DatabaseObject()
+        obj.name = obj_name
         self.assertEqual(
-            mo.name,
-            cn.MongoObject(mo_name).name
+            obj.name,
+            cn.DatabaseObject(obj_name).name
         )
 
-    @unittest.skipUnless(CONNECTS, "Cloud not connect to DB")
-    def test_mongo_db_connect(self):
-        mo = cn.MongoObject()
-        self.assertEqual(mo.connect_to_db(**DB_DICT), True)
-        self.assertEqual(mo.is_connected_to_db, True)
-        mo.write_to_db()
-        mo.disconnect_from_db()
-        self.assertEqual(mo.is_connected_to_db, False)
+    @unittest.skipUnless(CONNECTS, "Could not connect to DB")
+    def test_database_connect(self):
+        """Test connecting to database (MongoDB or in-memory)"""
+        obj = cn.DatabaseObject()
+        if WITH_MONGODB:
+            self.assertEqual(obj.connect_to_db(**DB_DICT), True)
+        else:
+            self.assertEqual(obj.connect_to_db("memory", "memory", "memory", "memory"), True)
+        self.assertEqual(obj.is_connected_to_db, True)
+        obj.write_to_db()
+        obj.disconnect_from_db()
+        self.assertEqual(obj.is_connected_to_db, False)
 
-        mo2 = cn.MongoObject()
-        mo.connect_object_to_db_mongo(mo2)
-        self.assertEqual(mo2.is_connected_to_db, True)
-        mo2.disconnect_from_db()
-        self.assertEqual(mo2.is_connected_to_db, False)
+        obj2 = cn.DatabaseObject()
+        if WITH_MONGODB:
+            obj.connect_object_to_db_mongo(obj2)
+        else:
+            obj.connect_object_to_db(obj2)
+        self.assertEqual(obj2.is_connected_to_db, True)
+        obj2.disconnect_from_db()
+        self.assertEqual(obj2.is_connected_to_db, False)
 
-        # mo3 = cn.MongoObject()
-        # mo3.connect_to_db(
-        #     **db_dict
-        # )
-        # mo3.read_from_db(mo.get_oid())
-        # self.assertEqual(mo3.read_from_db(mo.get_oid()), True)
+    def test_database_oid(self):
+        """Test object ID generation"""
+        obj = cn.DatabaseObject()
+        # OID should be a non-empty string
+        self.assertTrue(len(obj.oid) > 0)
 
-    def test_mongo_oid(self):
-        mo = cn.MongoObject()
-        self.assertEqual(len(mo.oid), 24)
-
-    def test_mongo_json(self):
-        mo = cn.MongoObject("test_name")
-        d = json.loads(mo.get_json())
-        self.assertEqual(set(d.keys()), set(['_id', 'precursor', 'death', 'name']))
+    def test_database_json(self):
+        """Test JSON serialization"""
+        obj = cn.DatabaseObject("test_name")
+        d = json.loads(obj.get_json())
+        # All objects should have at least _id and name
+        self.assertTrue('_id' in d)
+        self.assertTrue('name' in d)
+        self.assertEqual(d['name'], "test_name")
 
     def test_singleton(self):
-        mo = cn.MongoObject()
-        mo.set_singleton_double("d", 22.3)
-        self.assertAlmostEqual(mo.get_singleton_double("d"), 22.3)
+        """Test singleton values (double, int, bool)"""
+        obj = cn.DatabaseObject()
+        obj.set_singleton_double("d", 22.3)
+        self.assertAlmostEqual(obj.get_singleton_double("d"), 22.3)
 
-        mo.set_singleton_int("i", 13)
-        self.assertEqual(mo.get_singleton_int("i"), 13)
+        obj.set_singleton_int("i", 13)
+        self.assertEqual(obj.get_singleton_int("i"), 13)
 
-        mo.set_singleton_bool("b1", True)
-        self.assertEqual(mo.get_singleton_bool("b1"), True)
+        obj.set_singleton_bool("b1", True)
+        self.assertEqual(obj.get_singleton_bool("b1"), True)
 
-        mo.set_singleton_bool("b2", False)
-        self.assertEqual(mo.get_singleton_bool("b2"), False)
+        obj.set_singleton_bool("b2", False)
+        self.assertEqual(obj.get_singleton_bool("b2"), False)
 
     def test_array(self):
-        mo = cn.MongoObject()
-        mo.set_array_double("d", (1.1, 2.2))
-        self.assertTupleEqual(mo.get_array_double("d"), (1.1, 2.2))
-        mo.set_array_int("i", [3, 4])
-        self.assertEqual(mo.get_array_int("i"), (3, 4))
+        """Test array values (double, int)"""
+        obj = cn.DatabaseObject()
+        obj.set_array_double("d", (1.1, 2.2))
+        self.assertTupleEqual(obj.get_array_double("d"), (1.1, 2.2))
+        obj.set_array_int("i", [3, 4])
+        self.assertEqual(obj.get_array_int("i"), (3, 4))
 
     # TODO: NOT READY
     # @unittest.expectedFailure

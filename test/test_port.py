@@ -256,21 +256,29 @@ class Tests(unittest.TestCase):
         p1.reactive = False
         self.assertEqual(p1.reactive, False)
 
-    @unittest.skipUnless(CONNECTS, "Cloud not connect to DB")
+    @unittest.skipUnless(CONNECTS, "Could not connect to DB")
     def test_db_write(self):
+        """Test writing a Port to the database"""
         value_array = (1, 2, 3, 5, 8, 13)
         port = cn.Port(
             value=value_array,
             fixed=True
         )
-        connect_success = port.connect_to_db(**DB_DICT)
+
+        # Connect to the appropriate database
+        if WITH_MONGODB:
+            connect_success = port.connect_to_db(**DB_DICT)
+        else:
+            connect_success = port.connect_to_db("memory", "memory", "memory", "memory")
+
         write_success = port.write_to_db()
 
         self.assertEqual(connect_success, True)
         self.assertEqual(write_success, True)
 
-    @unittest.skipUnless(CONNECTS, "Cloud not connect to DB")
+    @unittest.skipUnless(CONNECTS, "Could not connect to DB")
     def test_port_db_restore(self):
+        """Test reading a Port from the database"""
         value_array = (1, 2, 3, 5, 8, 13)
         value = 17
 
@@ -278,18 +286,178 @@ class Tests(unittest.TestCase):
         port.value = value
         port.value = value_array
 
-        port.connect_to_db(**DB_DICT)
+        # Connect to the appropriate database
+        if WITH_MONGODB:
+            port.connect_to_db(**DB_DICT)
+        else:
+            port.connect_to_db("memory", "memory", "memory", "memory")
+
         port.write_to_db()
 
         port_reload = cn.Port()
-        port_reload.connect_to_db(**DB_DICT)
+        if WITH_MONGODB:
+            port_reload.connect_to_db(**DB_DICT)
+        else:
+            port_reload.connect_to_db("memory", "memory", "memory", "memory")
+
         self.assertEqual(port_reload.read_from_db(port.oid), True)
 
         dict_port = json.loads(port.get_json())
-        dict_port_restore = json.loads(port.get_json())
+        dict_port_restore = json.loads(port_reload.get_json())
 
         self.assertEqual(dict_port, dict_port_restore)
 
+
+    def test_port_type_conversion_auto(self):
+        """Test automatic type conversion when assigning values"""
+        # Create an int port
+        p1 = cn.Port(value=42)
+        self.assertEqual(p1.get_value_type(), 0)  # 0 = int type
+
+        # Assign a float value, should automatically upcast to float
+        p1.value = 42.5
+        self.assertEqual(p1.get_value_type(), 1)  # 1 = float type
+        self.assertEqual(p1.value, 42.5)
+
+        # Create a float port
+        p2 = cn.Port(value=42.5)
+        self.assertEqual(p2.get_value_type(), 1)  # 1 = float type
+
+        # Assign an int value, should keep float type (no downcast)
+        p2.value = 42
+        self.assertEqual(p2.get_value_type(), 1)  # Still float type
+        self.assertEqual(p2.value, 42.0)  # Value should be converted to float
+
+    def test_port_type_conversion_explicit(self):
+        """Test explicit type conversion using dtype property"""
+        # Create a port with default type
+        p1 = cn.Port(value=42)
+        self.assertEqual(p1.get_value_type(), 0)  # 0 = int type
+
+        # Explicitly change type to float
+        p1.dtype = np.float64
+        self.assertEqual(p1.get_value_type(), 1)  # 1 = float type
+        self.assertEqual(p1.value, 42.0)  # Value should be converted to float
+
+        # Create a float port
+        p2 = cn.Port(value=42.5)
+        self.assertEqual(p2.get_value_type(), 1)  # 1 = float type
+
+        # Explicitly change type to int (downcast)
+        p2.dtype = np.int64
+        self.assertEqual(p2.get_value_type(), 0)  # 0 = int type
+        self.assertEqual(p2.value, 42)  # Value should be truncated to int
+
+    def test_port_type_conversion_array(self):
+        """Test type conversion with array values"""
+        # Create an int port with array values
+        p1 = cn.Port(value=np.array([1, 2, 3, 4, 5]))
+        self.assertEqual(p1.get_value_type(), 0)  # 0 = int type
+
+        # Assign a float array, should automatically upcast to float
+        p1.value = np.array([1.1, 2.2, 3.3, 4.4, 5.5])
+        self.assertEqual(p1.get_value_type(), 1)  # 1 = float type
+        self.assertTrue(np.allclose(p1.value, np.array([1.1, 2.2, 3.3, 4.4, 5.5])))
+
+        # Create a float port with array values
+        p2 = cn.Port(value=np.array([1.1, 2.2, 3.3, 4.4, 5.5]))
+        self.assertEqual(p2.get_value_type(), 1)  # 1 = float type
+
+        # Assign an int array, should keep float type (no downcast)
+        p2.value = np.array([1, 2, 3, 4, 5])
+        self.assertEqual(p2.get_value_type(), 1)  # Still float type
+        self.assertTrue(np.allclose(p2.value, np.array([1.0, 2.0, 3.0, 4.0, 5.0])))
+
+    def test_port_type_conversion_memory(self):
+        """Test memory allocation during type conversion"""
+        # Create a large int array
+        large_array = np.arange(1000, dtype=np.int64)
+        p1 = cn.Port(value=large_array)
+        self.assertEqual(p1.get_value_type(), 0)  # 0 = int type
+
+        # Get the current buffer size
+        initial_size = p1.current_size()
+
+        # Convert to float (should allocate more memory)
+        p1.dtype = np.float64
+        self.assertEqual(p1.get_value_type(), 1)  # 1 = float type
+
+        # Verify all values were preserved
+        self.assertTrue(np.allclose(p1.value, large_array.astype(np.float64)))
+
+        # Create a large float array
+        large_float_array = np.arange(1000, dtype=np.float64) + 0.5
+        p2 = cn.Port(value=large_float_array)
+        self.assertEqual(p2.get_value_type(), 1)  # 1 = float type
+
+        # Convert to int (should truncate values)
+        p2.dtype = np.int64
+        self.assertEqual(p2.get_value_type(), 0)  # 0 = int type
+
+        # Verify values were truncated
+        expected = large_float_array.astype(np.int64)
+        self.assertTrue(np.allclose(p2.value, expected))
+
+    def test_port_type_conversion_edge_cases(self):
+        """Test type conversion edge cases"""
+        # Empty port
+        p1 = cn.Port()
+        p1.dtype = np.float64
+        self.assertEqual(p1.get_value_type(), 1)  # 1 = float type
+
+        # Very large values
+        p2 = cn.Port(value=np.iinfo(np.int64).max)
+        self.assertEqual(p2.get_value_type(), 0)  # 0 = int type
+        p2.dtype = np.float64
+        self.assertEqual(p2.get_value_type(), 1)  # 1 = float type
+        self.assertEqual(p2.value, float(np.iinfo(np.int64).max))
+
+        # Very small values
+        p3 = cn.Port(value=np.finfo(np.float64).tiny)
+        self.assertEqual(p3.get_value_type(), 1)  # 1 = float type
+        p3.dtype = np.int64
+        self.assertEqual(p3.get_value_type(), 0)  # 0 = int type
+        self.assertEqual(p3.value, 0)  # Should be truncated to 0
+
+        # Mixed type arrays
+        mixed_array = np.array([1, 2.5, 3, 4.5, 5])
+        p4 = cn.Port(value=mixed_array)
+        self.assertEqual(p4.get_value_type(), 1)  # Should be float type
+        self.assertTrue(np.allclose(p4.value, mixed_array))
+
+    def test_port_type_preservation(self):
+        """Test that the dtype setter preserves the port's internal type values (2-ness or 3-ness)"""
+        # Create a port with value_type 0 (int)
+        p1 = cn.Port(value=42)
+        self.assertEqual(p1.get_value_type(), 0)  # 0 = int type
+
+        # Manually set value_type to 2 (another int type)
+        p1.set_value_type(2)
+        self.assertEqual(p1.get_value_type(), 2)
+
+        # Change dtype to float, should preserve the "2-ness" and become value_type 3
+        p1.dtype = np.float64
+        self.assertEqual(p1.get_value_type(), 3)  # Should be 3 (float type with "2-ness" preserved)
+
+        # Change back to int, should preserve the "3-ness" and become value_type 2
+        p1.dtype = np.int64
+        self.assertEqual(p1.get_value_type(), 2)  # Should be 2 (int type with "3-ness" preserved)
+
+        # Create a port with value_type 1 (float)
+        p2 = cn.Port(value=42.5)
+        self.assertEqual(p2.get_value_type(), 1)  # 1 = float type
+
+        # Manually set value_type to 3 (another float type)
+        p2.set_value_type(3)
+        self.assertEqual(p2.get_value_type(), 3)
+
+        # Change dtype to int, should preserve the "3-ness" and become value_type 2
+        p2.dtype = np.int64
+        self.assertEqual(p2.get_value_type(), 2)  # Should be 2 (int type with "3-ness" preserved)
+
+        # Change back to float, should preserve the "2-ness" and become value_type 3
+        p2.dtype = np.float64
+        self.assertEqual(p2.get_value_type(), 3)  # Should be 3 (float type with "2-ness" preserved)
 
 if __name__ == '__main__':
     unittest.main()

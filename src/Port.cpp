@@ -42,17 +42,18 @@ std::shared_ptr<Port> Port::operator+(std::shared_ptr<Port> v)
 std::shared_ptr<Port> Port::operator*(std::shared_ptr<Port> v)
 {
     auto re = std::make_shared<Port>();
-    re->set_value_type(this->get_value_type());
+    int new_value_type = std::max(this->get_value_type(), v->get_value_type());
+    re->set_value_type(new_value_type);
     auto node = new Node();
     std::string name = this->get_name()  + "*" + v->get_name();
     node->set_name(name);
     node->add_input_port(this->get_name(), get_ptr());
     node->add_input_port(v->get_name(), v);
     node->add_output_port(name, re);
-    if(this->get_value_type() == 0){
-        node->set_callback("multiply_double", "C");
-    } else if(this->get_value_type() == 1){
+    if(new_value_type == 0){
         node->set_callback("multiply_int", "C");
+    } else if(new_value_type == 1){
+        node->set_callback("multiply_double", "C");
     }
     re->set_node(node);
     re->set_name(name);
@@ -74,17 +75,26 @@ void Port::set_link(std::shared_ptr<Port> v) {
 }
 
 bool Port::write_to_db() {
+#ifdef WITH_MONGODB
     bson_t doc = get_bson();
     return MongoObject::write_to_db(doc, 0);
+#else
+    return DatabaseObject::write_to_db();
+#endif
 }
 
 bool Port::read_from_db(const std::string &oid_string) {
-    bool re = MongoObject::read_from_db(oid_string);
+    bool re = DatabaseObject::read_from_db(oid_string);
+#ifdef WITH_MONGODB
     auto v = MongoObject::get_array<uint8_t>("value");
+#else
+    auto v = get_array<uint8_t>("value");
+#endif
     buffer_ = v;
     return re;
 }
 
+#ifdef WITH_MONGODB
 bson_t Port::get_bson()
 {
     bson_t dst = get_bson_excluding("value", "bounds", NULL);
@@ -104,6 +114,7 @@ bson_t Port::get_bson()
     append_number_array(&dst, "bounds", bounds_);
     return dst;
 }
+#endif
 
 
 bool Port::bound_is_valid()
@@ -160,6 +171,7 @@ void Port::get_bytes(unsigned char **output, int *n_output, bool copy) {
 void Port::set_bytes(unsigned char *input, int n_input) {
     buffer_.resize(n_input);
     std::memcpy(buffer_.data(), input, n_input);
+    buffer_element_size_ = 1; // When setting raw bytes, each element is 1 byte
 }
 
 void Port::set_buffer_ptr(size_t ptr, int n_elements, int element_size) {

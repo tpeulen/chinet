@@ -4,14 +4,18 @@
 
 bool Session::read_from_db(const std::string &oid_string){
     bool return_value = true;
-    return_value &= MongoObject::read_from_db(oid_string);
+    return_value &= DatabaseObject::read_from_db(oid_string);
+#ifdef WITH_MONGODB
     return_value &= create_and_connect_objects_from_oid_array(&document, "nodes", &nodes);
+#else
+    return_value &= create_and_connect_objects_from_oid_array(document, "nodes", &nodes);
+#endif
     return return_value;
 }
 
 bool Session::write_to_db(){
 
-    bool re = MongoObject::write_to_db();
+    bool re = DatabaseObject::write_to_db();
 
     for(auto &o : nodes){
         if(!o.second->is_connected_to_db()){
@@ -23,11 +27,15 @@ bool Session::write_to_db(){
     return re;
 }
 
+#ifdef WITH_MONGODB
 bson_t Session::get_bson(){
-    bson_t doc = MongoObject::get_bson_excluding("nodes", NULL);
+    // Since we're inheriting from DatabaseObject which is a typedef for MongoObject when WITH_MONGODB is defined,
+    // we can safely cast to MongoObject* here
+    bson_t doc = static_cast<MongoObject*>(this)->get_bson_excluding("nodes", NULL);
     create_oid_array_in_doc(&doc, "nodes", nodes);
     return doc;
 }
+#endif
 
 std::shared_ptr<Port> Session::create_port(
         json port_template,
@@ -191,4 +199,3 @@ std::map<std::string, std::shared_ptr<Node>> Session::get_nodes()
 std::string Session::get_session_template(){
     return "";
 }
-

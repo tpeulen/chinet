@@ -6,7 +6,9 @@
 #include <cmath>
 #include <iostream>
 #include <chrono>
+#ifdef WITH_MONGODB
 #include <bson.h>
+#endif
 
 namespace FluorescenceDecay{
 
@@ -225,6 +227,7 @@ namespace Functions {
      */
     uint64_t get_time();
 
+#ifdef WITH_MONGODB
     /*!
      * Adds the content in the bson_t document src to the document dst omitting the keys
      * provided by the vector skip.
@@ -238,6 +241,7 @@ namespace Functions {
      * @param skip vector of strings containing keys that are skipped by iter
      */
     bool bson_iter_skip(bson_iter_t *iter, std::vector<std::string> *skip);
+#endif
 
     /*!
      * Returns a vector with a size that is is min(a.size(), b.size())

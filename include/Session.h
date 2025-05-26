@@ -4,7 +4,7 @@
 #include <map>
 #include <memory>
 
-#include "MongoObject.h"
+#include "DatabaseObject.h"
 #include "CNode.h"
 #include "Port.h"
 
@@ -12,12 +12,14 @@
 #include "json.hpp"
 using nlohmann::json;
 
-class Session : public MongoObject
+class Session : public DatabaseObject
 {
 
 protected:
 
+#ifdef WITH_MONGODB
     bson_t get_bson() final;
+#endif
 
 public:
 
@@ -25,7 +27,11 @@ public:
 
     Session()
     {
+#ifdef WITH_MONGODB
         append_string(&document, "type", "session");
+#else
+        document["type"] = "session";
+#endif
     };
 
     explicit Session(std::map<std::string, std::shared_ptr<Node>> nodes) :

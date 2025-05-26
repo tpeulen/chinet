@@ -8,14 +8,17 @@
 #include <cstdlib>
 #include <vector>
 #include <cstring>
+
+#ifdef WITH_MONGODB
 #include <bson.h>
+#endif
 
 #include "CNode.h"
-#include "MongoObject.h"
+#include "DatabaseObject.h"
 
 class Node;
 
-class Port : public MongoObject {
+class Port : public DatabaseObject {
 
 private:
     std::vector<uint8_t> buffer_;
@@ -87,10 +90,14 @@ public:
             bool is_bounded = false,
             double lb = 0,
             double ub = 0,
-            int value_type = 1,
+            int value_type = 0,
             std::string name = ""
-    ) : MongoObject(name), fixed_(fixed), is_output_(is_output), is_reactive_(is_reactive), is_bounded_(is_bounded), value_type(value_type) {
+    ) : DatabaseObject(name), fixed_(fixed), is_output_(is_output), is_reactive_(is_reactive), is_bounded_(is_bounded), value_type(value_type) {
+#ifdef WITH_MONGODB
         append_string(&document, "type", "port");
+#else
+        document["type"] = "port";
+#endif
         buffer_.resize(64); // Reserve a constant memory size for buffers
         if (is_bounded) {
             bounds_.push_back(lb);
@@ -110,7 +117,54 @@ public:
     void set_bounded(bool is_bounded) { is_bounded_ = is_bounded; }
     bool is_bounded() const { return is_bounded_; }
 
-    void set_value_type(int type) { value_type = type; }
+    void set_value_type(int type) { 
+        if (value_type == type) {
+            return; // No change needed
+        }
+
+        int old_value_type = value_type;
+        value_type = type;
+
+        // If we're changing from int to float and we have existing data, convert it
+        if (!buffer_.empty() && old_value_type == 0 && value_type == 1) {
+            // Convert from int to float
+            size_t num_elements = buffer_.size() / buffer_element_size_;
+            std::vector<float> temp_buffer(num_elements);
+
+            // Copy and convert the data
+            const int* int_data = reinterpret_cast<const int*>(buffer_.data());
+            for (size_t i = 0; i < num_elements; i++) {
+                temp_buffer[i] = static_cast<float>(int_data[i]);
+            }
+
+            // Resize the buffer to hold the float data
+            buffer_.resize(num_elements * sizeof(float));
+            std::memcpy(buffer_.data(), temp_buffer.data(), num_elements * sizeof(float));
+            buffer_element_size_ = sizeof(float);
+        }
+        // If we're changing from float to int and we have existing data, convert it
+        // Note: This is a downcast and may lose precision
+        else if (!buffer_.empty() && old_value_type == 1 && value_type == 0) {
+            // Convert from float to int
+            size_t num_elements = buffer_.size() / buffer_element_size_;
+            std::vector<int> temp_buffer(num_elements);
+
+            // Copy and convert the data
+            const float* float_data = reinterpret_cast<const float*>(buffer_.data());
+            for (size_t i = 0; i < num_elements; i++) {
+                temp_buffer[i] = static_cast<int>(float_data[i]);
+            }
+
+            // Resize the buffer to hold the int data
+            buffer_.resize(num_elements * sizeof(int));
+            std::memcpy(buffer_.data(), temp_buffer.data(), num_elements * sizeof(int));
+            buffer_element_size_ = sizeof(int);
+        }
+        // If the buffer is empty, just update the buffer_element_size_
+        else if (buffer_.empty()) {
+            buffer_element_size_ = (value_type == 1) ? sizeof(float) : sizeof(int);
+        }
+    }
     int get_value_type() const { return value_type; }
 
     void set_node(Node* node_ptr) { node_ = node_ptr; }
@@ -122,7 +176,11 @@ public:
 
     bool unlink() {
         if (link_ == nullptr) return false;
+#ifdef WITH_MONGODB
         set_oid("link", get_bson_oid());
+#else
+        set_oid("link", get_own_oid());
+#endif
         bool result = remove_links_to_port();
         link_ = nullptr;
         return result;
@@ -151,6 +209,51 @@ public:
         if (is_fixed()) {
             return;
         }
+
+        // Check if we need to change the type
+        bool type_changed = false;
+        int old_value_type = value_type;
+
+        // Update value_type based on the template parameter T
+        // For floating point types, set value_type to 1 (float)
+        // For integer types, set value_type to 0 (int)
+        // Always upcast: if current type is float and new type is int, keep it as float
+        if (std::is_floating_point<T>::value) {
+            // If input is float, set value_type to 1 (float)
+            if (value_type != 1) {
+                value_type = 1;
+                type_changed = true;
+            }
+        } else if (value_type != 1) {
+            // If input is int and current type is not float, set value_type to 0 (int)
+            // This ensures we don't downcast from float to int
+            value_type = 0;
+        }
+
+        // If the type has changed, update buffer_element_size_ and convert existing data if necessary
+        if (type_changed) {
+            if (buffer_.empty()) {
+                // If the buffer is empty, just update buffer_element_size_
+                buffer_element_size_ = sizeof(T);
+            } else if (old_value_type == 0 && value_type == 1) {
+                // Convert from int to float
+                size_t num_elements = buffer_.size() / buffer_element_size_;
+                std::vector<float> temp_buffer(num_elements);
+
+                // Copy and convert the data
+                const int* int_data = reinterpret_cast<const int*>(buffer_.data());
+                for (size_t i = 0; i < num_elements; i++) {
+                    temp_buffer[i] = static_cast<float>(int_data[i]);
+                }
+
+                // Resize the buffer to hold the float data
+                buffer_.resize(num_elements * sizeof(float));
+                std::memcpy(buffer_.data(), temp_buffer.data(), num_elements * sizeof(float));
+                buffer_element_size_ = sizeof(float);
+            }
+        }
+
+        // Now set the new values
         if (copy_values) {
             buffer_.resize(n_input * sizeof(T));
             std::memcpy(buffer_.data(), input, n_input * sizeof(T));
@@ -194,7 +297,7 @@ public:
         if (buffer_.empty()) {
             update_buffer<T>();
         }
-        *n_output = buffer_.size() / sizeof(T);
+        *n_output = buffer_.size() / buffer_element_size_;
         *output = reinterpret_cast<T*>(buffer_.data());
     }
 
@@ -207,25 +310,29 @@ public:
     template<typename T>
     std::vector<T> get_value_vector() const {
         const std::vector<uint8_t>* buff = &buffer_;
+        const int element_size = is_linked() ? link_->buffer_element_size_ : buffer_element_size_;
         if (is_linked()) {
             buff = &link_->buffer_;
         }
-        size_t n_elements = buff->size() / sizeof(T);
+        size_t n_elements = buff->size() / element_size;
         std::vector<T> output(n_elements);
 
         if (!output.empty()) {
-            std::memcpy(output.data(), buff->data(), buff->size());
+            std::memcpy(output.data(), buff->data(), n_elements * sizeof(T));
         }
         return output;
     }
 
+#ifdef WITH_MONGODB
     virtual bson_t get_bson() final;
+#endif
 
     template<typename T>
     void update_buffer() {
         auto v = get_array<T>("value");
         buffer_.resize(v.size() * sizeof(T));
         std::memcpy(buffer_.data(), v.data(), v.size() * sizeof(T));
+        buffer_element_size_ = sizeof(T);
     }
 
     std::vector<uint8_t>& get_buffer() { return buffer_; }

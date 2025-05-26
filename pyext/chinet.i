@@ -17,7 +17,7 @@
 
     #include "../include/Functions.h"
     #include "../include/CNode.h"
-    #include "../include/MongoObject.h"
+    #include "../include/DatabaseObject.h"
 %}
 
 %include "numpy.i"
@@ -84,7 +84,7 @@
 }
 
 %include "../include/info.h"
-%include "mongo.i"
+%include "database.i"
 %include "port.i"
 %include "node.i"
 %include "session.i"
