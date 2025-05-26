@@ -22,7 +22,7 @@ OPTION(INSTALL "Install the library and the include files" ON)
 OPTION(BUILD_LIBRARY "Build the library and the include files" ON)
 OPTION(BUILD_PYTHON_INTERFACE "Build Python interface" ON)
 OPTION(BUILD_PYTHON_DOCS "Build documentation of SWIG Python interface" OFF)
-OPTION(VERBOSE_CHINET "Verbose build" OFF)
+# OPTION(VERBOSE_CHINET "Verbose build" OFF) - Replaced with runtime environment variable check
 OPTION(WITH_MONGODB "Build with MongoDB support" OFF)
 
 
@@ -144,9 +144,10 @@ ELSE()
     MESSAGE ("-- MongoDB support disabled, using in-memory implementation")
 ENDIF()
 
-IF(VERBOSE_CHINET)
-    ADD_COMPILE_DEFINITIONS(CHINET_VERBOSE)
-ENDIF(VERBOSE_CHINET)
+# Verbose mode is now controlled by the CHINET_VERBOSE environment variable at runtime
+# IF(VERBOSE_CHINET)
+#     ADD_COMPILE_DEFINITIONS(CHINET_VERBOSE)
+# ENDIF(VERBOSE_CHINET)
 
 # Targets
 #############################

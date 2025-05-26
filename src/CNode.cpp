@@ -1,5 +1,6 @@
 #include "CNode.h"
 #include "Port.h"
+#include "info.h"
 
 // Constructor
 //--------------------------------------------------------------------
@@ -31,10 +32,10 @@ Node::~Node() = default;
 //--------------------------------------------------------------------
 
 bool Node::read_from_db(const std::string &oid_string){
-#if CHINET_VERBOSE
-    std::clog << "READING NODE FROM DB" << std::endl;
-    std::clog << "Requested OID:" << oid_string << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "READING NODE FROM DB" << std::endl;
+        std::clog << "Requested OID:" << oid_string << std::endl;
+    }
     bool return_value = true;
     return_value &= DatabaseObject::read_from_db(oid_string);
 
@@ -42,10 +43,10 @@ bool Node::read_from_db(const std::string &oid_string){
     return_value &= create_and_connect_objects_from_oid_doc(
             &document, "ports", &ports
             );
-#if CHINET_VERBOSE
-    std::clog << "callback-restore: " << get_string_by_key(&document, "callback") << std::endl;
-    std::clog << "callback_type-restore: " << get_string_by_key(&document, "callback_type") << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "callback-restore: " << get_string_by_key(&document, "callback") << std::endl;
+        std::clog << "callback_type-restore: " << get_string_by_key(&document, "callback_type") << std::endl;
+    }
 
     set_callback(
             get_string_by_key(&document, "callback"),
@@ -55,10 +56,10 @@ bool Node::read_from_db(const std::string &oid_string){
     return_value &= create_and_connect_objects_from_oid_doc(
             document, "ports", &ports
             );
-#if CHINET_VERBOSE
-    std::clog << "callback-restore: " << document["callback"].get<std::string>() << std::endl;
-    std::clog << "callback_type-restore: " << document["callback_type"].get<std::string>() << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "callback-restore: " << document["callback"].get<std::string>() << std::endl;
+        std::clog << "callback_type-restore: " << document["callback_type"].get<std::string>() << std::endl;
+    }
 
     set_callback(
             document["callback"].get<std::string>(),
@@ -147,23 +148,23 @@ std::map<std::string, std::shared_ptr<Port>> Node::get_output_ports(){
 // Setter
 //--------------------------------------------------------------------
 void Node::set_callback(std::string s_callback, std::string s_callback_type){
-#if CHINET_VERBOSE
-    std::clog << "NODE SET CALLBACK" << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "NODE SET CALLBACK" << std::endl;
+    }
     this->callback = s_callback;
     this->callback_type_string = s_callback_type;
-#if CHINET_VERBOSE
-    std::clog << "-- Callback type: " << callback_type_string << std::endl;
-    std::clog << "-- Callback name: " << callback << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "-- Callback type: " << callback_type_string << std::endl;
+        std::clog << "-- Callback name: " << callback << std::endl;
+    }
     if(s_callback_type == "C"){
         callback_type = 0;
         meth_ = rttr::type::get_global_method(callback);
         if(!meth_){
-#if CHINET_VERBOSE
-            std::cerr << "ERROR: The class type " << callback << " does not exist." <<
-                      " No callback set. " << std::endl;
-#endif
+            if (is_chinet_verbose()) {
+                std::cerr << "ERROR: The class type " << callback << " does not exist." <<
+                          " No callback set. " << std::endl;
+            }
         }
     }
 }
@@ -184,27 +185,27 @@ void Node::add_port(
         bool is_output,
         bool fill_in_out
         ) {
-#if CHINET_VERBOSE
-    std::clog << "ADDING PORT TO NODE" << std::endl;
-    std::clog << "-- Name of node: " << get_name() << std::endl;
-    std::clog << "-- Key of port: " << key << std::endl;
-    std::clog << "-- Port is_output: " << is_output << std::endl;
-    std::clog << "-- Fill value of output: " << fill_in_out << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "ADDING PORT TO NODE" << std::endl;
+        std::clog << "-- Name of node: " << get_name() << std::endl;
+        std::clog << "-- Key of port: " << key << std::endl;
+        std::clog << "-- Port is_output: " << is_output << std::endl;
+        std::clog << "-- Fill value of output: " << fill_in_out << std::endl;
+    }
     port->set_port_type(is_output);
     port->set_node(this);
     if (ports.find(key) == ports.end() ) {
-#if CHINET_VERBOSE
-        std::clog << "-- The key of the port was not found." << std::endl;
-        std::clog << "-- Port " << key << " was created in node. " << std::endl;
-#endif
+        if (is_chinet_verbose()) {
+            std::clog << "-- The key of the port was not found." << std::endl;
+            std::clog << "-- Port " << key << " was created in node. " << std::endl;
+        }
         ports[key] = port;
     } else {
         auto p = ports[key];
         if(port != p){
-#if CHINET_VERBOSE
-            std::clog << "WARNING: Overwriting the port that was originally associated to the key " << key << "." << std::endl;
-#endif
+            if (is_chinet_verbose()) {
+                std::clog << "WARNING: Overwriting the port that was originally associated to the key " << key << "." << std::endl;
+            }
             ports[key] = port;
         } else{
             std::cerr << "WARNING: Port is already part of the node." << std::endl;
@@ -250,32 +251,32 @@ bson_t Node::get_bson(){
 #endif
 
 void Node::evaluate(){
-#if CHINET_VERBOSE
-    std::clog << "NODE EVALUATE" << std::endl;
-    std::clog << "-- Node name: " << get_name() << std::endl;
-    std::clog << "-- Callback_type: " << callback_type << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "NODE EVALUATE" << std::endl;
+        std::clog << "-- Node name: " << get_name() << std::endl;
+        std::clog << "-- Callback_type: " << callback_type << std::endl;
+    }
     if(callback_type == 0)
     {
-#if CHINET_VERBOSE
-        std::clog << "-- Calling registered C function."  << std::endl;
-#endif
+        if (is_chinet_verbose()) {
+            std::clog << "-- Calling registered C function."  << std::endl;
+        }
         rttr::variant return_value = meth_.invoke({}, in_, out_);
     } else if (callback_class != nullptr) {
-#if CHINET_VERBOSE
-        std::clog << "-- Calling 'run' method of a callback class."  << std::endl;
-#endif
+        if (is_chinet_verbose()) {
+            std::clog << "-- Calling 'run' method of a callback class."  << std::endl;
+        }
             callback_class->run(in_, out_);
     }
-#if CHINET_VERBOSE
-    std::clog << "-- Setting nodes associated to output ports to invalid."  << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "-- Setting nodes associated to output ports to invalid."  << std::endl;
+    }
     for(auto &o : get_output_ports()){
         auto n = o.second->get_node();
         if(n != nullptr){
-#if CHINET_VERBOSE
-            std::clog << "-- Node " << n->get_name() << " of port " << o.second->get_name() << " set to invalid." << std::endl;
-#endif
+            if (is_chinet_verbose()) {
+                std::clog << "-- Node " << n->get_name() << " of port " << o.second->get_name() << " set to invalid." << std::endl;
+            }
             n->set_valid(false);
         }
     }

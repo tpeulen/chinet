@@ -1,4 +1,5 @@
 #include "Port.h"
+#include "info.h"
 
 std::shared_ptr<Port> Port::get_ptr() {
     return std::dynamic_pointer_cast<Port>(shared_from_this());
@@ -6,23 +7,23 @@ std::shared_ptr<Port> Port::get_ptr() {
 
 std::shared_ptr<Port> Port::operator+(std::shared_ptr<Port> v)
 {
-#if CHINET_VERBOSE
-    std::clog << "ADDING PORTS" << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "ADDING PORTS" << std::endl;
+    }
     int new_value_type = std::max(value_type, v->value_type);
-#if CHINET_VERBOSE
-    std::clog << "-- Value type of resulting port: " << new_value_type << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "-- Value type of resulting port: " << new_value_type << std::endl;
+    }
     std::string name = get_name()  + " + " + v->get_name();
-#if CHINET_VERBOSE
-    std::clog << "-- Name of resulting port: " << name << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "-- Name of resulting port: " << name << std::endl;
+    }
     auto re = std::make_shared<Port>(
             false, true, true, false, 0, 0, new_value_type, name
     );
-#if CHINET_VERBOSE
-    std::clog << "-- Creating a Node associated to the resulting port." << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "-- Creating a Node associated to the resulting port." << std::endl;
+    }
     auto node = new Node();
     node->set_name(name);
     node->add_input_port(this->get_name(), get_ptr());

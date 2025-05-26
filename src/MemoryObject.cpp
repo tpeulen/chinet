@@ -1,5 +1,6 @@
 #include "MemoryObject.h"
 #include <ctime>
+#include "info.h"
 
 // Initialize static members
 std::list<std::shared_ptr<MemoryObject>> MemoryObject::registered_objects = std::list<std::shared_ptr<MemoryObject>>();
@@ -18,11 +19,15 @@ MemoryObject::MemoryObject(std::string name) :
     document["_id"] = oid_document;
     document["name"] = name;
 
-    std::clog << "NEW MEMORYOBJECT" << std::endl;
+    if (is_chinet_verbose()) {
+        std::clog << "NEW MEMORYOBJECT" << std::endl;
+    }
 }
 
 MemoryObject::~MemoryObject() {
-    std::clog << "DESTROYING MEMORYOBJECT" << std::endl;
+    if (is_chinet_verbose()) {
+        std::clog << "DESTROYING MEMORYOBJECT" << std::endl;
+    }
 
     // Remove this object from the registered objects list
     // Don't use shared_from_this() in the destructor as it can throw std::bad_weak_ptr
@@ -48,7 +53,9 @@ bool MemoryObject::connect_to_db(
     } catch (const std::bad_weak_ptr&) {
         // If shared_from_this() fails, log a warning but continue
         // This can happen if the object wasn't created with make_shared
-        std::clog << "Warning: Could not register instance in connect_to_db (shared_from_this() failed)" << std::endl;
+        if (is_chinet_verbose()) {
+            std::clog << "Warning: Could not register instance in connect_to_db (shared_from_this() failed)" << std::endl;
+        }
     }
 
     return true;
@@ -70,7 +77,9 @@ void MemoryObject::register_instance(std::shared_ptr<MemoryObject> x) {
         } catch (const std::bad_weak_ptr&) {
             // If shared_from_this() fails, the object is already being destroyed
             // and we can't get a valid shared_ptr, so just return
-            std::clog << "Warning: Could not register instance (null shared_ptr and shared_from_this() failed)" << std::endl;
+            if (is_chinet_verbose()) {
+                std::clog << "Warning: Could not register instance (null shared_ptr and shared_from_this() failed)" << std::endl;
+            }
             return;
         }
     }
@@ -80,7 +89,9 @@ void MemoryObject::register_instance(std::shared_ptr<MemoryObject> x) {
         registered_objects.push_back(x);
     }
 
-    std::clog << "-- Total number of MemoryObject instances: " << registered_objects.size() << std::endl;
+    if (is_chinet_verbose()) {
+        std::clog << "-- Total number of MemoryObject instances: " << registered_objects.size() << std::endl;
+    }
 }
 
 void MemoryObject::unregister_instance(std::shared_ptr<MemoryObject> x) {
@@ -93,7 +104,9 @@ void MemoryObject::unregister_instance(std::shared_ptr<MemoryObject> x) {
         } catch (const std::bad_weak_ptr&) {
             // If shared_from_this() fails, the object is already being destroyed
             // and we can't get a valid shared_ptr, so just ignore it
-            std::clog << "Warning: Could not unregister instance (null shared_ptr and shared_from_this() failed)" << std::endl;
+            if (is_chinet_verbose()) {
+                std::clog << "Warning: Could not unregister instance (null shared_ptr and shared_from_this() failed)" << std::endl;
+            }
         }
     }
 }
@@ -181,7 +194,9 @@ std::shared_ptr<MemoryObject> MemoryObject::get_ptr() {
         return shared_from_this();
     } catch (const std::bad_weak_ptr&) {
         // If shared_from_this() fails, log a warning and return nullptr
-        std::clog << "Warning: get_ptr() failed (shared_from_this() threw bad_weak_ptr)" << std::endl;
+        if (is_chinet_verbose()) {
+            std::clog << "Warning: get_ptr() failed (shared_from_this() threw bad_weak_ptr)" << std::endl;
+        }
         return nullptr;
     }
 }

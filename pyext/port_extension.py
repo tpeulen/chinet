@@ -17,6 +17,7 @@ def link(self):
 def link(self, v):
     self.set_link(v)
 
+
 @property
 def value(self):
     value_getters = {
@@ -33,6 +34,7 @@ def value(self):
         return result[0]
 
     return result
+
 
 @value.setter
 def value(self, v):
@@ -69,12 +71,7 @@ def value(self, v):
                 self.set_value_type(1)  # Convert to scalar float
             else:
                 self.set_value_type(1)  # Ensure it's scalar float
-
-        # Use the appropriate setter based on whether it's a scalar or vector
-        if is_vector:
-            self.set_value_vd(v)
-        else:
-            self.set_value_d(v[0])
+        self.set_value_vd(v)
     else:
         # Ensure integer values are converted to long
         v = v.astype(np.int64)
@@ -95,12 +92,7 @@ def value(self, v):
                 self.set_value_type(0)  # Convert to scalar int
             else:
                 self.set_value_type(0)  # Ensure it's scalar int
-
-        # Use the appropriate setter based on whether it's a scalar or vector
-        if is_vector:
-            self.set_value_vi(v)
-        else:
-            self.set_value_i(v[0], 1)
+        self.set_value_vi(v)
 
 
 @property

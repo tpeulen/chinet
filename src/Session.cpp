@@ -1,5 +1,6 @@
 #include "Session.h"
 #include "Port.h"
+#include "info.h"
 
 
 bool Session::read_from_db(const std::string &oid_string){
@@ -41,26 +42,26 @@ std::shared_ptr<Port> Session::create_port(
         json port_template,
         std::string port_key
     ) {
-#if CHINET_VERBOSE
-    std::clog << "CREATE PORT" << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "CREATE PORT" << std::endl;
+    }
     auto port = std::make_shared<Port>();
     port->set_name(port_key);
-#if CHINET_VERBOSE
-    std::clog << "-- port name: " << port_key << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "-- port name: " << port_key << std::endl;
+    }
     for (json::iterator it_val = port_template.begin(); it_val != port_template.end(); ++it_val) {
         if (it_val.key() == "is_fixed") {
             bool is_fixed = port_template["is_fixed"].get<bool>();
             port->set_fixed(is_fixed);
-#if CHINET_VERBOSE
-            std::clog << "-- is_fixed: " << is_fixed << std::endl;
-#endif
+            if (is_chinet_verbose()) {
+                std::clog << "-- is_fixed: " << is_fixed << std::endl;
+            }
         } else if (it_val.key() == "value") {
             auto b = port_template["value"].get<std::vector<double>>();
-#if CHINET_VERBOSE
-            std::clog << "-- number of values: " << b.size() << std::endl;
-#endif
+            if (is_chinet_verbose()) {
+                std::clog << "-- number of values: " << b.size() << std::endl;
+            }
             bool is_fixed = port->is_fixed();
             port->set_fixed(false);
             port->set_value(b.data(), b.size());
@@ -83,44 +84,44 @@ std::shared_ptr<Port> Session::create_port(
 }
 
 std::shared_ptr<Port> Session::create_port(char* port_template, char* port_key){
-#if CHINET_VERBOSE
-    std::clog << "Session:" << port_template << ":" << port_template << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "Session:" << port_template << ":" << port_template << std::endl;
+    }
     return create_port(json::parse(port_template), port_key);
 }
 
 std::shared_ptr<Node> Session::create_node(json node_template, std::string node_key){
-#if CHINET_VERBOSE
-    std::clog << "CREATE NODE" << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "CREATE NODE" << std::endl;
+    }
     auto node = std::make_shared<Node>(node_key);
     std::string callback;
     std::string callback_type;
     for (json::iterator it = node_template.begin(); it != node_template.end(); ++it) {
         if (it.key() == "ports") {
-#if CHINET_VERBOSE
-            std::clog << "-- adding ports... " << std::endl;
-#endif
+            if (is_chinet_verbose()) {
+                std::clog << "-- adding ports... " << std::endl;
+            }
             auto ports_json = node_template["ports"];
             for (json::iterator it2 = ports_json.begin(); it2 != ports_json.end(); ++it2) {
                 const std::string &port_key = it2.key();
-#if CHINET_VERBOSE
-                std::clog << "-- adding port key: " << port_key << std::endl;
-#endif
+                if (is_chinet_verbose()) {
+                    std::clog << "-- adding port key: " << port_key << std::endl;
+                }
                 auto port_json = node_template["ports"][port_key];
                 auto port = create_port(port_json, port_key);
                 node->add_port(port_key, port, port->is_output());
             }
         } else if (it.key() == "callback") {
             callback = node_template["callback"].get<std::string>();
-#if CHINET_VERBOSE
-            std::clog << "-- callback: " << callback << std::endl;
-#endif
+            if (is_chinet_verbose()) {
+                std::clog << "-- callback: " << callback << std::endl;
+            }
         } else if (it.key() == "callback_type") {
             callback_type = node_template["callback_type"].get<std::string>();
-#if CHINET_VERBOSE
-            std::clog << "-- callback_type: " << callback_type << std::endl;
-#endif
+            if (is_chinet_verbose()) {
+                std::clog << "-- callback_type: " << callback_type << std::endl;
+            }
         }
     }
     node->set_callback(callback, callback_type);
@@ -135,9 +136,9 @@ std::shared_ptr<Node> Session::create_node(char* node_template, char* port_key){
 }
 
 bool Session::read_session_template(const std::string &json_string){
-#if CHINET_VERBOSE
-    std::clog << "READ SESSION TEMPLATE" << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "READ SESSION TEMPLATE" << std::endl;
+    }
     json session_json = json::parse(json_string);
     // read nodes
     json nodes_json = session_json["nodes"];

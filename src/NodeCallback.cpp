@@ -1,4 +1,5 @@
 #include <NodeCallback.h>
+#include "info.h"
 
 //using namespace rttr;
 
@@ -43,25 +44,25 @@ void combine(
         std::map<std::string, std::shared_ptr<Port>> &outputs,
         int operation
         ){
-#if CHINET_VERBOSE
-    std::clog << "-- Combining values of input ports."  << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "-- Combining values of input ports."  << std::endl;
+    }
     size_t n_elements = UINT_MAX;
-#if CHINET_VERBOSE
-    std::clog << "-- Determining input vector with smallest length." << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "-- Determining input vector with smallest length." << std::endl;
+    }
     for(auto &o : inputs){
         n_elements = std::min(n_elements, o.second->current_size());
     }
-#if CHINET_VERBOSE
-    std::clog << "-- The smallest input vector has a length of: " << n_elements << std::endl;
-#endif
+    if (is_chinet_verbose()) {
+        std::clog << "-- The smallest input vector has a length of: " << n_elements << std::endl;
+    }
     auto tmp = (T*) malloc(n_elements * sizeof(T));
     switch(operation){
         case 0:
-#if CHINET_VERBOSE
-            std::clog << "-- Adding input ports" << std::endl;
-#endif
+            if (is_chinet_verbose()) {
+                std::clog << "-- Adding input ports" << std::endl;
+            }
             add(tmp, n_elements, inputs);
             break;
         case 1:
@@ -178,7 +179,7 @@ void AV(
         std::map<std::string, Port*> &output){
     /*
     auto g = dyeDensity(
-            
+
             );
     */
 }
