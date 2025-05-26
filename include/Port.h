@@ -355,6 +355,10 @@ public:
     bool write_to_db();
     bool read_from_db(const std::string &oid_string);
 
+#ifndef WITH_MONGODB
+    std::string get_json(int indent=0) override;
+#endif
+
     std::shared_ptr<Port> operator+(std::shared_ptr<Port> v);
     std::shared_ptr<Port> operator*(std::shared_ptr<Port> v);
 

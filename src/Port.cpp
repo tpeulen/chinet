@@ -99,6 +99,55 @@ bool Port::read_from_db(const std::string &oid_string) {
     return re;
 }
 
+#ifndef WITH_MONGODB
+std::string Port::get_json(int indent) {
+    // Update the document with the current state of the Port object
+    document["fixed"] = fixed_;
+    document["is_output"] = is_output_;
+    document["is_reactive"] = is_reactive_;
+    document["is_bounded"] = is_bounded_;
+    document["value_type"] = value_type;
+
+    // Add the value field
+    if (value_type == 0) {
+        long* va; int nv;
+        get_own_value(&va, &nv);
+        std::vector<long> v;
+        v.assign(va, va + nv);
+        json array = json::array();
+        for (auto& val : v) {
+            array.push_back(val);
+        }
+        document["value"] = array;
+    } else {
+        double* va; int nv;
+        get_own_value(&va, &nv);
+        std::vector<double> v;
+        v.assign(va, va + nv);
+        json array = json::array();
+        for (auto& val : v) {
+            array.push_back(val);
+        }
+        document["value"] = array;
+    }
+
+    // Add the bounds field
+    json bounds_array = json::array();
+    for (auto& val : bounds_) {
+        bounds_array.push_back(val);
+    }
+    document["bounds"] = bounds_array;
+
+    // Add the link field if the port is linked
+    if (is_linked()) {
+        document["link"] = link_->get_own_oid();
+    }
+
+    // Return the JSON representation
+    return MemoryObject::get_json(indent);
+}
+#endif
+
 #ifdef WITH_MONGODB
 bson_t Port::get_bson()
 {

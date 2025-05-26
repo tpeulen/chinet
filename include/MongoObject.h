@@ -603,7 +603,7 @@ public:
     }
 #endif
 
-    std::string get_json(int indent=0);
+    virtual std::string get_json(int indent=0);
 
     std::string get_json_of_key(std::string key);
 

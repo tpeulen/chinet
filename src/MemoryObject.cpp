@@ -14,9 +14,12 @@ MemoryObject::MemoryObject(std::string name) :
 
     // Generate a unique OID for this object
     oid_document = generate_oid();
+    oid_precursor = oid_document;
 
     // Initialize the document with basic fields
     document["_id"] = oid_document;
+    document["precursor"] = oid_precursor;
+    document["death"] = time_of_death;
     document["name"] = name;
 
     if (is_chinet_verbose()) {
@@ -35,6 +38,14 @@ MemoryObject::~MemoryObject() {
 
     // Set time of death
     time_of_death = std::time(nullptr);
+
+    // Update the death field in the document
+    document["death"] = time_of_death;
+
+    // If connected to the database, write the updated document
+    if (is_connected_to_db_) {
+        write_to_db();
+    }
 }
 
 bool MemoryObject::connect_to_db(
@@ -121,6 +132,12 @@ bool MemoryObject::write_to_db() {
         return false;
     }
 
+    // Update the document with the latest field values
+    document["_id"] = oid_document;
+    document["precursor"] = oid_precursor;
+    document["death"] = time_of_death;
+    document["name"] = object_name;
+
     // Store the document in the object store
     std::lock_guard<std::mutex> lock(object_store_mutex);
     object_store[oid_document] = document;
@@ -135,6 +152,18 @@ std::string MemoryObject::create_copy_in_db() {
     // Create a copy of the document with the new OID
     json copy = document;
     copy["_id"] = new_oid;
+
+    // Set the precursor of the copy to the current document's OID
+    copy["precursor"] = oid_document;
+
+    // Make sure all required fields are in the copy
+    if (!copy.contains("death")) {
+        copy["death"] = time_of_death;
+    }
+
+    if (!copy.contains("name")) {
+        copy["name"] = object_name;
+    }
 
     // Store the copy in the object store
     std::lock_guard<std::mutex> lock(object_store_mutex);
@@ -161,7 +190,15 @@ bool MemoryObject::read_from_db(const std::string& oid_string) {
     document = it->second;
     oid_document = oid_string;
 
-    // Update the object name if it exists in the document
+    // Update the object fields from the document
+    if (document.contains("precursor") && document["precursor"].is_string()) {
+        oid_precursor = document["precursor"].get<std::string>();
+    }
+
+    if (document.contains("death") && document["death"].is_number()) {
+        time_of_death = document["death"].get<uint64_t>();
+    }
+
     if (document.contains("name") && document["name"].is_string()) {
         object_name = document["name"].get<std::string>();
     }
@@ -173,9 +210,17 @@ bool MemoryObject::read_json(std::string json_string) {
     try {
         document = json::parse(json_string);
 
-        // Update the OID and name from the document
+        // Update the fields from the document
         if (document.contains("_id") && document["_id"].is_string()) {
             oid_document = document["_id"].get<std::string>();
+        }
+
+        if (document.contains("precursor") && document["precursor"].is_string()) {
+            oid_precursor = document["precursor"].get<std::string>();
+        }
+
+        if (document.contains("death") && document["death"].is_number()) {
+            time_of_death = document["death"].get<uint64_t>();
         }
 
         if (document.contains("name") && document["name"].is_string()) {
@@ -202,7 +247,30 @@ std::shared_ptr<MemoryObject> MemoryObject::get_ptr() {
 }
 
 std::string MemoryObject::get_json(int indent) {
-    return document.dump(indent);
+    // Make sure all required fields are in the document
+    json doc = document;
+
+    // Ensure _id is in the document
+    if (!doc.contains("_id")) {
+        doc["_id"] = oid_document;
+    }
+
+    // Ensure precursor is in the document
+    if (!doc.contains("precursor")) {
+        doc["precursor"] = oid_precursor;
+    }
+
+    // Ensure death is in the document
+    if (!doc.contains("death")) {
+        doc["death"] = time_of_death;
+    }
+
+    // Ensure name is in the document
+    if (!doc.contains("name")) {
+        doc["name"] = object_name;
+    }
+
+    return doc.dump(indent);
 }
 
 std::string MemoryObject::get_json_of_key(std::string key) {
