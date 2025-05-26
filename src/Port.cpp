@@ -99,6 +99,68 @@ bool Port::read_from_db(const std::string &oid_string) {
     return re;
 }
 
+void Port::set_document(json doc) {
+    // Call the base class implementation to update the document and object fields
+    MemoryObject::set_document(doc);
+
+    // Update the Port-specific fields from the document
+    if (doc.contains("fixed") && doc["fixed"].is_boolean()) {
+        fixed_ = doc["fixed"].get<bool>();
+    }
+
+    if (doc.contains("is_output") && doc["is_output"].is_boolean()) {
+        is_output_ = doc["is_output"].get<bool>();
+    }
+
+    if (doc.contains("is_reactive") && doc["is_reactive"].is_boolean()) {
+        is_reactive_ = doc["is_reactive"].get<bool>();
+    }
+
+    if (doc.contains("is_bounded") && doc["is_bounded"].is_boolean()) {
+        is_bounded_ = doc["is_bounded"].get<bool>();
+    }
+
+    if (doc.contains("value_type") && doc["value_type"].is_number()) {
+        value_type = doc["value_type"].get<int>();
+    }
+
+    if (doc.contains("bounds") && doc["bounds"].is_array()) {
+        bounds_.clear();
+        for (auto& val : doc["bounds"]) {
+            if (val.is_number()) {
+                bounds_.push_back(val.get<double>());
+            }
+        }
+    }
+
+    // Update the buffer if the value field is present
+    if (doc.contains("value") && doc["value"].is_array()) {
+        if (value_type == 0) {
+            // Integer values
+            std::vector<long> values;
+            for (auto& val : doc["value"]) {
+                if (val.is_number()) {
+                    values.push_back(val.get<long>());
+                }
+            }
+            if (!values.empty()) {
+                set_value_vector(values);
+            }
+        } else {
+            // Float values
+            std::vector<double> values;
+            for (auto& val : doc["value"]) {
+                if (val.is_number()) {
+                    values.push_back(val.get<double>());
+                }
+            }
+            if (!values.empty()) {
+                set_value_vector(values);
+            }
+        }
+    }
+}
+
 #ifndef WITH_MONGODB
 std::string Port::get_json(int indent) {
     // Update the document with the current state of the Port object
@@ -167,6 +229,34 @@ bson_t Port::get_bson()
     }
     append_number_array(&dst, "bounds", bounds_);
     return dst;
+}
+
+std::string Port::get_json(int indent)
+{
+    // First get the BSON document with all the Port-specific fields
+    bson_t doc = get_bson();
+
+    // Convert the BSON document to JSON
+    size_t len;
+    char *str = bson_as_json(&doc, &len);
+    std::string result;
+
+    if (str) {
+        if(indent == 0){
+            result = std::string(str, len);
+        } else{
+            auto j = json::parse(str);
+            result = j.dump(indent);
+        }
+        bson_free(str);
+    } else {
+        result = "{}";
+    }
+
+    // Clean up the BSON document
+    bson_destroy(&doc);
+
+    return result;
 }
 #endif
 

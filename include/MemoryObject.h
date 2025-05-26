@@ -45,6 +45,9 @@ protected:
     std::string oid_precursor;
     uint64_t time_of_death;
 
+    // Set the document from a JSON object
+    void set_document(json doc);
+
     // Helper methods for JSON manipulation
     template <typename T>
     void create_oid_dict_in_doc(

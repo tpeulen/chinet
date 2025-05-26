@@ -338,6 +338,7 @@ public:
 
 #ifdef WITH_MONGODB
     virtual bson_t get_bson() final;
+    virtual std::string get_json(int indent=0) override;
 #endif
 
     template<typename T>
@@ -358,6 +359,9 @@ public:
 #ifndef WITH_MONGODB
     std::string get_json(int indent=0) override;
 #endif
+
+    // Override set_document to handle the value field
+    void set_document(json doc);
 
     std::shared_ptr<Port> operator+(std::shared_ptr<Port> v);
     std::shared_ptr<Port> operator*(std::shared_ptr<Port> v);

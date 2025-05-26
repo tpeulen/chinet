@@ -27,6 +27,32 @@ MemoryObject::MemoryObject(std::string name) :
     }
 }
 
+void MemoryObject::set_document(json doc) {
+    // Set the document to the input JSON
+    document = doc;
+
+    // Update the object fields from the document
+    if (document.contains("_id") && document["_id"].is_string()) {
+        oid_document = document["_id"].get<std::string>();
+    }
+
+    if (document.contains("precursor") && document["precursor"].is_string()) {
+        oid_precursor = document["precursor"].get<std::string>();
+    }
+
+    if (document.contains("death") && document["death"].is_number()) {
+        time_of_death = document["death"].get<uint64_t>();
+    }
+
+    if (document.contains("name") && document["name"].is_string()) {
+        object_name = document["name"].get<std::string>();
+    }
+
+    // Handle the "value" field if it exists
+    // This is important for Port objects that have a value field
+    // The actual handling of the value field is done in the derived classes
+}
+
 MemoryObject::~MemoryObject() {
     if (is_chinet_verbose()) {
         std::clog << "DESTROYING MEMORYOBJECT" << std::endl;
@@ -268,6 +294,11 @@ std::string MemoryObject::get_json(int indent) {
     // Ensure name is in the document
     if (!doc.contains("name")) {
         doc["name"] = object_name;
+    }
+
+    // Ensure value is in the document if it exists in the original document
+    if (document.contains("value")) {
+        doc["value"] = document["value"];
     }
 
     return doc.dump(indent);
