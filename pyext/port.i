@@ -62,7 +62,7 @@
     }
 
     std::string get_json(int indent=0) {
-        return $self->MemoryObject::get_json(indent);
+        return $self->Port::get_json(indent);
     }
 
     std::string get_json_of_key(std::string key) {
