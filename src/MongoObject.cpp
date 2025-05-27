@@ -587,6 +587,34 @@ bson_t MongoObject::get_bson()
             object_name.c_str(), object_name.size()
             );
 
+    // Ensure value is in the document if it exists in the original document
+    if (bson_iter_init(&iter, &document) &&
+        bson_iter_find(&iter, "value")) {
+        // The value field exists in the original document, so make sure it's in the output document
+        if (!bson_iter_init(&iter, &doc) ||
+            !bson_iter_find(&iter, "value")) {
+            // The value field doesn't exist in the output document, so copy it from the original document
+            bson_iter_t value_iter;
+            if (bson_iter_init(&value_iter, &document) &&
+                bson_iter_find(&value_iter, "value")) {
+                // Get the value field as a subdocument
+                const uint8_t *data;
+                uint32_t len;
+                bson_t value_doc;
+
+                if (BSON_ITER_HOLDS_ARRAY(&value_iter)) {
+                    bson_iter_array(&value_iter, &len, &data);
+                    bson_init_static(&value_doc, data, len);
+                    bson_append_array(&doc, "value", 5, &value_doc);
+                } else if (BSON_ITER_HOLDS_DOCUMENT(&value_iter)) {
+                    bson_iter_document(&value_iter, &len, &data);
+                    bson_init_static(&value_doc, data, len);
+                    bson_append_document(&doc, "value", 5, &value_doc);
+                }
+            }
+        }
+    }
+
     return doc;
 }
 

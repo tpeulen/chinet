@@ -297,6 +297,8 @@ std::string MemoryObject::get_json(int indent) {
     }
 
     // Ensure value is in the document if it exists in the original document
+    // Note: For Port objects, the value might be dynamic and need to be updated
+    // The actual handling of the value field is done in the derived classes (e.g., Port)
     if (document.contains("value")) {
         doc["value"] = document["value"];
     }

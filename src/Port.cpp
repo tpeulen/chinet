@@ -173,7 +173,7 @@ std::string Port::get_json(int indent) {
     // Add the value field
     if (value_type == 0) {
         long* va; int nv;
-        get_own_value(&va, &nv);
+        get_value(&va, &nv);
         std::vector<long> v;
         v.assign(va, va + nv);
         json array = json::array();
@@ -183,7 +183,7 @@ std::string Port::get_json(int indent) {
         document["value"] = array;
     } else {
         double* va; int nv;
-        get_own_value(&va, &nv);
+        get_value(&va, &nv);
         std::vector<double> v;
         v.assign(va, va + nv);
         json array = json::array();
@@ -216,13 +216,13 @@ bson_t Port::get_bson()
     bson_t dst = get_bson_excluding("value", "bounds", NULL);
     if(value_type == 0){
         long* va; int nv;
-        get_own_value(&va, &nv);
+        get_value(&va, &nv);
         auto v = std::vector<long>();
         v.assign(va, va + nv);
         append_number_array(&dst, "value", v);
     } else{
         double* va; int nv;
-        get_own_value(&va, &nv);
+        get_value(&va, &nv);
         auto v = std::vector<double>();
         v.assign(va, va + nv);
         append_number_array(&dst, "value", v);
