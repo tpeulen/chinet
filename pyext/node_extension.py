@@ -78,7 +78,7 @@ def set_python_callback_function(
     # None.
 
     # get the signature of the function to create input Ports
-    import sys    
+    import sys
     if sys.version_info[0] > 2:
         from inspect import signature as sig
         empty_name = inspect.Signature.empty
@@ -155,53 +155,46 @@ def set_python_callback_function(
             )
     # create a new CallbackNodePython
     cb_instance = CallbackNodePython(cb_function=cb)
+    # Store a reference to the callback instance to prevent garbage collection
     cb_instance.__disown__()
     self.set_callback(cb_instance)
 
-
 callback_function = property(None, set_python_callback_function)
 
-
 def __getattr__(self, name):
-    in_input = name in self.inputs.keys()
-    in_output = name in self.outputs.keys()
-    if in_input and in_output:
-        raise KeyError("Ambiguous access. %s an input and output parameter.")
-    elif not in_output and not in_input:
-        raise AttributeError
-    else:
-        if in_input:
-            return self.inputs[name].value
+    if self._initialized:
+        port = self.get_port(name)
+        if port is not None:
+            return port.value
         else:
-            return self.outputs[name].value
-
+            raise AttributeError("'%s' object has no attribute '%s'" % (type(self).__name__, name))
+    return None
 
 def __setattr__(self, name, value):
-    try:
-        in_input = name in self.inputs.keys()
-        in_output = name in self.outputs.keys()
-        if in_input and in_output:
-            raise KeyError("Ambiguous access. %s an input and output parameter.")
-        elif not in_output and not in_input:
-            raise AttributeError
-        else:
-            if in_input:
-                self.inputs[name].value = value
-            else:
-                self.outputs[name].value = value
-    except:
-        # super().__setattr__(name, value)
-        DatabaseObject.__setattr__(self, name, value)
+    if name == '_initialized':
+        # Allow setting _initialized even before it exists
+        object.__setattr__(self, name, value)
+        return
 
+    try:
+        if object.__getattribute__(self, '_initialized'):
+            # Try getting a port by name
+            get_port = object.__getattribute__(self, 'get_port')
+            port = get_port(name)
+            if port is not None:
+                port.value = value
+                return
+            else:
+                raise AttributeError(f"'{type(self).__name__}' object has no port named '{name}'")
+    except AttributeError:
+        # Either _initialized or get_port does not exist yet, fall through
+        pass
+
+    # Fallback: set normally
+    object.__setattr__(self, name, value)
 
 def __call__(self):
     return self.evaluate()
-
-
-def __del__(self):
-    # super(Node).__del__()
-    DatabaseObject.__del__(self)
-
 
 def __init__(self,
              obj=None,
@@ -209,9 +202,9 @@ def __init__(self,
              ports = None, #type: dict
              callback_function=None,
              reactive_inputs=True,
-             reactive_outputs=True,
+             reactive_outputs=False,
              *args, **kwargs
-):
+             ):
     """
 
     :param self:
@@ -225,12 +218,18 @@ def __init__(self,
     :param kwargs:
     :return:
     """
+    self._initialized = False
+    # Initialize the parent MemoryObject class first
+    super(Node, self).__init__(*args, **kwargs)
+    # Now initialize the Node-specific parts
     this = _chinet.new_Node(*args, **kwargs)
+
     try:
         self.this.append(this)
     except:
         self.this = this
     self.register_instance(None)
+
     if isinstance(ports, dict):
         self.ports = ports
     if isinstance(obj, str):
@@ -249,3 +248,5 @@ def __init__(self,
     else:
         if callable(callback_function):
             self.name = callback_function.__name__
+
+    self._initialized = True
