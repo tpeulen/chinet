@@ -2,6 +2,7 @@
 #define chinet_NODECALLBACK_H
 
 #include <functional>
+#include <climits> /* UINT_MAX is defined */
 #include <algorithm> /* std::min std::max */
 #include <rttr/registration>
 
