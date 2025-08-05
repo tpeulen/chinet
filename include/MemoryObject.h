@@ -17,7 +17,6 @@
 
 #include "info.h"
 #include "json.hpp"
-#include <nlohmann/json.hpp>   // If using nlohmann JSON library
 
 using json = nlohmann::json;
 
