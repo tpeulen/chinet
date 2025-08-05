@@ -1,5 +1,6 @@
 #include <NodeCallback.h>
 #include "info.h"
+#include <climits>
 
 //using namespace rttr;
 
