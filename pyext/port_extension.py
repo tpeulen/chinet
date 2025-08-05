@@ -35,7 +35,6 @@ def value(self):
 
     return result
 
-
 @value.setter
 def value(self, v):
     # Convert to numpy array if not already
@@ -71,29 +70,60 @@ def value(self, v):
                 self.set_value_type(1)  # Convert to scalar float
             else:
                 self.set_value_type(1)  # Ensure it's scalar float
-        self.set_value_vd(v)
+
+        # Ensure v is a properly formatted numpy array for set_value_vd
+        # Make sure it's contiguous and has the correct data type
+        v = np.ascontiguousarray(v, dtype=np.float64)
+        try:
+            self.set_value_vd(v)
+        except TypeError:
+            # If set_value_vd fails, try using set_value_d for scalar values
+            if not is_vector:
+                self.set_value_d(float(v[0]), 1, True)
+            else:
+                raise
     else:
-        # Ensure integer values are converted to long
-        v = v.astype(np.int64)
-
-        # Set value_type based on whether it's a scalar or vector
+        # Check if the current port type is float
         current_value_type = self.get_value_type()
-        if is_vector:
-            # Vector int (value_type 2)
-            # If current type is float, downcast to int
-            if current_value_type == 1 or current_value_type == 3:
-                self.set_value_type(2)  # Convert to vector int
-            else:
-                self.set_value_type(2)  # Ensure it's vector int
-        else:
-            # Scalar int (value_type 0)
-            # If current type is float, downcast to int
-            if current_value_type == 1 or current_value_type == 3:
-                self.set_value_type(0)  # Convert to scalar int
-            else:
-                self.set_value_type(0)  # Ensure it's scalar int
-        self.set_value_vi(v)
+        is_float_type = current_value_type == 1 or current_value_type == 3
 
+        if is_float_type:
+            # If port type is float, upcast integer value to float
+            v = v.astype(np.float64)
+
+            # Ensure v is a properly formatted numpy array for set_value_vd
+            v = np.ascontiguousarray(v, dtype=np.float64)
+            try:
+                self.set_value_vd(v)
+            except TypeError:
+                # If set_value_vd fails, try using set_value_d for scalar values
+                if not is_vector:
+                    self.set_value_d(float(v[0]), 1, True)
+                else:
+                    raise
+        else:
+            # Ensure integer values are converted to long
+            v = v.astype(np.int64)
+
+            # Set value_type based on whether it's a scalar or vector
+            if is_vector:
+                # Vector int (value_type 2)
+                self.set_value_type(2)  # Ensure it's vector int
+            else:
+                # Scalar int (value_type 0)
+                self.set_value_type(0)  # Ensure it's scalar int
+
+            # Ensure v is a properly formatted numpy array for set_value_vi
+            # Make sure it's contiguous and has the correct data type
+            v = np.ascontiguousarray(v, dtype=np.int64)
+            try:
+                self.set_value_vi(v)
+            except TypeError:
+                # If set_value_vi fails, try using set_value_i for scalar values
+                if not is_vector:
+                    self.set_value_i(int(v[0]), 1, True)
+                else:
+                    raise
 
 @property
 def bounds(self):
@@ -188,22 +218,26 @@ def bounds(self, v):
     self.set_bounds(v_array)
 
 def __init__(
-        self,
-        value=[],
-        fixed=False,
-        *args, **kwargs
-):
-    this = _chinet.new_Port(*args, **kwargs)
+            self,
+            value=[],
+            fixed=False,
+            *args, **kwargs
+    ):
+        # Extract 'value' from kwargs if it exists (for backward compatibility)
+        if 'value' in kwargs:
+            value = kwargs.pop('value')
 
-    try:
-        self.this.append(this)
-    except:
-        self.this = this
+        this = _chinet.new_Port(*args, **kwargs)
 
-    # Use the value setter which already handles NaN and infinity
-    if len(value) > 0:
-        self.value = np.atleast_1d(value)
-    self.fixed = fixed
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+        # Use the value setter which already handles NaN and infinity
+        if np.isscalar(value) or (hasattr(value, '__len__') and len(value) > 0):
+            self.value = np.atleast_1d(value)
+        self.fixed = fixed
 
 def __str__(self):
     return self.get_json(indent=4)
