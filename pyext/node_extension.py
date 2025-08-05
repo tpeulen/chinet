@@ -155,6 +155,8 @@ def set_python_callback_function(
             )
     # create a new CallbackNodePython
     cb_instance = CallbackNodePython(cb_function=cb)
+    # Store a reference to the callback instance to prevent garbage collection
+    self._cb_instance = cb_instance
     cb_instance.__disown__()
     self.set_callback(cb_instance)
 
@@ -199,6 +201,9 @@ def __call__(self):
 
 
 def __del__(self):
+    # Clean up the callback reference to avoid circular references
+    if hasattr(self, '_cb_instance'):
+        self._cb_instance = None
     # super(Node).__del__()
     DatabaseObject.__del__(self)
 
