@@ -1,6 +1,7 @@
 #include "MemoryObject.h"
-#include <ctime>
-#include "info.h"
+
+using json = nlohmann::json;  // If not already aliased
+
 
 // Initialize static members
 std::list<std::shared_ptr<MemoryObject>> MemoryObject::registered_objects = std::list<std::shared_ptr<MemoryObject>>();
