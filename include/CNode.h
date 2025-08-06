@@ -10,7 +10,6 @@
 #include <memory>
 #include <map>
 #include <algorithm>
-#include <rttr/registration>
 #include "DatabaseObject.h"
 #include "Port.h"
 #include "NodeCallback.h"
@@ -38,7 +37,6 @@ protected:
     /// @brief Populates input and output port lookups.
     void fill_input_output_port_lookups();
 
-    rttr::method meth_ = rttr::type::get_global_method("nothing"); ///< RTTR method reference for callbacks.
     std::map<std::string, std::shared_ptr<Port>> in_;  ///< Lookup table for input ports.
     std::map<std::string, std::shared_ptr<Port>> out_; ///< Lookup table for output ports.
     std::string callback; ///< Holds the callback name.

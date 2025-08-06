@@ -157,16 +157,6 @@ void Node::set_callback(std::string s_callback, std::string s_callback_type){
         std::clog << "-- Callback type: " << callback_type_string << std::endl;
         std::clog << "-- Callback name: " << callback << std::endl;
     }
-    if(s_callback_type == "C"){
-        callback_type = 0;
-        meth_ = rttr::type::get_global_method(callback);
-        if(!meth_){
-            if (is_chinet_verbose()) {
-                std::cerr << "ERROR: The class type " << callback << " does not exist." <<
-                          " No callback set. " << std::endl;
-            }
-        }
-    }
 }
 
 void Node::set_callback(std::shared_ptr<NodeCallback> cb){
@@ -256,13 +246,7 @@ void Node::evaluate(){
         std::clog << "-- Node name: " << get_name() << std::endl;
         std::clog << "-- Callback_type: " << callback_type << std::endl;
     }
-    if(callback_type == 0)
-    {
-        if (is_chinet_verbose()) {
-            std::clog << "-- Calling registered C function."  << std::endl;
-        }
-        rttr::variant return_value = meth_.invoke({}, in_, out_);
-    } else if (callback_class != nullptr) {
+    if (callback_class != nullptr) {
         if (is_chinet_verbose()) {
             std::clog << "-- Calling 'run' method of a callback class."  << std::endl;
         }

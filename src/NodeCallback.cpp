@@ -184,15 +184,3 @@ void AV(
             );
     */
 }
-
-RTTR_REGISTRATION{
-    using namespace rttr;
-    registration::class_<NodeCallback>("NodeCallback").constructor<>().method("run", &NodeCallback::run);
-    registration::method("multiply_double", &multiply<double>);
-    registration::method("multiply_int", &multiply<long>);
-    registration::method("addition_double", &addition<double>);
-    registration::method("addition_int", &addition<long>);
-    registration::method("nothing", &nothing);
-    registration::method("passthrough", &passthrough);
-    registration::method("convolve", &convolve_sum_of_exponentials_periodic);
-}
