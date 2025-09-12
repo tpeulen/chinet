@@ -118,12 +118,18 @@ void multiply(
 void nothing(
         std::map<std::string, std::shared_ptr<Port>> &inputs,
         std::map<std::string, std::shared_ptr<Port>> &outputs){
+    if (is_chinet_verbose()) {
+        std::clog << "[NodeCallback::nothing] called; inputs=" << inputs.size() << ", outputs=" << outputs.size() << std::endl;
+    }
 }
 
 void passthrough(
         std::map<std::string, std::shared_ptr<Port>> &inputs,
         std::map<std::string, std::shared_ptr<Port>> &outputs
         ){
+    if (is_chinet_verbose()) {
+        std::clog << "[NodeCallback::passthrough] inputs=" << inputs.size() << ", outputs=" << outputs.size() << std::endl;
+    }
     for(auto it_in = inputs.cbegin(), end_in = inputs.cend(),
             it_out = outputs.cbegin(), end_out = outputs.cend();
             it_in != end_in || it_out != end_out;)
@@ -150,6 +156,9 @@ void convolve_sum_of_exponentials_periodic(
         std::map<std::string, Port*> &inputs,
         std::map<std::string, Port*> &outputs
         ){
+    if (is_chinet_verbose()) {
+        std::clog << "[NodeCallback::convolve_sum_of_exponentials_periodic] called; inputs=" << inputs.size() << ", outputs=" << outputs.size() << std::endl;
+    }
     // Make sure that all inputs are set
 
     int n_irf; double* irf;

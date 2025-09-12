@@ -1,8 +1,12 @@
 #include "Functions.h"
+#include "info.h"
 
 
 void Functions::shift(double value, std::vector<double> &x)
 {
+    if (is_chinet_verbose()) {
+        std::clog << "[Functions::shift] value=" << value << ", x.size()=" << x.size() << std::endl;
+    }
     int tsi = static_cast<int>(-value);
     double tsf = -value - tsi;
 
@@ -14,10 +18,16 @@ void Functions::shift(double value, std::vector<double> &x)
     for (size_t i = 0; i < x.size(); i++) {
         x[i] = x[i] * tsf + x_copy[i] * (1.0 - tsf);
     }
+    if (is_chinet_verbose()) {
+        std::clog << "[Functions::shift] completed" << std::endl;
+    }
 }
 
 void Functions::roll(int value, std::vector<double> &y)
 {
+    if (is_chinet_verbose()) {
+        std::clog << "[Functions::roll] value=" << value << ", y.size()=" << y.size() << std::endl;
+    }
     if (value > 0) {
         std::rotate(y.begin(), y.begin() + value, y.end());
     } else {
@@ -28,17 +38,26 @@ void Functions::roll(int value, std::vector<double> &y)
 
 void Functions::copy_vector_to_array(std::vector<double> &v, double *out, int nout)
 {
+    if (is_chinet_verbose()) {
+        std::clog << "[Functions::copy_vector_to_array] v.size()=" << v.size() << ", nout=" << nout << std::endl;
+    }
     std::copy(v.begin(), v.begin() + nout, out);
 }
 
 void Functions::copy_array_to_vector(double *in, int nin, std::vector<double> &v)
 {
+    if (is_chinet_verbose()) {
+        std::clog << "[Functions::copy_array_to_vector] nin=" << nin << std::endl;
+    }
     v.assign(in, in + nin);
 }
 
 void Functions::copy_vector_to_array(std::vector<double> &v, double **out, int *nout)
 {
     *nout = v.size();
+    if (is_chinet_verbose()) {
+        std::clog << "[Functions::copy_vector_to_array**] v.size()=" << v.size() << std::endl;
+    }
     *out = static_cast<double *>(malloc(*nout * sizeof(double)));
     std::copy(v.begin(), v.end(), *out);
 }
@@ -49,8 +68,11 @@ void Functions::copy_two_vectors_to_interleaved_array(
         double **out, int *nout
 )
 {
+    if (is_chinet_verbose()) {
+        std::clog << "[Functions::copy_two_vectors_to_interleaved_array] v1.size()=" << v1.size() << ", v2.size()=" << v2.size() << std::endl;
+    }
     if (v1.size() == v2.size()) {
-        int n = 2 * v1.size();
+        int n = 2 * static_cast<int>(v1.size());
         *out = static_cast<double *>(malloc(n * sizeof(double)));
         for (size_t i = 0; i < v1.size(); i++) {
             (*out)[2 * i] = v1[i];
@@ -67,6 +89,13 @@ void Functions::convolve_sum_of_exponentials(
         int convolution_stop,
         double dt)
 {
+    if (is_chinet_verbose()) {
+        std::clog << "[Functions::convolve_sum_of_exponentials] n_out=" << n_out
+                  << ", n_lifetime_spectrum=" << n_lifetime_spectrum
+                  << ", n_irf=" << n_irf
+                  << ", convolution_stop=" << convolution_stop
+                  << ", dt=" << dt << std::endl;
+    }
     double dt_half = dt * 0.5;
     int stop = std::min({n_out, n_irf, convolution_stop});
     std::fill(out, out + stop, 0.0);
@@ -91,6 +120,15 @@ void Functions::convolve_sum_of_exponentials_periodic(
         double period
 )
 {
+    if (is_chinet_verbose()) {
+        std::clog << "[Functions::convolve_sum_of_exponentials_periodic] n_out=" << n_out
+                  << ", n_lifetimes=" << n_lifetimes
+                  << ", n_irf=" << n_irf
+                  << ", start=" << start
+                  << ", stop=" << stop
+                  << ", dt=" << dt
+                  << ", period=" << period << std::endl;
+    }
     double dt_half = dt * 0.5;
     int period_n = static_cast<int>(period / dt - 0.5);
     int irfStart = 0;
@@ -121,6 +159,9 @@ void Functions::convolve_sum_of_exponentials_periodic(
 
 std::vector<double> Functions::diff(std::vector<double> v)
 {
+    if (is_chinet_verbose()) {
+        std::clog << "[Functions::diff] v.size()=" << v.size() << std::endl;
+    }
     std::vector<double> dx(v.size() - 1);
     for (size_t i = 0; i < dx.size(); i++) {
         dx[i] = (v[i + 1] - v[i]);

@@ -100,6 +100,9 @@ bool MemoryObject::connect_to_db(
 }
 
 void MemoryObject::disconnect_from_db() {
+    if (is_chinet_verbose()) {
+        std::clog << "[MemoryObject::disconnect_from_db] disconnecting object '" << object_name << "'" << std::endl;
+    }
     is_connected_to_db_ = false;
 }
 
@@ -158,6 +161,9 @@ bool MemoryObject::write_to_db() {
         std::cerr << "Error: Not connected to database" << std::endl;
         return false;
     }
+    if (is_chinet_verbose()) {
+        std::clog << "[MemoryObject::write_to_db] oid=" << oid_document << ", name='" << object_name << "'" << std::endl;
+    }
 
     // Update the document with the latest field values
     document["_id"] = oid_document;
@@ -175,6 +181,9 @@ bool MemoryObject::write_to_db() {
 std::string MemoryObject::create_copy_in_db() {
     // Create a new OID for the copy
     std::string new_oid = generate_oid();
+    if (is_chinet_verbose()) {
+        std::clog << "[MemoryObject::create_copy_in_db] new_oid=" << new_oid << " from precursor=" << oid_document << std::endl;
+    }
 
     // Create a copy of the document with the new OID
     json copy = document;
@@ -203,6 +212,9 @@ bool MemoryObject::read_from_db(const std::string& oid_string) {
     if (!is_connected_to_db_) {
         std::cerr << "Error: Not connected to database" << std::endl;
         return false;
+    }
+    if (is_chinet_verbose()) {
+        std::clog << "[MemoryObject::read_from_db] oid=" << oid_string << std::endl;
     }
 
     // Look up the document in the object store
@@ -234,6 +246,9 @@ bool MemoryObject::read_from_db(const std::string& oid_string) {
 }
 
 bool MemoryObject::read_json(std::string json_string) {
+    if (is_chinet_verbose()) {
+        std::clog << "[MemoryObject::read_json] input_size=" << json_string.size() << std::endl;
+    }
     try {
         document = json::parse(json_string);
 
@@ -274,6 +289,9 @@ std::shared_ptr<MemoryObject> MemoryObject::get_ptr() {
 }
 
 std::string MemoryObject::get_json(int indent) {
+    if (is_chinet_verbose()) {
+        std::clog << "[MemoryObject::get_json] indent=" << indent << std::endl;
+    }
     // Make sure all required fields are in the document
     json doc = document;
 
@@ -308,6 +326,9 @@ std::string MemoryObject::get_json(int indent) {
 }
 
 std::string MemoryObject::get_json_of_key(std::string key) {
+    if (is_chinet_verbose()) {
+        std::clog << "[MemoryObject::get_json_of_key] key='" << key << "'" << std::endl;
+    }
     if (document.contains(key)) {
         return document[key].dump();
     }
@@ -315,6 +336,9 @@ std::string MemoryObject::get_json_of_key(std::string key) {
 }
 
 std::shared_ptr<MemoryObject> MemoryObject::operator[](std::string key) {
+    if (is_chinet_verbose()) {
+        std::clog << "[MemoryObject::operator[]] key='" << key << "'" << std::endl;
+    }
     // This is a placeholder implementation
     // In a real implementation, this would return a child object
     return nullptr;

@@ -65,6 +65,10 @@ std::shared_ptr<Port> Port::operator*(std::shared_ptr<Port> v)
 
 
 void Port::set_link(std::shared_ptr<Port> v) {
+    if (is_chinet_verbose()) {
+        std::clog << "[Port::set_link] this='" << get_name() << "' -> "
+                  << (v ? v->get_name() : std::string("<null>")) << std::endl;
+    }
     if (v == nullptr) {
         unlink();
         return;
@@ -76,6 +80,9 @@ void Port::set_link(std::shared_ptr<Port> v) {
 }
 
 bool Port::write_to_db() {
+    if (is_chinet_verbose()) {
+        std::clog << "[Port::write_to_db] port='" << get_name() << "'" << std::endl;
+    }
 #ifdef WITH_MONGODB
     bson_t doc = get_bson();
     return MongoObject::write_to_db(doc, 0);
@@ -85,6 +92,9 @@ bool Port::write_to_db() {
 }
 
 bool Port::read_from_db(const std::string &oid_string) {
+    if (is_chinet_verbose()) {
+        std::clog << "[Port::read_from_db] oid=" << oid_string << std::endl;
+    }
 #ifdef WITH_MONGODB
     bool re = MongoObject::read_from_db(oid_string);
 #else
@@ -96,10 +106,16 @@ bool Port::read_from_db(const std::string &oid_string) {
     auto v = get_array<uint8_t>("value");
 #endif
     buffer_ = v;
+    if (is_chinet_verbose()) {
+        std::clog << "[Port::read_from_db] loaded buffer size=" << buffer_.size() << std::endl;
+    }
     return re;
 }
 
 void Port::set_document(json doc) {
+    if (is_chinet_verbose()) {
+        std::clog << "[Port::set_document] keys=" << doc.size() << std::endl;
+    }
     // Call the base class implementation to update the document and object fields
     MemoryObject::set_document(doc);
 
@@ -163,6 +179,9 @@ void Port::set_document(json doc) {
 
 #ifndef WITH_MONGODB
 std::string Port::get_json(int indent) {
+    if (is_chinet_verbose()) {
+        std::clog << "[Port::get_json] indent=" << indent << " (memory backend)" << std::endl;
+    }
     // Update the document with the current state of the Port object
     document["fixed"] = fixed_;
     document["is_output"] = is_output_;
@@ -233,6 +252,9 @@ bson_t Port::get_bson()
 
 std::string Port::get_json(int indent)
 {
+    if (is_chinet_verbose()) {
+        std::clog << "[Port::get_json] indent=" << indent << " (mongo backend)" << std::endl;
+    }
     // First get the BSON document with all the Port-specific fields
     bson_t doc = get_bson();
 
@@ -263,17 +285,24 @@ std::string Port::get_json(int indent)
 
 bool Port::bound_is_valid()
 {
+    bool valid = false;
     if (bounds_.size() == 2) {
         if (bounds_[0] != bounds_[1]) {
-            return true;
+            valid = true;
         }
     }
-    return false;
+    if (is_chinet_verbose()) {
+        std::clog << "[Port::bound_is_valid] bounds.size=" << bounds_.size() << ", valid=" << std::boolalpha << valid << std::endl;
+    }
+    return valid;
 }
 
 
 void Port::set_bounds(std::vector<double> v)
 {
+    if (is_chinet_verbose()) {
+        std::clog << "[Port::set_bounds] input.size=" << v.size() << std::endl;
+    }
     if (v.size() >= 2) {
         bounds_.clear();
         double lower = std::min(v[0], v[1]);
@@ -291,14 +320,25 @@ std::vector<double> Port::get_bounds()
 
 
 void Port::update_attached_node() {
+    if (is_chinet_verbose()) {
+        std::clog << "[Port::update_attached_node] node='" << (node_ ? node_->get_name() : std::string("<null>"))
+                  << "', reactive=" << std::boolalpha << is_reactive()
+                  << ", is_output=" << is_output() << std::endl;
+    }
     node_->set_valid(false);
     if (is_reactive() && !is_output()) {
         node_->evaluate();
+        if (is_chinet_verbose()) {
+            std::clog << "[Port::update_attached_node] node evaluated" << std::endl;
+        }
     }
 }
 
 void Port::get_bytes(unsigned char **output, int *n_output, bool copy) {
-    *n_output = buffer_.size();
+    *n_output = static_cast<int>(buffer_.size());
+    if (is_chinet_verbose()) {
+        std::clog << "[Port::get_bytes] buffer_size=" << *n_output << ", copy=" << std::boolalpha << copy << std::endl;
+    }
     if (copy) {
         auto buffer_size = *n_output;
         *output = static_cast<unsigned char*>(std::malloc(buffer_size)); // Use malloc for improved performance
@@ -313,18 +353,27 @@ void Port::get_bytes(unsigned char **output, int *n_output, bool copy) {
 }
 
 void Port::set_bytes(unsigned char *input, int n_input) {
+    if (is_chinet_verbose()) {
+        std::clog << "[Port::set_bytes] n_input=" << n_input << std::endl;
+    }
     buffer_.resize(n_input);
     std::memcpy(buffer_.data(), input, n_input);
     buffer_element_size_ = 1; // When setting raw bytes, each element is 1 byte
 }
 
 void Port::set_buffer_ptr(size_t ptr, int n_elements, int element_size) {
+    if (is_chinet_verbose()) {
+        std::clog << "[Port::set_buffer_ptr] n_elements=" << n_elements << ", element_size=" << element_size << std::endl;
+    }
     buffer_.assign(reinterpret_cast<uint8_t*>(ptr),
                    reinterpret_cast<uint8_t*>(ptr) + (n_elements * element_size));
     buffer_element_size_ = element_size;
 }
 
 size_t Port::get_buffer_ptr() {
+    if (is_chinet_verbose()) {
+        std::clog << "[Port::get_buffer_ptr] returning pointer" << std::endl;
+    }
     return reinterpret_cast<size_t>(buffer_.data());
 }
 

@@ -68,15 +68,15 @@ std::shared_ptr<Port> Session::create_port(
             port->set_fixed(is_fixed);
         } else if (it_val.key() == "is_output"){
             bool is_output = port_template["is_output"].get<bool>();
-#if CHINET_VERBOSE
-            std::clog << "-- is_output: " << is_output << std::endl;
-#endif
+            if (is_chinet_verbose()) {
+                std::clog << "-- is_output: " << is_output << std::endl;
+            }
             port->set_port_type(is_output);
         } else if (it_val.key() == "is_reactive"){
             bool is_reactive = port_template["is_reactive"].get<bool>();
-#if CHINET_VERBOSE
-            std::clog << "-- is_reactive: " << is_reactive << std::endl;
-#endif
+            if (is_chinet_verbose()) {
+                std::clog << "-- is_reactive: " << is_reactive << std::endl;
+            }
             port->set_reactive(is_reactive);
         }
     }
@@ -164,6 +164,10 @@ bool Session::link_nodes(
         const std::string &port_name,
         const std::string &target_node_name,
         const std::string &target_port_name){
+    if (is_chinet_verbose()) {
+        std::clog << "[Session::link_nodes] " << node_name << ":" << port_name
+                  << " -> " << target_node_name << ":" << target_port_name << std::endl;
+    }
     auto itn = nodes.find(node_name);
     auto itnt = nodes.find(target_node_name);
 
@@ -174,8 +178,15 @@ bool Session::link_nodes(
         auto itpt = ports.find(target_port_name);
         if(itp != ports.end() && itpt != target_ports.end()){
             ports[port_name]->set_link(target_ports[target_port_name]);
+            if (is_chinet_verbose()) {
+                std::clog << "[Session::link_nodes] link created" << std::endl;
+            }
             return true;
+        } else if (is_chinet_verbose()) {
+            std::clog << "[Session::link_nodes] ports not found" << std::endl;
         }
+    } else if (is_chinet_verbose()) {
+        std::clog << "[Session::link_nodes] nodes not found" << std::endl;
     }
     return false;
 }
@@ -185,10 +196,16 @@ void Session::add_node(
         std::shared_ptr<Node> object
 )
 {
+    if (is_chinet_verbose()) {
+        std::clog << "[Session::add_node] name=" << name << std::endl;
+    }
     nodes[name] = object;
     object->set_name(name);
     if (is_connected_to_db()) {
         connect_object_to_db(object);
+        if (is_chinet_verbose()) {
+            std::clog << "[Session::add_node] connected node to DB" << std::endl;
+        }
     }
 }
 
