@@ -41,7 +41,7 @@ protected:
     std::map<std::string, std::shared_ptr<Port>> out_; ///< Lookup table for output ports.
     std::string callback; ///< Holds the callback name.
     std::string callback_type_string; ///< Indicates the type of the callback as a string.
-    int callback_type; ///< Callback type as an integer.
+    int callback_type = -1; ///< Callback type as an integer. -1 means no callback configured.
 
 public:
     /// A shared pointer managing a callback class for this node.
@@ -100,15 +100,15 @@ public:
 
     /// @brief Gets all input ports of the node.
     /// @return A map containing input ports with their names as keys.
-    std::map<std::string, std::shared_ptr<Port>> get_input_ports();
+    const std::map<std::string, std::shared_ptr<Port>>& get_input_ports() const;
 
     /// @brief Gets all output ports of the node.
     /// @return A map containing output ports with their names as keys.
-    std::map<std::string, std::shared_ptr<Port>> get_output_ports();
+    const std::map<std::string, std::shared_ptr<Port>>& get_output_ports() const;
 
     /// @brief Gets all ports of the node (both input and output).
     /// @return A map containing all ports with their names as keys.
-    std::map<std::string, std::shared_ptr<Port>> get_ports();
+    const std::map<std::string, std::shared_ptr<Port>>& get_ports() const;
 
     /// @brief Retrieves a port by its name.
     /// @param port_name The name of the port to retrieve.

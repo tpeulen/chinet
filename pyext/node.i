@@ -25,11 +25,13 @@
     std::string __repr__(){
         std::ostringstream os;
         os << "Node(";
-        for (auto &v : $self->get_input_ports()){
+        const auto &in_ports = $self->get_input_ports();
+        for (const auto &v : in_ports){
             os << (v.first)<< ",";
         }
         os << "->";
-        for (auto &v : $self->get_output_ports()){
+        const auto &out_ports = $self->get_output_ports();
+        for (const auto &v : out_ports){
             os << (v.first)<< ",";
         }
         os << ")";

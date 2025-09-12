@@ -13,8 +13,7 @@ Node::Node(
         std::string name,
         const std::map<std::string, std::shared_ptr<Port>>& ports,
         std::shared_ptr<NodeCallback> callback_class
-) : DatabaseObject(name)
-{
+) : DatabaseObject(name) {
 #ifdef WITH_MONGODB
     append_string(&document, "type", "node");
 #else
@@ -27,14 +26,45 @@ Node::Node(
         std::clog << "[Node::ctor] Callback provided: " << std::boolalpha << static_cast<bool>(callback_class) << std::endl;
     }
 
-    set_ports(ports);
+    if (!ports.empty()) {
+        if (is_chinet_verbose()) {
+            std::clog << "[Node::ctor] Ports passed: " << ports.size() << "\n";
+        }
+        for(auto &o : ports){
+            if (is_chinet_verbose()) {
+                std::clog << "[Node::ctor]  -> port key='" << o.first
+                          << "' is_output=" << std::boolalpha << o.second->is_output()
+                          << std::endl;
+            }
+            o.second->set_name(o.first);
+        }
+        set_ports(ports);
+    } else {
+        if (is_chinet_verbose()) {
+            std::clog << "[Node::ctor] No ports passed\n";
+        }
+    }
 
     if(callback_class != nullptr){
+        if (is_chinet_verbose()) {
+            std::clog << "[Node::ctor] Callback class provided\n";
+        }
         this->callback_class = callback_class;
         callback_type = 1;
         if (is_chinet_verbose()) {
             std::clog << "[Node::ctor] Callback class stored; callback_type set to 1\n";
         }
+    } else {
+        // No callback provided; mark as non-evaluable by default
+        callback_type = -1;
+        callback_type_string.clear();
+        callback.clear();
+        if (is_chinet_verbose()) {
+            std::clog << "[Node::ctor] No callback provided; callback_type set to -1 (disabled)\n";
+        }
+    }
+    if (is_chinet_verbose()) {
+        std::clog << "[Node::ctor] Node finished constructing\n";
     }
 }
 
@@ -193,7 +223,7 @@ std::string Node::get_name(){
     return r;
 }
 
-std::map<std::string, std::shared_ptr<Port>> Node::get_ports(){
+const std::map<std::string, std::shared_ptr<Port>>& Node::get_ports() const{
     if (is_chinet_verbose()) {
         std::clog << "[Node::get_ports] Returning " << ports.size() << " ports\n";
     }
@@ -267,14 +297,14 @@ Port* Node::get_output_port(const std::string &port_name){
     return it->second.get();
 }
 
-std::map<std::string, std::shared_ptr<Port>> Node::get_input_ports(){
+const std::map<std::string, std::shared_ptr<Port>>& Node::get_input_ports() const{
     if (is_chinet_verbose()) {
         std::clog << "[Node::get_input_ports] Returning " << in_.size() << " inputs\n";
     }
     return in_;
 }
 
-std::map<std::string, std::shared_ptr<Port>> Node::get_output_ports(){
+const std::map<std::string, std::shared_ptr<Port>>& Node::get_output_ports() const{
     if (is_chinet_verbose()) {
         std::clog << "[Node::get_output_ports] Returning " << out_.size() << " outputs\n";
     }
@@ -289,8 +319,28 @@ void Node::set_callback(std::string s_callback, std::string s_callback_type){
     }
     this->callback = std::move(s_callback);
     this->callback_type_string = std::move(s_callback_type);
+
+    // Determine numeric callback_type
+    //  -1: no callback configured
+    //   0: C-style callback by name
+    //   1: class-based callback (see set_callback(NodeCallback))
+    if (callback.empty()) {
+        callback_type = -1;
+    } else {
+        // Normalize type string to upper-case simple form
+        std::string t = callback_type_string;
+        std::transform(t.begin(), t.end(), t.begin(), [](unsigned char c){ return static_cast<char>(std::toupper(c)); });
+        if (t == "C") {
+            callback_type = 0;
+        } else if (t == "CLASS" || t == "CPP" || t == "C++") {
+            callback_type = 1;
+        } else {
+            callback_type = -1; // unknown type disables evaluation by default
+        }
+    }
+
     if (is_chinet_verbose()) {
-        std::clog << "[Node::set_callback(str,str)] -- Callback type: " << callback_type_string << "\n";
+        std::clog << "[Node::set_callback(str,str)] -- Callback type: " << callback_type_string << " (numeric=" << callback_type << ")\n";
         std::clog << "[Node::set_callback(str,str)] -- Callback name: " << callback << std::endl;
     }
 }
@@ -396,6 +446,14 @@ void Node::evaluate(){
         std::clog << "[Node::evaluate] NODE EVALUATE\n";
         std::clog << "[Node::evaluate] -- Node name: " << get_name() << "\n";
         std::clog << "[Node::evaluate] -- Callback_type: " << callback_type << std::endl;
+    }
+
+    // If no callback is configured, do not evaluate
+    if (callback_class == nullptr && callback_type < 0) {
+        if (is_chinet_verbose()) {
+            std::clog << "[Node::evaluate] -- No callback configured (callback_type < 0). Skipping evaluation.\n";
+        }
+        return;
     }
 
     auto t0 = std::chrono::high_resolution_clock::now();

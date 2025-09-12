@@ -12,7 +12,6 @@ def outputs(self):
 def ports(self):
     return self.get_ports()
 
-
 @ports.setter
 def ports(self, v):
     # type: (Dict[str, object]) -> None
@@ -30,8 +29,8 @@ def ports(self, v):
 def set_python_callback_function(
         self,
         cb,
-        reactive_inputs = True,
-        reactive_outputs = True
+        reactive_inputs = False,
+        reactive_outputs = False
 ):
     # type: (Callable, bool, bool) -> None
     class CallbackNodePython(cn.NodeCallback):
@@ -64,13 +63,20 @@ def set_python_callback_function(
 
     if isinstance(cb, str):
         code_obj = compile(cb, '<string>', 'exec')
-        self.set_string('source', cb)
+        # Store source on Python side to avoid relying on backend-specific methods here
+        try:
+            object.__setattr__(self, '_source', cb)
+        except Exception:
+            pass
         for o in code_obj.co_consts:
             if isinstance(o, types.CodeType):
                 cb = types.FunctionType(o, globals())
                 break
     else:
-        self.set_string('source', inspect.getsource(cb))
+        try:
+            object.__setattr__(self, '_source', inspect.getsource(cb))
+        except Exception:
+            object.__setattr__(self, '_source', None)
     # When the cb-function of a node is evaluated, the input Ports are
     # processed by the callback and written to the output Port. Thus,
     # the inputs and outputs need to be defined as Ports. Here, the inputs
@@ -165,8 +171,15 @@ callback_function = property(None, set_python_callback_function)
 
 
 def __getattr__(self, name):
-    in_input = name in self.inputs.keys()
-    in_output = name in self.outputs.keys()
+    # Avoid interfering with SWIG internals or during early initialization
+    if name in ('this', 'thisown', '__swig_destroy__', '__class__') or name.startswith('_'):
+        raise AttributeError
+    try:
+        in_input = name in self.inputs.keys()
+        in_output = name in self.outputs.keys()
+    except Exception:
+        # Likely not fully initialized yet
+        raise AttributeError
     if in_input and in_output:
         raise KeyError("Ambiguous access. %s an input and output parameter.")
     elif not in_output and not in_input:
@@ -179,21 +192,26 @@ def __getattr__(self, name):
 
 
 def __setattr__(self, name, value):
+    # Bypass for internal/SWIG attributes and during early init
+    if name in ('this', 'thisown', '_cb_instance') or name.startswith('_'):
+        object.__setattr__(self, name, value)
+        return
     try:
         in_input = name in self.inputs.keys()
         in_output = name in self.outputs.keys()
         if in_input and in_output:
             raise KeyError("Ambiguous access. %s an input and output parameter.")
         elif not in_output and not in_input:
-            raise AttributeError
+            # Defer to base handling for normal attributes/properties
+            object.__setattr__(self, name, value)
         else:
             if in_input:
                 self.inputs[name].value = value
             else:
                 self.outputs[name].value = value
-    except:
-        # super().__setattr__(name, value)
-        DatabaseObject.__setattr__(self, name, value)
+    except Exception:
+        # Fallback for early initialization or other errors
+        object.__setattr__(self, name, value)
 
 
 def __call__(self):
@@ -202,10 +220,12 @@ def __call__(self):
 
 def __del__(self):
     # Clean up the callback reference to avoid circular references
-    if hasattr(self, '_cb_instance'):
-        self._cb_instance = None
-    # super(Node).__del__()
-    DatabaseObject.__del__(self)
+    try:
+        if hasattr(self, '_cb_instance'):
+            self._cb_instance = None
+    except Exception:
+        pass
+    # Rely on SWIG-managed destructor for Node; avoid referencing DatabaseObject alias
 
 
 def __init__(self,
@@ -213,8 +233,8 @@ def __init__(self,
              name = "", #type: str
              ports = None, #type: dict
              callback_function=None,
-             reactive_inputs=True,
-             reactive_outputs=True,
+             reactive_inputs=False,
+             reactive_outputs=False,
              *args, **kwargs
 ):
     """
@@ -231,11 +251,8 @@ def __init__(self,
     :return:
     """
     this = _chinet.new_Node(*args, **kwargs)
-    try:
-        self.this.append(this)
-    except:
-        self.this = this
-    self.register_instance(None)
+    # Assign directly to avoid triggering __getattr__ before initialization
+    object.__setattr__(self, 'this', this)
     if isinstance(ports, dict):
         self.ports = ports
     if isinstance(obj, str):
