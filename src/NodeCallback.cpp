@@ -59,6 +59,9 @@ void combine(
         std::clog << "-- The smallest input vector has a length of: " << n_elements << std::endl;
     }
     auto tmp = (T*) malloc(n_elements * sizeof(T));
+    if (tmp == nullptr) {
+        throw std::runtime_error("Memory allocation failed in combine function");
+    }
     switch(operation){
         case 0:
             if (is_chinet_verbose()) {

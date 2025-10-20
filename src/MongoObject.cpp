@@ -27,6 +27,7 @@ MongoObject::MongoObject(std::string name) : uri_string(""),
         "death", BCON_INT64(time_of_death)
     );
     set_document(doc);
+    bson_destroy(doc);
 
     if (name.empty()) {
         name = get_own_oid();
@@ -260,12 +261,15 @@ void MongoObject::disconnect_from_db() {
         // destroy cursor, collection, session before the client they came from
         if (collection) {
             mongoc_collection_destroy(collection);
+            collection = nullptr;
         }
         if (uri) {
             mongoc_uri_destroy(uri);
+            uri = nullptr;
         }
         if (client) {
             mongoc_client_destroy(client);
+            client = nullptr;
         }
         mongoc_cleanup();
     }
@@ -362,8 +366,9 @@ bool MongoObject::write_to_db(
                 break;
         }
         // destroy
-        bson_destroy(update);
-        bson_destroy(query);
+        if (opts) { bson_destroy(opts); }
+        if (update) { bson_destroy(update); }
+        if (query) { bson_destroy(query); }
         bson_destroy(&reply);
     } else {
         std::cerr << "ERROR: Not connected to DB - cannot write!" << std::endl;
@@ -401,7 +406,9 @@ bool MongoObject::read_from_db(const std::string &oid_string) {
             query = BCON_NEW("_id", BCON_OID(&oid));
             size_t len;
             if (is_chinet_verbose()) {
-                std::clog << "-- Query result: " << bson_as_json(query, &len) << std::endl;
+                char* __json_q = bson_as_json(query, &len);
+                std::clog << "-- Query result: " << (__json_q ? __json_q : "") << std::endl;
+                if (__json_q) { bson_free(__json_q); }
             }
             mongoc_cursor_t *cursor; // cursor pointing to the new document
             cursor = mongoc_collection_find_with_opts(
@@ -413,20 +420,28 @@ bool MongoObject::read_from_db(const std::string &oid_string) {
             const bson_t *doc;
             while (mongoc_cursor_next(cursor, &doc)) {
                 if (is_chinet_verbose()) {
-                    std::clog << "-- Read content from DB: " << bson_as_json(doc, &len) << std::endl;
+                    char* __json_doc = bson_as_json(doc, &len);
+                    std::clog << "-- Read content from DB: " << (__json_doc ? __json_doc : "") << std::endl;
+                    if (__json_doc) { bson_free(__json_doc); }
                 }
                 if (is_chinet_verbose()) {
-                    std::clog << "-- Document content before reinint:" << bson_as_json(&document, &len) << std::endl;
+                    char* __json_before = bson_as_json(&document, &len);
+                    std::clog << "-- Document content before reinint:" << (__json_before ? __json_before : "") << std::endl;
+                    if (__json_before) { bson_free(__json_before); }
                     std::clog << "-- Reinit local document" << std::endl;
                 }
                 bson_reinit(&document);
                 if (is_chinet_verbose()) {
-                    std::clog << "-- Document content after reinint:" << bson_as_json(&document, &len) << std::endl;
+                    char* __json_after_reinit = bson_as_json(&document, &len);
+                    std::clog << "-- Document content after reinint:" << (__json_after_reinit ? __json_after_reinit : "") << std::endl;
+                    if (__json_after_reinit) { bson_free(__json_after_reinit); }
                     std::clog << "-- Copying document of query to the document of the node" << std::endl;
                 }
                 bson_copy_to(doc, &document);
                 if (is_chinet_verbose()) {
-                    std::clog << "-- Document content after copy: " << bson_as_json(&document, &len) << std::endl;
+                    char* __json_after_copy = bson_as_json(&document, &len);
+                    std::clog << "-- Document content after copy: " << (__json_after_copy ? __json_after_copy : "") << std::endl;
+                    if (__json_after_copy) { bson_free(__json_after_copy); }
                 }
                 bson_oid_copy(&oid, &oid_document);
                 if (is_chinet_verbose()) {
@@ -648,9 +663,12 @@ std::string MongoObject::create_copy_in_db() {
     }
     size_t len;
 #if CHINET_VERBOSE
-    std::clog << "created copy: " << bson_as_json(&document_copy, &len) << std::endl;
+    char* __json_copy = bson_as_json(&document_copy, &len);
+    std::clog << "created copy: " << (__json_copy ? __json_copy : "") << std::endl;
+    if (__json_copy) { bson_free(__json_copy); }
 #endif
     write_to_db(document_copy, 2);
+    bson_destroy(&document_copy);
     return oid_to_string(oid_copy);
 }
 
@@ -665,6 +683,7 @@ bool MongoObject::is_connected_to_db() {
 
         /* ensure client has connected */
         r = mongoc_client_command_simple(client, "db", b, NULL, NULL, &error);
+        bson_destroy(b);
         if (!r) {
             MONGOC_ERROR("could not connect: %s\n", error.message);
             return false;

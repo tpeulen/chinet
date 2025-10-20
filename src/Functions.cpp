@@ -52,6 +52,8 @@ void Functions::copy_array_to_vector(double *in, int nin, std::vector<double> &v
     v.assign(in, in + nin);
 }
 
+// Allocates memory using malloc() - caller is responsible for freeing.
+// When used with numpy, numpy will automatically free the memory.
 void Functions::copy_vector_to_array(std::vector<double> &v, double **out, int *nout)
 {
     *nout = v.size();
@@ -62,6 +64,8 @@ void Functions::copy_vector_to_array(std::vector<double> &v, double **out, int *
     std::copy(v.begin(), v.end(), *out);
 }
 
+// Allocates memory using malloc() - caller is responsible for freeing.
+// When used with numpy, numpy will automatically free the memory.
 void Functions::copy_two_vectors_to_interleaved_array(
         std::vector<double> &v1,
         std::vector<double> &v2,
@@ -103,7 +107,7 @@ void Functions::convolve_sum_of_exponentials(
     for (int ne = 0; ne < n_lifetime_spectrum; ne++) {
         double exp_curr = exp(-dt / (lifetime_spectrum[2 * ne + 1] + 1e-12));
         double fit_curr = 0.0;
-        for (int i = 0; i < stop; i++) {
+        for (int i = 1; i < stop; i++) {
             fit_curr = (fit_curr + dt_half * irf[i - 1]) * exp_curr + dt_half * irf[i];
             out[i] += fit_curr * lifetime_spectrum[2 * ne];
         }
@@ -145,7 +149,7 @@ void Functions::convolve_sum_of_exponentials_periodic(
         exp_curr = exp(-dt / (lifetime[2 * ne + 1] + 1e-12));
         tail_a = 1.0 / (1.0 - exp(-period / lifetime[2 * ne + 1]));
         fit_curr = 0.0;
-        for (int i = 0; i < stop1; i++) {
+        for (int i = 1; i < stop1; i++) {
             fit_curr = (fit_curr + dt_half * irf[i - 1]) * exp_curr + dt_half * irf[i];
             out[i] += fit_curr * lifetime[2 * ne];
         }

@@ -325,6 +325,12 @@ void Port::update_attached_node() {
                   << "', reactive=" << std::boolalpha << is_reactive()
                   << ", is_output=" << is_output() << std::endl;
     }
+    if (node_ == nullptr) {
+        if (is_chinet_verbose()) {
+            std::clog << "[Port::update_attached_node] node is null, skipping update" << std::endl;
+        }
+        return;
+    }
     node_->set_valid(false);
     if (is_reactive() && !is_output()) {
         node_->evaluate();
@@ -334,6 +340,9 @@ void Port::update_attached_node() {
     }
 }
 
+// When copy=true, allocates memory using malloc() - caller is responsible for freeing.
+// When used with numpy, numpy will automatically free the memory.
+// When copy=false, returns a pointer to internal buffer (no allocation).
 void Port::get_bytes(unsigned char **output, int *n_output, bool copy) {
     *n_output = static_cast<int>(buffer_.size());
     if (is_chinet_verbose()) {
@@ -364,6 +373,14 @@ void Port::set_bytes(unsigned char *input, int n_input) {
 void Port::set_buffer_ptr(size_t ptr, int n_elements, int element_size) {
     if (is_chinet_verbose()) {
         std::clog << "[Port::set_buffer_ptr] n_elements=" << n_elements << ", element_size=" << element_size << std::endl;
+    }
+    // Validate pointer is not null
+    if (ptr == 0) {
+        throw std::runtime_error("Null pointer passed to set_buffer_ptr");
+    }
+    // Validate parameters are positive
+    if (n_elements <= 0 || element_size <= 0) {
+        throw std::runtime_error("Invalid parameters: n_elements and element_size must be positive");
     }
     buffer_.assign(reinterpret_cast<uint8_t*>(ptr),
                    reinterpret_cast<uint8_t*>(ptr) + (n_elements * element_size));
